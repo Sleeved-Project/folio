@@ -1,0 +1,60 @@
+name: Update PR Description with JIRA ID
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  update-description:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract JIRA ID from branch name
+        id: extract-jira-id
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const branchName = context.payload.pull_request.head.ref;
+            const jiraIdMatch = branchName.match(/^([A-Z]+-\d+)/);
+
+            if (jiraIdMatch) {
+              const jiraId = jiraIdMatch[1];
+              core.setOutput('jira_id', jiraId);
+              core.setOutput('found', 'true');
+            } else {
+              core.setOutput('found', 'false');
+            }
+
+      - name: Update PR description with JIRA ID
+        if: steps.extract-jira-id.outputs.found == 'true'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const jiraId = '${{ steps.extract-jira-id.outputs.jira_id }}';
+            const pr = context.payload.pull_request;
+
+            let description = pr.body;
+
+            // Check if the description already contains the JIRA link
+            const jiraLinkPattern = new RegExp(`\\[${jiraId}\\]\\(https://sleeved\\.atlassian\\.net/browse/${jiraId}\\)`);
+
+            if (!jiraLinkPattern.test(description)) {
+              // Replace the placeholder with the actual JIRA ID
+              const jiraLink = `[${jiraId}](https://sleeved.atlassian.net/browse/${jiraId})`;
+              description = description.replace(/\[FOL-XXX\]\(https:\/\/sleeved\.atlassian\.net\/browse\/FOL-XXX\)/, jiraLink);
+              
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                body: description
+              });
+              
+              console.log(`Updated PR #${pr.number} description with JIRA ID: ${jiraId}`);
+            } else {
+              console.log(`PR #${pr.number} already contains JIRA ID: ${jiraId}`);
+            }
