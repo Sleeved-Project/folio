@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo ">> Running lint and format checks..."
+npx lint-staged || {
+  echo "❌ Lint or formatting issues detected. Commit canceled."
+  exit 1
+}
+
+echo "✅ Lint and format checks passed."
+
+# Check for exposed secrets/API keys
+echo ">> Checking for hardcoded secrets in config files..."
+if git diff --cached --name-only | grep -E "\.(js|jsx|ts|tsx|json)$" | xargs grep -l -E "(password|secret|key|token|auth).*['\"]((?!process\.env)[^'\"]{8,})['\" ]" > /dev/null; then
+  echo "❌ ERREUR: Potential hardcoded secret/API key detected. Use environment variables instead."
+  git diff --cached --name-only | grep -E "\.(js|jsx|ts|tsx|json)$" | xargs grep -l -E "(password|secret|key|token|auth).*['\"]((?!process\.env)[^'\"]{8,})['\" ]"
+  exit 1
+fi
+
+echo "✅ No hardcoded secrets detected. Commit allowed."
+exit 0
