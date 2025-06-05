@@ -3,44 +3,62 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
+    "start": "expo start --port 4001",
+    "android": "expo start --android --port 4001",
+    "ios": "expo start --ios --port 4001",
+    "web": "expo start --web --port 4001",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "prepare": "",
-    "lint-staged": "lint-staged"
+    "format-check": "prettier --check .",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky install",
+    "lint-staged": "lint-staged",
+    "check": "npm run format-check && npm run lint && npm run type-check"
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
+    "@hookform/resolvers": "^5.0.1",
+    "@react-navigation/native": "^7.1.10",
+    "@react-navigation/native-stack": "^7.3.14",
+    "@tanstack/react-query": "^5.80.5",
+    "@tanstack/react-query-devtools": "^5.80.5",
     "expo": "53.0.9",
+    "expo-secure-store": "~14.2.3",
     "expo-status-bar": "~2.2.3",
+    "lucide-react-native": "^0.513.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-hook-form": "^7.57.0",
     "react-native": "0.79.2",
-    "react-native-web": "^0.20.0"
+    "react-native-safe-area-context": "5.4.0",
+    "react-native-screens": "~4.11.1",
+    "react-native-svg": "^15.11.2",
+    "react-native-web": "^0.20.0",
+    "zod": "^3.25.51"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@types/react": "~19.0.10",
     "@typescript-eslint/eslint-plugin": "^8.33.0",
     "@typescript-eslint/parser": "^8.33.0",
-    "eslint": "^9.28.0",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-native": "^5.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.0",
     "prettier": "^3.5.3",
+    "react-native-svg-transformer": "^1.5.1",
     "typescript": "~5.8.3"
   },
   "lint-staged": {
     "*.ts?(x)": [
       "eslint --fix",
-      "prettier --write"
+      "prettier --check"
     ],
-    "*.{json,md}": [
-      "prettier --write"
+    "*.{json,md,ya?ml}": [
+      "prettier --check"
     ]
   },
   "private": true
