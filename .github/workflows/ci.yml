@@ -64,9 +64,6 @@ jobs:
           expo-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Verify Metro config
-        run: node -e "require('./metro.config.js')"
-
       - name: Verify Android build
         run: npx expo export --platform android --output-dir ./dist-android
 
