@@ -1,22 +1,5 @@
-import { Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import CardScanner from '../../features/scan/screens/CardScanner';
 
 export default function Scan() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Scanner screen</Text>
-    </SafeAreaView>
-  );
+  return <CardScanner />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#25292e',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    color: '#fff',
-  },
-});
