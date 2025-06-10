@@ -21,6 +21,7 @@
     "@tanstack/react-query": "^5.80.5",
     "@tanstack/react-query-devtools": "^5.80.5",
     "expo": "53.0.9",
+    "expo-asset": "~11.1.5",
     "expo-constants": "~17.1.6",
     "expo-dev-client": "~5.2.0",
     "expo-linking": "~7.1.5",
@@ -38,11 +39,11 @@
     "react-native-svg": "15.11.2",
     "react-native-vision-camera": "^4.6.4",
     "react-native-web": "^0.20.0",
-    "zod": "^3.25.51",
-    "expo-asset": "~11.1.5"
+    "zod": "^3.25.51"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@react-native-community/cli": "latest",
     "@types/lodash": "^4.17.17",
     "@types/react": "~19.0.10",
     "@typescript-eslint/eslint-plugin": "^8.33.0",
@@ -54,8 +55,7 @@
     "lint-staged": "^16.1.0",
     "prettier": "^3.5.3",
     "react-native-svg-transformer": "^1.5.1",
-    "typescript": "~5.8.3",
-    "@react-native-community/cli": "latest"
+    "typescript": "~5.8.3"
   },
   "private": true
 }

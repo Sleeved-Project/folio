@@ -1,6 +1,6 @@
 import { Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Camera, useCameraDevice, useCameraPermission } from 'react-native-vision-camera';
+import { useCameraPermission, Camera, useCameraDevice } from 'react-native-vision-camera';
 
 export default function CardScanner() {
   const { hasPermission, requestPermission } = useCameraPermission();
