@@ -7,6 +7,7 @@ import { authUtils } from '../utils/auth-utils';
 import { User, AuthResponse } from '../types';
 import { useQueryClient } from '@tanstack/react-query';
 import { getErrorMessage } from '../../../lib/errors/errors-utils';
+import { config } from '../../../config';
 
 interface AuthContextType {
   user: User | null;
@@ -41,6 +42,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        if (config.IS_DEV_MODE) {
+          setIsAuthenticated(true);
+          setAuthCheckComplete(true);
+          return;
+        }
         const isAuth = await authUtils.isAuthenticated();
         setIsAuthenticated(isAuth);
 

@@ -8,6 +8,7 @@ const config = {
   API_ATLAS_BASE_URL: process.env.EXPO_PUBLIC_API_ATLAS_BASE_URL || 'http://localhost:8082/api/v1',
   API_WARDEN_BASE_URL:
     process.env.EXPO_PUBLIC_API_WARDEN_BASE_URL || 'http://localhost:8081/api/v1',
+  IS_DEV_MODE: process.env.EXPO_PUBLIC_IS_DEV_MODE, // Set to true for development mode to skip auth
 } as const;
 
 try {
