@@ -11,10 +11,12 @@ https://docs.expo.dev/get-started/set-up-your-environment/?platform=ios&device=s
 
 # Build the project
 
+# If you've followed the instructions in the link above, you can run the following command to build the project:
+
 # to run iOS
 
-`npx expo run:ios`
+`npx expo run:ios --device --port 4001`
 
 # to run Android
 
-`npx expo run:android`
+`npx expo run:android --device --port 4001`
