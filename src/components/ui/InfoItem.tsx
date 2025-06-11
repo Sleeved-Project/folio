@@ -58,11 +58,9 @@ const styles = StyleSheet.create({
   },
   halfWidth: {
     width: '48%',
-    marginHorizontal: '1%',
   },
   fullWidth: {
     width: '98%',
-    marginHorizontal: '1%',
   },
   accentBorder: {
     borderWidth: 1,

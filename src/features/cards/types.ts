@@ -61,3 +61,28 @@ export interface CardDetail extends CardBasicInfo {
   artist?: CardDetailsData['artist'];
   subtypes?: CardDetailsData['subtypes'];
 }
+
+export interface PriceData {
+  id: string;
+  type: 'normal' | 'reverseHolo' | 'holofoil' | string;
+  market: string;
+}
+
+export interface MarketReporting {
+  id: number;
+  url: string;
+}
+
+export interface CardMarketReporting extends MarketReporting {
+  cardMarketPrices: PriceData[];
+}
+
+export interface TcgPlayerReporting extends MarketReporting {
+  tcgPlayerPrices: PriceData[];
+}
+
+export interface CardPricesData {
+  id: string;
+  cardMarketReporting?: CardMarketReporting;
+  tcgPlayerReporting?: TcgPlayerReporting;
+}
