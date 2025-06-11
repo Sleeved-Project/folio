@@ -1,114 +1,106 @@
-import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Circle, X } from 'lucide-react-native';
+import React, { useRef, useState } from 'react';
+import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Constants from 'expo-constants';
-
-import type { CameraDevice } from 'react-native-vision-camera';
-import type * as VisionCamera from 'react-native-vision-camera';
-
-// Check if running in Expo Go
-const isExpoGo = Constants.appOwnership === 'expo';
+import { Camera, useCameraPermission, useCameraDevice } from 'react-native-vision-camera';
 
 export default function CardScanner() {
-  const [error, setError] = useState<Error | null>(null);
-  const [cameraModule, setCameraModule] = useState<typeof VisionCamera | null>(null);
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [device, setDevice] = useState<CameraDevice | null>(null);
+  const { hasPermission, requestPermission } = useCameraPermission();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const device = useCameraDevice('back');
+  const camera = useRef<Camera>(null);
 
-  // Load camera module dynamically if not in Expo Go
-  useEffect(() => {
-    if (!isExpoGo) {
-      import('react-native-vision-camera')
-        .then((module) => {
-          setCameraModule(module);
-
-          // Initialize camera permissions and device
-          const { useCameraPermission, useCameraDevice } = module;
-
-          // Get permission status using a function since we can't use hooks directly here
-          const checkPermission = async () => {
-            try {
-              const { requestPermission } = useCameraPermission();
-              const status = await requestPermission();
-              setHasPermission(status);
-            } catch (err) {
-              setError(
-                err instanceof Error ? err : new Error('Failed to request camera permission')
-              );
-            }
-          };
-
-          // Get camera device
-          const device = useCameraDevice('back');
-          if (device) {
-            setDevice(device);
-          }
-
-          // Check permission
-          checkPermission();
-        })
-        .catch((err) => {
-          setError(err instanceof Error ? err : new Error('Failed to load camera module'));
-        });
+  React.useEffect(() => {
+    if (hasPermission === false) {
+      requestPermission();
     }
-  }, []);
+  }, [hasPermission, requestPermission]);
 
-  // If in Expo Go, show the placeholder message
-  if (isExpoGo) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.errorContainer}>
-          <Text style={styles.mainText}>Camera scanning is not available in Expo Go</Text>
-          <Text style={styles.subText}>This feature requires a development build</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
+  const uploadPhoto = async (photo: Blob) => {
+    setIsLoading(true);
+    try {
+      console.log('Uploading photo to Iris API...');
+      console.log('Photo type:', typeof photo);
 
-  // Handle errors
-  if (error) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.errorContainer}>
-          <Text style={styles.mainText}>Something went wrong</Text>
-          <Text style={styles.subText}>{error.message}</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
+      const formData = new FormData();
+      formData.append('file', photo, 'card_photo.jpg');
+      console.log('FormData prepared:', formData);
+      const response = await fetch('http://localhost:8000/api/v1/images/hash/file', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error('Failed to upload photo');
+      }
+      const data = await response.json();
+      console.log('Photo uploaded successfully:', data);
+      return data;
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  // While loading the camera module
-  if (!cameraModule) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.mainText}>Initializing camera...</Text>
-      </SafeAreaView>
-    );
-  }
+  const handleTakePhoto = async () => {
+    if (camera.current) {
+      try {
+        const photo = await camera.current.takePhoto();
+        const result = await fetch(`file://${photo.path}`);
+        const data = await result.blob();
+        console.log('Photo taken:', data, typeof data);
+        // Sending the photo to Atlas api
+        await uploadPhoto(data);
+      } catch (e) {
+        console.warn('Failed to take photo:', e);
+      }
+    }
+  };
 
-  // Handle camera permission request
   if (hasPermission === false) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.mainText}>Camera permission is required to use this feature.</Text>
+        <Text style={styles.text}>Camera permission is required to use this feature.</Text>
       </SafeAreaView>
     );
   }
 
-  // No device found
-  if (!device) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.mainText}>No camera device found</Text>
-      </SafeAreaView>
-    );
-  }
-
-  // Camera view
-  const { Camera } = cameraModule;
   return (
     <SafeAreaView style={styles.container}>
-      <Camera style={StyleSheet.absoluteFill} device={device} isActive={true} />
+      {device && (
+        <>
+          <Camera
+            ref={camera}
+            style={StyleSheet.absoluteFill}
+            device={device}
+            isActive={true}
+            photo={true}
+          />
+          <View style={styles.cameraContainer}>
+            <View style={styles.crossContainer}>
+              <X size={32} color="white" />
+            </View>
+            <View style={styles.frameOverlay} />
+
+            <View style={styles.controls}>
+              {isLoading ? (
+                <Text style={styles.text}>Analysing...</Text>
+              ) : (
+                <>
+                  <Text style={styles.text}>Place your card here</Text>
+                  <TouchableOpacity style={styles.button} onPress={handleTakePhoto}>
+                    <Circle size={64} color="white" />
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+          </View>
+        </>
+      )}
     </SafeAreaView>
   );
 }
@@ -120,20 +112,36 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  errorContainer: {
-    padding: 20,
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    borderRadius: 10,
+  text: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  cameraContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 32,
+  },
+  crossContainer: {
+    alignSelf: 'flex-start',
+  },
+  controls: {
     alignItems: 'center',
   },
-  mainText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
+  button: {
+    padding: 16,
+    borderRadius: 32,
   },
-  subText: {
-    color: '#ddd',
-    fontSize: 14,
+  buttonText: {
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  frameOverlay: {
+    width: 311,
+    height: 434,
+    borderWidth: 3,
+    borderColor: 'white',
+    borderRadius: 16,
+    zIndex: 10,
   },
 });
