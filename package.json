@@ -39,7 +39,8 @@
     "react-native-svg": "15.11.2",
     "react-native-vision-camera": "^4.6.4",
     "react-native-web": "^0.20.0",
-    "zod": "^3.25.51"
+    "zod": "^3.25.51",
+    "expo-linear-gradient": "~14.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
