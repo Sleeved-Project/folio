@@ -3,6 +3,7 @@ import { Text, StyleSheet, View, Modal, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button } from '../../../components/ui';
 import cardVerso from '../../../../assets/card-verso.png';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface CardNotFoundProps {
   visible?: boolean;
@@ -11,12 +12,10 @@ interface CardNotFoundProps {
 
 export default function CardNotFound({ visible, setIsVisible }: CardNotFoundProps) {
   return (
-    <Modal visible={visible} transparent={true}>
-      <View style={styles.container}>
-        <View style={styles.imageContainer}>
+    <Modal visible={visible} transparent={false} backdropColor={'black'} animationType="fade">
+      <SafeAreaView style={styles.safeAreaView}>
+        <LinearGradient colors={['black', 'white']} style={styles.container} locations={[0.5, 0.8]}>
           <Image source={cardVerso} style={styles.image} />
-        </View>
-        <LinearGradient colors={['black', 'white']} style={styles.background}>
           <View style={styles.actionContainer}>
             <Text style={styles.text}>Oops no card match found !</Text>
             <Button
@@ -28,7 +27,7 @@ export default function CardNotFound({ visible, setIsVisible }: CardNotFoundProp
             />
           </View>
         </LinearGradient>
-      </View>
+      </SafeAreaView>
     </Modal>
   );
 }
@@ -36,8 +35,16 @@ export default function CardNotFound({ visible, setIsVisible }: CardNotFoundProp
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
+  },
+  safeAreaView: { flex: 1, backgroundColor: 'transparent' },
+  actionContainer: {
+    width: '100%',
+  },
+  actionButton: {
+    width: '90%',
+    alignSelf: 'center',
   },
   text: {
     color: '#111',
@@ -49,29 +56,8 @@ const styles = StyleSheet.create({
   textStyle: {
     color: '#111',
   },
-  imageContainer: {
-    zIndex: 1,
-  },
   image: {
     width: 345,
     height: 480,
-  },
-  background: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 600,
-  },
-  actionContainer: {
-    position: 'absolute',
-    bottom: 60,
-    left: 0,
-    right: 0,
-  },
-  actionButton: {
-    width: '90%',
-    marginTop: 20,
-    alignSelf: 'center',
   },
 });
