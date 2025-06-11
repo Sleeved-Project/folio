@@ -5,7 +5,11 @@ import { View } from 'react-native';
 
 export default function TabLayout() {
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        headerShown: true,
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -47,6 +51,13 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => <Wallet color={focused ? 'black' : '#A09CAB'} size={24} />,
           tabBarActiveTintColor: 'black',
           tabBarInactiveTintColor: '#A09CAB',
+        }}
+      />
+      <Tabs.Screen
+        name="card/[cardId]"
+        options={{
+          href: null,
+          headerTitle: () => <TabHeader displayBackButton={true} />,
         }}
       />
     </Tabs>
