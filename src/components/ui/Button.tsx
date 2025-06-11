@@ -10,7 +10,7 @@ import {
   TextStyle,
 } from 'react-native';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost';
+export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost' | 'scan';
 
 export interface ButtonProps extends TouchableOpacityProps {
   title: string;
@@ -42,6 +42,8 @@ const Button: React.FC<ButtonProps> = ({
         return styles.buttonOutline;
       case 'ghost':
         return styles.buttonGhost;
+      case 'scan':
+        return styles.buttonScan;
       case 'primary':
       default:
         return styles.buttonPrimary;
@@ -133,6 +135,9 @@ const styles = StyleSheet.create({
     shadowColor: 'transparent',
     shadowOpacity: 0,
     elevation: 0,
+  },
+  buttonScan: {
+    backgroundColor: '#EFF1F5',
   },
   text: {
     fontSize: 18,
