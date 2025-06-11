@@ -67,6 +67,6 @@ const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: '#e0e0e0',
-    marginVertical: 16,
+    marginTop: 16,
   },
 });

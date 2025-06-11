@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useCardDetail, useCardDetailedInfo } from '../hooks/queries/useCardDetail';
+import { useCardDetail } from '../hooks/queries/useCardDetail';
 import DetailCard from '../../../components/ui/DetailCard';
 import { LoadingState, ErrorState } from '../../../components/ui/StatusIndicators';
 import CardMetaInfo from '../components/CardMetaInfo';
@@ -21,12 +21,6 @@ export default function CardDetail({ cardId }: { cardId?: string }) {
     isLoading: isLoadingBasic,
     error: basicError,
   } = useCardDetail(cardId as string);
-
-  const {
-    data: detailedCardData,
-    isLoading: isLoadingDetails,
-    error: detailedError,
-  } = useCardDetailedInfo(cardId as string);
 
   const tabOptions: TabOption<TabType>[] = [
     { id: 'details', label: 'Details' },
@@ -57,16 +51,13 @@ export default function CardDetail({ cardId }: { cardId?: string }) {
           options={tabOptions}
           activeTabId={activeTab}
           onTabChange={(tabId) => setActiveTab(tabId)}
+          containerStyle={{ marginTop: 8 }}
         />
 
         {activeTab === 'details' ? (
-          <CardDetailedInfo
-            detailedData={detailedCardData}
-            isLoading={isLoadingDetails}
-            error={detailedError}
-          />
+          <CardDetailedInfo cardId={cardId} />
         ) : (
-          <CardPricesInfo />
+          <CardPricesInfo cardId={cardId} />
         )}
       </DetailCard>
     </View>

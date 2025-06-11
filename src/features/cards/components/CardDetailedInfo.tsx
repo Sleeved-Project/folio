@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useCardDetailedInfo } from '../hooks/queries/useCardDetail';
+import { LoadingState, ErrorState } from '../../../components/ui/StatusIndicators';
 import InfoGrid from '../../../components/ui/InfoGrid';
 import InfoItem from '../../../components/ui/InfoItem';
 import Tag from '../../../components/ui/Tag';
@@ -7,55 +9,28 @@ import FlavorTextBox from './FlavorTextBox';
 import { User, Calendar, StarIcon } from 'lucide-react-native';
 
 interface CardDetailedInfoProps {
-  detailedData?: {
-    artist?: {
-      id: number;
-      name: string;
-    };
-    rarity?: {
-      id: number;
-      label: string;
-    };
-    set?: {
-      releaseDate: string;
-    };
-    subtypes?: Array<{
-      id: number;
-      label: string;
-    }>;
-    flavorText?: string;
-  };
-  isLoading: boolean;
-  error: unknown;
+  cardId?: string;
 }
 
-export default function CardDetailedInfo({
-  detailedData,
-  isLoading,
-  error,
-}: CardDetailedInfoProps) {
+export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
+  const { data: detailedData, isLoading, error } = useCardDetailedInfo(cardId || '');
+
+  // Loading state
+  if (isLoading) {
+    return <LoadingState />;
+  }
+
+  // Error state
+  if (error || !detailedData) {
+    return (
+      <ErrorState
+        message={error instanceof Error ? error.message : 'Failed to load card details'}
+      />
+    );
+  }
+
   const hasSubtypes = detailedData?.subtypes && detailedData.subtypes.length > 0;
   const hasFlavorText = !!detailedData?.flavorText;
-
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>Loading additional details...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>
-          {error instanceof Error ? error.message : 'Error loading card details'}
-        </Text>
-      </View>
-    );
-  }
-
-  if (!detailedData) return null;
 
   return (
     <View style={styles.container}>
@@ -113,24 +88,6 @@ export default function CardDetailedInfo({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-  },
-  loadingContainer: {
-    padding: 16,
-    alignItems: 'center',
-  },
-  loadingText: {
-    fontSize: 14,
-    color: '#666',
-    fontStyle: 'italic',
-  },
-  errorContainer: {
-    padding: 16,
-    backgroundColor: '#ffeeee',
-    borderRadius: 8,
-  },
-  errorText: {
-    fontSize: 14,
-    color: '#e53e3e',
   },
   subtypesSection: {
     marginBottom: 20,
