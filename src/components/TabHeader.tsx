@@ -1,6 +1,4 @@
-import { Link } from 'expo-router';
 import { Text, StyleSheet, View } from 'react-native';
-import AccountSvg from './ui/AccountSvg';
 import BackButton from './BackButton';
 
 interface TabHeaderProps {
@@ -13,11 +11,6 @@ export default function TabHeader({ title, displayBackButton }: TabHeaderProps) 
     <View style={styles.container}>
       <View style={styles.side}>{displayBackButton && <BackButton />}</View>
       <View style={styles.center}>{title && <Text style={styles.text}>{title}</Text>}</View>
-      <View style={styles.side}>
-        <Link href="/account">
-          <AccountSvg width={20} height={20} />
-        </Link>
-      </View>
     </View>
   );
 }

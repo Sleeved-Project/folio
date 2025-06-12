@@ -42,7 +42,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        if (config.IS_DEV_MODE) {
+        if (config.IS_DEV_MODE === true) {
           setIsAuthenticated(true);
           setAuthCheckComplete(true);
           return;
