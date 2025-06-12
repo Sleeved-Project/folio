@@ -3,12 +3,11 @@ import React, { useRef, useState } from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera, useCameraPermission, useCameraDevice } from 'react-native-vision-camera';
-import CardNotFound from './CardNotFound';
+import { Link } from 'expo-router';
 
 export default function CardScanner() {
   const { hasPermission, requestPermission } = useCameraPermission();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isCardNotFoundModalVisible, setIsCardNotFoundModalVisible] = useState<boolean>(true);
   const device = useCameraDevice('back');
   const camera = useRef<Camera>(null);
 
@@ -35,7 +34,7 @@ export default function CardScanner() {
         body: formData,
       });
       if (!response.ok) {
-        setIsCardNotFoundModalVisible(true);
+        console.log("Navigate to '/scan-result' with error");
       }
       const data = await response.json();
       console.log('Photo uploaded successfully:', data);
@@ -103,10 +102,9 @@ export default function CardScanner() {
           </View>
         </>
       )}
-      <CardNotFound
-        visible={isCardNotFoundModalVisible}
-        setIsVisible={setIsCardNotFoundModalVisible}
-      />
+      <Link href="/scan-result" style={{ width: '100%', color: 'red' }}>
+        Go to scan result
+      </Link>
     </SafeAreaView>
   );
 }
