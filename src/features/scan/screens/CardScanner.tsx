@@ -3,11 +3,20 @@ import React, { useRef, useState } from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera, useCameraPermission, useCameraDevice } from 'react-native-vision-camera';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
+import { Card } from '../../cards/types';
 
 export default function CardScanner() {
+  const router = useRouter();
   const { hasPermission, requestPermission } = useCameraPermission();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [cards, setCards] = useState<Card[]>([
+    {
+      id: 'base1-4',
+      imageSmall: 'https://images.pokemontcg.io/base1/4.png',
+      price: 19.99,
+    },
+  ]);
   const device = useCameraDevice('back');
   const camera = useRef<Camera>(null);
 
@@ -34,6 +43,12 @@ export default function CardScanner() {
         body: formData,
       });
       if (!response.ok) {
+        router.push({
+          pathname: '/scan-result',
+          params: {
+            resultType: 'fail',
+          },
+        });
         console.log("Navigate to '/scan-result' with error");
       }
       const data = await response.json();
@@ -52,10 +67,18 @@ export default function CardScanner() {
       try {
         const photo = await camera.current.takePhoto();
         const result = await fetch(`file://${photo.path}`);
-        const data = await result.blob();
-        console.log('Photo taken:', data, typeof data);
+        const photoData = await result.blob();
         // Sending the photo to Atlas api
-        await uploadPhoto(data);
+        const cards = await uploadPhoto(photoData);
+        // Navigate to scan result
+        setCards(cards);
+        router.push({
+          pathname: '/scan-result',
+          params: {
+            resultType: 'success',
+            cards: JSON.stringify(cards),
+          },
+        });
       } catch (e) {
         console.warn('Failed to take photo:', e);
       }
@@ -102,7 +125,17 @@ export default function CardScanner() {
           </View>
         </>
       )}
-      <Link href="/scan-result" style={{ width: '100%', color: 'red' }}>
+      {/* // [TODO] delete this button as it is only for testing purposes */}
+      <Link
+        href={{
+          pathname: '/scan-result',
+          params: {
+            resultType: 'success',
+            cards: JSON.stringify(cards),
+          },
+        }}
+        style={{ width: '100%', color: 'red' }}
+      >
         Go to scan result
       </Link>
     </SafeAreaView>

@@ -1,6 +1,8 @@
 export interface Card {
   id: string;
   imageSmall: string;
+  imageLarge?: string;
+  price?: number;
 }
 
 export interface CardsListResponse {

@@ -1,22 +1,20 @@
 import React from 'react';
 import { Text, StyleSheet, View, Image } from 'react-native';
-import { Button } from '../../../components/ui';
 import cardVerso from '../../../../assets/card-verso.png';
+import { useRouter } from 'expo-router';
+import { Button } from '../../../components/ui';
 
-interface CardScanFailProps {
-  setIsVisible: (visible: boolean) => void;
-}
-
-export default function CardScanFail({ setIsVisible }: CardScanFailProps) {
+export default function CardScanFail() {
+  const router = useRouter();
   return (
     <>
       <Image source={cardVerso} style={styles.image} />
       <View style={styles.actionContainer}>
         <Text style={styles.text}>Oops no card match found !</Text>
         <Button
-          title={'Scan again'}
+          title="Scan again"
           variant="scan"
-          onPress={() => setIsVisible(false)}
+          onPress={() => router.replace('/scan')}
           buttonStyle={styles.actionButton}
           textStyle={styles.textStyle}
         />
@@ -32,6 +30,9 @@ const styles = StyleSheet.create({
   actionButton: {
     width: '90%',
     alignSelf: 'center',
+    backgroundColor: '#EFF1F5',
+    padding: 16,
+    borderRadius: 12,
   },
   text: {
     color: '#111',
@@ -46,5 +47,6 @@ const styles = StyleSheet.create({
   image: {
     width: 345,
     height: 480,
+    borderRadius: 16,
   },
 });
