@@ -4,7 +4,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Button } from '../../../components/ui';
 import cardVerso from '../../../../assets/card-verso.png';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Link } from 'expo-router';
 
 interface CardNotFoundProps {
   visible?: boolean;
@@ -19,9 +18,6 @@ export default function CardNotFound({ visible, setIsVisible }: CardNotFoundProp
           <Image source={cardVerso} style={styles.image} />
           <View style={styles.actionContainer}>
             <Text style={styles.text}>Oops no card match found !</Text>
-            <Link href="/scan/scan-result" style={{ width: '100%' }}>
-              Go to scan result
-            </Link>
             <Button
               title={'Scan again'}
               variant="scan"
