@@ -8,7 +8,8 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useAuth } from '../context/AuthContext';
-import { User, LogOut, Settings } from 'lucide-react-native';
+import { LogOut, Settings } from 'lucide-react-native';
+import AccountSvg from '../../../components/ui/AccountSvg';
 
 export default function UserMenu() {
   const { logout, user } = useAuth();
@@ -41,7 +42,7 @@ export default function UserMenu() {
       )}
 
       <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)} style={styles.iconButton}>
-        <User size={24} color="#333" />
+        <AccountSvg width={24} height={24} />
       </TouchableOpacity>
 
       {menuVisible && (

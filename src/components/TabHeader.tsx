@@ -1,5 +1,6 @@
 import { Text, StyleSheet, View } from 'react-native';
 import BackButton from './BackButton';
+import UserMenu from '../features/auth/components/UserMenu';
 
 interface TabHeaderProps {
   title?: string;
@@ -11,6 +12,9 @@ export default function TabHeader({ title, displayBackButton }: TabHeaderProps) 
     <View style={styles.container}>
       <View style={styles.side}>{displayBackButton && <BackButton />}</View>
       <View style={styles.center}>{title && <Text style={styles.text}>{title}</Text>}</View>
+      <View style={styles.side}>
+        <UserMenu />
+      </View>
     </View>
   );
 }
