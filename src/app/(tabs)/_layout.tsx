@@ -2,12 +2,16 @@ import { Tabs } from 'expo-router';
 import TabHeader from '../../components/TabHeader';
 import { Focus, List, Wallet } from 'lucide-react-native';
 import { View } from 'react-native';
+import UserMenu from '../../features/auth/components/UserMenu';
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: true,
+        tabBarActiveTintColor: '#2196F3',
+        tabBarInactiveTintColor: '#A0A0A0',
+        headerRight: () => <UserMenu />,
+        headerRightContainerStyle: { paddingRight: 16 },
       }}
     >
       <Tabs.Screen
