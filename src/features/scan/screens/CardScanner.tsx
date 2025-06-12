@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera, useCameraPermission, useCameraDevice } from 'react-native-vision-camera';
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Card } from '../../cards/types';
 
 export default function CardScanner() {
@@ -17,6 +17,8 @@ export default function CardScanner() {
       price: 19.99,
     },
   ]);
+  console.log('CardScanner rendered with cards:', cards);
+
   const device = useCameraDevice('back');
   const camera = useRef<Camera>(null);
 
@@ -35,7 +37,7 @@ export default function CardScanner() {
       const formData = new FormData();
       formData.append('file', photo, 'card_photo.jpg');
       console.log('FormData prepared:', formData);
-      const response = await fetch('http://localhost:8000/api/v1/images/hash/file', {
+      const response = await fetch('http://localhost:8082/api/v1/scan/analyze', {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -56,6 +58,12 @@ export default function CardScanner() {
       return data;
     } catch (error) {
       console.error('Error uploading photo:', error);
+      router.push({
+        pathname: '/scan-result',
+        params: {
+          resultType: 'fail',
+        },
+      });
       throw error;
     } finally {
       setIsLoading(false);
@@ -125,19 +133,6 @@ export default function CardScanner() {
           </View>
         </>
       )}
-      {/* // [TODO] delete this button as it is only for testing purposes */}
-      <Link
-        href={{
-          pathname: '/scan-result',
-          params: {
-            resultType: 'success',
-            cards: JSON.stringify(cards),
-          },
-        }}
-        style={{ width: '100%', color: 'red' }}
-      >
-        Go to scan result
-      </Link>
     </SafeAreaView>
   );
 }
