@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useCardDetail } from '../hooks/queries/useCardDetail';
 import { LoadingState, ErrorState } from '../../../components/ui/StatusIndicators';
 import CardMetaInfo from '../components/CardMetaInfo';
@@ -9,6 +9,7 @@ import CardImageSection from '../components/CardImageSection';
 import { TabSwitcher, TabOption } from '../../../components/ui/TabSwitcher';
 import AnimatedDrawer from '../components/AnimatedDrawer';
 import { useDrawerAnimation } from '../hooks/useDrawerAnimation';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type TabType = 'details' | 'prices';
 
