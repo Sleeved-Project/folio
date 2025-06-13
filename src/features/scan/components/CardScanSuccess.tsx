@@ -3,7 +3,6 @@ import { Text, StyleSheet, View, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Card } from '../../cards/types';
 import { Button } from '../../../components/ui';
-import { displayPrice } from '../utils/price-utils';
 
 interface CardScanSuccessProps {
   cards: Card[];
@@ -20,7 +19,7 @@ export default function CardScanSuccess({ cards, highlightedCardId }: CardScanSu
       <View style={styles.actionContainer}>
         <View style={styles.cardInfoContainer}>
           <View style={styles.cardInfo}>
-            <Text style={styles.priceText}>{displayPrice(highlightedCard.bestTrendPrice)}</Text>
+            <Text style={styles.priceText}>{highlightedCard.bestTrendPrice}</Text>
             <Text style={styles.infoText}>Best trend price</Text>
           </View>
           <Button
