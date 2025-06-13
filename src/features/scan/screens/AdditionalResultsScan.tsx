@@ -22,8 +22,8 @@ export default function AdditionalResultsScan({ cards }: AdditionalResultsScanPr
               pathname: `/scan-result`,
               params: {
                 resultType: 'success',
-                cards: JSON.stringify([cards]),
-                highlightedCardId: cards[0].id,
+                cards: JSON.stringify(cards),
+                highlightedCardId: cards[0]?.id,
               },
             })
           }

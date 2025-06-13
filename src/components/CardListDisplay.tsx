@@ -34,7 +34,7 @@ export default function CardListDisplay({
                 pathname: `/scan-result`,
                 params: {
                   resultType: 'success',
-                  cards: JSON.stringify([item]),
+                  cards: JSON.stringify(cards),
                   highlightedCardId: item.id,
                 },
               });
