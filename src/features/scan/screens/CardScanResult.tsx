@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-// import { LinearGradient } from 'expo-linear-gradient';
+import { StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CardScanFail from '../components/CardScanFail';
 import CardScanSuccess from '../components/CardScanSuccess';
@@ -14,9 +14,9 @@ interface CardScanResultProps {
 export default function CardScanResult({ resultType, cards }: CardScanResultProps) {
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      <View style={styles.container}>
+      <LinearGradient colors={['black', 'white']} style={styles.container} locations={[0.5, 0.8]}>
         {resultType === 'success' && cards ? <CardScanSuccess cards={cards} /> : <CardScanFail />}
-      </View>
+      </LinearGradient>
     </SafeAreaView>
   );
 }
