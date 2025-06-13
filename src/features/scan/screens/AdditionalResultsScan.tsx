@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { Card } from '../../cards/types';
 import CardListDisplay from '../../../components/CardListDisplay';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -30,6 +30,9 @@ export default function AdditionalResultsScan({ cards }: AdditionalResultsScanPr
         >
           <ChevronLeft size={32} color="black" />
         </TouchableOpacity>
+        <View style={styles.headerTitleContainer}>
+          <Text style={styles.headerTitle}>Other results</Text>
+        </View>
       </View>
       <CardListDisplay cards={cards} listOrigin={'scan'} />
     </SafeAreaView>
@@ -47,5 +50,17 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 8,
     paddingTop: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  headerTitleContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  headerTitle: {
+    color: 'black',
+    fontSize: 20,
+    alignSelf: 'center',
   },
 });
