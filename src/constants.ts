@@ -8,6 +8,10 @@ export const SCREEN_DIMENSIONS = {
   HEIGHT: Dimensions.get('window').height,
 };
 
+// This approach creates a responsive frame that works across all devices:
+export const FRAME_WIDTH = Math.min(SCREEN_DIMENSIONS.WIDTH * 0.85, 311); // 85% of screen width, max 311
+export const FRAME_HEIGHT = FRAME_WIDTH * (434 / 311); // Maintain aspect ratio
+
 // Card aspect ratio (standard Pokémon card is 2.5:3.5)
 export const CARD_ASPECT_RATIO = 2.5 / 3.5;
 

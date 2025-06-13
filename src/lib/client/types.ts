@@ -27,3 +27,9 @@ export class ApiError extends Error {
     this.error = errorResponse.error;
   }
 }
+
+export interface FormDataFile {
+  uri: string;
+  type: string;
+  name: string;
+}
