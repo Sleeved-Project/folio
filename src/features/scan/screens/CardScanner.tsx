@@ -52,6 +52,7 @@ export default function CardScanner() {
                 params: {
                   resultType: 'success',
                   cards: JSON.stringify(cards),
+                  highlightedCardId: cards[0].id,
                 },
               });
             } else {

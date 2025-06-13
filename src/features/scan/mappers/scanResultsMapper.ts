@@ -1,5 +1,6 @@
 import { CardScanResult } from '../types';
 import { Card } from '../../cards/types';
+import { displayScanPrice } from '../utils/scan-price-utils';
 
 export function mapScanResultToCards(scanResults: CardScanResult[]): Card[] {
   if (!scanResults || !Array.isArray(scanResults)) {
@@ -11,7 +12,7 @@ export function mapScanResultToCards(scanResults: CardScanResult[]): Card[] {
     id: result.id,
     imageSmall: result.imageSmall,
     imageLarge: result.imageLarge,
-    price: parseFloat(result.bestTrendPrice || '0'),
+    bestTrendPrice: displayScanPrice(result.bestTrendPrice),
     similarity: result.similarity,
   }));
 }

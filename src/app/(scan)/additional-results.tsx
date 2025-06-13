@@ -1,5 +1,8 @@
+import { useLocalSearchParams } from 'expo-router';
 import AdditionalResultsScan from '../../features/scan/screens/AdditionalResultsScan';
 
 export default function AdditionalResults() {
-  return <AdditionalResultsScan />;
+  const { cards } = useLocalSearchParams();
+
+  return <AdditionalResultsScan cards={JSON.parse(cards as string)} />;
 }
