@@ -3,28 +3,30 @@ import { Text, StyleSheet, View, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Card } from '../../cards/types';
 import { Button } from '../../../components/ui';
+import { displayPrice } from '../utils/price-utils';
 
 interface CardScanSuccessProps {
   cards: Card[];
+  highlightedCardId: string;
 }
 
-export default function CardScanSuccess({ cards }: CardScanSuccessProps) {
+export default function CardScanSuccess({ cards, highlightedCardId }: CardScanSuccessProps) {
   const router = useRouter();
-  const card = cards[0];
+  const highlightedCard: Card = cards.find((card) => card.id === highlightedCardId) || cards[0];
 
   return (
     <>
-      <Image source={{ uri: card.imageSmall }} style={styles.image} />
+      <Image source={{ uri: highlightedCard.imageSmall }} style={styles.image} />
       <View style={styles.actionContainer}>
         <View style={styles.cardInfoContainer}>
           <View style={styles.cardInfo}>
-            <Text style={styles.priceText}>${card.price}</Text>
+            <Text style={styles.priceText}>{displayPrice(highlightedCard.bestTrendPrice)}</Text>
             <Text style={styles.infoText}>Best trend price</Text>
           </View>
           <Button
             title="See more"
             variant="primary"
-            onPress={() => router.push(`/card/${card.id}`)}
+            onPress={() => router.push(`/card/${highlightedCard.id}`)}
           />
         </View>
         <Button title="Scan again" variant="outline" onPress={() => router.replace('/scan')} />

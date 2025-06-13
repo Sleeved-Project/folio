@@ -2,7 +2,7 @@ export interface Card {
   id: string;
   imageSmall: string;
   imageLarge?: string;
-  price?: number;
+  bestTrendPrice?: string;
 }
 
 export interface CardsListResponse {

@@ -9,13 +9,22 @@ import { Card } from '../../cards/types';
 interface CardScanResultProps {
   resultType: 'success' | 'fail';
   cards?: Card[];
+  highlightedCardId: string;
 }
 
-export default function CardScanResult({ resultType, cards }: CardScanResultProps) {
+export default function CardScanResult({
+  resultType,
+  cards,
+  highlightedCardId,
+}: CardScanResultProps) {
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <LinearGradient colors={['black', 'white']} style={styles.container} locations={[0.5, 0.8]}>
-        {resultType === 'success' && cards ? <CardScanSuccess cards={cards} /> : <CardScanFail />}
+        {resultType === 'success' && cards ? (
+          <CardScanSuccess cards={cards} highlightedCardId={highlightedCardId} />
+        ) : (
+          <CardScanFail />
+        )}
       </LinearGradient>
     </SafeAreaView>
   );
