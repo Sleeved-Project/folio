@@ -129,6 +129,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: '#2196F3',
+    shadowColor: 'transparent',
+    elevation: 0,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
   },
   buttonGhost: {
     backgroundColor: 'transparent',
