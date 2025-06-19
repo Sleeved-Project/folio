@@ -20,12 +20,19 @@ export interface ApiErrorResponse {
 
 export class ApiError extends Error {
   error: string;
+  code: string;
+  rawData?: unknown;
 
   constructor(errorResponse: ApiErrorResponse) {
     super(errorResponse.message);
     this.name = 'ApiError';
     this.error = errorResponse.error;
+    this.code = errorResponse.error;
   }
+}
+
+export interface ExtendedError extends Error {
+  rawData?: unknown;
 }
 
 export interface FormDataFile {
