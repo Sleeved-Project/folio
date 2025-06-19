@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, Keyboard } from 'react-native';
-import { useAuth } from '../context/AuthContext';
+import { useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+
+import AuthLayout from '../components/AuthLayout';
+import { useAuth } from '../context/AuthContext';
 import { FormTextInput } from '../../../components/ui';
 import { signupSchema, type SignupFormValues } from '../schemas/userSchema';
 import { getErrorMessage } from '../../../lib/errors/errors-utils';
-import AuthLayout from '../components/AuthLayout';
 
 const SignupScreen: React.FC = () => {
-  const { signup, isLoading } = useAuth();
+  const { signup } = useAuth();
+  const [isLoading, setLoading] = useState(false);
+  const router = useRouter();
 
   const {
     control,
@@ -26,9 +30,20 @@ const SignupScreen: React.FC = () => {
 
   const onSubmit = async (data: SignupFormValues) => {
     try {
-      await signup(data.email, data.password);
-    } catch (err: unknown) {
+      setLoading(true);
+      const result = await signup(data.email, data.password);
+
+      if (result && result.requiresVerification) {
+        router.replace({
+          pathname: '/verify-email',
+          params: { email: result.email },
+        });
+      }
+    } catch (err) {
+      console.error('SignupScreen: Signup failed:', err);
       Alert.alert('Signup Failed', getErrorMessage(err));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,7 +64,6 @@ const SignupScreen: React.FC = () => {
         error={errors.email?.message}
         returnKeyType="next"
       />
-
       <FormTextInput
         control={control}
         name="password"
@@ -59,7 +73,6 @@ const SignupScreen: React.FC = () => {
         error={errors.password?.message}
         returnKeyType="next"
       />
-
       <FormTextInput
         control={control}
         name="verifyPassword"

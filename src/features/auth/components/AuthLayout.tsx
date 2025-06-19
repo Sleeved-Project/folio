@@ -19,7 +19,7 @@ interface AuthLayoutProps {
   buttonTitle: string;
   isLoading: boolean;
   onSubmit: () => void;
-  redirectType: 'signin' | 'signup';
+  redirectType?: 'signin' | 'signup';
   footerContent?: ReactNode;
 }
 
@@ -66,7 +66,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
             disabled={isLoading}
             buttonStyle={styles.actionButton}
           />
-          <AuthRedirectLink type={redirectType} />
+          {redirectType && <AuthRedirectLink type={redirectType} />}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

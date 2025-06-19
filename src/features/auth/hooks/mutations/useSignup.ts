@@ -13,6 +13,7 @@ export const useSignup = () => {
         apiType: 'auth',
       });
 
+      // Only set token if it exists (won't exist for unverified emails)
       if (response.token) {
         await authUtils.setToken(response.token);
       }
@@ -20,8 +21,11 @@ export const useSignup = () => {
       return response;
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(userKeys.currentUser(), data.user);
-      queryClient.invalidateQueries({ queryKey: userKeys.currentUser() });
+      // Only update user data if we have a user
+      if (data.user) {
+        queryClient.setQueryData(userKeys.currentUser(), data.user);
+        queryClient.invalidateQueries({ queryKey: userKeys.currentUser() });
+      }
     },
     onError: (error) => {
       console.error('Registration failed:', error);
