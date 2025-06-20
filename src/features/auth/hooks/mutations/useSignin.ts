@@ -1,8 +1,11 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
 import { AuthResponse, SigninPayload } from '../../types';
+import { userKeys } from '../queries/useCurrentUser';
 
 export const useSignin = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async ({ email, password }: SigninPayload) => {
       try {
@@ -15,6 +18,11 @@ export const useSignin = () => {
       } catch (error: unknown) {
         console.error('Signin error:', error);
         throw error;
+      }
+    },
+    onSuccess: (data) => {
+      if (data.user) {
+        queryClient.setQueryData(userKeys.currentUser(), data.user);
       }
     },
   });

@@ -12,6 +12,7 @@ export const useLogout = () => {
     },
     onSuccess: () => {
       queryClient.setQueryData(userKeys.currentUser(), null);
+      queryClient.invalidateQueries({ queryKey: userKeys.all });
     },
   });
 };

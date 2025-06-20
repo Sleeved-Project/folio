@@ -15,6 +15,8 @@ export default function UserMenu() {
   const { logout, user } = useAuth();
   const [menuVisible, setMenuVisible] = useState(false);
 
+  console.log('userinfo:', user)
+
   const handleLogout = async () => {
     Alert.alert('Logout', 'Are you sure you want to log out?', [
       { text: 'Cancel', style: 'cancel' },

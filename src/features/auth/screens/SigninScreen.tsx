@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, StyleSheet, Alert, Keyboard } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet, Alert, Keyboard, View } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,6 +7,7 @@ import { FormTextInput } from '../../../components/ui';
 import { signinSchema, type SigninFormValues } from '../schemas/userSchema';
 import { getErrorMessage } from '../../../lib/errors/errors-utils';
 import AuthLayout from '../components/AuthLayout';
+import { GoogleSignInButton } from '../components/GoogleSignInButton';
 
 const SigninScreen: React.FC = () => {
   const { signin, isLoading } = useAuth();
@@ -31,11 +32,24 @@ const SigninScreen: React.FC = () => {
     }
   };
 
-  // Forgot password component to pass as footer content
-  const forgotPasswordLink = (
-    <TouchableOpacity style={styles.forgotPassword}>
-      <Text style={styles.forgotPasswordText}>Forgot password?</Text>
-    </TouchableOpacity>
+  // Combined footer content with forgot password and social login options
+  const footerContent = (
+    <View style={styles.footerContainer}>
+      {/* Forgot password link */}
+      <TouchableOpacity style={styles.forgotPassword}>
+        <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+      </TouchableOpacity>
+
+      {/* Separator */}
+      <View style={styles.separator}>
+        <View style={styles.separatorLine} />
+        <Text style={styles.separatorText}>or continue with</Text>
+        <View style={styles.separatorLine} />
+      </View>
+
+      {/* Social login buttons */}
+      <GoogleSignInButton />
+    </View>
   );
 
   return (
@@ -45,7 +59,7 @@ const SigninScreen: React.FC = () => {
       isLoading={isLoading}
       onSubmit={handleSubmit(onSubmit)}
       redirectType="signup"
-      footerContent={forgotPasswordLink}
+      footerContent={footerContent}
     >
       <FormTextInput
         control={control}
@@ -72,15 +86,34 @@ const SigninScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  footerContainer: {
+    width: '100%',
+    marginTop: 4,
+    marginBottom: 20,
+  },
   forgotPassword: {
     alignSelf: 'flex-end',
-    marginTop: 4,
     marginBottom: 20,
   },
   forgotPasswordText: {
     color: '#2196F3',
     fontSize: 14,
     fontWeight: '500',
+  },
+  separator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 16,
+  },
+  separatorLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#E0E0E0',
+  },
+  separatorText: {
+    marginHorizontal: 10,
+    fontSize: 14,
+    color: '#757575',
   },
 });
 
