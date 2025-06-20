@@ -5,6 +5,7 @@ import { getErrorMessage } from '../../../lib/errors/errors-utils';
 import { authUtils } from '../utils/auth-utils';
 import { useSignin } from '../hooks/mutations/useSignin';
 import { useSignup } from '../hooks/mutations/useSignup';
+import { useLogout } from '../hooks/mutations/useLogout';
 import { useCurrentUser } from '../hooks/queries/useCurrentUser';
 import { AuthErrorCode, User } from '../types';
 import { ApiError } from '../../../lib/client/types';
@@ -69,6 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // API hooks
   const { mutateAsync: signinMutation, isPending: isSigninLoading } = useSignin();
   const { mutateAsync: signupMutation, isPending: isSignupLoading } = useSignup();
+  const { mutateAsync: logoutMutation } = useLogout();
   const { data: user, isLoading: isUserLoading } = useCurrentUser();
 
   // Computed auth states used for routing decisions
@@ -172,7 +174,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    */
   const logout = async () => {
     try {
-      await authUtils.removeToken();
+      await logoutMutation();
       setIsAuthenticated(false);
       setError(null);
     } catch (err) {
