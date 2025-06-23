@@ -1,6 +1,15 @@
-import { Text, StyleSheet, View, FlatList, Image, TouchableOpacity } from 'react-native';
-import { Card } from '../features/cards/types';
+import {
+  Text,
+  StyleSheet,
+  View,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
+import { Card } from '../../features/cards/types';
 import { useRouter } from 'expo-router';
+import { useTheme } from '../../theme/useTheme';
 
 interface CardListDisplayProps {
   cards: Card[];
@@ -21,8 +30,10 @@ export default function CardListDisplay({
   error,
   listOrigin,
 }: CardListDisplayProps) {
+  const router = useRouter();
+  const theme = useTheme();
+
   const displayCardsList = ({ item }: { item: Card }) => {
-    const router = useRouter();
     return (
       <View key={item.id} style={{ margin: 8 }}>
         <TouchableOpacity
@@ -43,7 +54,12 @@ export default function CardListDisplay({
         >
           <Image
             source={{ uri: item.imageSmall }}
-            style={{ width: 167, height: 227, borderRadius: 8 }}
+            style={{
+              width: 167,
+              height: 227,
+              borderRadius: theme.borderRadius.medium,
+              ...theme.shadows.small,
+            }}
           />
         </TouchableOpacity>
       </View>
@@ -51,7 +67,7 @@ export default function CardListDisplay({
   };
 
   return (
-    <>
+    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <FlatList
         data={cards}
         keyExtractor={(card, index) => `${card.id}-${index}`}
@@ -65,29 +81,56 @@ export default function CardListDisplay({
         onEndReachedThreshold={0.5}
         ListFooterComponent={() => {
           if (isFetchingNextPage || isLoading) {
-            return <Text style={styles.text}>Loading...</Text>;
+            return (
+              <View style={styles.loaderContainer}>
+                <ActivityIndicator color={theme.colors.primary} size="small" />
+                <Text style={[styles.text, { color: theme.colors.text.secondary }]}>
+                  Loading...
+                </Text>
+              </View>
+            );
           }
           if (error) {
-            return <Text style={styles.text}>Error loading cards</Text>;
+            return (
+              <Text style={[styles.text, styles.errorText, { color: theme.colors.danger }]}>
+                Error loading cards
+              </Text>
+            );
           }
           return null;
         }}
-        ListEmptyComponent={() => <Text style={styles.text}>No cards available</Text>}
+        ListEmptyComponent={() => {
+          if (isFetchingNextPage || isLoading) return null;
+
+          return (
+            <Text style={[styles.text, { color: theme.colors.text.secondary }]}>
+              No cards available
+            </Text>
+          );
+        }}
         showsVerticalScrollIndicator={false}
       />
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingTop: 16,
   },
   text: {
-    color: 'black',
+    textAlign: 'center',
+    padding: 16,
+    fontSize: 16,
+  },
+  errorText: {
+    fontWeight: '500',
+  },
+  loaderContainer: {
+    padding: 16,
+    alignItems: 'center',
   },
 });

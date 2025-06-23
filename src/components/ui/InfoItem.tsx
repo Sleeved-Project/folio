@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useTheme } from '../../theme/useTheme';
 
 interface InfoItemProps {
   label: string;
@@ -20,6 +21,8 @@ export default function InfoItem({
   useEllipsis = true,
   numberOfLines = 1,
 }: InfoItemProps) {
+  const theme = useTheme();
+
   if (value === null || value === undefined) return null;
 
   return (
@@ -27,15 +30,23 @@ export default function InfoItem({
       style={[
         styles.container,
         fullWidth ? styles.fullWidth : styles.halfWidth,
-        accentBorder && styles.accentBorder,
+        {
+          backgroundColor: theme.colors.background.tertiary,
+          borderRadius: theme.borderRadius.medium,
+        },
+        accentBorder && {
+          borderWidth: 1,
+          borderColor: theme.colors.border.medium,
+          backgroundColor: theme.colors.background.primary,
+        },
       ]}
     >
       {icon && <View style={styles.iconContainer}>{icon}</View>}
 
       <View style={styles.content}>
-        <Text style={styles.label}>{label}</Text>
+        <Text style={[styles.label, { color: theme.colors.text.tertiary }]}>{label}</Text>
         <Text
-          style={styles.value}
+          style={[styles.value, { color: theme.colors.text.primary }]}
           numberOfLines={useEllipsis ? numberOfLines : undefined}
           ellipsizeMode="tail"
         >
@@ -53,19 +64,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 14,
     marginBottom: 12,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 10,
   },
   halfWidth: {
     width: '48%',
   },
   fullWidth: {
     width: '98%',
-  },
-  accentBorder: {
-    borderWidth: 1,
-    borderColor: '#D0D0D0',
-    backgroundColor: '#fff',
   },
   iconContainer: {
     marginRight: 12,
@@ -75,12 +79,10 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    color: '#999',
     marginBottom: 4,
   },
   value: {
     fontSize: 15,
-    color: '#333',
     fontWeight: '500',
   },
 });

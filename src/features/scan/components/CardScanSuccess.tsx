@@ -3,6 +3,7 @@ import { Text, StyleSheet, View, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Card } from '../../cards/types';
 import { Button } from '../../../components/ui';
+import { useTheme } from '../../../theme/useTheme';
 
 interface CardScanSuccessProps {
   cards: Card[];
@@ -11,16 +12,24 @@ interface CardScanSuccessProps {
 
 export default function CardScanSuccess({ cards, highlightedCardId }: CardScanSuccessProps) {
   const router = useRouter();
+  const theme = useTheme();
   const highlightedCard: Card = cards.find((card) => card.id === highlightedCardId) || cards[0];
 
   return (
     <>
-      <Image source={{ uri: highlightedCard.imageSmall }} style={styles.image} />
+      <Image
+        source={{ uri: highlightedCard.imageSmall }}
+        style={[styles.image, { borderRadius: theme.borderRadius.medium }]}
+      />
       <View style={styles.actionContainer}>
         <View style={styles.cardInfoContainer}>
           <View style={styles.cardInfo}>
-            <Text style={styles.priceText}>{highlightedCard.bestTrendPrice}</Text>
-            <Text style={styles.infoText}>Best trend price</Text>
+            <Text style={[styles.priceText, { color: theme.colors.text.primary }]}>
+              {highlightedCard.bestTrendPrice}
+            </Text>
+            <Text style={[styles.infoText, { color: theme.colors.text.tertiary }]}>
+              Best trend price
+            </Text>
           </View>
           <Button
             title="See more"
@@ -40,7 +49,7 @@ export default function CardScanSuccess({ cards, highlightedCardId }: CardScanSu
               },
             })
           }
-          textStyle={styles.addResultsText}
+          textStyle={[styles.addResultsText, { color: theme.colors.text.primary }]}
         />
       </View>
     </>
@@ -59,41 +68,19 @@ const styles = StyleSheet.create({
   priceText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#111',
   },
   infoText: {
-    fontSize: 16,
-    color: '#A09CAB',
-  },
-  cardDetailButton: {
-    backgroundColor: '#111',
-    padding: 20,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  cardDetailText: {
-    color: '#fff',
-    fontWeight: 'bold',
     fontSize: 16,
   },
   actionContainer: {
     width: '90%',
     gap: 16,
   },
-  text: {
-    color: '#111',
-    fontWeight: 'bold',
-    fontSize: 18,
-    textAlign: 'center',
-    margin: 20,
-  },
   image: {
     width: 345,
     height: 480,
-    borderRadius: 16,
   },
   addResultsText: {
-    color: '#111',
     fontSize: 16,
     textAlign: 'center',
     textDecorationLine: 'underline',

@@ -4,6 +4,7 @@ import { PanGestureHandler, GestureEvent } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PanGestureHandlerEventPayload } from 'react-native-screens';
+import { useTheme } from '../../../theme/useTheme';
 
 type GestureHandlerType = (event: GestureEvent<PanGestureHandlerEventPayload>) => void;
 
@@ -28,20 +29,34 @@ export default function AnimatedDrawer({
   style,
   contentContainerStyle,
   showDragHandle = true,
-  dragHandleColor = '#d0d0d0',
+  dragHandleColor,
 }: AnimatedDrawerProps) {
   const insets = useSafeAreaInsets();
+  const theme = useTheme();
+
+  const handleColor = dragHandleColor || theme.colors.border.medium;
 
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
-      <Animated.View style={[styles.container, animatedStyle, style]}>
-        {/* Drag handle */}
+      <Animated.View
+        style={[
+          styles.container,
+          {
+            backgroundColor: theme.colors.background.primary,
+            borderTopLeftRadius: theme.borderRadius.large * 2,
+            borderTopRightRadius: theme.borderRadius.large * 2,
+            ...theme.shadows.medium,
+          },
+          animatedStyle,
+          style,
+        ]}
+      >
         {showDragHandle && (
           <View
             style={styles.dragHandleContainer}
             onTouchStart={Platform.OS === 'web' ? onDragHandlePress : undefined}
           >
-            <View style={[styles.dragHandle, { backgroundColor: dragHandleColor }]} />
+            <View style={[styles.dragHandle, { backgroundColor: handleColor }]} />
           </View>
         )}
 
@@ -61,14 +76,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'white',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 10,
     zIndex: 10,
   },
   dragHandleContainer: {

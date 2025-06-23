@@ -9,6 +9,7 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
+import { useTheme } from '../../theme/useTheme';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost' | 'scan';
 
@@ -32,43 +33,49 @@ const Button: React.FC<ButtonProps> = ({
   loadingColor,
   ...rest
 }) => {
+  const theme = useTheme();
+
   const getButtonStyles = () => {
     switch (variant) {
       case 'secondary':
-        return styles.buttonSecondary;
+        return { backgroundColor: theme.colors.secondary };
       case 'danger':
-        return styles.buttonDanger;
+        return { backgroundColor: theme.colors.danger };
       case 'outline':
-        return styles.buttonOutline;
+        return {
+          backgroundColor: 'transparent',
+          borderWidth: 1,
+          borderColor: theme.colors.primary,
+          shadowColor: 'transparent',
+          elevation: 0,
+        };
       case 'ghost':
-        return styles.buttonGhost;
+        return {
+          backgroundColor: 'transparent',
+          shadowColor: 'transparent',
+          elevation: 0,
+        };
       case 'scan':
-        return styles.buttonScan;
+        return { backgroundColor: theme.colors.background.tertiary };
       case 'primary':
       default:
-        return styles.buttonPrimary;
+        return { backgroundColor: theme.colors.primary };
     }
   };
 
   const getTextStyles = () => {
     switch (variant) {
       case 'outline':
-        return styles.textOutline;
       case 'ghost':
-        return styles.textGhost;
+        return { color: theme.colors.primary };
+      case 'scan':
+        return { color: theme.colors.text.primary };
       case 'primary':
       case 'secondary':
       case 'danger':
       default:
-        return styles.textPrimary;
+        return { color: 'white' };
     }
-  };
-
-  const getDisabledStyles = () => {
-    if (variant === 'outline' || variant === 'ghost') {
-      return styles.disabledTransparent;
-    }
-    return styles.disabledOpaque;
   };
 
   const getLoadingColor = () => {
@@ -77,7 +84,9 @@ const Button: React.FC<ButtonProps> = ({
     switch (variant) {
       case 'outline':
       case 'ghost':
-        return '#2196F3';
+        return theme.colors.primary;
+      case 'scan':
+        return theme.colors.text.primary;
       default:
         return 'white';
     }
@@ -88,7 +97,7 @@ const Button: React.FC<ButtonProps> = ({
       style={[
         styles.button,
         getButtonStyles(),
-        (disabled || loading) && getDisabledStyles(),
+        (disabled || loading) && styles.disabledOpaque,
         buttonStyle,
       ]}
       disabled={disabled || loading}
@@ -116,51 +125,11 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  buttonPrimary: {
-    backgroundColor: '#2196F3',
-  },
-  buttonSecondary: {
-    backgroundColor: '#757575',
-  },
-  buttonDanger: {
-    backgroundColor: '#FF3B30',
-  },
-  buttonOutline: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#2196F3',
-    shadowColor: 'transparent',
-    elevation: 0,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0,
-    shadowRadius: 0,
-  },
-  buttonGhost: {
-    backgroundColor: 'transparent',
-    shadowColor: 'transparent',
-    shadowOpacity: 0,
-    elevation: 0,
-  },
-  buttonScan: {
-    backgroundColor: '#EFF1F5',
-  },
   text: {
     fontSize: 18,
     fontWeight: '600',
   },
-  textPrimary: {
-    color: 'white',
-  },
-  textOutline: {
-    color: '#2196F3',
-  },
-  textGhost: {
-    color: '#2196F3',
-  },
   disabledOpaque: {
-    opacity: 0.5,
-  },
-  disabledTransparent: {
     opacity: 0.5,
   },
 });

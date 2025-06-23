@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { DollarSign, Euro } from 'lucide-react-native';
+import { useTheme } from '../../theme/useTheme';
 
 interface PriceRowProps {
   type: string;
@@ -10,17 +11,25 @@ interface PriceRowProps {
 }
 
 export default function PriceRow({ type, value, currency = 'USD', isLast = false }: PriceRowProps) {
+  const theme = useTheme();
+
   return (
-    <View style={[styles.container, isLast && styles.lastRow]}>
+    <View
+      style={[
+        styles.container,
+        { borderBottomColor: theme.colors.border.light },
+        isLast && styles.lastRow,
+      ]}
+    >
       <View style={styles.typeContainer}>
         {currency === 'EUR' ? (
-          <Euro size={16} color="#4CAF50" />
+          <Euro size={16} color={theme.colors.success} />
         ) : (
-          <DollarSign size={16} color="#4CAF50" />
+          <DollarSign size={16} color={theme.colors.success} />
         )}
-        <Text style={styles.type}>{type}</Text>
+        <Text style={[styles.type, { color: theme.colors.text.primary }]}>{type}</Text>
       </View>
-      <Text style={styles.value}>{value}</Text>
+      <Text style={[styles.value, { color: theme.colors.text.primary }]}>{value}</Text>
     </View>
   );
 }
@@ -32,7 +41,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
   },
   lastRow: {
     borderBottomWidth: 0,
@@ -43,7 +51,6 @@ const styles = StyleSheet.create({
   },
   type: {
     fontSize: 15,
-    color: '#333',
     marginLeft: 8,
   },
   value: {

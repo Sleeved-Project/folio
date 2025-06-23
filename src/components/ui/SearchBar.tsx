@@ -2,6 +2,7 @@ import { Search } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { TextInput, View, StyleSheet } from 'react-native';
 import { debounce } from 'lodash';
+import { useTheme } from '../../theme/useTheme';
 
 interface SearchBarProps {
   searchQuery: string;
@@ -10,6 +11,7 @@ interface SearchBarProps {
 
 export default function SearchBar({ searchQuery, setSearchQuery }: SearchBarProps) {
   const [inputValue, setInputValue] = useState(searchQuery);
+  const theme = useTheme();
 
   // We are debouncing the query to avoid too many updates, it will only be sent after 1 second of inactivity
   const debouncedSetSearchQuery = useRef(
@@ -28,14 +30,26 @@ export default function SearchBar({ searchQuery, setSearchQuery }: SearchBarProp
   }, [searchQuery]);
 
   return (
-    <View style={styles.container}>
-      <Search color={'#A09CAB'} />
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.colors.background.tertiary,
+          shadowColor: theme.shadows.small.shadowColor,
+          shadowOffset: theme.shadows.small.shadowOffset,
+          shadowOpacity: theme.shadows.small.shadowOpacity,
+          shadowRadius: theme.shadows.small.shadowRadius,
+          elevation: theme.shadows.small.elevation,
+        },
+      ]}
+    >
+      <Search color={theme.colors.text.tertiary} />
       <TextInput
-        style={styles.input}
+        style={[styles.input, { color: theme.colors.text.primary }]}
         value={inputValue}
         onChangeText={setInputValue}
         placeholder="Search"
-        placeholderTextColor={'#A09CAB'}
+        placeholderTextColor={theme.colors.text.tertiary}
       />
     </View>
   );
@@ -46,16 +60,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    backgroundColor: '#EFF1F5',
     borderRadius: 50,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
     marginHorizontal: 16,
   },
   input: {
@@ -63,6 +68,5 @@ const styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 10,
     fontSize: 16,
-    color: '#333',
   },
 });

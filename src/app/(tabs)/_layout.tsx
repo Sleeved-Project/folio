@@ -1,13 +1,20 @@
 import { Tabs } from 'expo-router';
-import TabHeader from '../../components/TabHeader';
+import TabHeader from '../../components/ui/TabHeader';
 import { Focus, List, Wallet } from 'lucide-react-native';
 import { View } from 'react-native';
+import { useTheme } from '../../theme/useTheme';
 
 export default function TabLayout() {
+  const theme = useTheme();
+
   return (
     <Tabs
       screenOptions={{
         headerShown: true,
+        tabBarStyle: {
+          backgroundColor: theme.colors.background.primary,
+          borderTopColor: theme.colors.border.light,
+        },
       }}
     >
       <Tabs.Screen
@@ -15,9 +22,14 @@ export default function TabLayout() {
         options={{
           title: 'Cards',
           headerTitle: () => <TabHeader title="Cards" displayBackButton={false} />,
-          tabBarIcon: ({ focused }) => <List color={focused ? 'black' : '#A09CAB'} size={24} />,
-          tabBarActiveTintColor: 'black',
-          tabBarInactiveTintColor: '#A09CAB',
+          tabBarIcon: ({ focused }) => (
+            <List
+              color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
+              size={24}
+            />
+          ),
+          tabBarActiveTintColor: theme.colors.text.primary,
+          tabBarInactiveTintColor: theme.colors.text.tertiary,
         }}
       />
       <Tabs.Screen
@@ -35,10 +47,13 @@ export default function TabLayout() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderRadius: 60,
-                backgroundColor: '#EFF1F5',
+                backgroundColor: theme.colors.background.tertiary,
               }}
             >
-              <Focus color={focused ? 'black' : '#A09CAB'} size={40} />
+              <Focus
+                color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
+                size={40}
+              />
             </View>
           ),
         }}
@@ -48,9 +63,14 @@ export default function TabLayout() {
         options={{
           title: 'Folio',
           headerTitle: () => <TabHeader title="Folio" displayBackButton />,
-          tabBarIcon: ({ focused }) => <Wallet color={focused ? 'black' : '#A09CAB'} size={24} />,
-          tabBarActiveTintColor: 'black',
-          tabBarInactiveTintColor: '#A09CAB',
+          tabBarIcon: ({ focused }) => (
+            <Wallet
+              color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
+              size={24}
+            />
+          ),
+          tabBarActiveTintColor: theme.colors.text.primary,
+          tabBarInactiveTintColor: theme.colors.text.tertiary,
         }}
       />
       <Tabs.Screen

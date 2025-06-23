@@ -1,22 +1,27 @@
 import React from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { useTheme } from '../../theme/useTheme';
 
 interface ErrorStateProps {
   message: string;
 }
 
 export function LoadingState() {
+  const theme = useTheme();
+
   return (
-    <View style={styles.centerContainer}>
-      <ActivityIndicator size="large" color="#0970e6" />
+    <View style={[styles.centerContainer, { backgroundColor: theme.colors.background.secondary }]}>
+      <ActivityIndicator size="large" color={theme.colors.primary} />
     </View>
   );
 }
 
 export function ErrorState({ message }: ErrorStateProps) {
+  const theme = useTheme();
+
   return (
-    <View style={styles.centerContainer}>
-      <Text style={styles.errorText}>{message}</Text>
+    <View style={[styles.centerContainer, { backgroundColor: theme.colors.background.secondary }]}>
+      <Text style={[styles.errorText, { color: theme.colors.danger }]}>{message}</Text>
     </View>
   );
 }
@@ -24,14 +29,12 @@ export function ErrorState({ message }: ErrorStateProps) {
 const styles = StyleSheet.create({
   centerContainer: {
     flex: 1,
-    backgroundColor: '#f4f6f8',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
   errorText: {
     fontSize: 16,
-    color: '#e63946',
     textAlign: 'center',
   },
 });

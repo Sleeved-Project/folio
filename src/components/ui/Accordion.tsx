@@ -9,6 +9,7 @@ import {
   UIManager,
 } from 'react-native';
 import { ChevronDown, ChevronUp } from 'lucide-react-native';
+import { useTheme } from '../../theme/useTheme';
 
 // Enable LayoutAnimation on Android
 if (Platform.OS === 'android') {
@@ -29,6 +30,7 @@ export default function Accordion({
   rightElement,
 }: AccordionProps) {
   const [isOpen, setIsOpen] = useState(initiallyOpen);
+  const theme = useTheme();
 
   const toggleAccordion = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -36,33 +38,47 @@ export default function Accordion({
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.colors.background.primary,
+          borderColor: theme.colors.border.light,
+          borderRadius: theme.borderRadius.medium,
+        },
+      ]}
+    >
       <TouchableOpacity
         style={styles.headerContainer}
         onPress={toggleAccordion}
         activeOpacity={0.7}
       >
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>{title}</Text>
-          {isOpen ? <ChevronUp size={20} color="#666" /> : <ChevronDown size={20} color="#666" />}
+          <Text style={[styles.title, { color: theme.colors.text.primary }]}>{title}</Text>
+          {isOpen ? (
+            <ChevronUp size={20} color={theme.colors.text.secondary} />
+          ) : (
+            <ChevronDown size={20} color={theme.colors.text.secondary} />
+          )}
         </View>
 
         {rightElement && <View style={styles.rightElement}>{rightElement}</View>}
       </TouchableOpacity>
 
-      {isOpen && <View style={styles.content}>{children}</View>}
+      {isOpen && (
+        <View style={[styles.content, { borderTopColor: theme.colors.border.light }]}>
+          {children}
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
-    borderRadius: 8,
     marginBottom: 12,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#e0e0e0',
   },
   headerContainer: {
     flexDirection: 'row',
@@ -77,7 +93,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginRight: 8,
   },
   rightElement: {
@@ -88,6 +103,5 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingTop: 0,
     borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
   },
 });

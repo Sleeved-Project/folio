@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useTheme } from '../../../theme/useTheme';
 
 interface AuthRedirectLinkProps {
   type: 'signup' | 'signin';
@@ -9,6 +10,7 @@ interface AuthRedirectLinkProps {
 
 const AuthRedirectLink: React.FC<AuthRedirectLinkProps> = ({ type, containerStyle }) => {
   const router = useRouter();
+  const theme = useTheme();
 
   const handlePress = () => {
     if (type === 'signup') {
@@ -19,9 +21,11 @@ const AuthRedirectLink: React.FC<AuthRedirectLinkProps> = ({ type, containerStyl
 
   return (
     <TouchableOpacity style={[styles.container, containerStyle]} onPress={handlePress}>
-      <Text style={styles.text}>
+      <Text style={[styles.text, { color: theme.colors.text.secondary }]}>
         {type === 'signup' ? "Don't have an account? " : 'Already have an account? '}
-        <Text style={styles.boldText}>{type === 'signup' ? 'Sign Up' : 'Sign In'}</Text>
+        <Text style={[styles.boldText, { color: theme.colors.primary }]}>
+          {type === 'signup' ? 'Sign Up' : 'Sign In'}
+        </Text>
       </Text>
     </TouchableOpacity>
   );
@@ -34,11 +38,9 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   text: {
-    color: '#666',
     fontSize: 16,
   },
   boldText: {
-    color: '#2196F3',
     fontWeight: '600',
   },
 });

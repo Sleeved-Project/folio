@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
+import { useTheme } from '../../../theme/useTheme';
 
 interface CardMetaInfoProps {
   number: string;
@@ -10,6 +11,8 @@ interface CardMetaInfoProps {
 }
 
 export default function CardMetaInfo({ number, set }: CardMetaInfoProps) {
+  const theme = useTheme();
+
   return (
     <>
       <View style={styles.metaContainer}>
@@ -20,16 +23,16 @@ export default function CardMetaInfo({ number, set }: CardMetaInfoProps) {
               style={styles.setSymbol}
               resizeMode="contain"
             />
-            <Text style={styles.setName}>{set.name}</Text>
+            <Text style={[styles.setName, { color: theme.colors.text.secondary }]}>{set.name}</Text>
           </View>
         </View>
 
         <View>
-          <Text style={styles.cardNumber}>#{number}</Text>
+          <Text style={[styles.cardNumber, { color: theme.colors.text.primary }]}>#{number}</Text>
         </View>
       </View>
 
-      <View style={styles.divider} />
+      <View style={[styles.divider, { backgroundColor: theme.colors.border.light }]} />
     </>
   );
 }
@@ -48,7 +51,6 @@ const styles = StyleSheet.create({
   cardNumber: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#333',
     marginRight: 10,
   },
   setInfo: {
@@ -62,11 +64,9 @@ const styles = StyleSheet.create({
   },
   setName: {
     fontSize: 14,
-    color: '#666',
   },
   divider: {
     height: 1,
-    backgroundColor: '#e0e0e0',
     marginTop: 16,
   },
 });

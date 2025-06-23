@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { Eye, EyeOff } from 'lucide-react-native';
+import { useTheme } from '../../theme/useTheme';
 
 type FormTextInputProps<T extends FieldValues> = {
   control: Control<T>;
@@ -38,12 +39,13 @@ const FormTextInput = <T extends FieldValues>({
 }: FormTextInputProps<T>) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const theme = useTheme();
 
   const isPassword = inputType === 'password' || secureTextEntry;
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <Text style={[styles.label, { color: theme.colors.text.primary }]}>{label}</Text>}
 
       <Controller
         control={control}
@@ -53,13 +55,21 @@ const FormTextInput = <T extends FieldValues>({
             <TextInput
               style={[
                 styles.input,
-                isFocused && styles.inputFocused,
-                error && styles.inputError,
-                // Ajout de padding à droite pour les champs de mot de passe pour éviter que le texte ne se cache sous l'icône
+                {
+                  borderColor: theme.colors.border.light,
+                  backgroundColor: theme.colors.background.secondary,
+                  color: theme.colors.text.primary,
+                  borderRadius: theme.borderRadius.medium,
+                },
+                isFocused && {
+                  borderColor: theme.colors.primary,
+                  backgroundColor: theme.colors.states.focus,
+                },
+                error && { borderColor: theme.colors.danger },
                 isPassword && { paddingRight: 48 },
               ]}
               placeholder={placeholder}
-              placeholderTextColor="#A0A0A0"
+              placeholderTextColor={theme.colors.text.tertiary}
               value={value}
               onChangeText={onChange}
               onBlur={() => {
@@ -81,9 +91,9 @@ const FormTextInput = <T extends FieldValues>({
                 activeOpacity={0.7}
               >
                 {showPassword ? (
-                  <EyeOff size={22} color="#666" strokeWidth={1.5} />
+                  <EyeOff size={22} color={theme.colors.text.secondary} strokeWidth={1.5} />
                 ) : (
-                  <Eye size={22} color="#666" strokeWidth={1.5} />
+                  <Eye size={22} color={theme.colors.text.secondary} strokeWidth={1.5} />
                 )}
               </TouchableOpacity>
             )}
@@ -91,7 +101,7 @@ const FormTextInput = <T extends FieldValues>({
         )}
       />
 
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {error && <Text style={[styles.errorText, { color: theme.colors.danger }]}>{error}</Text>}
     </View>
   );
 };
@@ -103,7 +113,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333',
     marginBottom: 8,
     paddingLeft: 4,
   },
@@ -116,22 +125,10 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 54,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 12,
     paddingHorizontal: 16,
     fontSize: 16,
-    backgroundColor: '#F8F8F8',
-    color: '#333',
-  },
-  inputFocused: {
-    borderColor: '#2196F3',
-    backgroundColor: '#F0F9FF',
-  },
-  inputError: {
-    borderColor: '#FF3B30',
   },
   errorText: {
-    color: '#FF3B30',
     fontSize: 14,
     marginTop: 5,
     marginLeft: 4,

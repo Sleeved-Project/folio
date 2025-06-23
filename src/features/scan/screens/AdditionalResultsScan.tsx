@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { Card } from '../../cards/types';
-import CardListDisplay from '../../../components/CardListDisplay';
+import CardListDisplay from '../../../components/ui/CardListDisplay';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { ChevronLeft } from 'lucide-react-native';
+import { useTheme } from '../../../theme/useTheme';
 
 interface AdditionalResultsScanProps {
   cards: Card[];
@@ -12,9 +13,10 @@ interface AdditionalResultsScanProps {
 
 export default function AdditionalResultsScan({ cards }: AdditionalResultsScanProps) {
   const router = useRouter();
+  const theme = useTheme();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <View style={styles.backButtonContainer}>
         <TouchableOpacity
           onPress={() =>
@@ -28,10 +30,21 @@ export default function AdditionalResultsScan({ cards }: AdditionalResultsScanPr
             })
           }
         >
-          <ChevronLeft size={32} color="black" />
+          <ChevronLeft size={32} color={theme.colors.text.primary} />
         </TouchableOpacity>
         <View style={styles.headerTitleContainer}>
-          <Text style={styles.headerTitle}>Other results</Text>
+          <Text
+            style={[
+              styles.headerTitle,
+              {
+                color: theme.colors.text.primary,
+                fontSize: theme.typography.fontSizes.xl,
+                fontWeight: theme.typography.fontWeights.semiBold,
+              },
+            ]}
+          >
+            Other results
+          </Text>
         </View>
       </View>
       <CardListDisplay cards={cards} listOrigin={'scan'} />
@@ -59,8 +72,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    color: 'black',
-    fontSize: 20,
     alignSelf: 'center',
   },
 });

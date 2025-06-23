@@ -10,10 +10,12 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { LogOut, Settings } from 'lucide-react-native';
 import AccountSvg from '../../../components/ui/AccountSvg';
+import { useTheme } from '../../../theme/useTheme';
 
 export default function UserMenu() {
   const { logout, user } = useAuth();
   const [menuVisible, setMenuVisible] = useState(false);
+  const theme = useTheme();
 
   const handleLogout = async () => {
     Alert.alert('Logout', 'Are you sure you want to log out?', [
@@ -42,23 +44,41 @@ export default function UserMenu() {
       )}
 
       <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)} style={styles.iconButton}>
-        <AccountSvg width={24} height={24} />
+        <AccountSvg width={24} height={24} fill={theme.colors.text.primary} />
       </TouchableOpacity>
 
       {menuVisible && (
-        <View style={styles.menu}>
+        <View
+          style={[
+            styles.menu,
+            {
+              backgroundColor: theme.colors.background.primary,
+              shadowColor: theme.shadows.medium.shadowColor,
+              shadowOffset: theme.shadows.medium.shadowOffset,
+              shadowOpacity: theme.shadows.medium.shadowOpacity,
+              shadowRadius: theme.shadows.medium.shadowRadius,
+              elevation: theme.shadows.medium.elevation,
+            },
+          ]}
+        >
           <TouchableOpacity style={styles.menuItem} onPress={() => setMenuVisible(false)}>
-            <Settings size={18} color="#333" />
-            <Text style={styles.menuItemText}>Settings</Text>
+            <Settings size={18} color={theme.colors.text.primary} />
+            <Text style={[styles.menuItemText, { color: theme.colors.text.primary }]}>
+              Settings
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.menuItem, styles.logoutItem]} onPress={handleLogout}>
-            <LogOut size={18} color="#FF3B30" />
-            <Text style={[styles.menuItemText, styles.logoutText]}>Logout</Text>
+            <LogOut size={18} color={theme.colors.danger} />
+            <Text style={[styles.menuItemText, styles.logoutText, { color: theme.colors.danger }]}>
+              Logout
+            </Text>
           </TouchableOpacity>
 
-          <View style={styles.userInfo}>
-            <Text style={styles.emailText}>{user?.email}</Text>
+          <View style={[styles.userInfo, { borderTopColor: theme.colors.border.light }]}>
+            <Text style={[styles.emailText, { color: theme.colors.text.tertiary }]}>
+              {user?.email}
+            </Text>
           </View>
         </View>
       )}
@@ -89,13 +109,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 45,
     right: 0,
-    backgroundColor: 'white',
     borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
     padding: 8,
     width: 200,
     zIndex: 100,
@@ -109,7 +123,6 @@ const styles = StyleSheet.create({
   menuItemText: {
     marginLeft: 12,
     fontSize: 16,
-    color: '#333',
   },
   logoutItem: {
     marginTop: 4,
@@ -119,13 +132,11 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     borderTopWidth: 1,
-    borderTopColor: '#eee',
     marginTop: 8,
     paddingTop: 8,
     paddingHorizontal: 12,
   },
   emailText: {
     fontSize: 12,
-    color: '#888',
   },
 });
