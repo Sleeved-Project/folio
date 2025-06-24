@@ -59,10 +59,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="folio"
+        name="folios"
         options={{
-          title: 'Folio',
-          headerTitle: () => <TabHeader title="Folio" displayBackButton />,
+          title: 'Folios',
+          headerTitle: () => <TabHeader title="Folios" displayBackButton />,
           tabBarIcon: ({ focused }) => (
             <Wallet
               color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
