@@ -7,6 +7,7 @@ import InfoItem from '../../../components/ui/InfoItem';
 import Tag from '../../../components/ui/Tag';
 import FlavorTextBox from './FlavorTextBox';
 import { User, Calendar, StarIcon } from 'lucide-react-native';
+import { useTheme } from '../../../theme/useTheme';
 
 interface CardDetailedInfoProps {
   cardId?: string;
@@ -14,6 +15,7 @@ interface CardDetailedInfoProps {
 
 export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
   const { data: detailedData, isLoading, error } = useCardDetailedInfo(cardId || '');
+  const theme = useTheme();
 
   // Loading state
   if (isLoading) {
@@ -39,7 +41,7 @@ export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
           <InfoItem
             label="Artist"
             value={detailedData.artist.name}
-            icon={<User size={20} color="#333" />}
+            icon={<User size={20} color={theme.colors.text.primary} />}
             fullWidth
             accentBorder
           />
@@ -49,7 +51,7 @@ export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
           <InfoItem
             label="Rarity"
             value={detailedData.rarity.label}
-            icon={<StarIcon size={20} color="#333" />}
+            icon={<StarIcon size={20} color={theme.colors.text.primary} />}
             accentBorder
           />
         )}
@@ -58,7 +60,7 @@ export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
           <InfoItem
             label="Release"
             value={new Date(detailedData.set.releaseDate).getFullYear().toString()}
-            icon={<Calendar size={20} color="#333" />}
+            icon={<Calendar size={20} color={theme.colors.text.primary} />}
             accentBorder
           />
         )}
@@ -66,7 +68,7 @@ export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
 
       {hasSubtypes && (
         <View style={styles.subtypesSection}>
-          <Text style={styles.sectionTitle}>Subtypes</Text>
+          <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>Subtypes</Text>
           <View style={styles.tagsContainer}>
             {detailedData.subtypes?.map((subtype, index) => (
               <Tag key={`${subtype.id || index}`} label={subtype.label} />
@@ -77,7 +79,9 @@ export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
 
       {hasFlavorText && (
         <View style={styles.flavorSection}>
-          <Text style={styles.sectionTitle}>Description</Text>
+          <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>
+            Description
+          </Text>
           <FlavorTextBox text={detailedData.flavorText} />
         </View>
       )}
@@ -98,7 +102,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 12,
   },
   tagsContainer: {

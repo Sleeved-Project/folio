@@ -10,11 +10,13 @@ import { TabSwitcher, TabOption } from '../../../components/ui/TabSwitcher';
 import AnimatedDrawer from '../components/AnimatedDrawer';
 import { useDrawerAnimation } from '../hooks/useDrawerAnimation';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useTheme } from '../../../theme/useTheme';
 
 type TabType = 'details' | 'prices';
 
 export default function CardDetail({ cardId }: { cardId?: string }) {
   const [activeTab, setActiveTab] = useState<TabType>('details');
+  const theme = useTheme();
 
   const { toggleDrawer, gestureHandler, drawerAnimatedStyle, cardImageAnimatedStyle } =
     useDrawerAnimation();
@@ -43,7 +45,7 @@ export default function CardDetail({ cardId }: { cardId?: string }) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}>
       <CardImageSection
         imageUrl={basicCardData.imageLarge}
         cardAnimatedStyle={cardImageAnimatedStyle}
@@ -78,7 +80,6 @@ export default function CardDetail({ cardId }: { cardId?: string }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f6f8',
   },
   detailContent: {
     paddingVertical: 16,

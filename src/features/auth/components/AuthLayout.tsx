@@ -12,6 +12,7 @@ import {
 import AuthRedirectLink from './AuthRedirectLink';
 import { Button } from '../../../components/ui';
 import logoImage from '../../../../assets/logo.png';
+import { useTheme } from '../../../theme/useTheme';
 
 interface AuthLayoutProps {
   title: string;
@@ -32,8 +33,10 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
   redirectType,
   footerContent,
 }) => {
+  const theme = useTheme();
+
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.colors.background.primary }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
@@ -48,7 +51,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
           </View>
 
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={[styles.title, { color: theme.colors.text.primary }]}>{title}</Text>
           </View>
 
           <View style={styles.formContainer}>{children}</View>
@@ -58,7 +61,9 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
           <View style={styles.flexSpace} />
         </ScrollView>
 
-        <View style={styles.actionsContainer}>
+        <View
+          style={[styles.actionsContainer, { backgroundColor: theme.colors.background.primary }]}
+        >
           <Button
             title={isLoading ? `${buttonTitle}...` : buttonTitle}
             onPress={onSubmit}
@@ -76,7 +81,6 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   container: {
     flex: 1,
@@ -100,7 +104,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#333',
     marginBottom: 8,
     textAlign: 'center',
   },
@@ -116,7 +119,6 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 24,
     paddingTop: 12,
-    backgroundColor: '#fff',
   },
   actionButton: {
     width: '100%',

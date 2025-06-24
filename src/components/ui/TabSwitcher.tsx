@@ -8,6 +8,7 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
+import { useTheme } from '../../theme/useTheme';
 
 export interface TabOption<T extends string> {
   id: T;
@@ -35,8 +36,19 @@ export function TabSwitcher<T extends string>({
   textStyle,
   activeTextStyle,
 }: TabSwitcherProps<T>) {
+  const theme = useTheme();
+
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.colors.background.tertiary,
+          borderColor: theme.colors.border.light,
+        },
+        containerStyle,
+      ]}
+    >
       {options.map((option, index) => (
         <TouchableOpacity
           key={option.id}
@@ -44,8 +56,15 @@ export function TabSwitcher<T extends string>({
             styles.tab,
             index === 0 && styles.firstTab,
             index === options.length - 1 && styles.lastTab,
+            { borderRightColor: theme.colors.border.light },
             tabStyle,
-            activeTabId === option.id && styles.activeTab,
+            activeTabId === option.id && [
+              styles.activeTab,
+              {
+                backgroundColor: theme.colors.background.primary,
+                ...theme.shadows.small,
+              },
+            ],
             activeTabId === option.id && activeTabStyle,
           ]}
           onPress={() => onTabChange(option.id)}
@@ -53,8 +72,12 @@ export function TabSwitcher<T extends string>({
           <Text
             style={[
               styles.tabText,
+              { color: theme.colors.text.secondary },
               textStyle,
-              activeTabId === option.id && styles.activeTabText,
+              activeTabId === option.id && [
+                styles.activeTabText,
+                { color: theme.colors.text.primary },
+              ],
               activeTabId === option.id && activeTextStyle,
             ]}
           >
@@ -69,12 +92,10 @@ export function TabSwitcher<T extends string>({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#f0f0f0',
     borderRadius: 8,
     marginBottom: 16,
     height: 40,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
     padding: 2,
   },
   tab: {
@@ -83,7 +104,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 8,
     borderRightWidth: 1,
-    borderRightColor: '#e0e0e0',
   },
   firstTab: {
     borderTopLeftRadius: 6,
@@ -95,22 +115,14 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 6,
   },
   activeTab: {
-    backgroundColor: 'white',
     borderRadius: 6,
     borderWidth: 0,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
-    elevation: 2,
   },
   tabText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#666',
   },
   activeTabText: {
-    color: '#333',
     fontWeight: '700',
   },
 });

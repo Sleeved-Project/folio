@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Line, Rect, Defs, LinearGradient, Stop } from 'react-native-svg';
+import { useTheme } from '../../../theme/useTheme';
 
 interface GridBackgroundProps {
   lightTheme?: boolean;
@@ -11,6 +12,8 @@ export default function GridBackground({
   lightTheme = true,
   density = 'low',
 }: GridBackgroundProps) {
+  const theme = useTheme();
+
   // Determine grid line count based on density
   const horizontalLines = density === 'low' ? 8 : density === 'medium' ? 12 : 16;
   const verticalLines = density === 'low' ? 10 : density === 'medium' ? 15 : 20;
@@ -20,8 +23,9 @@ export default function GridBackground({
   const vSpacing = 40 / (density === 'low' ? 1 : density === 'medium' ? 1.5 : 2);
 
   // Colors based on theme
-  const gradientColors = lightTheme ? ['#ffffff', '#f8f9fa'] : ['#1a1a2e', '#16213e'];
-
+  const gradientColors = lightTheme
+    ? [theme.colors.background.primary, theme.colors.background.secondary]
+    : ['#1a1a2e', '#16213e'];
   const lineColor = lightTheme ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.07)';
 
   return (

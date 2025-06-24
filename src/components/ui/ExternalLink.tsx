@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { ExternalLink as ExternalLinkIcon } from 'lucide-react-native';
+import { useTheme } from '../../theme/useTheme';
 
 interface ExternalLinkProps {
   url: string;
@@ -9,12 +10,10 @@ interface ExternalLinkProps {
   color?: string;
 }
 
-export default function ExternalLink({
-  url,
-  label = 'View',
-  onPress,
-  color = '#2196F3',
-}: ExternalLinkProps) {
+export default function ExternalLink({ url, label = 'View', onPress, color }: ExternalLinkProps) {
+  const theme = useTheme();
+  const linkColor = color || theme.colors.primary;
+
   const handlePress = () => {
     if (onPress) {
       onPress(url);
@@ -23,8 +22,8 @@ export default function ExternalLink({
 
   return (
     <TouchableOpacity style={styles.container} onPress={handlePress}>
-      <ExternalLinkIcon size={16} color={color} />
-      <Text style={[styles.label, { color }]}>{label}</Text>
+      <ExternalLinkIcon size={16} color={linkColor} />
+      <Text style={[styles.label, { color: linkColor }]}>{label}</Text>
     </TouchableOpacity>
   );
 }
