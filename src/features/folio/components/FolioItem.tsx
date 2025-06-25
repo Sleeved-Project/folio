@@ -14,8 +14,22 @@ function FolioItemStat({ label, value }: FolioItemStatProps) {
 
   return (
     <View style={styles.statItem}>
-      <Text style={[styles.statLabel, { color: theme.colors.text.tertiary }]}>{label}</Text>
-      <Text style={[styles.statValue, { color: theme.colors.text.secondary }]}>{value}</Text>
+      <Text
+        style={[
+          styles.statLabel,
+          { color: theme.colors.text.tertiary, fontSize: theme.typography.fontSizes.xs },
+        ]}
+      >
+        {label}
+      </Text>
+      <Text
+        style={[
+          styles.statValue,
+          { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
+        ]}
+      >
+        {value}
+      </Text>
     </View>
   );
 }
@@ -47,7 +61,13 @@ export default function FolioItem({ folio, onPress }: FolioItemProps) {
       </View>
 
       <View style={styles.contentContainer}>
-        <Text style={[styles.folioName, { color: theme.colors.text.primary }]} numberOfLines={1}>
+        <Text
+          style={[
+            styles.folioName,
+            { color: theme.colors.text.primary, fontSize: theme.typography.fontSizes.lg },
+          ]}
+          numberOfLines={1}
+        >
           {folio.name}
         </Text>
 
@@ -83,7 +103,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   folioName: {
-    fontSize: 18,
     fontWeight: '600',
     marginBottom: 12,
   },
@@ -97,11 +116,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   statLabel: {
-    fontSize: 12,
     marginBottom: 4,
   },
   statValue: {
-    fontSize: 18,
     fontWeight: '500',
   },
 });

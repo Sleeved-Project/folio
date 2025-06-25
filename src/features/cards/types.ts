@@ -3,6 +3,7 @@ export interface Card {
   imageSmall: string;
   imageLarge?: string;
   bestTrendPrice?: string;
+  occurrences?: number;
 }
 
 export interface CardsListResponse {

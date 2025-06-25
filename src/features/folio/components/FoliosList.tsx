@@ -33,12 +33,13 @@ export default function FoliosList({
       renderItem={({ item }) => <FolioItem folio={item} onPress={onFolioPress} />}
       ListHeaderComponent={<CreateFolioButton onPress={onCreatePress} />}
       showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.container}
     />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    paddingVertical: 16,
   },
 });
