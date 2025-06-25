@@ -1,25 +1,69 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
 import { useTheme } from '../../../theme/useTheme';
 import EmptyStateCards from '../components/EmptyStateCards';
+import FoliosList from '../components/FoliosList';
+import { FolioItem } from '../types';
 
 export default function MyFoliosScreen() {
   const theme = useTheme();
 
-  // Simulate no cards for demonstration purposes
-  // In a real application, this would be replaced with actual data fetching logic
-  const hasCards = false;
+  // Mock data to simulate fetched folios
+  const mockFolios: FolioItem[] = [
+    {
+      id: '1',
+      name: 'My Favorite Collection',
+      cardCount: 42,
+      cardMarketValue: '325.50€',
+      tcgPlayerValue: '$352.75',
+    },
+    {
+      id: '2',
+      name: 'Rare Cards',
+      cardCount: 12,
+      cardMarketValue: '678.25€',
+      tcgPlayerValue: '$712.99',
+    },
+    {
+      id: '3',
+      name: 'Starter Deck',
+      cardCount: 28,
+      cardMarketValue: '89.99€',
+      tcgPlayerValue: '$95.50',
+    },
+    {
+      id: '4',
+      name: 'Collection 2023',
+      cardCount: 63,
+      cardMarketValue: '425.30€',
+      tcgPlayerValue: '$450.10',
+    },
+  ];
+
+  const hasCards = true;
+
+  const handleFolioPress = (id: string) => {
+    // @TODO: Implement navigation to folio details
+    console.log(`Folio pressed: ${id}`);
+  };
+
+  const handleCreatePress = () => {
+    // @TODO: Implement create folio functionality
+    console.log('create folio pressed');
+  };
 
   if (!hasCards) {
     return <EmptyStateCards />;
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={[styles.title, { color: theme.colors.text.primary }]}>My Folios</Text>
-      <Text style={[styles.description, { color: theme.colors.text.secondary }]}>
-        This section will display your custom folios
-      </Text>
+    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
+      <FoliosList
+        folios={mockFolios}
+        onFolioPress={handleFolioPress}
+        onCreatePress={handleCreatePress}
+      />
     </View>
   );
 }
@@ -27,16 +71,5 @@ export default function MyFoliosScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  description: {
-    fontSize: 16,
-    textAlign: 'center',
   },
 });

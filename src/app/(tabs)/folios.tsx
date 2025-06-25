@@ -18,8 +18,11 @@ export default function Folio() {
   ];
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      <View style={styles.content}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+      edges={['top', 'left', 'right']}
+    >
+      <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
         <TabSwitcher
           options={tabOptions}
           activeTabId={activeTab}
@@ -41,6 +44,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   tabSwitcher: {
-    marginBottom: 24,
+    marginBottom: 0,
   },
 });
