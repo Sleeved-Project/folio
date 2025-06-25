@@ -185,7 +185,7 @@ export default function AddCardButton({
             ]}
           >
             <Text style={[styles.quantityText, { color: theme.colors.primary }]}>
-              {quantity} {quantity === 1 ? 'card' : 'cards'}
+              {`${quantity} ${quantity === 1 ? 'card' : 'cards'} owned`}
             </Text>
           </View>
 
@@ -227,7 +227,7 @@ export default function AddCardButton({
         activeOpacity={0.7}
         disabled={isRecentlyRemoved}
       >
-        <Text style={styles.addButtonText}>Add to collection</Text>
+        <Text style={styles.addButtonText}>Add to my collection</Text>
       </TouchableOpacity>
     </View>
   );
