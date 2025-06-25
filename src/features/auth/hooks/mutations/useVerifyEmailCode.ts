@@ -4,6 +4,7 @@ import { AuthResponse } from '../../types';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
 import { authUtils } from '../../utils/auth-utils';
+import { useInitFolio } from '../../../folio/hooks/mutations/useInitFolio';
 
 interface VerifyEmailPayload {
   email: string;
@@ -13,6 +14,7 @@ interface VerifyEmailPayload {
 export const useVerifyEmailCode = () => {
   const router = useRouter();
   const { setIsAuthenticated, setPendingVerificationEmail } = useAuth();
+  const { mutateAsync: initFolio } = useInitFolio();
 
   return useMutation({
     mutationFn: async ({ email, code }: VerifyEmailPayload) => {
@@ -25,15 +27,20 @@ export const useVerifyEmailCode = () => {
     },
 
     onSuccess: async (response) => {
-      if (response.token) {
-        await authUtils.setToken(response.token);
-        setIsAuthenticated(true);
-        setPendingVerificationEmail(null);
-
-        router.replace('/');
-      } else {
-        console.warn('useVerifyEmail: No token received in verification response');
+      if (!response.token) {
+        throw new Error('Verification failed: No token received');
       }
+      await authUtils.setToken(response.token);
+      setIsAuthenticated(true);
+      setPendingVerificationEmail(null);
+
+      try {
+        await initFolio();
+      } catch (error) {
+        console.error('Failed to initialize folio:', error);
+      }
+
+      router.replace('/');
     },
 
     onError: (error) => {
