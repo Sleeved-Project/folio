@@ -2,7 +2,7 @@ import { config } from '../../config';
 import { TOKEN_KEY } from '../../constants';
 import { secureStorage } from '../storage/secure-storage';
 
-import { type FetchOptions, type ApiType, ApiError, ApiErrorResponse } from './types';
+import { type FetchOptions, type ApiType, ApiError, ExtendedError } from './types';
 
 const getApiBaseUrl = (apiType: ApiType = 'global'): string => {
   switch (apiType) {
@@ -46,13 +46,29 @@ const createHttpClient = () => {
       try {
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
-          const errorData = (await response.json()) as ApiErrorResponse;
+          const errorData = await response.json();
 
+          // If the error data has a specific structure (e.g., code and message)
+          if (errorData.code && errorData.message) {
+            const apiError = new ApiError({
+              error: errorData.code,
+              message: errorData.message,
+            });
+
+            apiError.rawData = errorData;
+
+            throw apiError;
+          }
+
+          // If the error data has a different structure (e.g., error and message)
           if (errorData.error && errorData.message) {
             throw new ApiError(errorData);
           }
 
-          throw new Error(JSON.stringify(errorData));
+          // If the error data is not in the expected format, throw a generic error
+          const genericError = new Error(JSON.stringify(errorData)) as ExtendedError;
+          genericError.rawData = errorData;
+          throw genericError;
         }
 
         const errorMessage = await response.text();

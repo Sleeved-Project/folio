@@ -37,6 +37,5 @@ export const useCurrentUser = () => {
     },
     enabled: hasToken === true,
     staleTime: 5 * 60 * 1000,
-    retry: false,
   });
 };

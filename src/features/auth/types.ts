@@ -2,11 +2,17 @@ export interface User {
   id: string;
   email: string;
   name?: string;
+  fullName?: string;
+  isVerified: number;
 }
 
 export interface AuthResponse {
-  token: string;
+  token?: string;
   user: User;
+  type?: string;
+  requiresVerification?: boolean;
+  message?: string;
+  status?: boolean;
 }
 
 export interface SignupPayload {
@@ -18,4 +24,15 @@ export interface SignupPayload {
 export interface SigninPayload {
   email: string;
   password: string;
+}
+
+export enum AuthErrorCode {
+  EMAIL_NOT_VERIFIED = 'E_EMAIL_NOT_VERIFIED',
+  INVALID_VERIFICATION_CODE = 'E_INVALID_VERIFICATION_CODE',
+}
+
+export interface AuthError {
+  code: string;
+  message: string;
+  status: number;
 }

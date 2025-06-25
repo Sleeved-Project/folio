@@ -1,28 +1,21 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
-import { authUtils } from '../../utils/auth-utils';
-import type { AuthResponse, SigninPayload } from '../../types';
-import { userKeys } from '../queries/useCurrentUser';
+import { AuthResponse, SigninPayload } from '../../types';
 
 export const useSignin = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: async (credentials: SigninPayload) => {
-      const response = await httpClient.post<AuthResponse>('/login', credentials, {
-        apiType: 'auth',
-      });
-
-      if (response.token) {
-        await authUtils.setToken(response.token);
+    mutationFn: async ({ email, password }: SigninPayload) => {
+      try {
+        const response = await httpClient.post<AuthResponse>(
+          '/login',
+          { email, password },
+          { apiType: 'auth' }
+        );
+        return response;
+      } catch (error: unknown) {
+        console.error('Signin error:', error);
+        throw error;
       }
-
-      return response;
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(userKeys.currentUser(), data.user);
-
-      queryClient.invalidateQueries({ queryKey: userKeys.currentUser() });
     },
   });
 };

@@ -1,142 +1,210 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useCurrentUser } from '../hooks/queries/useCurrentUser';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
+import { useRouter, SplashScreen } from 'expo-router';
+import { httpClient } from '../../../lib/client/http-client';
+import { getErrorMessage } from '../../../lib/errors/errors-utils';
+import { authUtils } from '../utils/auth-utils';
 import { useSignin } from '../hooks/mutations/useSignin';
 import { useSignup } from '../hooks/mutations/useSignup';
-import { useLogout } from '../hooks/mutations/useLogout';
-import { authUtils } from '../utils/auth-utils';
-import { User, AuthResponse } from '../types';
-import { useQueryClient } from '@tanstack/react-query';
-import { getErrorMessage } from '../../../lib/errors/errors-utils';
-import { config } from '../../../config';
+import { useCurrentUser } from '../hooks/queries/useCurrentUser';
+import { AuthErrorCode, User } from '../types';
+import { ApiError } from '../../../lib/client/types';
 
+// Prevent auto-hiding of splash screen
+SplashScreen.preventAutoHideAsync().catch(() => {
+  console.error('SplashScreen.preventAutoHideAsync() failed');
+});
+
+export interface SigninResult {
+  success: boolean;
+}
+
+export interface SignupResult {
+  success: boolean;
+  requiresVerification?: boolean;
+  email?: string;
+}
+
+/**
+ * Authentication context interface with computed auth states
+ */
 interface AuthContextType {
+  // Authentication data
   user: User | null;
+
+  // Authentication status flags
   isLoading: boolean;
   isAuthenticated: boolean;
   error: string | null;
-  signup: (email: string, password: string, name?: string) => Promise<AuthResponse>;
-  signin: (email: string, password: string) => Promise<AuthResponse>;
+  pendingVerificationEmail: string | null;
+
+  // Computed navigation states
+  isFullyAuthenticated: boolean;
+  needsVerification: boolean;
+
+  // Authentication methods
+  signup: (email: string, password: string, name?: string) => Promise<SignupResult>;
+  signin: (email: string, password: string) => Promise<SigninResult>;
   logout: () => Promise<void>;
+
+  // State management
+  setPendingVerificationEmail: (email: string | null) => void;
+  setToken: (token: string) => Promise<void>;
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 /**
- * Provider component that wraps the app and makes auth object available to any
- * child component that calls useAuth().
+ * Authentication Provider component with integrated splash screen management
  */
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const router = useRouter();
+
+  // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [authCheckComplete, setAuthCheckComplete] = useState<boolean>(false);
+  const [initialLoadComplete, setInitialLoadComplete] = useState<boolean>(false);
+  const [pendingVerificationEmail, setPendingVerificationEmail] = useState<string | null>(null);
 
-  const queryClient = useQueryClient();
+  // API hooks
+  const { mutateAsync: signinMutation, isPending: isSigninLoading } = useSignin();
+  const { mutateAsync: signupMutation, isPending: isSignupLoading } = useSignup();
+  const { data: user, isLoading: isUserLoading } = useCurrentUser();
 
-  // React Query hooks for authentication
-  const { data: user, isLoading: userLoading, refetch } = useCurrentUser();
-  const { mutateAsync: signinMutation, isPending: signinLoading } = useSignin();
-  const { mutateAsync: signupMutation, isPending: signupLoading } = useSignup();
-  const { mutateAsync: logoutMutation, isPending: logoutLoading } = useLogout();
+  // Computed auth states used for routing decisions
+  const needsVerification = !!pendingVerificationEmail;
+  const isFullyAuthenticated = isAuthenticated && !needsVerification;
 
-  // Initial authentication check
+  // Loading state across all auth operations
+  const isLoading = isUserLoading || !initialLoadComplete || isSigninLoading || isSignupLoading;
+
+  // Verify token on startup and manage splash screen
   useEffect(() => {
-    const checkAuth = async () => {
+    const verifyAuthentication = async () => {
       try {
-        if (config.IS_DEV_MODE === true) {
-          setIsAuthenticated(true);
-          setAuthCheckComplete(true);
-          return;
-        }
-        const isAuth = await authUtils.isAuthenticated();
-        setIsAuthenticated(isAuth);
+        const hasToken = await authUtils.isAuthenticated();
 
-        if (isAuth) {
-          // Fetch user data if authenticated
-          refetch();
+        if (hasToken) {
+          try {
+            await httpClient.get('/me', { apiType: 'auth' });
+            setIsAuthenticated(true);
+          } catch {
+            await authUtils.removeToken();
+            setIsAuthenticated(false);
+          }
+        } else {
+          setIsAuthenticated(false);
         }
-      } catch (err) {
-        console.error('Authentication check failed', err);
+      } catch {
+        setIsAuthenticated(false);
       } finally {
-        setAuthCheckComplete(true);
+        setInitialLoadComplete(true);
       }
     };
 
-    checkAuth();
-  }, [refetch]);
-
-  // Update isAuthenticated when user data changes
-  useEffect(() => {
-    if (user) {
-      setIsAuthenticated(true);
-    }
-  }, [user]);
+    verifyAuthentication();
+  }, []);
 
   /**
-   * Sign in with email and password
-   * Exposed to components that use the useAuth hook
+   * Sign in user with email and password
+   * @param email User's email
+   * @param password User's password
+   * @returns Promise with sign-in result
    */
   const signin = useCallback(
     async (email: string, password: string) => {
       setError(null);
       try {
         const response = await signinMutation({ email, password });
-        setIsAuthenticated(true);
-        return response;
+
+        if (response && response.token) {
+          await authUtils.setToken(response.token);
+          setIsAuthenticated(true);
+          return { success: true };
+        } else {
+          throw new Error('No authentication token received');
+        }
       } catch (err: unknown) {
+        if (err instanceof ApiError && err.code === AuthErrorCode.EMAIL_NOT_VERIFIED) {
+          setPendingVerificationEmail(email);
+          router.replace({
+            pathname: '/verify-email',
+            params: { email },
+          });
+        }
         setError(getErrorMessage(err));
         throw err;
       }
     },
-    [signinMutation, queryClient]
+    [signinMutation]
   );
 
   /**
-   * Create a new user account with email and password
+   * Register a new user
+   * @param email User's email
+   * @param password User's password
+   * @param name Optional user's name
+   * @returns Promise with registration result
    */
-  const signup = useCallback(
-    async (email: string, password: string, name?: string) => {
-      setError(null);
-      try {
-        const response = await signupMutation({ email, password, name });
-        setIsAuthenticated(true);
-        return response;
-      } catch (err: unknown) {
-        // setIsAuthenticated(false);
-        setError(getErrorMessage(err));
-        throw err;
-      }
-    },
-    [signupMutation]
-  );
-
-  /**
-   * Sign out and clear all authentication data
-   */
-  const logout = useCallback(async () => {
+  const signup = async (email: string, password: string, name?: string) => {
     try {
-      await logoutMutation();
-      setIsAuthenticated(false);
-      queryClient.clear(); // Clear all cached data when logging out
-    } catch (err: unknown) {
+      const response = await signupMutation({ email, password, name });
+
+      if (response.requiresVerification) {
+        setPendingVerificationEmail(email);
+        return { success: true, requiresVerification: true, email };
+      }
+
+      if (response.token) {
+        await authUtils.setToken(response.token);
+        setIsAuthenticated(true);
+      }
+
+      return { success: true };
+    } catch (err) {
       setError(getErrorMessage(err));
       throw err;
     }
-  }, [logoutMutation, queryClient]);
+  };
 
-  // Combine all loading states for a single isLoading flag
-  const isLoading =
-    userLoading || signinLoading || signupLoading || logoutLoading || !authCheckComplete;
+  /**
+   * Log out the current user
+   */
+  const logout = async () => {
+    try {
+      await authUtils.removeToken();
+      setIsAuthenticated(false);
+      setError(null);
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
+  };
+
+  /**
+   * Helper to set authentication token
+   * @param token Authentication token
+   */
+  const setToken = async (token: string) => {
+    await authUtils.setToken(token);
+    setIsAuthenticated(true);
+  };
 
   return (
     <AuthContext.Provider
       value={{
-        user: user || null,
+        user: user ?? null,
         isLoading,
         isAuthenticated,
         error,
+        pendingVerificationEmail,
+        isFullyAuthenticated,
+        needsVerification,
         signin,
         signup,
         logout,
+        setPendingVerificationEmail,
+        setToken,
+        setIsAuthenticated,
       }}
     >
       {children}
@@ -145,8 +213,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 };
 
 /**
- * Hook that simplifies access to the auth context
- * Must be used within an AuthProvider component
+ * Hook to access authentication context
  */
 export const useAuth = () => {
   const context = useContext(AuthContext);
