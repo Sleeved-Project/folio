@@ -9,11 +9,11 @@ import DisclaimerBox from '../../../components/ui/DisclaimerBox';
 import PriceRow from '../../../components/ui/PriceRow';
 
 interface CardPricesInfoProps {
-  cardId?: string;
+  cardId: string;
 }
 
 export default function CardPricesInfo({ cardId }: CardPricesInfoProps) {
-  const { data: priceData, isLoading, error } = useCardPrices(cardId || '');
+  const { data: priceData, isLoading, error } = useCardPrices(cardId);
   const insets = useSafeAreaInsets();
 
   // Loading state

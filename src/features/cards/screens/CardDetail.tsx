@@ -11,10 +11,11 @@ import AnimatedDrawer from '../components/AnimatedDrawer';
 import { useDrawerAnimation } from '../hooks/useDrawerAnimation';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTheme } from '../../../theme/useTheme';
+import AddCardButton from '../components/AddCardButton';
 
 type TabType = 'details' | 'prices';
 
-export default function CardDetail({ cardId }: { cardId?: string }) {
+export default function CardDetail({ cardId }: { cardId: string }) {
   const [activeTab, setActiveTab] = useState<TabType>('details');
   const theme = useTheme();
 
@@ -59,6 +60,13 @@ export default function CardDetail({ cardId }: { cardId?: string }) {
         headerComponent={<CardMetaInfo number={basicCardData.number} set={basicCardData.set} />}
       >
         <ScrollView showsVerticalScrollIndicator={false} style={styles.detailContent}>
+          <AddCardButton
+            cardId={cardId}
+            onQuantityChange={(id, quantity) =>
+              // @TODO: add logic to handle quantity change with API
+              console.log('quantity:', quantity, id)
+            }
+          />
           <TabSwitcher
             options={tabOptions}
             activeTabId={activeTab}
