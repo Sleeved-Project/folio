@@ -71,5 +71,7 @@ export default function MyFoliosScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 32,
+    paddingBottom: 24,
   },
 });

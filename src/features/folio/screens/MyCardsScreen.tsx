@@ -1,12 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { useTheme } from '../../../theme/useTheme';
+import { View, StyleSheet } from 'react-native';
 import EmptyStateCards from '../components/EmptyStateCards';
+import CardKPIStats from '../../cards/components/CardKPIStats';
 
 export default function MyCardsScreen() {
-  const theme = useTheme();
-
-  const hasCards = false;
+  const hasCards = true;
+  const cardCount = 142;
+  const cardMarketValue = 325.5;
+  const cardMarketTrend = 'down';
+  const tcgPlayerValue = 352.75;
+  const tcgPlayerTrend = 'up';
 
   // Simulate no cards for demonstration purposes
   // In a real application, this would be replaced with actual data fetching logic
@@ -16,10 +19,13 @@ export default function MyCardsScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.title, { color: theme.colors.text.primary }]}>My Cards</Text>
-      <Text style={[styles.description, { color: theme.colors.text.secondary }]}>
-        This section will display your card collection
-      </Text>
+      <CardKPIStats
+        cardCount={cardCount}
+        cardMarketValue={cardMarketValue}
+        cardMarketTrend={cardMarketTrend}
+        tcgPlayerValue={tcgPlayerValue}
+        tcgPlayerTrend={tcgPlayerTrend}
+      />
     </View>
   );
 }
@@ -27,16 +33,7 @@ export default function MyCardsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  description: {
-    fontSize: 16,
-    textAlign: 'center',
+    paddingTop: 32,
+    paddingBottom: 24,
   },
 });
