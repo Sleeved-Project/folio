@@ -10,11 +10,11 @@ import { User, Calendar, StarIcon } from 'lucide-react-native';
 import { useTheme } from '../../../theme/useTheme';
 
 interface CardDetailedInfoProps {
-  cardId?: string;
+  cardId: string;
 }
 
 export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
-  const { data: detailedData, isLoading, error } = useCardDetailedInfo(cardId || '');
+  const { data: detailedData, isLoading, error } = useCardDetailedInfo(cardId);
   const theme = useTheme();
 
   // Loading state

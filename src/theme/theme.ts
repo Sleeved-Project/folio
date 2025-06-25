@@ -8,6 +8,10 @@ export const theme = {
     success: '#4CAF50',
     warning: '#f0ad4e',
 
+    variants: {
+      primaryLight: '#2196F31A',
+    },
+
     background: {
       primary: '#FFFFFF',
       secondary: '#F8F8F8',

@@ -10,7 +10,7 @@ export const cardKeys = {
 
 export const useCardDetail = (cardId: string) => {
   return useQuery({
-    queryKey: cardKeys.detail(cardId || ''),
+    queryKey: cardKeys.detail(cardId),
     queryFn: async () => {
       if (!cardId) throw new Error('Card ID is required');
       const response = await httpClient.get<CardBasicInfo>(`/cards/${cardId}`);
@@ -23,7 +23,7 @@ export const useCardDetail = (cardId: string) => {
 
 export const useCardDetailedInfo = (cardId: string) => {
   return useQuery({
-    queryKey: cardKeys.details(cardId || ''),
+    queryKey: cardKeys.details(cardId),
     queryFn: async () => {
       if (!cardId) throw new Error('Card ID is required');
       const response = await httpClient.get<CardDetailedInfo>(`/cards/${cardId}/details`);
