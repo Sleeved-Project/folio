@@ -32,7 +32,6 @@ export default function FoliosList({
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <FolioItem folio={item} onPress={onFolioPress} />}
       ListHeaderComponent={<CreateFolioButton onPress={onCreatePress} />}
-      contentContainerStyle={styles.listContainer}
       showsVerticalScrollIndicator={false}
     />
   );
@@ -41,10 +40,5 @@ export default function FoliosList({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
-  },
-  listContainer: {
-    paddingTop: 32,
-    paddingBottom: 24,
   },
 });
