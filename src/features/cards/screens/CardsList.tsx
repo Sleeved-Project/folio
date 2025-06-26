@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import { useCards } from '../hooks/queries/useCardsQuery';
 import { useState } from 'react';
 import SearchBar from '../../../components/ui/SearchBar';
-import CardListDisplay from '../../../components/ui/CardListDisplay';
+import CardListDisplay from '../components/CardListDisplay';
 import { useTheme } from '../../../theme/useTheme';
 
 export default function CardsList() {
@@ -44,7 +44,5 @@ export default function CardsList() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
 });

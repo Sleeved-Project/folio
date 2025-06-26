@@ -1,5 +1,4 @@
 import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { useTheme } from '../../theme/useTheme';
 import { TabSwitcher } from '../../components/ui/TabSwitcher';
@@ -18,10 +17,7 @@ export default function Folio() {
   ];
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
-      edges={['top', 'left', 'right']}
-    >
+    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
         <TabSwitcher
           options={tabOptions}
@@ -31,7 +27,7 @@ export default function Folio() {
         />
         {activeTab === 'cards' ? <MyCardsScreen /> : <MyFoliosScreen />}
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -42,6 +38,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 16,
+    paddingTop: 16,
   },
   tabSwitcher: {
     marginBottom: 0,

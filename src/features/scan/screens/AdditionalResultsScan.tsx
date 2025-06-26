@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { Card } from '../../cards/types';
-import CardListDisplay from '../../../components/ui/CardListDisplay';
+import CardListDisplay from '../../cards/components/CardListDisplay';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { ChevronLeft } from 'lucide-react-native';
@@ -55,8 +55,6 @@ export default function AdditionalResultsScan({ cards }: AdditionalResultsScanPr
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
     gap: 16,
   },
   backButtonContainer: {
