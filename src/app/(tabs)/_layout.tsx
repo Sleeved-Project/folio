@@ -9,6 +9,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      backBehavior="history"
       screenOptions={{
         headerShown: true,
         tabBarStyle: {
@@ -62,7 +63,7 @@ export default function TabLayout() {
         name="folios"
         options={{
           title: 'Folios',
-          headerTitle: () => <TabHeader title="Folios" displayBackButton />,
+          headerTitle: () => <TabHeader title="Folios" />,
           tabBarIcon: ({ focused }) => (
             <Wallet
               color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
