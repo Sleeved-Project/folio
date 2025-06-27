@@ -72,9 +72,9 @@ export default function CardListDisplay({
               ...theme.shadows.small,
             }}
           />
-          {item.occurrences && item.occurrences > 0 && (
+          {item.occurrence && item.occurrence > 0 && (
             <View style={styles.occurenceBadge}>
-              <Badge value={item.occurrences} />
+              <Badge value={item.occurrence} />
             </View>
           )}
         </View>
