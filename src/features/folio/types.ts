@@ -20,3 +20,9 @@ export interface MyCardsListResponse {
   data: RawMyCard[];
   meta: CardsListResponse['meta'];
 }
+
+export interface FolioStatisticsData {
+  totalCardsCount: number;
+  cardMarketPrice: string;
+  tcgPlayerPrice: string;
+}
