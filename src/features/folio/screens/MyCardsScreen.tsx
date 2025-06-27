@@ -1,36 +1,47 @@
-import React from 'react';
+import { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import EmptyStateCards from '../components/EmptyStateCards';
 import CardKPIStats from '../../cards/components/CardKPIStats';
 import CardListDisplay from '../../cards/components/CardListDisplay';
+import { useAllMyCards } from '../hooks/queries/useAllMyCards';
+import { LoadingState } from '../../../components/ui/StatusIndicators';
 
 export default function MyCardsScreen() {
-  const hasCards = true;
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+    useAllMyCards();
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
+
   const cardCount = 142;
   const cardMarketValue = 325.5;
   const cardMarketTrend = 'down';
   const tcgPlayerValue = 352.75;
   const tcgPlayerTrend = 'up';
 
-  const myCards = [
-    { id: 'base1-1', imageSmall: 'https://images.pokemontcg.io/base1/1.png', occurrences: 1 },
-    { id: 'base1-2', imageSmall: 'https://images.pokemontcg.io/base1/2.png', occurrences: 1 },
-    { id: 'base1-3', imageSmall: 'https://images.pokemontcg.io/base1/3.png', occurrences: 1 },
-    { id: 'base1-4', imageSmall: 'https://images.pokemontcg.io/base1/4.png', occurrences: 1 },
-    { id: 'base1-5', imageSmall: 'https://images.pokemontcg.io/base1/5.png', occurrences: 1 },
-    { id: 'base1-6', imageSmall: 'https://images.pokemontcg.io/base1/6.png', occurrences: 1 },
-  ];
+  const cardsData = data?.pages.flatMap((page) => page.data) ?? [];
 
-  // Simulate no cards for demonstration purposes
-  // In a real application, this would be replaced with actual data fetching logic
-  if (!hasCards) {
+  if (isLoading) {
+    return <LoadingState />;
+  }
+
+  if (!isLoading && cardsData?.length === 0) {
     return <EmptyStateCards />;
   }
 
   return (
     <View style={styles.container}>
       <CardListDisplay
-        cards={myCards}
+        cards={cardsData}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        isLoading={isLoading}
+        fetchNextPage={fetchNextPage}
+        error={error}
         listOrigin="collection"
         ListHeaderComponent={
           <CardKPIStats
