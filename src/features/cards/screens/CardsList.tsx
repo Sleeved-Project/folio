@@ -15,7 +15,7 @@ type TabType = 'sets' | 'cards';
 
 export default function CardsList() {
   const [cardName, setCardName] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<TabType>('sets');
+  const [activeTab, setActiveTab] = useState<TabType>('cards');
   const isFiltersVisible = true;
   const [isFilterDetailVisible, setIsFilterDetailVisible] = useState<boolean>(false);
   const [selectedFilterIndex, setSelectedFilterIndex] = useState<number | null>(null);
@@ -102,12 +102,15 @@ export default function CardsList() {
           error={cardsError}
         />
       )}
-      <FilterDetail
-        isFilterDetailVisible={isFilterDetailVisible}
-        filterOptions={filtersOptions[selectedFilterIndex ?? 0]}
-        filters={filters ?? []}
-        setFilters={setFilters}
-      />
+      {isFilterDetailVisible && activeTab !== 'sets' && (
+        <FilterDetail
+          isFilterDetailVisible={isFilterDetailVisible}
+          setIsFilterDetailVisible={setIsFilterDetailVisible}
+          filterOptions={filtersOptions[selectedFilterIndex ?? 0]}
+          filters={filters ?? []}
+          setFilters={setFilters}
+        />
+      )}
     </View>
   );
 }

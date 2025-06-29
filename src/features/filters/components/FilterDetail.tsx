@@ -5,9 +5,11 @@ import AnimatedDrawer from '../../cards/components/AnimatedDrawer';
 import { useDrawerAnimation } from '../../cards/hooks/useDrawerAnimation';
 import FilterOption from './FilterOption';
 import { Filters } from '../types';
+import { useEffect } from 'react';
 
 interface FilterDetailProps {
   isFilterDetailVisible: boolean;
+  setIsFilterDetailVisible: (isVisible: boolean) => void;
   filterOptions: {
     label: string;
     values: string[];
@@ -18,14 +20,22 @@ interface FilterDetailProps {
 
 export default function FilterDetail({
   isFilterDetailVisible,
+  setIsFilterDetailVisible,
   filterOptions,
   filters,
   setFilters,
 }: FilterDetailProps) {
   const theme = useTheme();
-  console.log('setIsFilterDetailVisible:', isFilterDetailVisible);
+  const { isCollapsed, gestureHandler, drawerAnimatedStyle, toggleDrawer } = useDrawerAnimation({
+    isFilterView: true,
+  });
 
-  const { gestureHandler, drawerAnimatedStyle, toggleDrawer } = useDrawerAnimation();
+  useEffect(() => {
+    if (isFilterDetailVisible && isCollapsed) {
+      toggleDrawer();
+      setIsFilterDetailVisible(false);
+    }
+  }, [isFilterDetailVisible, isCollapsed]);
 
   return (
     <AnimatedDrawer

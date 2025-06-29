@@ -20,7 +20,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
   const theme = useTheme();
 
   const { toggleDrawer, gestureHandler, drawerAnimatedStyle, cardImageAnimatedStyle } =
-    useDrawerAnimation();
+    useDrawerAnimation({ isFilterView: false });
 
   const {
     data: basicCardData,

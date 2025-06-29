@@ -17,13 +17,19 @@ interface GestureContext {
 }
 
 // Destructure constants for easier access
-const { EXPANDED_HEIGHT, COLLAPSED_HEIGHT } = DRAWER_DIMENSIONS;
+const {
+  EXPANDED_HEIGHT,
+  COLLAPSED_HEIGHT,
+  FILTER_VIEW_COLLAPSED_HEIGHT,
+  FILTER_VIEW_EXPANDED_HEIGHT,
+} = DRAWER_DIMENSIONS;
 const { DURATION, VELOCITY_THRESHOLD } = ANIMATION_CONFIG;
 const { HEIGHT: SCREEN_HEIGHT } = SCREEN_DIMENSIONS;
 
-export const useDrawerAnimation = () => {
+export const useDrawerAnimation = ({ isFilterView }: { isFilterView?: boolean }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-
+  const expandedHeight = isFilterView ? FILTER_VIEW_EXPANDED_HEIGHT : EXPANDED_HEIGHT;
+  const collapsedHeight = isFilterView ? FILTER_VIEW_COLLAPSED_HEIGHT : COLLAPSED_HEIGHT;
   // Animation values
   const drawerTranslateY = useSharedValue(0);
 
@@ -32,7 +38,7 @@ export const useDrawerAnimation = () => {
     const newIsCollapsed = !isCollapsed;
     setIsCollapsed(newIsCollapsed);
 
-    const targetValue = newIsCollapsed ? EXPANDED_HEIGHT - COLLAPSED_HEIGHT : 0;
+    const targetValue = newIsCollapsed ? expandedHeight - collapsedHeight : 0;
 
     drawerTranslateY.value = withTiming(targetValue, {
       duration: DURATION,
@@ -50,19 +56,16 @@ export const useDrawerAnimation = () => {
       const newPosition = ctx.startY + event.translationY;
 
       // Don't let drawer go above its expanded position or below collapsed position
-      drawerTranslateY.value = Math.max(
-        0,
-        Math.min(newPosition, EXPANDED_HEIGHT - COLLAPSED_HEIGHT)
-      );
+      drawerTranslateY.value = Math.max(0, Math.min(newPosition, expandedHeight - collapsedHeight));
     },
     onEnd: (event) => {
       // Determine threshold for snapping
-      const snapThreshold = (EXPANDED_HEIGHT - COLLAPSED_HEIGHT) / 2;
+      const snapThreshold = (expandedHeight - collapsedHeight) / 2;
 
       // Determine if we should snap to expanded or collapsed state
       if (event.velocityY > VELOCITY_THRESHOLD || drawerTranslateY.value > snapThreshold) {
         // Collapse drawer
-        drawerTranslateY.value = withTiming(EXPANDED_HEIGHT - COLLAPSED_HEIGHT, {
+        drawerTranslateY.value = withTiming(expandedHeight - collapsedHeight, {
           duration: DURATION,
           easing: Easing.out(Easing.cubic),
         });
@@ -82,14 +85,14 @@ export const useDrawerAnimation = () => {
   const drawerAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: drawerTranslateY.value }],
-      height: EXPANDED_HEIGHT,
+      height: expandedHeight,
     };
   });
 
   // Animated styles for card image with adaptive centering
   const cardImageAnimatedStyle = useAnimatedStyle(() => {
     // Calculate progress (0 = expanded, 1 = collapsed)
-    const progress = drawerTranslateY.value / (EXPANDED_HEIGHT - COLLAPSED_HEIGHT);
+    const progress = drawerTranslateY.value / (expandedHeight - collapsedHeight);
 
     // Adaptive scale based on screen size
     const cardScale = interpolate(
