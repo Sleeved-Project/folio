@@ -6,6 +6,7 @@ import { AuthProvider } from '../features/auth/context/AuthContext';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
 import { useAuth } from '../features/auth/context/AuthContext';
+import { ToasterProvider } from '../components/ui/ToasterProvider';
 
 function AppNavigator() {
   const { isFullyAuthenticated } = useAuth();
@@ -37,7 +38,9 @@ export default function RootLayout() {
     <GestureHandlerRootView style={styles.container}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <AppNavigator />
+          <ToasterProvider>
+            <AppNavigator />
+          </ToasterProvider>
         </AuthProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>
