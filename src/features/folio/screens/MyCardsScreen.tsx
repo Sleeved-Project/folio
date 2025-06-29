@@ -8,7 +8,7 @@ import { useAllMyCards } from '../hooks/queries/useAllMyCards';
 import { LoadingState } from '../../../components/ui/StatusIndicators';
 
 export default function MyCardsScreen() {
-  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useAllMyCards();
 
   const {
@@ -18,10 +18,10 @@ export default function MyCardsScreen() {
     refetch: refetchMyCardsStats,
   } = useMainFolioStatistics();
 
-  // We need to refetch the cards and stats when the screen is focused
+  // We need to refetch stats when the screen is focused
   // This is useful when the user navigates back to this screen
   // and we want to ensure the data is up-to-date
-  useRefetchOnFocus(refetch, refetchMyCardsStats);
+  useRefetchOnFocus(refetchMyCardsStats);
 
   const cardsData = data?.pages.flatMap((page) => page.data) ?? [];
 

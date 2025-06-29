@@ -17,7 +17,7 @@ export const useCardFolioCollect = () => {
   const queryClient = useQueryClient();
   return useMutation<CollectResponse, Error, CollectPayload>({
     mutationFn: async ({ cardId }: CollectPayload) => {
-      return httpClient.post('/folios/collect', { cardId });
+      return httpClient.post('/folios/cards/collect', { cardId });
     },
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: folioKeys.allMyCards });
