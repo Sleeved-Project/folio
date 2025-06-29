@@ -6,5 +6,7 @@ export function mapFolioStatistics(data: FolioStatisticsData): FolioStatisticsDa
     totalCardsCount: data.totalCardsCount,
     cardMarketPrice: `${formatNumberShort(parseFloat(data.cardMarketPrice))}€`,
     tcgPlayerPrice: `$${formatNumberShort(parseFloat(data.tcgPlayerPrice))}`,
+    cardMarketTrending: data.cardMarketTrending,
+    tcgPlayerTrending: data.tcgPlayerTrending,
   };
 }

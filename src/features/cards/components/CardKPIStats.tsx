@@ -13,14 +13,14 @@ import { useTheme } from '../../../theme/useTheme';
 interface CardKPIStatsProps {
   cardCount?: number;
   cardMarketValue?: string;
-  cardMarketTrend: 'up' | 'down' | 'neutral';
+  cardMarketTrending: 'up' | 'down' | 'equal' | undefined;
   tcgPlayerValue?: string;
-  tcgPlayerTrend: 'up' | 'down' | 'neutral';
+  tcgPlayerTrending: 'up' | 'down' | 'equal' | undefined;
   isLoading?: boolean;
   isError?: boolean;
 }
 
-function TrendIcon({ trend }: { trend: 'up' | 'down' | 'neutral' }) {
+function TrendIcon({ trend }: { trend: 'up' | 'down' | 'equal' | undefined }) {
   const theme = useTheme();
   if (trend === 'up')
     return <TrendingUp size={14} color={theme.colors.success} style={{ marginLeft: 4 }} />;
@@ -47,9 +47,9 @@ function StatValue({
 export default function CardKPIStats({
   cardCount,
   cardMarketValue,
-  cardMarketTrend,
+  cardMarketTrending,
   tcgPlayerValue,
-  tcgPlayerTrend,
+  tcgPlayerTrending,
   isLoading,
   isError,
 }: CardKPIStatsProps) {
@@ -79,7 +79,7 @@ export default function CardKPIStats({
           <StatValue value={cardMarketValue} isLoading={isLoading} isError={isError} />
           <View style={styles.labelWithTrend}>
             <Text style={[styles.label, { color: theme.colors.text.secondary }]}>CardMarket</Text>
-            <TrendIcon trend={cardMarketTrend} />
+            <TrendIcon trend={cardMarketTrending} />
           </View>
         </View>
         <View style={styles.divider} />
@@ -88,7 +88,7 @@ export default function CardKPIStats({
           <StatValue value={tcgPlayerValue} isLoading={isLoading} isError={isError} />
           <View style={styles.labelWithTrend}>
             <Text style={[styles.label, { color: theme.colors.text.secondary }]}>TCGPlayer</Text>
-            <TrendIcon trend={tcgPlayerTrend} />
+            <TrendIcon trend={tcgPlayerTrending} />
           </View>
         </View>
       </View>
