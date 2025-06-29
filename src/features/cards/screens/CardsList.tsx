@@ -5,8 +5,9 @@ import SearchBar from '../../../components/ui/SearchBar';
 import CardListDisplay from '../components/CardListDisplay';
 import { useTheme } from '../../../theme/useTheme';
 import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
-import CardSetDisplay from '../components/CardSetDisplay';
-import { useSets } from '../hooks/queries/useSetsQuery';
+import { useSets } from '../../sets/hooks/queries/useSetsQuery';
+import SetsList from '../../sets/screens/SetsList';
+import { Set } from '../../sets/types';
 
 type TabType = 'sets' | 'cards';
 
@@ -34,7 +35,32 @@ export default function CardsList() {
   } = useSets(cardName);
 
   const cards = cardsData?.pages.flatMap((page) => page.data) ?? [];
-  const sets = setsData?.pages.flatMap((page) => page.data) ?? [];
+  const sets: Set[] = setsData?.pages.flatMap((page) => page.data) ?? [
+    {
+      id: 'set1',
+      name: 'Example Set',
+      imageLogo: 'https://images.pokemontcg.io/base1/logo.png',
+      imageSymbol: 'https://images.pokemontcg.io/base1/symbol.png',
+      nbOwned: 2,
+      nbTotal: 20,
+    },
+    {
+      id: 'set2',
+      name: 'Another Set',
+      imageLogo: 'https://images.pokemontcg.io/base2/logo.png',
+      imageSymbol: 'https://images.pokemontcg.io/base2/symbol.png',
+      nbOwned: 5,
+      nbTotal: 10,
+    },
+    {
+      id: 'set3',
+      name: 'Third Set',
+      imageLogo: 'https://images.pokemontcg.io/base3/logo.png',
+      imageSymbol: 'https://images.pokemontcg.io/base3/symbol.png',
+      nbOwned: 0,
+      nbTotal: 10,
+    },
+  ];
   const tabOptions: TabOption<TabType>[] = [
     { id: 'sets', label: 'Card Sets' },
     { id: 'cards', label: 'All Cards' },
@@ -62,7 +88,7 @@ export default function CardsList() {
         setSearchQuery={(newName: string) => setCardName(newName)}
       />
       {activeTab === 'sets' ? (
-        <CardSetDisplay
+        <SetsList
           sets={sets}
           hasNextPage={hasNextSetsPage}
           isFetchingNextPage={isFetchingNextSetsPage}

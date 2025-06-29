@@ -1,10 +1,10 @@
 import React from 'react';
 import { Text, StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import CardSet from './CardSet';
-import { Set } from '../../sets/types';
+import { Set } from '../types';
+import SetListDisplay from '../components/SetListDisplay';
 
-interface CardSetDisplayProps {
+interface SetsListProps {
   sets: Set[];
   hasNextPage?: boolean;
   isFetchingNextPage?: boolean;
@@ -14,7 +14,7 @@ interface CardSetDisplayProps {
   ListHeaderComponent?: React.ReactElement | null;
 }
 
-export default function CardSetDisplay({
+export default function SetsList({
   sets,
   hasNextPage,
   isFetchingNextPage,
@@ -22,13 +22,13 @@ export default function CardSetDisplay({
   fetchNextPage,
   error,
   ListHeaderComponent = null,
-}: CardSetDisplayProps) {
+}: SetsListProps) {
   const theme = useTheme();
 
   const GAP = 8;
   const NUM_COLUMNS = 2;
 
-  const displaySetList = ({ item }: { item: Set }) => <CardSet set={item} />;
+  const displaySetList = ({ item }: { item: Set }) => <SetListDisplay set={item} />;
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
@@ -57,6 +57,8 @@ export default function CardSetDisplay({
             );
           }
           if (error) {
+            console.log('Error loading sets:', error);
+
             return (
               <Text style={[styles.text, styles.errorText, { color: theme.colors.danger }]}>
                 Error loading sets

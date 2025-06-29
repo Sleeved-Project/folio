@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, useWindowDimensions } from 'react-native';
 import Badge from '../../../components/ui/Badge';
-import { Set } from '../types';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../../../theme/useTheme';
+import { Set } from '../../sets/types';
 
 interface CardSetProps {
   set: Set;

@@ -1,26 +1,3 @@
-export interface Set {
-  id: string;
-  name: string;
-  imageSymbol: string;
-  imageLogo: string;
-  nbOwned: number;
-}
-
-export interface SetsListResponse {
-  data: Set[];
-  meta: {
-    currentPage: number;
-    firstPage: number;
-    firstPageUrl: string;
-    lastPage: number;
-    lastPageUrl: string;
-    nextPageUrl: string | null;
-    perPage: number;
-    previousPageUrl: string | null;
-    total: number;
-  };
-}
-
 export interface Card {
   id: string;
   imageSmall: string;
