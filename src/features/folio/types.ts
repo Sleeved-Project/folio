@@ -25,4 +25,6 @@ export interface FolioStatisticsData {
   totalCardsCount: number;
   cardMarketPrice: string;
   tcgPlayerPrice: string;
+  cardMarketTrending: 'up' | 'down' | 'equal';
+  tcgPlayerTrending: 'up' | 'down' | 'equal';
 }

@@ -1,6 +1,5 @@
-import { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
 import EmptyStateCards from '../components/EmptyStateCards';
 import CardKPIStats from '../../cards/components/CardKPIStats';
 import CardListDisplay from '../../cards/components/CardListDisplay';
@@ -19,12 +18,10 @@ export default function MyCardsScreen() {
     refetch: refetchMyCardsStats,
   } = useMainFolioStatistics();
 
-  useFocusEffect(
-    useCallback(() => {
-      refetch();
-      refetchMyCardsStats();
-    }, [refetch])
-  );
+  // We need to refetch the cards and stats when the screen is focused
+  // This is useful when the user navigates back to this screen
+  // and we want to ensure the data is up-to-date
+  useRefetchOnFocus(refetch, refetchMyCardsStats);
 
   const cardsData = data?.pages.flatMap((page) => page.data) ?? [];
 
@@ -50,9 +47,9 @@ export default function MyCardsScreen() {
           <CardKPIStats
             cardCount={myCardsStats?.totalCardsCount}
             cardMarketValue={myCardsStats?.cardMarketPrice}
-            cardMarketTrend="neutral"
+            cardMarketTrending={myCardsStats?.cardMarketTrending}
             tcgPlayerValue={myCardsStats?.tcgPlayerPrice}
-            tcgPlayerTrend="neutral"
+            tcgPlayerTrending={myCardsStats?.tcgPlayerTrending}
             isLoading={isLoadingMyCardsStats}
             isError={!!myCardsStatsError}
           />
