@@ -141,9 +141,9 @@ export default function CardListDisplay({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginHorizontal: 16,
   },
   listContent: {
-    paddingTop: 16,
     paddingBottom: 32,
   },
   text: {

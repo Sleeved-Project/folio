@@ -19,6 +19,8 @@ export const CARD_ASPECT_RATIO = 2.5 / 3.5;
 export const DRAWER_DIMENSIONS = {
   EXPANDED_HEIGHT: SCREEN_DIMENSIONS.HEIGHT * 0.5, // 50% of screen
   COLLAPSED_HEIGHT: 70, // Minimal height when collapsed
+  FILTER_VIEW_COLLAPSED_HEIGHT: 0,
+  FILTER_VIEW_EXPANDED_HEIGHT: SCREEN_DIMENSIONS.HEIGHT * 0.7, // 70% of screen
 };
 
 // Animation constants

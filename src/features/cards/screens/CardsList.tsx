@@ -7,12 +7,19 @@ import { useTheme } from '../../../theme/useTheme';
 import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
 import CardSetDisplay from '../components/CardSetDisplay';
 import { useSets } from '../hooks/queries/useSetsQuery';
+import CardFilters from '../../filters/components/CardFilters';
+import FilterDetail from '../../filters/components/FilterDetail';
+import { Filters } from '../../filters/types';
 
 type TabType = 'sets' | 'cards';
 
 export default function CardsList() {
   const [cardName, setCardName] = useState<string>('');
   const [activeTab, setActiveTab] = useState<TabType>('sets');
+  const isFiltersVisible = true;
+  const [isFilterDetailVisible, setIsFilterDetailVisible] = useState<boolean>(false);
+  const [selectedFilterIndex, setSelectedFilterIndex] = useState<number | null>(null);
+
   const theme = useTheme();
 
   const {
@@ -33,12 +40,20 @@ export default function CardsList() {
     isFetchingNextPage: isFetchingNextSetsPage,
   } = useSets(cardName);
 
+  const filtersOptions = [
+    { label: 'Artist', values: ['Artist 1', 'Loop', 'Huuh', 'Kiki', 'ldozqo'] },
+    { label: 'Subtype', values: ['Subtype 1', 'Loop', 'Huuh', 'Kiki'] },
+    { label: 'Type', values: ['Type 1', 'Loop', 'Huuh', 'Kiki'] },
+  ];
+
   const cards = cardsData?.pages.flatMap((page) => page.data) ?? [];
   const sets = setsData?.pages.flatMap((page) => page.data) ?? [];
   const tabOptions: TabOption<TabType>[] = [
     { id: 'sets', label: 'Card Sets' },
     { id: 'cards', label: 'All Cards' },
   ];
+
+  const [filters, setFilters] = useState<Filters>();
 
   return (
     <View
@@ -61,6 +76,13 @@ export default function CardsList() {
         searchQuery={cardName}
         setSearchQuery={(newName: string) => setCardName(newName)}
       />
+      {isFiltersVisible && (
+        <CardFilters
+          filters={filtersOptions}
+          setIsFilterDetailVisible={setIsFilterDetailVisible}
+          setSelectedFilterIndex={setSelectedFilterIndex}
+        />
+      )}
       {activeTab === 'sets' ? (
         <CardSetDisplay
           sets={sets}
@@ -80,6 +102,12 @@ export default function CardsList() {
           error={cardsError}
         />
       )}
+      <FilterDetail
+        isFilterDetailVisible={isFilterDetailVisible}
+        filterOptions={filtersOptions[selectedFilterIndex ?? 0]}
+        filters={filters ?? []}
+        setFilters={setFilters}
+      />
     </View>
   );
 }
