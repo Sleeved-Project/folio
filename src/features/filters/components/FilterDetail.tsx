@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import { ScrollView } from 'react-native-gesture-handler';
 import AnimatedDrawer from '../../cards/components/AnimatedDrawer';
@@ -41,9 +41,31 @@ export default function FilterDetail({
           },
         ]}
       >
-        <Text style={{ color: theme.colors.text.primary, fontSize: 18, fontWeight: 'bold' }}>
-          {filterOptions?.label}
-        </Text>
+        <View style={styles.labelContainer}>
+          <Text style={{ color: theme.colors.text.primary, fontSize: 18, fontWeight: 'bold' }}>
+            {filterOptions?.label}
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              if (!setFilters) return;
+              const currentFilters = filters ?? [];
+
+              // If the filter is already selected, we remove it
+              const existingIndex = filters?.findIndex(
+                (filter) => filter.label === filterOptions.label
+              );
+
+              setFilters(currentFilters.filter((_, i) => i !== existingIndex));
+            }}
+            style={[
+              styles.checkBoxContainer,
+              {
+                borderColor: theme.colors.border.black,
+                borderRadius: theme.borderRadius.small,
+              },
+            ]}
+          ></TouchableOpacity>
+        </View>
         <ScrollView style={{ marginTop: 16 }}>
           {filterOptions?.values.map((value, index) => (
             <FilterOption
@@ -104,5 +126,18 @@ export default function FilterDetail({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  labelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: 16,
+  },
+  checkBoxContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    width: 24,
+    height: 24,
   },
 });

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import { Check } from 'lucide-react-native';
+// import { Check } from 'lucide-react-native';
 
 interface FilterOptionProps {
   value: string;
@@ -38,13 +38,12 @@ export default function FilterOption({ value, updateFiltersCallback }: FilterOpt
         style={[
           styles.checkBoxContainer,
           {
-            padding: theme.spacing.md,
             borderColor: theme.colors.border.black,
             borderRadius: theme.borderRadius.small,
           },
         ]}
       >
-        <Check color={theme.colors.text.tertiary} width={16} height={16} />
+        {/* <Check color={theme.colors.text.tertiary} width={16} height={16} /> */}
       </TouchableOpacity>
     </View>
   );
@@ -61,7 +60,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    width: 16,
-    height: 16,
+    width: 24,
+    height: 24,
   },
 });

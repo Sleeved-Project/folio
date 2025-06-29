@@ -76,7 +76,7 @@ export default function CardsList() {
         searchQuery={cardName}
         setSearchQuery={(newName: string) => setCardName(newName)}
       />
-      {isFiltersVisible && (
+      {isFiltersVisible && activeTab !== 'sets' && (
         <CardFilters
           filters={filtersOptions}
           setIsFilterDetailVisible={setIsFilterDetailVisible}
