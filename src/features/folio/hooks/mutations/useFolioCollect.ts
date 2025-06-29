@@ -1,6 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
 import { useToaster } from '../../../../components/ui/ToasterProvider';
+import { folioKeys } from '../queries/useAllMyCards';
 
 interface CollectPayload {
   cardId: string;
@@ -13,11 +14,13 @@ interface CollectResponse {
 export const useCardFolioCollect = () => {
   const { showToast } = useToaster();
 
+  const queryClient = useQueryClient();
   return useMutation<CollectResponse, Error, CollectPayload>({
     mutationFn: async ({ cardId }: CollectPayload) => {
       return httpClient.post('/folios/collect', { cardId });
     },
     onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: folioKeys.allMyCards });
       showToast({ message: response.message || 'Card added to your collection!', type: 'success' });
     },
     onError: (error) => {
