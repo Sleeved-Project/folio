@@ -1,33 +1,57 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { TrendingUp, TrendingDown, Euro, DollarSign, Layers } from 'lucide-react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import {
+  TrendingUp,
+  TrendingDown,
+  Euro,
+  DollarSign,
+  Layers,
+  AlertCircle,
+} from 'lucide-react-native';
 import { useTheme } from '../../../theme/useTheme';
 
 interface CardKPIStatsProps {
-  cardCount: number;
-  cardMarketValue: number;
-  cardMarketTrend: 'up' | 'down' | 'neutral';
-  tcgPlayerValue: number;
-  tcgPlayerTrend: 'up' | 'down' | 'neutral';
+  cardCount?: number;
+  cardMarketValue?: string;
+  cardMarketTrending: 'up' | 'down' | 'equal' | undefined;
+  tcgPlayerValue?: string;
+  tcgPlayerTrending: 'up' | 'down' | 'equal' | undefined;
+  isLoading?: boolean;
+  isError?: boolean;
 }
 
-function TrendIcon({ trend }: { trend: 'up' | 'down' | 'neutral' }) {
+function TrendIcon({ trend }: { trend: 'up' | 'down' | 'equal' | undefined }) {
   const theme = useTheme();
-  if (trend === 'up') {
+  if (trend === 'up')
     return <TrendingUp size={14} color={theme.colors.success} style={{ marginLeft: 4 }} />;
-  }
-  if (trend === 'down') {
+  if (trend === 'down')
     return <TrendingDown size={14} color={theme.colors.danger} style={{ marginLeft: 4 }} />;
-  }
   return null;
+}
+
+function StatValue({
+  value,
+  isLoading,
+  isError,
+}: {
+  value?: string | number;
+  isLoading?: boolean;
+  isError?: boolean;
+}) {
+  const theme = useTheme();
+  if (isLoading) return <ActivityIndicator size={16} color={theme.colors.primary} />;
+  if (isError) return <AlertCircle size={16} color={theme.colors.danger} />;
+  return <Text style={[styles.value, { color: theme.colors.text.primary }]}>{value ?? '-'}</Text>;
 }
 
 export default function CardKPIStats({
   cardCount,
   cardMarketValue,
-  cardMarketTrend,
+  cardMarketTrending,
   tcgPlayerValue,
-  tcgPlayerTrend,
+  tcgPlayerTrending,
+  isLoading,
+  isError,
 }: CardKPIStatsProps) {
   const theme = useTheme();
 
@@ -44,7 +68,7 @@ export default function CardKPIStats({
       <View style={styles.row}>
         <View style={styles.statItem}>
           <Layers size={20} color={theme.colors.primary} />
-          <Text style={[styles.value, { color: theme.colors.text.primary }]}>{cardCount}</Text>
+          <StatValue value={cardCount} isLoading={isLoading} isError={isError} />
           <View style={styles.labelWithTrend}>
             <Text style={[styles.label, { color: theme.colors.text.secondary }]}>Cards</Text>
           </View>
@@ -52,23 +76,19 @@ export default function CardKPIStats({
         <View style={styles.divider} />
         <View style={styles.statItem}>
           <Euro size={20} color={theme.colors.primary} />
-          <Text style={[styles.value, { color: theme.colors.text.primary }]}>
-            {cardMarketValue}€
-          </Text>
+          <StatValue value={cardMarketValue} isLoading={isLoading} isError={isError} />
           <View style={styles.labelWithTrend}>
             <Text style={[styles.label, { color: theme.colors.text.secondary }]}>CardMarket</Text>
-            <TrendIcon trend={cardMarketTrend} />
+            <TrendIcon trend={cardMarketTrending} />
           </View>
         </View>
         <View style={styles.divider} />
         <View style={styles.statItem}>
           <DollarSign size={20} color={theme.colors.primary} />
-          <Text style={[styles.value, { color: theme.colors.text.primary }]}>
-            ${tcgPlayerValue}
-          </Text>
+          <StatValue value={tcgPlayerValue} isLoading={isLoading} isError={isError} />
           <View style={styles.labelWithTrend}>
             <Text style={[styles.label, { color: theme.colors.text.secondary }]}>TCGPlayer</Text>
-            <TrendIcon trend={tcgPlayerTrend} />
+            <TrendIcon trend={tcgPlayerTrending} />
           </View>
         </View>
       </View>
