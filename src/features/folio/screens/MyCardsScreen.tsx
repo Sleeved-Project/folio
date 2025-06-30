@@ -1,44 +1,57 @@
-import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
 import EmptyStateCards from '../components/EmptyStateCards';
 import CardKPIStats from '../../cards/components/CardKPIStats';
 import CardListDisplay from '../../cards/components/CardListDisplay';
+import { useMainFolioStatistics } from '../hooks/queries/useMainFolioStatistics';
+import { useAllMyCards } from '../hooks/queries/useAllMyCards';
+import { LoadingState } from '../../../components/ui/StatusIndicators';
 
 export default function MyCardsScreen() {
-  const hasCards = true;
-  const cardCount = 142;
-  const cardMarketValue = 325.5;
-  const cardMarketTrend = 'down';
-  const tcgPlayerValue = 352.75;
-  const tcgPlayerTrend = 'up';
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useAllMyCards();
 
-  const myCards = [
-    { id: 'base1-1', imageSmall: 'https://images.pokemontcg.io/base1/1.png', occurrences: 1 },
-    { id: 'base1-2', imageSmall: 'https://images.pokemontcg.io/base1/2.png', occurrences: 1 },
-    { id: 'base1-3', imageSmall: 'https://images.pokemontcg.io/base1/3.png', occurrences: 1 },
-    { id: 'base1-4', imageSmall: 'https://images.pokemontcg.io/base1/4.png', occurrences: 1 },
-    { id: 'base1-5', imageSmall: 'https://images.pokemontcg.io/base1/5.png', occurrences: 1 },
-    { id: 'base1-6', imageSmall: 'https://images.pokemontcg.io/base1/6.png', occurrences: 1 },
-  ];
+  const {
+    data: myCardsStats,
+    isLoading: isLoadingMyCardsStats,
+    error: myCardsStatsError,
+    refetch: refetchMyCardsStats,
+  } = useMainFolioStatistics();
 
-  // Simulate no cards for demonstration purposes
-  // In a real application, this would be replaced with actual data fetching logic
-  if (!hasCards) {
+  // We need to refetch stats when the screen is focused
+  // This is useful when the user navigates back to this screen
+  // and we want to ensure the data is up-to-date
+  useRefetchOnFocus(refetchMyCardsStats);
+
+  const cardsData = data?.pages.flatMap((page) => page.data) ?? [];
+
+  if (isLoading) {
+    return <LoadingState />;
+  }
+
+  if (!isLoading && cardsData?.length === 0) {
     return <EmptyStateCards />;
   }
 
   return (
     <View style={styles.container}>
       <CardListDisplay
-        cards={myCards}
+        cards={cardsData}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        isLoading={isLoading}
+        fetchNextPage={fetchNextPage}
+        error={error}
         listOrigin="collection"
         ListHeaderComponent={
           <CardKPIStats
-            cardCount={cardCount}
-            cardMarketValue={cardMarketValue}
-            cardMarketTrend={cardMarketTrend}
-            tcgPlayerValue={tcgPlayerValue}
-            tcgPlayerTrend={tcgPlayerTrend}
+            cardCount={myCardsStats?.totalCardsCount}
+            cardMarketValue={myCardsStats?.cardMarketPrice}
+            cardMarketTrending={myCardsStats?.cardMarketTrending}
+            tcgPlayerValue={myCardsStats?.tcgPlayerPrice}
+            tcgPlayerTrending={myCardsStats?.tcgPlayerTrending}
+            isLoading={isLoadingMyCardsStats}
+            isError={!!myCardsStatsError}
           />
         }
       />
