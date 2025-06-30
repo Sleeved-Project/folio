@@ -3,10 +3,10 @@ import { View, StyleSheet, Text, Image } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import { Set } from '../types';
 import CircularProgressBar from '../components/CircularProgressBar';
-import { TrendingDown, TrendingUp } from 'lucide-react-native';
 import SearchBar from '../../../components/ui/SearchBar';
 import { useCards } from '../../cards/hooks/queries/useCardsQuery';
 import CardListDisplay from '../../cards/components/CardListDisplay';
+import CardKPIStats from '../../cards/components/CardKPIStats';
 
 export default function SetDetail({ setId }: { setId: string }) {
   const theme = useTheme();
@@ -64,49 +64,7 @@ export default function SetDetail({ setId }: { setId: string }) {
             Edited in {formattedReleaseDate}
           </Text>
         </View>
-        <Image
-          source={{ uri: set.imageSymbol }}
-          resizeMethod="resize"
-          resizeMode="contain"
-          style={{
-            width: theme.spacing.xxl,
-            height: theme.spacing.xxl,
-            borderRadius: theme.borderRadius.medium,
-            ...theme.shadows.small,
-          }}
-        />
-      </View>
-      <View
-        style={[
-          styles.setDetailsContainer,
-          {
-            padding: theme.spacing.md,
-            borderRadius: theme.borderRadius.medium,
-            backgroundColor: theme.colors.background.tertiary,
-          },
-        ]}
-      >
-        <View style={[styles.setDetails]}>
-          <View style={[styles.setDetailsInfo]}>
-            <Text
-              style={{
-                color: theme.colors.text.secondary,
-                fontSize: theme.typography.fontSizes.lg,
-                fontWeight: theme.typography.fontWeights.medium,
-              }}
-            >
-              Owned Cards
-            </Text>
-            <Text
-              style={{
-                color: theme.colors.text.black,
-                fontSize: theme.typography.fontSizes.lg,
-                fontWeight: theme.typography.fontWeights.medium,
-              }}
-            >
-              {set.nbOwned} out of {set.nbTotal}
-            </Text>
-          </View>
+        <View style={[styles.setLogoContainer, { gap: theme.spacing.md }]}>
           <CircularProgressBar
             size={theme.spacing.xl}
             strokeWidth={8}
@@ -114,62 +72,28 @@ export default function SetDetail({ setId }: { setId: string }) {
             bgColor={'grey'}
             pgColor={'black'}
           />
-        </View>
-        <View style={[styles.setDetails]}>
-          <View style={[styles.setDetailsInfo]}>
-            <Text
-              style={{
-                color: theme.colors.text.secondary,
-                fontSize: theme.typography.fontSizes.lg,
-                fontWeight: theme.typography.fontWeights.medium,
-              }}
-            >
-              Card Market Price
-            </Text>
-            <Text
-              style={{
-                color: theme.colors.text.black,
-                fontSize: theme.typography.fontSizes.lg,
-                fontWeight: theme.typography.fontWeights.medium,
-              }}
-            >
-              {set.cardMarketPrice?.toFixed(2)}€
-            </Text>
-          </View>
-          {set.cardMarketTrendingPrice === 'up' ? (
-            <TrendingUp size={24} color={theme.colors.success} />
-          ) : (
-            <TrendingDown size={24} color={theme.colors.danger} />
-          )}
-        </View>
-        <View style={[styles.setDetails]}>
-          <View style={[styles.setDetailsInfo]}>
-            <Text
-              style={{
-                color: theme.colors.text.secondary,
-                fontSize: theme.typography.fontSizes.lg,
-                fontWeight: theme.typography.fontWeights.medium,
-              }}
-            >
-              Tcg Player Price
-            </Text>
-            <Text
-              style={{
-                color: theme.colors.text.black,
-                fontSize: theme.typography.fontSizes.lg,
-                fontWeight: theme.typography.fontWeights.medium,
-              }}
-            >
-              {set.tcgPlayerPrice?.toFixed(2)}€
-            </Text>
-          </View>
-          {set.tcgPlayerTrendingPrice === 'up' ? (
-            <TrendingUp size={24} color={theme.colors.success} />
-          ) : (
-            <TrendingDown size={24} color={theme.colors.danger} />
-          )}
+          <Image
+            source={{ uri: set.imageSymbol }}
+            resizeMethod="resize"
+            resizeMode="contain"
+            style={{
+              width: theme.spacing.xxl,
+              height: theme.spacing.xxl,
+              borderRadius: theme.borderRadius.medium,
+              ...theme.shadows.small,
+            }}
+          />
         </View>
       </View>
+      <CardKPIStats
+        cardCount={set.nbOwned}
+        cardMarketValue={set.cardMarketPrice?.toString()}
+        cardMarketTrending={set.cardMarketTrendingPrice === 'up' ? 'up' : 'down'}
+        tcgPlayerValue={set.tcgPlayerPrice?.toString()}
+        tcgPlayerTrending={set.tcgPlayerTrendingPrice === 'up' ? 'up' : 'down'}
+        isLoading={isCardsLoading}
+        isError={!!cardsError}
+      />
       <SearchBar
         searchQuery={cardName}
         setSearchQuery={(newName: string) => setCardName(newName)}
@@ -197,15 +121,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  setDetailsContainer: {
-    gap: 8,
-  },
-  setDetails: {
+  setLogoContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  setDetailsInfo: {
-    gap: 4,
+    justifyContent: 'center',
   },
 });

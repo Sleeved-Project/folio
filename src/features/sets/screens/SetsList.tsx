@@ -57,8 +57,6 @@ export default function SetsList({
             );
           }
           if (error) {
-            console.log('Error loading sets:', error);
-
             return (
               <Text style={[styles.text, styles.errorText, { color: theme.colors.danger }]}>
                 Error loading sets
