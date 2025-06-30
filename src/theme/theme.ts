@@ -6,6 +6,7 @@ export const theme = {
     secondary: '#757575',
     danger: '#FF3B30',
     success: '#4CAF50',
+    info: '#2196F3',
     warning: '#f0ad4e',
 
     variants: {
@@ -22,6 +23,7 @@ export const theme = {
       secondary: '#666666',
       tertiary: '#A09CAB',
       black: '#000000',
+      onPrimary: '#fff',
     },
     border: {
       light: '#E0E0E0',

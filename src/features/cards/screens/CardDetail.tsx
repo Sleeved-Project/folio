@@ -12,12 +12,14 @@ import { useDrawerAnimation } from '../hooks/useDrawerAnimation';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTheme } from '../../../theme/useTheme';
 import AddCardButton from '../components/AddCardButton';
+import { useCardFolioCollect } from '../../folio/hooks/mutations/useFolioCollect';
 
 type TabType = 'details' | 'prices';
 
 export default function CardDetail({ cardId }: { cardId: string }) {
   const [activeTab, setActiveTab] = useState<TabType>('details');
   const theme = useTheme();
+  const { mutate: collectCard } = useCardFolioCollect();
 
   const { toggleDrawer, gestureHandler, drawerAnimatedStyle, cardImageAnimatedStyle } =
     useDrawerAnimation();
@@ -45,6 +47,12 @@ export default function CardDetail({ cardId }: { cardId: string }) {
     );
   }
 
+  const handleAddToCollection = (cardId: string, quantity: number) => {
+    if (quantity === 1) {
+      return collectCard({ cardId });
+    }
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}>
       <CardImageSection
@@ -60,13 +68,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
         headerComponent={<CardMetaInfo number={basicCardData.number} set={basicCardData.set} />}
       >
         <ScrollView showsVerticalScrollIndicator={false} style={styles.detailContent}>
-          <AddCardButton
-            cardId={cardId}
-            onQuantityChange={(id, quantity) =>
-              // @TODO: add logic to handle quantity change with API
-              console.log('quantity:', quantity, id)
-            }
-          />
+          <AddCardButton cardId={cardId} onQuantityChange={handleAddToCollection} />
           <TabSwitcher
             options={tabOptions}
             activeTabId={activeTab}
