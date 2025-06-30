@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useCallback, useRef } from 'react';
+import Toast from './Toast';
 
 type ToastType = 'success' | 'error' | 'info';
 
@@ -22,10 +23,22 @@ export function useToaster() {
 
 export function ToasterProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<ToastOptions | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const showToast = useCallback((options: ToastOptions) => {
     setToast(options);
-    setTimeout(() => setToast(null), options.duration ?? 2500);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      setToast(null);
+      timerRef.current = null;
+    }, options.duration ?? 2500);
+  }, []);
+
+  // Clean up timer on unmount
+  React.useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, []);
 
   return (
@@ -35,6 +48,3 @@ export function ToasterProvider({ children }: { children: ReactNode }) {
     </ToasterContext.Provider>
   );
 }
-
-// Importer Toast ici (voir étape suivante)
-import Toast from './Toast';

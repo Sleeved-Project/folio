@@ -32,6 +32,7 @@ export default function AddCardButton({
   const [isMaxQuantity, setIsMaxQuantity] = useState(initialQuantity >= MAX_QUANTITY);
 
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Clear interval helper
   const clearLongPressTimer = useCallback(() => {
@@ -41,6 +42,16 @@ export default function AddCardButton({
     }
   }, []);
 
+  const debouncedQuantityChange = useCallback(
+    (newQuantity: number) => {
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = setTimeout(() => {
+        onQuantityChange(cardId, newQuantity);
+      }, 350);
+    },
+    [onQuantityChange, cardId]
+  );
+
   // Handle quantity increment
   const handleIncrement = useCallback(
     (amount = 1) => {
@@ -49,16 +60,16 @@ export default function AddCardButton({
         const newQuantity = MAX_QUANTITY;
         setQuantity(newQuantity);
         setIsMaxQuantity(true);
-        onQuantityChange(cardId, newQuantity);
+        debouncedQuantityChange(newQuantity);
         return;
       }
 
       const newQuantity = quantity + amount;
       setQuantity(newQuantity);
       setIsMaxQuantity(newQuantity >= MAX_QUANTITY);
-      onQuantityChange(cardId, newQuantity);
+      debouncedQuantityChange(newQuantity);
     },
-    [quantity, cardId, onQuantityChange]
+    [quantity, debouncedQuantityChange]
   );
 
   // Handle quantity decrement
@@ -70,20 +81,17 @@ export default function AddCardButton({
         setCurrentOperation(null);
         setQuantity(0);
         setIsMaxQuantity(false);
-        onQuantityChange(cardId, 0);
-
-        // Debounce to prevent accidental clicks
+        debouncedQuantityChange(0);
         setIsRecentlyRemoved(true);
         setTimeout(() => setIsRecentlyRemoved(false), DEBOUNCE_TIME);
         return;
       }
-
       const newQuantity = quantity - amount;
       setQuantity(newQuantity);
       setIsMaxQuantity(false);
-      onQuantityChange(cardId, newQuantity);
+      debouncedQuantityChange(newQuantity);
     },
-    [quantity, cardId, onQuantityChange, clearLongPressTimer]
+    [quantity, debouncedQuantityChange, clearLongPressTimer]
   );
 
   // Long press handlers
@@ -150,7 +158,10 @@ export default function AddCardButton({
 
   // Cleanup on unmount
   useEffect(() => {
-    return clearLongPressTimer;
+    return () => {
+      clearLongPressTimer();
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    };
   }, [clearLongPressTimer]);
 
   // Render incrementer for existing items
@@ -216,7 +227,12 @@ export default function AddCardButton({
   return (
     <View style={[styles.container, style]}>
       <TouchableOpacity
-        onPress={() => handleIncrement()}
+        onPress={() => {
+          const newQuantity = quantity + 1;
+          setQuantity(newQuantity);
+          setIsMaxQuantity(newQuantity >= MAX_QUANTITY);
+          onQuantityChange(cardId, newQuantity);
+        }}
         style={[
           styles.addButton,
           {
