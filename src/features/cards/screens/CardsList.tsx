@@ -5,7 +5,6 @@ import SearchBar from '../../../components/ui/SearchBar';
 import CardListDisplay from '../components/CardListDisplay';
 import { useTheme } from '../../../theme/useTheme';
 import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
-import CardSetDisplay from '../components/CardSetDisplay';
 import CardFilters from '../../filters/components/CardFilters';
 import FilterDetail from '../../filters/components/FilterDetail';
 import { Filters } from '../../filters/types';
