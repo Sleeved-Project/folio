@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useCardDetail } from '../hooks/queries/useCardDetail';
+import { useCardFolioDelete } from '../../folio/hooks/mutations/useCardFolioDelete';
 import { useCardFolioUpdateOccurrence } from '../../folio/hooks/mutations/useCardFolioUpdateOccurrence';
 import { LoadingState, ErrorState } from '../../../components/ui/StatusIndicators';
 import CardMetaInfo from '../components/CardMetaInfo';
@@ -20,6 +21,7 @@ type TabType = 'details' | 'prices';
 export default function CardDetail({ cardId }: { cardId: string }) {
   const [activeTab, setActiveTab] = useState<TabType>('details');
   const theme = useTheme();
+  const { mutate: deleteCardFolio } = useCardFolioDelete();
   const { mutate: collectCard } = useCardFolioCollect();
   const { mutate: updateCardFolioOccurrence } = useCardFolioUpdateOccurrence();
 
@@ -41,8 +43,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
     (cardId: string, quantity?: number) => {
       switch (true) {
         case quantity === 0:
-          // TODO: delete mutation
-          // deleteCardFolio({ cardId });
+          deleteCardFolio({ cardId });
           break;
         case quantity === 1:
           collectCard({ cardId });
@@ -54,7 +55,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
           break;
       }
     },
-    [collectCard, updateCardFolioOccurrence]
+    [deleteCardFolio, collectCard, updateCardFolioOccurrence]
   );
 
   if (isLoadingBasic) {
