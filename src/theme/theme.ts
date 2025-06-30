@@ -22,6 +22,7 @@ export const theme = {
       primary: '#333333',
       secondary: '#666666',
       tertiary: '#A09CAB',
+      black: '#000000',
       onPrimary: '#fff',
     },
     border: {

@@ -22,7 +22,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Cards',
-          headerTitle: () => <TabHeader title="Cards" displayBackButton={false} />,
+          headerTitle: () => <TabHeader displayBackButton={false} />,
           tabBarIcon: ({ focused }) => (
             <List
               color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
@@ -76,6 +76,13 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="card/[cardId]"
+        options={{
+          href: null,
+          headerTitle: () => <TabHeader displayBackButton={true} />,
+        }}
+      />
+      <Tabs.Screen
+        name="set/[setId]"
         options={{
           href: null,
           headerTitle: () => <TabHeader displayBackButton={true} />,
