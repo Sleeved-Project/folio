@@ -19,6 +19,8 @@ export default function SetListDisplay({ set }: SetListDisplayProps) {
   const SET_WIDTH = (width - GAP * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
   const SET_HEIGHT = SET_WIDTH;
 
+  const progressPercent = set.nbOwned && set.nbOwned > 0 ? (set.nbOwned / set.total) * 100 : 0;
+
   return (
     <View style={{ width: SET_WIDTH, marginHorizontal: GAP / 2 }}>
       <TouchableOpacity
@@ -52,11 +54,11 @@ export default function SetListDisplay({ set }: SetListDisplayProps) {
             />
           </View>
           <View style={styles.occurenceBadge}>
-            <Text style={styles.badgeText}>{set.nbOwned}</Text>
+            {set.nbOwned && set.nbOwned > 0 && <Text style={styles.badgeText}>{set.nbOwned}</Text>}
             <CircularProgressBar
               size={24}
               strokeWidth={6}
-              progressPercent={(set.nbOwned / set.nbTotal) * 100}
+              progressPercent={progressPercent}
               bgColor={'grey'}
               pgColor={'black'}
             />

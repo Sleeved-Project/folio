@@ -1,37 +1,23 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import { Set } from '../types';
+import { SetDetailType } from '../types';
 import CircularProgressBar from '../components/CircularProgressBar';
 import SearchBar from '../../../components/ui/SearchBar';
-import { useCards } from '../../cards/hooks/queries/useCardsQuery';
 import CardListDisplay from '../../cards/components/CardListDisplay';
 import CardKPIStats from '../../cards/components/CardKPIStats';
+import { useSetDetailedInfo } from '../hooks/queries/useSetDetail';
+import { useSetCards } from '../hooks/queries/useSetCards';
 
 export default function SetDetail({ setId }: { setId: string }) {
   const theme = useTheme();
   const [cardName, setCardName] = React.useState<string>('');
-  const set: Set = {
-    id: setId,
-    name: 'Example Set',
-    releaseDate: '1999-01-09',
-    imageLogo: 'https://images.pokemontcg.io/base1/logo.png',
-    imageSymbol: 'https://images.pokemontcg.io/base1/symbol.png',
-    nbOwned: 2,
-    nbTotal: 20,
-    cardMarketPrice: 10.0,
-    cardMarketTrendingPrice: 'up',
-    tcgPlayerPrice: 12.0,
-    tcgPlayerTrendingPrice: 'down',
-  };
 
-  const formattedReleaseDate = set.releaseDate
-    ? new Date(set.releaseDate).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    : 'Unknown release date';
+  const {
+    data: setData,
+    isLoading: isLoadingBasic,
+    error: basicError,
+  } = useSetDetailedInfo(setId as string);
 
   const {
     data: cardsData,
@@ -40,8 +26,19 @@ export default function SetDetail({ setId }: { setId: string }) {
     fetchNextPage: fetchNextCardsPage,
     hasNextPage: hasNextCardsPage,
     isFetchingNextPage: isFetchingNextCardsPage,
-  } = useCards(cardName);
+  } = useSetCards(cardName);
+
   const cards = cardsData?.pages.flatMap((page) => page.data) ?? [];
+  const set = setData || ({} as SetDetailType);
+
+  const formattedReleaseDate = set.releaseDate
+    ? new Date(set.releaseDate).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : 'Unknown release date';
+  const progressPercent = set.nbOwned && set.nbOwned > 0 ? (set.nbOwned / set.total) * 100 : 0;
 
   return (
     <View
@@ -68,7 +65,7 @@ export default function SetDetail({ setId }: { setId: string }) {
           <CircularProgressBar
             size={theme.spacing.xl}
             strokeWidth={8}
-            progressPercent={(set.nbOwned / set.nbTotal) * 100}
+            progressPercent={progressPercent}
             bgColor={'grey'}
             pgColor={'black'}
           />
@@ -86,26 +83,25 @@ export default function SetDetail({ setId }: { setId: string }) {
         </View>
       </View>
       <CardKPIStats
-        cardCount={set.nbOwned}
-        cardMarketValue={set.cardMarketPrice?.toString()}
-        cardMarketTrending={set.cardMarketTrendingPrice === 'up' ? 'up' : 'down'}
-        tcgPlayerValue={set.tcgPlayerPrice?.toString()}
-        tcgPlayerTrending={set.tcgPlayerTrendingPrice === 'up' ? 'up' : 'down'}
-        isLoading={isCardsLoading}
-        isError={!!cardsError}
+        cardCount={set?.statistics?.totalCardsCount}
+        cardMarketValue={set?.statistics?.cardMarketPrice?.toString()}
+        cardMarketTrending={set?.statistics?.cardMarketTrending}
+        tcgPlayerValue={set?.statistics?.tcgPlayerPrice?.toString()}
+        tcgPlayerTrending={set?.statistics?.tcgPlayerTrending}
+        isLoading={isLoadingBasic}
+        isError={!!basicError}
       />
       <SearchBar
         searchQuery={cardName}
         setSearchQuery={(newName: string) => setCardName(newName)}
       />
       {/* Add the filters here */}
-
       <CardListDisplay
         cards={cards}
         hasNextPage={hasNextCardsPage}
         isFetchingNextPage={isFetchingNextCardsPage}
-        isLoading={isCardsLoading}
         fetchNextPage={fetchNextCardsPage}
+        isLoading={isCardsLoading}
         error={cardsError}
       />
     </View>

@@ -5,11 +5,7 @@ export interface Set {
   imageSymbol: string;
   imageLogo: string;
   nbOwned: number;
-  nbTotal: number;
-  cardMarketPrice?: number;
-  cardMarketTrendingPrice?: string;
-  tcgPlayerPrice?: number;
-  tcgPlayerTrendingPrice?: string;
+  total: number;
 }
 
 export interface SetsListResponse {
@@ -24,5 +20,20 @@ export interface SetsListResponse {
     perPage: number;
     previousPageUrl: string | null;
     total: number;
+  };
+}
+
+export enum SetCardPriceTrending {
+  UP = 'up',
+  DOWN = 'down',
+  EQUAL = 'equal',
+}
+export interface SetDetailType extends Set {
+  statistics: {
+    totalCardsCount: number;
+    cardMarketPrice: string;
+    tcgPlayerPrice: string;
+    cardMarketTrending: SetCardPriceTrending;
+    tcgPlayerTrending: SetCardPriceTrending;
   };
 }
