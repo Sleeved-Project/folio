@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
 import { SetDetailType } from '../../types';
+import { mapSetDetailData } from '../../mappers/setMapper';
 
 export const setKeys = {
   all: ['set'] as const,
@@ -13,7 +14,7 @@ export const useSetDetailedInfo = (setId: string) => {
     queryFn: async () => {
       if (!setId) throw new Error('Set ID is required');
       const response = await httpClient.get<SetDetailType>(`/sets/${setId}/details`);
-      return response;
+      return mapSetDetailData(response);
     },
     enabled: !!setId,
     staleTime: 5 * 60 * 1000,

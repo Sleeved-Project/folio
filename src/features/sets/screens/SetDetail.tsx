@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import { SetDetailType } from '../types';
+import { FormattedSetDetailType } from '../types';
 import CircularProgressBar from '../components/CircularProgressBar';
 import SearchBar from '../../../components/ui/SearchBar';
 import CardListDisplay from '../../cards/components/CardListDisplay';
@@ -29,16 +29,7 @@ export default function SetDetail({ setId }: { setId: string }) {
   } = useSetCards(setId, cardName);
 
   const cards = cardsData?.pages.flatMap((page) => page.data) ?? [];
-  const set = setData || ({} as SetDetailType);
-
-  const formattedReleaseDate = set.releaseDate
-    ? new Date(set.releaseDate).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    : 'Unknown release date';
-  const progressPercent = set.nbOwned && set.nbOwned > 0 ? (set.nbOwned / set.total) * 100 : 0;
+  const set = setData || ({} as FormattedSetDetailType);
 
   return (
     <View
@@ -57,15 +48,13 @@ export default function SetDetail({ setId }: { setId: string }) {
           <Text style={{ fontSize: 24, fontWeight: 'bold', color: theme.colors.text.primary }}>
             {set.name}
           </Text>
-          <Text style={{ color: theme.colors.text.secondary }}>
-            Edited in {formattedReleaseDate}
-          </Text>
+          <Text style={{ color: theme.colors.text.secondary }}>Edited in {set.releaseDate}</Text>
         </View>
         <View style={[styles.setLogoContainer, { gap: theme.spacing.md }]}>
           <CircularProgressBar
             size={theme.spacing.xl}
             strokeWidth={8}
-            progressPercent={progressPercent}
+            progressPercent={set.totalPercentage}
             bgColor={'grey'}
             pgColor={'black'}
           />

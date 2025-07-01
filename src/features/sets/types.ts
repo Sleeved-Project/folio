@@ -1,7 +1,7 @@
 export interface Set {
   id: string;
   name: string;
-  releaseDate?: string;
+  releaseDate: string;
   imageSymbol: string;
   imageLogo: string;
   nbOwned: number;
@@ -36,4 +36,8 @@ export interface SetDetailType extends Set {
     cardMarketTrending: SetCardPriceTrending;
     tcgPlayerTrending: SetCardPriceTrending;
   };
+}
+
+export interface FormattedSetDetailType extends SetDetailType {
+  totalPercentage: number;
 }
