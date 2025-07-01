@@ -26,7 +26,7 @@ export default function SetDetail({ setId }: { setId: string }) {
     fetchNextPage: fetchNextCardsPage,
     hasNextPage: hasNextCardsPage,
     isFetchingNextPage: isFetchingNextCardsPage,
-  } = useSetCards(cardName);
+  } = useSetCards(setId, cardName);
 
   const cards = cardsData?.pages.flatMap((page) => page.data) ?? [];
   const set = setData || ({} as SetDetailType);

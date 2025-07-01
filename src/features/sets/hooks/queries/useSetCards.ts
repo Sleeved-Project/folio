@@ -3,16 +3,16 @@ import { httpClient } from '../../../../lib/client/http-client';
 import { CardsListResponse } from '../../../cards/types';
 
 export const setCardKeys = {
-  all: ['setCards'] as const,
-  list: (setId: string) => [...setCardKeys.all, 'list', setId] as const,
+  all: ['card'] as const,
+  list: (setId: string, cardName: string) => [...setCardKeys.all, 'list', setId, cardName] as const,
 };
 
-export const useSetCards = (setId: string) => {
+export const useSetCards = (setId: string, cardName: string) => {
   return useInfiniteQuery({
-    queryKey: setCardKeys.list(setId),
+    queryKey: setCardKeys.list(setId, cardName),
     queryFn: async ({ pageParam = 1 }) => {
       const response = await httpClient.get<CardsListResponse>(
-        `/sets/${setId}/cards?page=${pageParam}&limit=30`
+        `/sets/${setId}/cards?page=${pageParam}&limit=30&name=${cardName}`
       );
       return response;
     },
