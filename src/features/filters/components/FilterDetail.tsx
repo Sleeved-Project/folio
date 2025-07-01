@@ -1,11 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import { ScrollView } from 'react-native-gesture-handler';
-import AnimatedDrawer from '../../cards/components/AnimatedDrawer';
-import { useDrawerAnimation } from '../../cards/hooks/useDrawerAnimation';
 import FilterOption from './FilterOption';
 import { Filters } from '../types';
 import { useEffect } from 'react';
+import { useFilterDrawerAnimation } from '../hooks/useFilterDrawerAnimation';
+import AnimatedFilterDrawer from './AnimatedFilterDrawer';
 
 interface FilterDetailProps {
   isFilterDetailVisible: boolean;
@@ -26,9 +26,8 @@ export default function FilterDetail({
   setFilters,
 }: FilterDetailProps) {
   const theme = useTheme();
-  const { isCollapsed, gestureHandler, drawerAnimatedStyle, toggleDrawer } = useDrawerAnimation({
-    isFilterView: true,
-  });
+  const { isCollapsed, gestureHandler, drawerAnimatedStyle, toggleDrawer } =
+    useFilterDrawerAnimation();
 
   useEffect(() => {
     if (isFilterDetailVisible && isCollapsed) {
@@ -38,7 +37,7 @@ export default function FilterDetail({
   }, [isFilterDetailVisible, isCollapsed]);
 
   return (
-    <AnimatedDrawer
+    <AnimatedFilterDrawer
       gestureHandler={gestureHandler}
       animatedStyle={drawerAnimatedStyle}
       onDragHandlePress={toggleDrawer}
@@ -129,7 +128,7 @@ export default function FilterDetail({
           ))}
         </ScrollView>
       </View>
-    </AnimatedDrawer>
+    </AnimatedFilterDrawer>
   );
 }
 

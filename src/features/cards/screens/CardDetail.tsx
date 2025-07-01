@@ -24,7 +24,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
   const { mutate: updateCardFolioOccurrence } = useCardFolioUpdateOccurrence();
 
   const { toggleDrawer, gestureHandler, drawerAnimatedStyle, cardImageAnimatedStyle } =
-    useDrawerAnimation({ isFilterView: false });
+    useDrawerAnimation();
 
   const {
     data: basicCardData,
