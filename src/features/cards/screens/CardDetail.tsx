@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useCardDetail } from '../hooks/queries/useCardDetail';
 import { useCardFolioDelete } from '../../folio/hooks/mutations/useCardFolioDelete';
-import { useCardFolioUpdateOccurrence } from '../../folio/hooks/mutations/useCardFolioUpdateOccurrence';
+import { useCardFolioUpdate } from '../../folio/hooks/mutations/useCardFolioUpdate';
 import { LoadingState, ErrorState } from '../../../components/ui/StatusIndicators';
 import CardMetaInfo from '../components/CardMetaInfo';
 import CardDetailedInfo from '../components/CardDetailedInfo';
@@ -14,7 +14,7 @@ import { useDrawerAnimation } from '../hooks/useDrawerAnimation';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTheme } from '../../../theme/useTheme';
 import AddCardButton from '../components/AddCardButton';
-import { useCardFolioCollect } from '../../folio/hooks/mutations/useFolioCollect';
+import { useCardFolioCollect } from '../../folio/hooks/mutations/useCardFolioCollect';
 
 type TabType = 'details' | 'prices';
 
@@ -23,7 +23,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
   const theme = useTheme();
   const { mutate: deleteCardFolio } = useCardFolioDelete();
   const { mutate: collectCard } = useCardFolioCollect();
-  const { mutate: updateCardFolioOccurrence } = useCardFolioUpdateOccurrence();
+  const { mutate: updateCardFolio } = useCardFolioUpdate();
 
   const { toggleDrawer, gestureHandler, drawerAnimatedStyle, cardImageAnimatedStyle } =
     useDrawerAnimation();
@@ -49,13 +49,13 @@ export default function CardDetail({ cardId }: { cardId: string }) {
           collectCard({ cardId });
           break;
         case quantity !== undefined && quantity > 1:
-          updateCardFolioOccurrence({ cardId, occurrence: quantity });
+          updateCardFolio({ cardId, occurrence: quantity });
           break;
         default:
           break;
       }
     },
-    [deleteCardFolio, collectCard, updateCardFolioOccurrence]
+    [deleteCardFolio, collectCard, updateCardFolio]
   );
 
   if (isLoadingBasic) {

@@ -17,7 +17,7 @@ export const useCardFolioDelete = () => {
 
   return useMutation<DeleteCardResponse, Error, DeleteCardPayload>({
     mutationFn: async ({ cardId }) => {
-      return httpClient.delete<DeleteCardResponse>(`/folios/cards/${cardId}/remove`);
+      return httpClient.delete<DeleteCardResponse>(`/folios/cards/${cardId}`);
     },
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: folioKeys.allMyCards });

@@ -12,13 +12,13 @@ interface UpdateOccurrenceResponse {
   message: string;
 }
 
-export const useCardFolioUpdateOccurrence = () => {
+export const useCardFolioUpdate = () => {
   const queryClient = useQueryClient();
   const { showToast } = useToaster();
 
   return useMutation<UpdateOccurrenceResponse, Error, UpdateOccurrencePayload>({
     mutationFn: async ({ cardId, occurrence }) => {
-      return httpClient.patch<UpdateOccurrenceResponse>(`/folios/cards/${cardId}/occurrence`, {
+      return httpClient.patch<UpdateOccurrenceResponse>(`/folios/cards/${cardId}`, {
         occurrence,
       });
     },
