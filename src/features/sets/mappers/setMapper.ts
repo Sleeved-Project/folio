@@ -1,4 +1,10 @@
-import { FormattedSetDetailType, SetCardPriceTrending, SetDetailType } from '../types';
+import {
+  FormattedSet,
+  FormattedSetDetailType,
+  Set,
+  SetCardPriceTrending,
+  SetDetailType,
+} from '../types';
 
 export function formatTotalPercentage(nbOwned: number, total: number): number {
   if (!total || total === 0 || !nbOwned || nbOwned === 0) {
@@ -37,5 +43,18 @@ export function mapSetDetailData(data: SetDetailType): FormattedSetDetailType {
       cardMarketTrending: data.statistics.cardMarketTrending as SetCardPriceTrending,
       tcgPlayerTrending: data.statistics.tcgPlayerTrending as SetCardPriceTrending,
     },
+  };
+}
+
+export function mapSetData(data: Set): FormattedSet {
+  return {
+    id: data.id,
+    name: data.name,
+    releaseDate: formatReleaseDate(data.releaseDate),
+    imageSymbol: data.imageSymbol,
+    imageLogo: data.imageLogo,
+    nbOwned: data.nbOwned,
+    total: data.total,
+    totalPercentage: formatTotalPercentage(data.nbOwned, data.total),
   };
 }

@@ -8,8 +8,27 @@ export interface Set {
   total: number;
 }
 
+export interface FormattedSet extends Set {
+  totalPercentage: number;
+}
+
 export interface SetsListResponse {
   data: Set[];
+  meta: {
+    currentPage: number;
+    firstPage: number;
+    firstPageUrl: string;
+    lastPage: number;
+    lastPageUrl: string;
+    nextPageUrl: string | null;
+    perPage: number;
+    previousPageUrl: string | null;
+    total: number;
+  };
+}
+
+export interface FormattedSetsListResponse {
+  data: FormattedSet[];
   meta: {
     currentPage: number;
     firstPage: number;

@@ -7,7 +7,7 @@ import { useTheme } from '../../../theme/useTheme';
 import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
 import { useSets } from '../../sets/hooks/queries/useSetsQuery';
 import SetsList from '../../sets/screens/SetsList';
-import { Set } from '../../sets/types';
+import { FormattedSet } from '../../sets/types';
 
 type TabType = 'sets' | 'cards';
 
@@ -35,7 +35,7 @@ export default function CardsList() {
   } = useSets(cardName);
 
   const cards = cardsData?.pages.flatMap((page) => page.data) ?? [];
-  const sets: Set[] = setsData?.pages.flatMap((page) => page.data) ?? [];
+  const sets: FormattedSet[] = setsData?.pages.flatMap((page) => page.data) ?? [];
   const tabOptions: TabOption<TabType>[] = [
     { id: 'sets', label: 'Card Sets' },
     { id: 'cards', label: 'All Cards' },
