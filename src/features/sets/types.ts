@@ -49,7 +49,6 @@ export enum SetCardPriceTrending {
 }
 export interface SetDetailType extends Set {
   statistics: {
-    totalCardsCount: number;
     cardMarketPrice: string;
     tcgPlayerPrice: string;
     cardMarketTrending: SetCardPriceTrending;

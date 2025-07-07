@@ -72,7 +72,7 @@ export default function SetDetail({ setId }: { setId: string }) {
         </View>
       </View>
       <CardKPIStats
-        cardCount={set?.statistics?.totalCardsCount}
+        cardCount={set?.total}
         cardMarketValue={set?.statistics?.cardMarketPrice?.toString()}
         cardMarketTrending={set?.statistics?.cardMarketTrending}
         tcgPlayerValue={set?.statistics?.tcgPlayerPrice?.toString()}

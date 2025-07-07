@@ -37,7 +37,6 @@ export function mapSetDetailData(data: SetDetailType): FormattedSetDetailType {
     total: data.total,
     totalPercentage: formatTotalPercentage(data.nbOwned, data.total),
     statistics: {
-      totalCardsCount: data.statistics.totalCardsCount,
       cardMarketPrice: data.statistics.cardMarketPrice,
       tcgPlayerPrice: data.statistics.tcgPlayerPrice,
       cardMarketTrending: data.statistics.cardMarketTrending as SetCardPriceTrending,
