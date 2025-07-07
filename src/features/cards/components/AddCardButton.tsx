@@ -34,6 +34,12 @@ export default function AddCardButton({
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Initialize quantity and max quantity state based on initialQuantity prop
+  useEffect(() => {
+    setQuantity(Math.min(initialQuantity ?? 0, MAX_QUANTITY));
+    setIsMaxQuantity((initialQuantity ?? 0) >= MAX_QUANTITY);
+  }, [initialQuantity]);
+
   // Clear interval helper
   const clearLongPressTimer = useCallback(() => {
     if (longPressTimerRef.current) {

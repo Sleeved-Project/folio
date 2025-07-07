@@ -28,6 +28,7 @@ export interface CardBase {
 export interface CardBasicInfo extends CardBase {
   imageLarge: string;
   number: string;
+  occurrence: number;
   set: {
     id: string;
     name: string;
