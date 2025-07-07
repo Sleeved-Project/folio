@@ -1,6 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
-import { SetsListResponse } from '../../types';
+import { FormattedSetsListResponse, SetsListResponse } from '../../types';
+import { mapSetData } from '../../mappers/setMapper';
 
 export const setKeys = {
   all: ['sets'] as const,
@@ -14,7 +15,13 @@ export const useSets = (cardName: string) => {
       const response = await httpClient.get<SetsListResponse>(
         `/sets?page=${pageParam}&limit=30&name=${cardName}`
       );
-      return response;
+
+      const formattedData = response.data.map((set) => mapSetData(set));
+      const formattedResponse: FormattedSetsListResponse = {
+        ...response,
+        data: formattedData,
+      };
+      return formattedResponse;
     },
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.data.length === 0) return undefined;
