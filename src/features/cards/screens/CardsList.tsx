@@ -14,10 +14,13 @@ import { FormattedSet } from '../../sets/types';
 
 type TabType = 'sets' | 'cards';
 
-export default function CardsList() {
+interface CardsListProps {
+  isFiltersVisible?: boolean;
+}
+
+export default function CardsList({ isFiltersVisible = true }: CardsListProps) {
   const [cardName, setCardName] = useState<string>('');
   const [activeTab, setActiveTab] = useState<TabType>('cards');
-  const isFiltersVisible = true;
   const [isFilterDetailVisible, setIsFilterDetailVisible] = useState<boolean>(false);
   const [selectedFilterIndex, setSelectedFilterIndex] = useState<number | null>(null);
 

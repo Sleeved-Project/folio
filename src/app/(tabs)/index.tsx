@@ -6,7 +6,7 @@ export default function Index() {
   const theme = useTheme();
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      <CardsList />
+      <CardsList isFiltersVisible />
     </View>
   );
 }
