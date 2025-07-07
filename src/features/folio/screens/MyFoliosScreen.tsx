@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useRouter } from 'expo-router';
 
 import { useTheme } from '../../../theme/useTheme';
 import EmptyStateCards from '../components/EmptyStateCards';
@@ -8,6 +9,7 @@ import { FolioItem } from '../types';
 
 export default function MyFoliosScreen() {
   const theme = useTheme();
+  const router = useRouter();
 
   // Mock data to simulate fetched folios
   const mockFolios: FolioItem[] = [
@@ -48,11 +50,6 @@ export default function MyFoliosScreen() {
     console.log(`Folio pressed: ${id}`);
   };
 
-  const handleCreatePress = () => {
-    // @TODO: Implement create folio functionality
-    console.log('create folio pressed');
-  };
-
   if (!hasCards) {
     return <EmptyStateCards />;
   }
@@ -62,7 +59,7 @@ export default function MyFoliosScreen() {
       <FoliosList
         folios={mockFolios}
         onFolioPress={handleFolioPress}
-        onCreatePress={handleCreatePress}
+        onCreatePress={() => router.push('(folios)/create-folio')}
       />
     </View>
   );
