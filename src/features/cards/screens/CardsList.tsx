@@ -42,9 +42,36 @@ export default function CardsList() {
   } = useSets(cardName);
 
   const filtersOptions = [
-    { label: 'Artist', values: ['Artist 1', 'Loop', 'Huuh', 'Kiki', 'ldozqo'] },
-    { label: 'Subtype', values: ['Subtype 1', 'Loop', 'Huuh', 'Kiki'] },
-    { label: 'Type', values: ['Type 1', 'Loop', 'Huuh', 'Kiki'] },
+    {
+      label: 'Artist',
+      values: [
+        { label: 'Artist 1', id: '1' },
+        { label: 'Loop', id: '2' },
+        { label: 'Huuh', id: '3' },
+        { label: 'Kiki', id: '4' },
+        { label: 'ldozqo', id: '5' },
+      ],
+    },
+    {
+      label: 'Subtype',
+      values: [
+        { label: 'Subtype 1', id: '1' },
+        { label: 'Loop', id: '2' },
+        { label: 'Huuh', id: '3' },
+        { label: 'Kiki', id: '4' },
+        { label: 'ldozqo', id: '5' },
+      ],
+    },
+    {
+      label: 'Type',
+      values: [
+        { label: 'Type 1', id: '1' },
+        { label: 'Loop', id: '2' },
+        { label: 'Huuh', id: '3' },
+        { label: 'Kiki', id: '4' },
+        { label: 'ldozqo', id: '5' },
+      ],
+    },
   ];
 
   const cards = cardsData?.pages.flatMap((page) => page.data) ?? [];
@@ -79,7 +106,8 @@ export default function CardsList() {
       />
       {isFiltersVisible && activeTab !== 'sets' && (
         <CardFilters
-          filters={filtersOptions}
+          filtersOptions={filtersOptions}
+          filters={filters}
           setIsFilterDetailVisible={setIsFilterDetailVisible}
           setSelectedFilterIndex={setSelectedFilterIndex}
         />
@@ -107,7 +135,7 @@ export default function CardsList() {
         <FilterDetail
           isFilterDetailVisible={isFilterDetailVisible}
           setIsFilterDetailVisible={setIsFilterDetailVisible}
-          filterOptions={filtersOptions[selectedFilterIndex ?? 0]}
+          filtersOptions={filtersOptions[selectedFilterIndex ?? 0]}
           filters={filters ?? []}
           setFilters={setFilters}
         />

@@ -3,16 +3,17 @@ import { useTheme } from '../../../theme/useTheme';
 import { ScrollView } from 'react-native-gesture-handler';
 import FilterOption from './FilterOption';
 import { Filters } from '../types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFilterDrawerAnimation } from '../hooks/useFilterDrawerAnimation';
 import AnimatedFilterDrawer from './AnimatedFilterDrawer';
+import { Check } from 'lucide-react-native';
 
 interface FilterDetailProps {
   isFilterDetailVisible: boolean;
   setIsFilterDetailVisible: (isVisible: boolean) => void;
-  filterOptions: {
+  filtersOptions: {
     label: string;
-    values: string[];
+    values: { id: string; label: string }[];
   };
   filters?: Filters;
   setFilters?: (filters: Filters) => void;
@@ -21,13 +22,14 @@ interface FilterDetailProps {
 export default function FilterDetail({
   isFilterDetailVisible,
   setIsFilterDetailVisible,
-  filterOptions,
+  filtersOptions,
   filters,
   setFilters,
 }: FilterDetailProps) {
   const theme = useTheme();
   const { isCollapsed, gestureHandler, drawerAnimatedStyle, toggleDrawer } =
     useFilterDrawerAnimation();
+  const [allFiltersChecked, setAllFiltersChecked] = useState(false);
 
   useEffect(() => {
     if (isFilterDetailVisible && isCollapsed) {
@@ -35,6 +37,39 @@ export default function FilterDetail({
       setIsFilterDetailVisible(false);
     }
   }, [isFilterDetailVisible, isCollapsed]);
+
+  useEffect(() => {
+    const currentFiltersValueLength = filters?.find(
+      (filter) => filter.label === filtersOptions.label
+    )?.values.length;
+    if (currentFiltersValueLength === filtersOptions.values.length) {
+      setAllFiltersChecked(true);
+    } else {
+      setAllFiltersChecked(false);
+    }
+  }, [filters]);
+
+  const handleToggleAllFilters = () => {
+    if (!setFilters) return;
+
+    const currentFilters = filters ?? [];
+
+    const existingIndex = currentFilters.findIndex((filter) => {
+      return filter.label === filtersOptions.label;
+    });
+    // If the filter with this label doesn't exist, we add it with all values
+    if (existingIndex === -1) {
+      setFilters([
+        ...currentFilters,
+        { label: filtersOptions.label, values: filtersOptions.values.map((v) => v.id) },
+      ]);
+      setAllFiltersChecked(true);
+      return;
+    }
+    // If it exists, we remove it
+    setAllFiltersChecked(false);
+    setFilters(currentFilters.filter((_, i) => i !== existingIndex));
+  };
 
   return (
     <AnimatedFilterDrawer
@@ -52,20 +87,10 @@ export default function FilterDetail({
       >
         <View style={styles.labelContainer}>
           <Text style={{ color: theme.colors.text.primary, fontSize: 18, fontWeight: 'bold' }}>
-            {filterOptions?.label}
+            {filtersOptions?.label}
           </Text>
           <TouchableOpacity
-            onPress={() => {
-              if (!setFilters) return;
-              const currentFilters = filters ?? [];
-
-              // If the filter is already selected, we remove it
-              const existingIndex = filters?.findIndex(
-                (filter) => filter.label === filterOptions.label
-              );
-
-              setFilters(currentFilters.filter((_, i) => i !== existingIndex));
-            }}
+            onPress={handleToggleAllFilters}
             style={[
               styles.checkBoxContainer,
               {
@@ -73,26 +98,36 @@ export default function FilterDetail({
                 borderRadius: theme.borderRadius.small,
               },
             ]}
-          ></TouchableOpacity>
+          >
+            {allFiltersChecked ? (
+              <Check color={theme.colors.success} width={16} height={16} />
+            ) : null}
+          </TouchableOpacity>
         </View>
         <ScrollView style={{ marginTop: 16 }}>
-          {filterOptions?.values.map((value, index) => (
+          {filtersOptions?.values.map((value, index) => (
             <FilterOption
-              key={index + value}
+              key={index + value.label}
               value={value}
+              isChecked={
+                filters?.some(
+                  (filter) =>
+                    filter.label === filtersOptions.label && filter.values.includes(value.id)
+                ) ?? false
+              }
               updateFiltersCallback={(newFilter: string) => {
                 if (!setFilters) return;
 
                 const currentFilters = filters ?? [];
                 const existingIndex = currentFilters.findIndex(
-                  (filter) => filter.label === filterOptions.label
+                  (filter) => filter.label === filtersOptions.label
                 );
 
                 // If filter with this label doesn't exist, we add it
                 if (existingIndex === -1) {
                   setFilters([
                     ...currentFilters,
-                    { label: filterOptions.label, values: [newFilter] },
+                    { label: filtersOptions.label, values: [newFilter] },
                   ]);
                   return;
                 }
