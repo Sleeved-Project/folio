@@ -2,11 +2,11 @@ import React from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, useWindowDimensions, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../../../theme/useTheme';
-import { Set } from '../types';
+import { FormattedSet } from '../types';
 import CircularProgressBar from './CircularProgressBar';
 
 interface SetListDisplayProps {
-  set: Set;
+  set: FormattedSet;
 }
 
 export default function SetListDisplay({ set }: SetListDisplayProps) {
@@ -52,11 +52,11 @@ export default function SetListDisplay({ set }: SetListDisplayProps) {
             />
           </View>
           <View style={styles.occurenceBadge}>
-            <Text style={styles.badgeText}>{set.nbOwned}</Text>
+            {set.nbOwned && set.nbOwned > 0 && <Text style={styles.badgeText}>{set.nbOwned}</Text>}
             <CircularProgressBar
               size={24}
               strokeWidth={6}
-              progressPercent={(set.nbOwned / set.nbTotal) * 100}
+              progressPercent={set.totalPercentage}
               bgColor={'grey'}
               pgColor={'black'}
             />

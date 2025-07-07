@@ -1,11 +1,11 @@
 import React from 'react';
 import { Text, StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import { Set } from '../types';
+import { FormattedSet } from '../types';
 import SetListDisplay from '../components/SetListDisplay';
 
 interface SetsListProps {
-  sets: Set[];
+  sets: FormattedSet[];
   hasNextPage?: boolean;
   isFetchingNextPage?: boolean;
   isLoading?: boolean;
@@ -28,7 +28,7 @@ export default function SetsList({
   const GAP = 8;
   const NUM_COLUMNS = 2;
 
-  const displaySetList = ({ item }: { item: Set }) => <SetListDisplay set={item} />;
+  const displaySetList = ({ item }: { item: FormattedSet }) => <SetListDisplay set={item} />;
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
