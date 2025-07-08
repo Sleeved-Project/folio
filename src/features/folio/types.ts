@@ -3,10 +3,12 @@ import { Card, CardsListResponse } from '../cards/types';
 export interface FolioItem {
   id: string;
   name: string;
-  cardCount: number;
-  cardMarketValue: string;
-  tcgPlayerValue: string;
-  iconPath?: string;
+  image: string;
+  statistics: {
+    totalCardsCount: number;
+    cardMarketPrice: string;
+    tcgPlayerPrice: string;
+  };
 }
 
 export interface RawMyCard {

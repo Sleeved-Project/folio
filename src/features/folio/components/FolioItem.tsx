@@ -57,7 +57,7 @@ export default function FolioItem({ folio, onPress }: FolioItemProps) {
       onPress={() => onPress && onPress(folio.id)}
     >
       <View style={[styles.iconContainer, { borderRadius: theme.borderRadius.small }]}>
-        <FolioIcon iconPath={folio.iconPath} size={80} />
+        <FolioIcon iconPath={folio.image} size={80} />
       </View>
 
       <View style={styles.contentContainer}>
@@ -72,9 +72,9 @@ export default function FolioItem({ folio, onPress }: FolioItemProps) {
         </Text>
 
         <View style={styles.statsContainer}>
-          <FolioItemStat label="Cards" value={folio.cardCount} />
-          <FolioItemStat label="Card Market" value={folio.cardMarketValue} />
-          <FolioItemStat label="TCG Player" value={folio.tcgPlayerValue} />
+          <FolioItemStat label="Cards" value={folio.statistics.totalCardsCount} />
+          <FolioItemStat label="Card Market" value={folio.statistics.cardMarketPrice} />
+          <FolioItemStat label="TCG Player" value={folio.statistics.tcgPlayerPrice} />
         </View>
       </View>
     </TouchableOpacity>
