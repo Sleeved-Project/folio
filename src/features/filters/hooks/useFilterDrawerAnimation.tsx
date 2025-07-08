@@ -17,11 +17,11 @@ interface GestureContext {
 }
 
 // Destructure constants for easier access
-const { EXPANDED_HEIGHT, COLLAPSED_HEIGHT } = DRAWER_DIMENSIONS;
+const { FILTER_VIEW_COLLAPSED_HEIGHT, FILTER_VIEW_EXPANDED_HEIGHT } = DRAWER_DIMENSIONS;
 const { DURATION, VELOCITY_THRESHOLD } = ANIMATION_CONFIG;
 const { HEIGHT: SCREEN_HEIGHT } = SCREEN_DIMENSIONS;
 
-export const useDrawerAnimation = () => {
+export const useFilterDrawerAnimation = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   // Animation values
   const drawerTranslateY = useSharedValue(0);
@@ -31,7 +31,9 @@ export const useDrawerAnimation = () => {
     const newIsCollapsed = !isCollapsed;
     setIsCollapsed(newIsCollapsed);
 
-    const targetValue = newIsCollapsed ? EXPANDED_HEIGHT - COLLAPSED_HEIGHT : 0;
+    const targetValue = newIsCollapsed
+      ? FILTER_VIEW_EXPANDED_HEIGHT - FILTER_VIEW_COLLAPSED_HEIGHT
+      : 0;
 
     drawerTranslateY.value = withTiming(targetValue, {
       duration: DURATION,
@@ -51,20 +53,23 @@ export const useDrawerAnimation = () => {
       // Don't let drawer go above its expanded position or below collapsed position
       drawerTranslateY.value = Math.max(
         0,
-        Math.min(newPosition, EXPANDED_HEIGHT - COLLAPSED_HEIGHT)
+        Math.min(newPosition, FILTER_VIEW_EXPANDED_HEIGHT - FILTER_VIEW_COLLAPSED_HEIGHT)
       );
     },
     onEnd: (event) => {
       // Determine threshold for snapping
-      const snapThreshold = (EXPANDED_HEIGHT - COLLAPSED_HEIGHT) / 2;
+      const snapThreshold = (FILTER_VIEW_EXPANDED_HEIGHT - FILTER_VIEW_COLLAPSED_HEIGHT) / 2;
 
       // Determine if we should snap to expanded or collapsed state
       if (event.velocityY > VELOCITY_THRESHOLD || drawerTranslateY.value > snapThreshold) {
         // Collapse drawer
-        drawerTranslateY.value = withTiming(EXPANDED_HEIGHT - COLLAPSED_HEIGHT, {
-          duration: DURATION,
-          easing: Easing.out(Easing.cubic),
-        });
+        drawerTranslateY.value = withTiming(
+          FILTER_VIEW_EXPANDED_HEIGHT - FILTER_VIEW_COLLAPSED_HEIGHT,
+          {
+            duration: DURATION,
+            easing: Easing.out(Easing.cubic),
+          }
+        );
         runOnJS(setIsCollapsed)(true);
       } else {
         // Expand drawer
@@ -81,14 +86,15 @@ export const useDrawerAnimation = () => {
   const drawerAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: drawerTranslateY.value }],
-      height: EXPANDED_HEIGHT,
+      height: FILTER_VIEW_EXPANDED_HEIGHT,
     };
   });
 
   // Animated styles for card image with adaptive centering
   const cardImageAnimatedStyle = useAnimatedStyle(() => {
     // Calculate progress (0 = expanded, 1 = collapsed)
-    const progress = drawerTranslateY.value / (EXPANDED_HEIGHT - COLLAPSED_HEIGHT);
+    const progress =
+      drawerTranslateY.value / (FILTER_VIEW_EXPANDED_HEIGHT - FILTER_VIEW_COLLAPSED_HEIGHT);
 
     // Adaptive scale based on screen size
     const cardScale = interpolate(
@@ -114,8 +120,8 @@ export const useDrawerAnimation = () => {
     drawerAnimatedStyle,
     cardImageAnimatedStyle,
     constants: {
-      DRAWER_EXPANDED_HEIGHT: EXPANDED_HEIGHT,
-      DRAWER_COLLAPSED_HEIGHT: COLLAPSED_HEIGHT,
+      DRAWER_EXPANDED_HEIGHT: FILTER_VIEW_EXPANDED_HEIGHT,
+      DRAWER_COLLAPSED_HEIGHT: FILTER_VIEW_COLLAPSED_HEIGHT,
     },
   };
 };

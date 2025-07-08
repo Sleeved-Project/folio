@@ -29,6 +29,7 @@ export const theme = {
       light: '#E0E0E0',
       medium: '#D0D0D0',
       dark: '#BBBBBB',
+      black: '#000000',
     },
 
     states: {

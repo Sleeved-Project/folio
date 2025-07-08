@@ -6,7 +6,7 @@ export default function Index() {
   const theme = useTheme();
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      <CardsList />
+      <CardsList isFiltersVisible={true} />
     </View>
   );
 }
@@ -14,6 +14,5 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
   },
 });
