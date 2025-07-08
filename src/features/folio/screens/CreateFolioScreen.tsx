@@ -1,55 +1,55 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
-import { useRouter } from 'expo-router';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useTheme } from '../../../theme/useTheme';
 import { Button } from '../../../components/ui';
 import FolioIcon from '../components/FolioIcon';
-import FolioNameInput from '../components/create/FolioNameInput';
 import FolioNameDisplay from '../components/create/FolioNameDisplay';
+import CardPlaceholderGrid from '../../cards/components/CardPlaceholderGrid';
+import { useCreateFolio } from '../hooks/mutations/useCreateFolio';
+import { useFolioCreation } from '../context/FolioCreationContext';
 
 export default function CreateFolioScreen() {
   const theme = useTheme();
   const router = useRouter();
-  const [folioName, setFolioName] = useState('Untitled');
+  const createFolio = useCreateFolio();
+  const { name, setName } = useFolioCreation();
 
   const handleSave = () => {
-    // TODO: Implement save logic with folioName
-    console.log('Save folio:', folioName);
-    router.back();
+    createFolio.mutate(
+      {
+        imageUrl: '/assets/icons/icon-1.png',
+        name,
+        cards: [],
+      },
+      {
+        onSuccess: () => {
+          router.back();
+        },
+      }
+    );
   };
 
   const handleEditName = () => {
     router.push({
       pathname: '/(folios)/edit-folio-name',
-      params: { currentName: folioName },
+      params: { currentName: name },
     });
   };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      {/* Header with icon and name input */}
       <View style={styles.header}>
         <FolioIcon size={80} />
         <View style={styles.nameInputContainer}>
-          <FolioNameDisplay value={folioName} onEditPress={handleEditName} />
+          <FolioNameDisplay value={name} onEditPress={handleEditName} />
         </View>
       </View>
-
-      {/* Content */}
-      <View style={styles.content}>
-
-        {/* TODO: Add form fields here */}
-      </View>
-
-      {/* Fixed buttons at bottom with SafeArea */}
-      <View
-        style={[
-          styles.buttonsContainer,
-          {
-            backgroundColor: theme.colors.background.primary,
-          },
-        ]}
-      >
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.content}>
+        <CardPlaceholderGrid />
+      </ScrollView>
+      <View style={[styles.buttonsContainer, { backgroundColor: theme.colors.background.primary }]}>
         <View style={styles.buttonRow}>
           <Button
             title="Cancel"
@@ -76,8 +76,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 24,
-    paddingTop: 16,
+    padding: 16,
     gap: 16,
   },
   nameInputContainer: {
@@ -85,15 +84,14 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
   },
   subtitle: {
     fontSize: 16,
     marginBottom: 32,
   },
   buttonsContainer: {
-    padding: 24,
-    paddingTop: 16,
+    padding: 16,
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
   },

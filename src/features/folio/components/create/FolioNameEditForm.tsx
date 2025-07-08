@@ -23,7 +23,7 @@ export default function FolioNameEditForm({
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
     watch,
   } = useForm<FolioNameFormValues>({
     resolver: zodResolver(folioNameSchema),
@@ -36,9 +36,7 @@ export default function FolioNameEditForm({
   const currentName = watch('name');
 
   useEffect(() => {
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
+    inputRef.current?.focus();
   }, []);
 
   const onSubmit = (data: FolioNameFormValues) => {
@@ -61,7 +59,7 @@ export default function FolioNameEditForm({
                 {
                   color: theme.colors.text.primary,
                   backgroundColor: theme.colors.background.secondary,
-                  borderColor: errors.name ? theme.colors.danger : theme.colors.border.light,
+                  borderColor: theme.colors.border.light,
                   borderRadius: theme.borderRadius.medium,
                 },
               ]}
@@ -83,15 +81,6 @@ export default function FolioNameEditForm({
           <Text style={[styles.counter, { color: theme.colors.text.tertiary }]}>
             {currentName?.length || 0}/30
           </Text>
-        </View>
-
-        {/* Container fixe pour l'erreur - toujours la même hauteur */}
-        <View style={styles.errorContainer}>
-          {errors.name && (
-            <Text style={[styles.errorText, { color: theme.colors.danger }]}>
-              {errors.name.message}
-            </Text>
-          )}
         </View>
       </View>
 
@@ -139,15 +128,6 @@ const styles = StyleSheet.create({
   },
   counter: {
     fontSize: 12,
-  },
-  errorContainer: {
-    height: 24,
-    justifyContent: 'center',
-    marginTop: 2,
-  },
-  errorText: {
-    fontSize: 14,
-    marginLeft: 4,
   },
   buttonContainer: {
     flexDirection: 'row',

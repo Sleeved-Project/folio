@@ -1,20 +1,20 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../theme/useTheme';
 import { X } from 'lucide-react-native';
 import FolioNameEditForm from '../../features/folio/components/create/FolioNameEditForm';
+import { useFolioCreation } from '../../features/folio/context/FolioCreationContext';
 
 export default function EditFolioNameModal() {
   const theme = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { currentName } = useLocalSearchParams<{ currentName: string }>();
+  const { name, setName } = useFolioCreation();
 
-  const handleSave = (name: string) => {
-    // TODO: Implement save logic avec le nom validé
-    console.log('Save folio name:', name);
+  const handleSave = (newName: string) => {
+    setName(newName);
     router.back();
   };
 
@@ -39,17 +39,15 @@ export default function EditFolioNameModal() {
           },
         ]}
       >
-        {/* Header */}
         <View style={styles.header}>
-          <Text style={[styles.title, { color: theme.colors.text.primary }]}>Edit Folio Name</Text>
+          <Text style={[styles.title, { color: theme.colors.text.primary }]}>Edit folio name</Text>
           <TouchableOpacity onPress={handleCancel} style={styles.closeButton}>
             <X size={24} color={theme.colors.text.secondary} />
           </TouchableOpacity>
         </View>
 
-        {/* Form */}
         <FolioNameEditForm
-          initialValue={currentName || 'Untitled'}
+          initialValue={name || 'Untitled'}
           onSave={handleSave}
           onCancel={handleCancel}
         />

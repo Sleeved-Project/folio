@@ -23,24 +23,6 @@ function AppNavigator() {
       <Stack.Protected guard={isFullyAuthenticated}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="(scan)" />
-
-        <Stack.Screen
-          name="(folios)/create-folio"
-          options={{
-            presentation: 'fullScreenModal',
-            headerShown: false,
-            headerTitle: 'Create Folio',
-            gestureEnabled: false,
-          }}
-        />
-        <Stack.Screen
-          name="(folios)/edit-folio-name"
-          options={{
-            presentation: 'containedTransparentModal',
-            animation: 'fade',
-            headerShown: false,
-          }}
-        />
       </Stack.Protected>
 
       {/* Auth routes - only accessible when not authenticated or pending verification */}
@@ -56,9 +38,11 @@ export default function RootLayout() {
     <GestureHandlerRootView style={styles.container}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <ToasterProvider>
-            <AppNavigator />
-          </ToasterProvider>
+          {/* <FolioCreationProvider> */}
+            <ToasterProvider>
+              <AppNavigator />
+            </ToasterProvider>
+          {/* </FolioCreationProvider> */}
         </AuthProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>
