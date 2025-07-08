@@ -38,11 +38,9 @@ export default function RootLayout() {
     <GestureHandlerRootView style={styles.container}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          {/* <FolioCreationProvider> */}
-            <ToasterProvider>
-              <AppNavigator />
-            </ToasterProvider>
-          {/* </FolioCreationProvider> */}
+          <ToasterProvider>
+            <AppNavigator />
+          </ToasterProvider>
         </AuthProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>

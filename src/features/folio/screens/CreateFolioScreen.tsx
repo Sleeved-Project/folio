@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useTheme } from '../../../theme/useTheme';
 import { Button } from '../../../components/ui';
 import FolioIcon from '../components/FolioIcon';
@@ -14,9 +14,14 @@ export default function CreateFolioScreen() {
   const theme = useTheme();
   const router = useRouter();
   const createFolio = useCreateFolio();
-  const { name, setName } = useFolioCreation();
+  const { name, reset } = useFolioCreation();
 
-  const handleSave = () => {
+  const handleClose = useCallback(() => {
+    reset();
+    router.back();
+  }, [reset, router]);
+
+  const handleSave = useCallback(() => {
     createFolio.mutate(
       {
         imageUrl: '/assets/icons/icon-1.png',
@@ -25,25 +30,25 @@ export default function CreateFolioScreen() {
       },
       {
         onSuccess: () => {
-          router.back();
+          handleClose();
         },
       }
     );
-  };
-
-  const handleEditName = () => {
-    router.push({
-      pathname: '/(folios)/edit-folio-name',
-      params: { currentName: name },
-    });
-  };
+  }, [createFolio, name, handleClose]);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <View style={styles.header}>
         <FolioIcon size={80} />
         <View style={styles.nameInputContainer}>
-          <FolioNameDisplay value={name} onEditPress={handleEditName} />
+          <FolioNameDisplay
+            value={name}
+            onEditPress={() =>
+              router.push({
+                pathname: '/(folios)/edit-folio-name',
+              })
+            }
+          />
         </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.content}>
@@ -54,7 +59,7 @@ export default function CreateFolioScreen() {
           <Button
             title="Cancel"
             variant="outline"
-            onPress={() => router.back()}
+            onPress={handleClose}
             buttonStyle={[styles.button, styles.cancelButton]}
           />
           <Button
@@ -92,6 +97,7 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     padding: 16,
+    paddingTop: 24,
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
   },
