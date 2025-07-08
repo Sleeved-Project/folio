@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 1,
     padding: 2,
-    marginHorizontal: 16,
   },
   tab: {
     flex: 1,

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useFilterDrawerAnimation } from '../hooks/useFilterDrawerAnimation';
 import AnimatedFilterDrawer from './AnimatedFilterDrawer';
 import { Check } from 'lucide-react-native';
+import { Dimensions } from 'react-native';
 
 interface FilterDetailProps {
   isFilterDetailVisible: boolean;
@@ -76,10 +77,11 @@ export default function FilterDetail({
       gestureHandler={gestureHandler}
       animatedStyle={drawerAnimatedStyle}
       onDragHandlePress={toggleDrawer}
+      style={styles.container}
     >
       <View
         style={[
-          styles.container,
+          styles.content,
           {
             backgroundColor: theme.colors.background.primary,
           },
@@ -169,6 +171,10 @@ export default function FilterDetail({
 
 const styles = StyleSheet.create({
   container: {
+    left: -16,
+    width: Dimensions.get('window').width,
+  },
+  content: {
     flex: 1,
   },
   labelContainer: {

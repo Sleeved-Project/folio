@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 8,
-    marginHorizontal: 16,
   },
   filterContainer: {
     flexDirection: 'row',
