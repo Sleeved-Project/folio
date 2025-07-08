@@ -92,7 +92,6 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
         styles.container,
         {
           backgroundColor: theme.colors.background.primary,
-          paddingTop: theme.spacing.md,
           gap: theme.spacing.md,
         },
       ]}
@@ -101,7 +100,6 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
         options={tabOptions}
         activeTabId={activeTab}
         onTabChange={(tabId) => setActiveTab(tabId)}
-        containerStyle={{ marginTop: 8 }}
       />
       <SearchBar
         searchQuery={cardName}
