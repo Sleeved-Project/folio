@@ -18,7 +18,7 @@ interface CardsListProps {
   isFiltersVisible?: boolean;
 }
 
-export default function CardsList({ isFiltersVisible = true }: CardsListProps) {
+export default function CardsList({ isFiltersVisible = false }: CardsListProps) {
   const [cardName, setCardName] = useState<string>('');
   const [activeTab, setActiveTab] = useState<TabType>('cards');
   const [isFilterDetailVisible, setIsFilterDetailVisible] = useState<boolean>(false);
