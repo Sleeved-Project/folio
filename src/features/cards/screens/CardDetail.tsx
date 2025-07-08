@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useCardDetail } from '../hooks/queries/useCardDetail';
 import { useCardFolioDelete } from '../../folio/hooks/mutations/useCardFolioDelete';
@@ -15,6 +15,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useTheme } from '../../../theme/useTheme';
 import AddCardButton from '../components/AddCardButton';
 import { useCardFolioCollect } from '../../folio/hooks/mutations/useCardFolioCollect';
+import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
 
 type TabType = 'details' | 'prices';
 
@@ -32,7 +33,16 @@ export default function CardDetail({ cardId }: { cardId: string }) {
     data: basicCardData,
     isLoading: isLoadingBasic,
     error: basicError,
+    refetch: refetchCardDetail,
   } = useCardDetail(cardId as string);
+
+  const [previousCardQuantity, setPreviousCardQuantity] = useState<number>(0);
+
+  useEffect(() => {
+    setPreviousCardQuantity(basicCardData?.occurrence ?? 0);
+  }, [cardId, basicCardData?.occurrence]);
+
+  useRefetchOnFocus(refetchCardDetail);
 
   const tabOptions: TabOption<TabType>[] = [
     { id: 'details', label: 'Details' },
@@ -41,21 +51,27 @@ export default function CardDetail({ cardId }: { cardId: string }) {
 
   const handleCollectionChange = React.useCallback(
     (cardId: string, quantity?: number) => {
+      if (quantity === undefined) return;
+
       switch (true) {
         case quantity === 0:
           deleteCardFolio({ cardId });
           break;
-        case quantity === 1:
+        case quantity === 1 && previousCardQuantity === 0:
+          // POST only when transitioning from 0 to 1
           collectCard({ cardId });
           break;
-        case quantity !== undefined && quantity > 1:
+        case quantity >= 1:
+          // PATCH for all other quantity changes
           updateCardFolio({ cardId, occurrence: quantity });
           break;
         default:
           break;
       }
+
+      setPreviousCardQuantity(quantity);
     },
-    [deleteCardFolio, collectCard, updateCardFolio]
+    [deleteCardFolio, collectCard, updateCardFolio, previousCardQuantity]
   );
 
   if (isLoadingBasic) {
@@ -85,7 +101,11 @@ export default function CardDetail({ cardId }: { cardId: string }) {
         headerComponent={<CardMetaInfo number={basicCardData.number} set={basicCardData.set} />}
       >
         <ScrollView showsVerticalScrollIndicator={false} style={styles.detailContent}>
-          <AddCardButton cardId={cardId} onQuantityChange={handleCollectionChange} />
+          <AddCardButton
+            cardId={cardId}
+            onQuantityChange={handleCollectionChange}
+            initialQuantity={basicCardData.occurrence}
+          />
           <TabSwitcher
             options={tabOptions}
             activeTabId={activeTab}
