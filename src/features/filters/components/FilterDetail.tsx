@@ -5,6 +5,7 @@ import FilterOption from './FilterOption';
 import { useEffect, useState } from 'react';
 import { Check } from 'lucide-react-native';
 import { useFilterContext } from '../../../context/FilterContext';
+import BackButton from '../../../components/ui/BackButton';
 
 export default function FilterDetail() {
   const theme = useTheme();
@@ -52,8 +53,9 @@ export default function FilterDetail() {
       ]}
     >
       <View style={styles.labelContainer}>
+        <BackButton />
         <Text style={{ color: theme.colors.text.primary, fontSize: 18, fontWeight: 'bold' }}>
-          {label}
+          {label.charAt(0).toUpperCase() + label.slice(1)}
         </Text>
         <TouchableOpacity
           onPress={handleToggleAllFilters}
