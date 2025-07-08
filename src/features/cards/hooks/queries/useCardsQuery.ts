@@ -25,7 +25,8 @@ export const useCards = (cardName: string, filters?: Filters) => {
       if (filters) {
         filters.forEach(({ label, values }) => {
           if (values && values.length > 0) {
-            const paramName = `${label.toLowerCase()}${values.length === 1 && '[]'}`;
+            const paramName =
+              values.length === 1 ? `${label.toLowerCase()}[]` : label.toLowerCase();
             params.append(paramName, values.join(','));
           }
         });
