@@ -26,17 +26,28 @@ export default function SetListDisplay({ set }: SetListDisplayProps) {
           router.push({ pathname: `/set/${set.id}` });
         }}
       >
-        <View style={styles.occurenceContainer}>
+        <View
+          style={[
+            styles.occurenceContainer,
+            {
+              width: SET_WIDTH,
+              height: SET_HEIGHT,
+              backgroundColor: theme.colors.background.secondary,
+              borderRadius: theme.borderRadius.medium,
+              ...theme.shadows.small,
+            },
+          ]}
+        >
           <Image
             source={{ uri: set.imageLogo }}
             resizeMethod="resize"
             resizeMode="contain"
-            style={{
-              width: SET_WIDTH,
-              height: SET_HEIGHT,
-              borderRadius: theme.borderRadius.medium,
-              ...theme.shadows.small,
-            }}
+            style={[
+              {
+                width: 100,
+                height: 100,
+              },
+            ]}
           />
           <View style={styles.symbolBadge}>
             <Image
@@ -52,7 +63,7 @@ export default function SetListDisplay({ set }: SetListDisplayProps) {
             />
           </View>
           <View style={styles.occurenceBadge}>
-            {set.nbOwned && set.nbOwned > 0 && <Text style={styles.badgeText}>{set.nbOwned}</Text>}
+            {set.nbOwned > 0 && <Text style={styles.badgeText}>{set.nbOwned}</Text>}
             <CircularProgressBar
               size={24}
               strokeWidth={6}
@@ -75,6 +86,8 @@ const styles = StyleSheet.create({
   },
   occurenceContainer: {
     position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   occurenceBadge: {
     position: 'absolute',

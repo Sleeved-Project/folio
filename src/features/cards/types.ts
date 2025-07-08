@@ -4,6 +4,7 @@ export interface Card {
   imageLarge?: string;
   bestTrendPrice?: string;
   occurrence?: number;
+  isOwned?: boolean;
 }
 
 export interface CardsListResponse {
