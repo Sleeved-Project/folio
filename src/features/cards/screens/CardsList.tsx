@@ -6,11 +6,11 @@ import CardListDisplay from '../components/CardListDisplay';
 import { useTheme } from '../../../theme/useTheme';
 import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
 import CardFilters from '../../filters/components/CardFilters';
-import FilterDetail from '../../filters/components/FilterDetail';
-import { Filters } from '../../filters/types';
 import { useSets } from '../../sets/hooks/queries/useSetsQuery';
 import SetsList from '../../sets/screens/SetsList';
 import { FormattedSet } from '../../sets/types';
+import { router } from 'expo-router';
+import { useFilterContext } from '../../../context/FilterContext';
 
 type TabType = 'sets' | 'cards';
 
@@ -21,9 +21,6 @@ interface CardsListProps {
 export default function CardsList({ isFiltersVisible = false }: CardsListProps) {
   const [cardName, setCardName] = useState<string>('');
   const [activeTab, setActiveTab] = useState<TabType>('cards');
-  const [isFilterDetailVisible, setIsFilterDetailVisible] = useState<boolean>(false);
-  const [selectedFilterIndex, setSelectedFilterIndex] = useState<number | null>(null);
-
   const theme = useTheme();
 
   const {
@@ -44,39 +41,6 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
     isFetchingNextPage: isFetchingNextSetsPage,
   } = useSets(cardName);
 
-  const filtersOptions = [
-    {
-      label: 'Artist',
-      values: [
-        { label: 'Artist 1', id: '1' },
-        { label: 'Loop', id: '2' },
-        { label: 'Huuh', id: '3' },
-        { label: 'Kiki', id: '4' },
-        { label: 'ldozqo', id: '5' },
-      ],
-    },
-    {
-      label: 'Subtype',
-      values: [
-        { label: 'Subtype 1', id: '1' },
-        { label: 'Loop', id: '2' },
-        { label: 'Huuh', id: '3' },
-        { label: 'Kiki', id: '4' },
-        { label: 'ldozqo', id: '5' },
-      ],
-    },
-    {
-      label: 'Type',
-      values: [
-        { label: 'Type 1', id: '1' },
-        { label: 'Loop', id: '2' },
-        { label: 'Huuh', id: '3' },
-        { label: 'Kiki', id: '4' },
-        { label: 'ldozqo', id: '5' },
-      ],
-    },
-  ];
-
   const cards = cardsData?.pages.flatMap((page) => page.data) ?? [];
   const sets: FormattedSet[] = setsData?.pages.flatMap((page) => page.data) ?? [];
   const tabOptions: TabOption<TabType>[] = [
@@ -84,7 +48,19 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
     { id: 'cards', label: 'All Cards' },
   ];
 
-  const [filters, setFilters] = useState<Filters>();
+  const { filtersOptions, setSelectedFilterOption } = useFilterContext();
+  const toggleFilterDetail = (label: string) => {
+    if (activeTab !== 'sets') {
+      const selected = filtersOptions[label];
+      if (!selected) return;
+      setSelectedFilterOption?.({
+        [label]: selected,
+      });
+      router.push({
+        pathname: '/(filters)/filter-detail',
+      });
+    }
+  };
 
   return (
     <View
@@ -106,12 +82,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
         setSearchQuery={(newName: string) => setCardName(newName)}
       />
       {isFiltersVisible && activeTab !== 'sets' && (
-        <CardFilters
-          filtersOptions={filtersOptions}
-          filters={filters}
-          setIsFilterDetailVisible={setIsFilterDetailVisible}
-          setSelectedFilterIndex={setSelectedFilterIndex}
-        />
+        <CardFilters toggleFilterDetail={toggleFilterDetail} />
       )}
       {activeTab === 'sets' ? (
         <SetsList
@@ -130,15 +101,6 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
           isLoading={isCardsLoading}
           fetchNextPage={fetchNextCardsPage}
           error={cardsError}
-        />
-      )}
-      {isFilterDetailVisible && activeTab !== 'sets' && (
-        <FilterDetail
-          isFilterDetailVisible={isFilterDetailVisible}
-          setIsFilterDetailVisible={setIsFilterDetailVisible}
-          filtersOptions={filtersOptions[selectedFilterIndex ?? 0]}
-          filters={filters ?? []}
-          setFilters={setFilters}
         />
       )}
     </View>

@@ -7,6 +7,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
 import { useAuth } from '../features/auth/context/AuthContext';
 import { ToasterProvider } from '../components/ui/ToasterProvider';
+import { FilterProvider } from '../context/FilterContext';
 
 function AppNavigator() {
   const { isFullyAuthenticated } = useAuth();
@@ -23,6 +24,12 @@ function AppNavigator() {
       <Stack.Protected guard={isFullyAuthenticated}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="(scan)" />
+        <Stack.Screen
+          name="(filters)"
+          options={{
+            presentation: 'modal',
+          }}
+        />
       </Stack.Protected>
 
       {/* Auth routes - only accessible when not authenticated or pending verification */}
@@ -39,7 +46,9 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <ToasterProvider>
-            <AppNavigator />
+            <FilterProvider>
+              <AppNavigator />
+            </FilterProvider>
           </ToasterProvider>
         </AuthProvider>
       </QueryClientProvider>

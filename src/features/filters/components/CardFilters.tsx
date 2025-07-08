@@ -1,26 +1,17 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import { ChevronDown } from 'lucide-react-native';
-import { Filters } from '../types';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useFilterContext } from '../../../context/FilterContext';
 
 interface CardFiltersProps {
-  filtersOptions: {
-    label: string;
-    values: { id: string; label: string }[];
-  }[];
-  filters?: Filters;
-  setIsFilterDetailVisible: (isVisible: boolean) => void;
-  setSelectedFilterIndex: (index: number | null) => void;
+  toggleFilterDetail: (label: string) => void;
 }
 
-export default function CardFilters({
-  filtersOptions,
-  filters,
-  setSelectedFilterIndex,
-  setIsFilterDetailVisible,
-}: CardFiltersProps) {
+export default function CardFilters({ toggleFilterDetail }: CardFiltersProps) {
   const theme = useTheme();
+
+  const { filters, filtersOptions } = useFilterContext();
 
   return (
     <View>
@@ -29,67 +20,60 @@ export default function CardFilters({
         horizontal
         showsHorizontalScrollIndicator={false}
       >
-        {filtersOptions.length > 0 &&
-          filtersOptions.map((filter, index) => {
-            const filterValuesLength =
-              filters?.find((f) => f.label === filter.label)?.values?.length || 0;
-            return (
-              <TouchableOpacity
-                key={index + filter.label}
-                onPress={() => {
-                  setSelectedFilterIndex(index);
-                  setIsFilterDetailVisible(true);
-                }}
-                style={[
-                  styles.filterContainer,
-                  {
-                    padding: theme.spacing.md,
-                    backgroundColor: theme.colors.background.tertiary,
-                    borderRadius: theme.borderRadius.large,
-                    marginBottom: theme.spacing.sm,
-                  },
-                ]}
-              >
-                {filterValuesLength > 0 && (
-                  <>
-                    <View
-                      style={[
-                        styles.filterNumber,
-                        {
-                          backgroundColor: theme.colors.secondary,
-                          borderRadius: theme.borderRadius.round,
-                        },
-                      ]}
+        {Object.entries(filtersOptions).map(([label], index) => {
+          const filterValuesLength = filters?.find((f) => f.label === label)?.values?.length || 0;
+
+          return (
+            <TouchableOpacity
+              key={`${index}-${label}`}
+              onPress={() => toggleFilterDetail(label)}
+              style={[
+                styles.filterContainer,
+                {
+                  padding: theme.spacing.md,
+                  backgroundColor: theme.colors.background.tertiary,
+                  borderRadius: theme.borderRadius.large,
+                  marginBottom: theme.spacing.sm,
+                },
+              ]}
+            >
+              {filterValuesLength > 0 && (
+                <>
+                  <View
+                    style={[
+                      styles.filterNumber,
+                      {
+                        backgroundColor: theme.colors.secondary,
+                        borderRadius: theme.borderRadius.round,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={{
+                        color: theme.colors.background.primary,
+                        fontSize: theme.typography.fontSizes.lg,
+                        fontWeight: theme.typography.fontWeights.bold,
+                      }}
                     >
-                      <Text
-                        style={[
-                          {
-                            color: theme.colors.background.primary,
-                            fontSize: theme.typography.fontSizes.lg,
-                            fontWeight: theme.typography.fontWeights.bold,
-                          },
-                        ]}
-                      >
-                        {filterValuesLength}
-                      </Text>
-                    </View>
-                    <View style={styles.filterLabel} />
-                  </>
-                )}
-                <Text
-                  style={[
-                    {
-                      color: theme.colors.text.tertiary,
-                      fontSize: theme.typography.fontSizes.md,
-                    },
-                  ]}
-                >
-                  {filter.label}
-                </Text>
-                <ChevronDown color={theme.colors.text.tertiary} />
-              </TouchableOpacity>
-            );
-          })}
+                      {filterValuesLength}
+                    </Text>
+                  </View>
+                  <View style={styles.filterLabel} />
+                </>
+              )}
+
+              <Text
+                style={{
+                  color: theme.colors.text.tertiary,
+                  fontSize: theme.typography.fontSizes.md,
+                }}
+              >
+                {label.charAt(0).toUpperCase() + label.slice(1)}
+              </Text>
+              <ChevronDown color={theme.colors.text.tertiary} />
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
     </View>
   );

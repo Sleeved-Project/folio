@@ -1,10 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import { Check } from 'lucide-react-native';
+import { getDisplayName } from '../utils/filter.utils';
 
 interface FilterOptionProps {
-  value: { id: string; label: string };
-  updateFiltersCallback: (value: string) => void;
+  value: { id: number; label: string } | { id: number; name: string };
+  updateFiltersCallback: (value: number) => void;
   isChecked?: boolean;
 }
 
@@ -27,14 +28,14 @@ export default function FilterOption({
       ]}
     >
       <Text
-        key={value.label}
+        key={getDisplayName(value)}
         style={{
           color: theme.colors.text.primary,
           fontSize: theme.typography.fontSizes.md,
           marginBottom: theme.spacing.sm,
         }}
       >
-        {value.label}
+        {getDisplayName(value)}
       </Text>
       <TouchableOpacity
         onPress={() => {
