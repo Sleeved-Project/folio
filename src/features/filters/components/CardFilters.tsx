@@ -30,7 +30,8 @@ export default function CardFilters({ toggleFilterDetail }: CardFiltersProps) {
               style={[
                 styles.filterContainer,
                 {
-                  padding: theme.spacing.md,
+                  paddingHorizontal: theme.spacing.md,
+                  paddingVertical: theme.spacing.sm,
                   backgroundColor: theme.colors.background.tertiary,
                   borderRadius: theme.borderRadius.large,
                 },
@@ -97,9 +98,13 @@ const styles = StyleSheet.create({
   filterNumber: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 25,
+    minWidth: 25,
     height: 25,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+    alignSelf: 'center',
   },
+
   filterSeparator: {
     borderLeftWidth: 1,
     borderColor: '#D0D0D0',
