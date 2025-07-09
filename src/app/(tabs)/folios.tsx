@@ -27,8 +27,6 @@ export default function Folio() {
     return <LoadingState />;
   }
 
-  console.log('myCardsData', data);
-
   if (!isLoading && myCardsDataFlatMap?.length === 0) {
     return <EmptyStateCards />;
   }

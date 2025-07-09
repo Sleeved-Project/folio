@@ -41,7 +41,6 @@ export default function CardScanner() {
           enableShutterSound: false,
         });
 
-        console.log('Photo taken:', photo.path);
         setScannerState('analyzing');
 
         scanCard(photo.path, {
