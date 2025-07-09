@@ -4,6 +4,7 @@ import { folioCardsKeys } from '../queries/useAllMyCards';
 import { foliosKeys } from '../queries/useFolios';
 import { cardKeys } from '../../../cards/hooks/queries/useCardsQuery';
 import { useToaster } from '../../../../components/ui/ToasterProvider';
+import { setKeys } from '../../../sets/hooks/queries/useSetsQuery';
 
 interface DeleteCardPayload {
   cardId: string;
@@ -25,6 +26,7 @@ export const useCardFolioDelete = () => {
       queryClient.invalidateQueries({ queryKey: folioCardsKeys.all });
       queryClient.invalidateQueries({ queryKey: foliosKeys.all });
       queryClient.invalidateQueries({ queryKey: cardKeys.list('') });
+      queryClient.invalidateQueries({ queryKey: setKeys.all });
 
       showToast({
         message: response.message || 'Card removed from your collection!',

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
 import { CardPricesData } from '../../types';
-import { cardKeys } from './useCardDetail';
+import { cardKeys } from './useCardsQuery';
 import { mapCardPricesData } from '../../mappers/cardPricesMapper';
 
 export const useCardPrices = (cardId: string) => {

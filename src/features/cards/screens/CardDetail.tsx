@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useCardDetail } from '../hooks/queries/useCardDetail';
+import { useCardDetail } from '../hooks/queries/useCardsQuery';
 import { useCardFolioDelete } from '../../folio/hooks/mutations/useCardFolioDelete';
 import { useCardFolioUpdate } from '../../folio/hooks/mutations/useCardFolioUpdate';
 import { LoadingState, ErrorState } from '../../../components/ui/StatusIndicators';
