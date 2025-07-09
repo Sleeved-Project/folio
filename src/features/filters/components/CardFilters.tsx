@@ -33,7 +33,6 @@ export default function CardFilters({ toggleFilterDetail }: CardFiltersProps) {
                   padding: theme.spacing.md,
                   backgroundColor: theme.colors.background.tertiary,
                   borderRadius: theme.borderRadius.large,
-                  marginBottom: theme.spacing.sm,
                 },
               ]}
             >
@@ -58,17 +57,20 @@ export default function CardFilters({ toggleFilterDetail }: CardFiltersProps) {
                       {filterValuesLength}
                     </Text>
                   </View>
-                  <View style={styles.filterLabel} />
+                  <View style={styles.filterSeparator} />
                 </>
               )}
 
               <Text
-                style={{
-                  color: theme.colors.text.tertiary,
-                  fontSize: theme.typography.fontSizes.md,
-                }}
+                style={[
+                  styles.filterLabel,
+                  {
+                    color: theme.colors.text.tertiary,
+                    fontSize: theme.typography.fontSizes.md,
+                  },
+                ]}
               >
-                {label.charAt(0).toUpperCase() + label.slice(1)}
+                {label}
               </Text>
               <ChevronDown color={theme.colors.text.tertiary} />
             </TouchableOpacity>
@@ -98,10 +100,13 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
   },
-  filterLabel: {
+  filterSeparator: {
     borderLeftWidth: 1,
     borderColor: '#D0D0D0',
     paddingLeft: 8,
     height: 25,
+  },
+  filterLabel: {
+    textTransform: 'capitalize',
   },
 });

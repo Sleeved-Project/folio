@@ -20,7 +20,7 @@ interface CardsListProps {
 
 export default function CardsList({ isFiltersVisible = false }: CardsListProps) {
   const [cardName, setCardName] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<TabType>('cards');
+  const [activeTab, setActiveTab] = useState<TabType>('sets');
   const theme = useTheme();
   const { filters, filtersOptions, setSelectedFilterOption } = useFilterContext();
 
@@ -57,7 +57,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
         [label]: selected,
       });
       router.push({
-        pathname: '/(filters)/filter-detail',
+        pathname: '/(cards)/filter-detail',
       });
     }
   };

@@ -54,8 +54,17 @@ export default function FilterDetail() {
     >
       <View style={styles.labelContainer}>
         <BackButton />
-        <Text style={{ color: theme.colors.text.primary, fontSize: 18, fontWeight: 'bold' }}>
-          {label.charAt(0).toUpperCase() + label.slice(1)}
+        <Text
+          style={[
+            styles.filterLabel,
+            {
+              color: theme.colors.text.primary,
+              fontSize: theme.typography.fontSizes.lg,
+              fontWeight: theme.typography.fontWeights.bold,
+            },
+          ]}
+        >
+          {label}
         </Text>
         <TouchableOpacity
           onPress={handleToggleAllFilters}
@@ -81,7 +90,7 @@ export default function FilterDetail() {
         {values.map((value, index) => (
           <FilterOption
             key={index + value.id.toString()}
-            value={value}
+            option={value}
             isChecked={
               filters?.some(
                 (filter) => filter.label === label && filter.values.includes(value.id)
@@ -134,7 +143,6 @@ const styles = StyleSheet.create({
     padding: 24,
     flex: 1,
   },
-  content: {},
   labelContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -147,5 +155,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     width: 24,
     height: 24,
+  },
+  filterLabel: {
+    textTransform: 'capitalize',
   },
 });

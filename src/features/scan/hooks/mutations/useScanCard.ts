@@ -17,8 +17,6 @@ export const useScanCard = () => {
 
       formData.append('file', fileData as unknown as Blob);
 
-      console.log('Sending scan request with formData:', photoPath);
-
       const response = await httpClient.post<CardScanResult[]>('/scan/analyze', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',

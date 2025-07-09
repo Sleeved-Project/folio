@@ -1,22 +1,24 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import { Check } from 'lucide-react-native';
-import { getDisplayName } from '../utils/filter.utils';
 
 interface FilterOptionProps {
-  value: { id: number; label: string } | { id: number; name: string };
+  option: { id: number; value: string };
   updateFiltersCallback: (value: number) => void;
   isChecked?: boolean;
 }
 
 export default function FilterOption({
-  value,
+  option,
   updateFiltersCallback,
   isChecked,
 }: FilterOptionProps) {
   const theme = useTheme();
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => {
+        updateFiltersCallback(option.id);
+      }}
       style={[
         styles.container,
         {
@@ -28,19 +30,16 @@ export default function FilterOption({
       ]}
     >
       <Text
-        key={getDisplayName(value)}
+        key={option.value}
         style={{
           color: theme.colors.text.primary,
           fontSize: theme.typography.fontSizes.md,
           marginBottom: theme.spacing.sm,
         }}
       >
-        {getDisplayName(value)}
+        {option.value}
       </Text>
-      <TouchableOpacity
-        onPress={() => {
-          updateFiltersCallback(value.id);
-        }}
+      <View
         style={[
           styles.checkBoxContainer,
           {
@@ -53,8 +52,8 @@ export default function FilterOption({
         {isChecked ? (
           <Check color={theme.colors.background.primary} width={18} height={18} />
         ) : null}
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 }
 
