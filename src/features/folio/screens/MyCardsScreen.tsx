@@ -1,16 +1,27 @@
 import { View, StyleSheet } from 'react-native';
 import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
-import EmptyStateCards from '../components/EmptyStateCards';
+import { Card } from '../../cards/types';
 import CardKPIStats from '../../cards/components/CardKPIStats';
 import CardListDisplay from '../../cards/components/CardListDisplay';
 import { useMainFolioStatistics } from '../hooks/queries/useMainFolioStatistics';
-import { useAllMyCards } from '../hooks/queries/useAllMyCards';
-import { LoadingState } from '../../../components/ui/StatusIndicators';
 
-export default function MyCardsScreen() {
-  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useAllMyCards();
+interface MyCardsScreenProps {
+  myCardsData: Card[];
+  fetchNextPage?: () => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  isLoading?: boolean;
+  error?: Error | null;
+}
 
+export default function MyCardsScreen({
+  myCardsData,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  isLoading,
+  error,
+}: MyCardsScreenProps) {
   const {
     data: myCardsStats,
     isLoading: isLoadingMyCardsStats,
@@ -23,20 +34,10 @@ export default function MyCardsScreen() {
   // and we want to ensure the data is up-to-date
   useRefetchOnFocus(refetchMyCardsStats);
 
-  const cardsData = data?.pages.flatMap((page) => page.data) ?? [];
-
-  if (isLoading) {
-    return <LoadingState />;
-  }
-
-  if (!isLoading && cardsData?.length === 0) {
-    return <EmptyStateCards />;
-  }
-
   return (
     <View style={styles.container}>
       <CardListDisplay
-        cards={cardsData}
+        cards={myCardsData}
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
         isLoading={isLoading}

@@ -1,68 +1,42 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-
+import { useRouter } from 'expo-router';
 import { useTheme } from '../../../theme/useTheme';
-import EmptyStateCards from '../components/EmptyStateCards';
 import FoliosList from '../components/FoliosList';
-import { FolioItem } from '../types';
+import { useFolios } from '../hooks/queries/useFolios';
+import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
+import CreateFirstFolioCta from '../components/create/CreateFirstFolioCta';
 
 export default function MyFoliosScreen() {
   const theme = useTheme();
+  const router = useRouter();
+  const { data: foliosListData, isLoading, error } = useFolios();
 
-  // Mock data to simulate fetched folios
-  const mockFolios: FolioItem[] = [
-    {
-      id: '1',
-      name: 'My Favorite Collection',
-      cardCount: 42,
-      cardMarketValue: '325.50€',
-      tcgPlayerValue: '$352.75',
-    },
-    {
-      id: '2',
-      name: 'Rare Cards',
-      cardCount: 12,
-      cardMarketValue: '678.25€',
-      tcgPlayerValue: '$712.99',
-    },
-    {
-      id: '3',
-      name: 'Starter Deck',
-      cardCount: 28,
-      cardMarketValue: '89.99€',
-      tcgPlayerValue: '$95.50',
-    },
-    {
-      id: '4',
-      name: 'Collection 2023',
-      cardCount: 63,
-      cardMarketValue: '425.30€',
-      tcgPlayerValue: '$450.10',
-    },
-  ];
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <LoadingState />
+      </View>
+    );
+  }
 
-  const hasCards = true;
+  if (!isLoading && error) {
+    return <ErrorState />;
+  }
 
-  const handleFolioPress = (id: string) => {
-    // @TODO: Implement navigation to folio details
-    console.log(`Folio pressed: ${id}`);
-  };
-
-  const handleCreatePress = () => {
-    // @TODO: Implement create folio functionality
-    console.log('create folio pressed');
-  };
-
-  if (!hasCards) {
-    return <EmptyStateCards />;
+  if (!foliosListData || foliosListData.length === 0) {
+    return <CreateFirstFolioCta />;
   }
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <FoliosList
-        folios={mockFolios}
-        onFolioPress={handleFolioPress}
-        onCreatePress={handleCreatePress}
+        foliosData={foliosListData}
+        onFolioPress={(id) => {
+          /* TODO: navigation */
+          console.log('Folio pressed:', id);
+        }}
+        onCreatePress={() => router.push('(folios)/create-folio')}
       />
     </View>
   );

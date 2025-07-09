@@ -4,13 +4,13 @@ import { CardsListResponse, Card } from '../../../cards/types';
 import { mapMyCardsApiToCards } from '../../mappers/myCardsMapper';
 import { MyCardsListResponse } from '../../types';
 
-export const folioKeys = {
-  allMyCards: ['folio', 'allMyCards'] as const,
+export const folioCardsKeys = {
+  all: ['folio', 'allMyCards'] as const,
 };
 
 export const useAllMyCards = () => {
   return useInfiniteQuery<{ data: Card[]; meta: CardsListResponse['meta'] }, Error>({
-    queryKey: folioKeys.allMyCards,
+    queryKey: folioCardsKeys.all,
     queryFn: async ({ pageParam = 1 }) => {
       const response = await httpClient.get<MyCardsListResponse>(
         `/folios/cards?page=${pageParam}&limit=30`

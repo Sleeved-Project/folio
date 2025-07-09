@@ -22,6 +22,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
   const [cardName, setCardName] = useState<string>('');
   const [activeTab, setActiveTab] = useState<TabType>('cards');
   const theme = useTheme();
+  const { filters, filtersOptions, setSelectedFilterOption } = useFilterContext();
 
   const {
     data: cardsData,
@@ -30,7 +31,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
     fetchNextPage: fetchNextCardsPage,
     hasNextPage: hasNextCardsPage,
     isFetchingNextPage: isFetchingNextCardsPage,
-  } = useCards(cardName);
+  } = useCards(cardName, filters);
 
   const {
     data: setsData,
@@ -48,7 +49,6 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
     { id: 'cards', label: 'All Cards' },
   ];
 
-  const { filtersOptions, setSelectedFilterOption } = useFilterContext();
   const toggleFilterDetail = (label: string) => {
     if (activeTab !== 'sets') {
       const selected = filtersOptions[label];

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
-import { folioKeys } from '../queries/useAllMyCards';
+import { folioCardsKeys } from '../queries/useAllMyCards';
 import { useToaster } from '../../../../components/ui/ToasterProvider';
 
 interface UpdateOccurrencePayload {
@@ -23,7 +23,7 @@ export const useCardFolioUpdate = () => {
       });
     },
     onSuccess: (response, variables) => {
-      queryClient.invalidateQueries({ queryKey: folioKeys.allMyCards });
+      queryClient.invalidateQueries({ queryKey: folioCardsKeys.all });
       showToast({
         message: `Card added x${variables.occurrence} to your collection!`,
         type: 'success',

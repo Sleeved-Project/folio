@@ -16,7 +16,10 @@ export default function AdditionalResultsScan({ cards }: AdditionalResultsScanPr
   const theme = useTheme();
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+      edges={['top', 'left', 'right']}
+    >
       <View style={styles.backButtonContainer}>
         <TouchableOpacity
           onPress={() =>
@@ -47,7 +50,9 @@ export default function AdditionalResultsScan({ cards }: AdditionalResultsScanPr
           </Text>
         </View>
       </View>
-      <CardListDisplay cards={cards} listOrigin={'scan'} />
+      <View style={styles.listContainer}>
+        <CardListDisplay cards={cards} listOrigin={'scan'} />
+      </View>
     </SafeAreaView>
   );
 }
@@ -71,5 +76,10 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     alignSelf: 'center',
+  },
+  listContainer: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
   },
 });
