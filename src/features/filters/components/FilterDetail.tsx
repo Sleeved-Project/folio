@@ -3,7 +3,7 @@ import { useTheme } from '../../../theme/useTheme';
 import { ScrollView } from 'react-native-gesture-handler';
 import FilterOption from './FilterOption';
 import { useEffect, useState } from 'react';
-import { Check } from 'lucide-react-native';
+import { Check, Minus } from 'lucide-react-native';
 import { useFilterContext } from '../../../context/FilterContext';
 import BackButton from '../../../components/ui/BackButton';
 
@@ -64,10 +64,17 @@ export default function FilterDetail() {
             {
               borderColor: theme.colors.border.black,
               borderRadius: theme.borderRadius.small,
+              backgroundColor: allFiltersChecked
+                ? theme.colors.text.black
+                : theme.colors.background.primary,
             },
           ]}
         >
-          {allFiltersChecked ? <Check color={theme.colors.success} width={16} height={16} /> : null}
+          {allFiltersChecked ? (
+            <Check color={theme.colors.background.primary} width={18} height={18} />
+          ) : (
+            <Minus color={theme.colors.text.primary} width={18} height={18} />
+          )}
         </TouchableOpacity>
       </View>
       <ScrollView style={{ marginTop: 16 }}>

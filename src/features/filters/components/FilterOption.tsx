@@ -46,10 +46,13 @@ export default function FilterOption({
           {
             borderColor: theme.colors.border.black,
             borderRadius: theme.borderRadius.small,
+            backgroundColor: isChecked ? theme.colors.text.black : theme.colors.background.primary,
           },
         ]}
       >
-        {isChecked ? <Check color={theme.colors.success} width={16} height={16} /> : null}
+        {isChecked ? (
+          <Check color={theme.colors.background.primary} width={18} height={18} />
+        ) : null}
       </TouchableOpacity>
     </View>
   );

@@ -51,7 +51,7 @@ export default function CardFilters({ toggleFilterDetail }: CardFiltersProps) {
                     <Text
                       style={{
                         color: theme.colors.background.primary,
-                        fontSize: theme.typography.fontSizes.lg,
+                        fontSize: theme.typography.fontSizes.sm,
                         fontWeight: theme.typography.fontWeights.bold,
                       }}
                     >
