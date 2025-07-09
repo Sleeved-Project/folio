@@ -22,7 +22,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
   const [cardName, setCardName] = useState<string>('');
   const [activeTab, setActiveTab] = useState<TabType>('sets');
   const theme = useTheme();
-  const { filters, filtersOptions, setSelectedFilterOption } = useFilterContext();
+  const { cardFilters, filtersOptions, setSelectedFilterOption } = useFilterContext();
 
   const {
     data: cardsData,
@@ -31,7 +31,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
     fetchNextPage: fetchNextCardsPage,
     hasNextPage: hasNextCardsPage,
     isFetchingNextPage: isFetchingNextCardsPage,
-  } = useCards(cardName, filters);
+  } = useCards(cardName, cardFilters);
 
   const {
     data: setsData,

@@ -82,7 +82,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="set/[setId]"
+        name="(sets)"
         options={{
           href: null,
           headerTitle: () => <TabHeader displayBackButton={true} />,

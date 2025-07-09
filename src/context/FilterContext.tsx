@@ -5,9 +5,11 @@ import { useFilters } from '../features/filters/hooks/queries/useFiltersQuery';
 type FilterContextType = {
   filtersOptions: FilterOption;
   selectedFilterOption: FilterOption;
-  filters?: Filters;
-  setFilters?: (filters: Filters) => void;
   setSelectedFilterOption?: (option: FilterOption) => void;
+  cardFilters?: Filters;
+  setCardFilters?: (filters: Filters) => void;
+  cardSetFilters?: Filters;
+  setCardSetFilters?: (filters: Filters) => void;
 };
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
@@ -19,7 +21,8 @@ export function useFilterContext() {
 }
 
 export function FilterProvider({ children }: { children: ReactNode }) {
-  const [filters, setFilters] = useState<Filters>([]);
+  const [cardFilters, setCardFilters] = useState<Filters>([]);
+  const [cardSetFilters, setCardSetFilters] = useState<Filters>([]);
   const [selectedFilterOption, setSelectedFilterOption] = useState<FilterOption>(
     {} as FilterOption
   );
@@ -29,8 +32,10 @@ export function FilterProvider({ children }: { children: ReactNode }) {
   return (
     <FilterContext.Provider
       value={{
-        filters,
-        setFilters,
+        cardFilters,
+        setCardFilters,
+        cardSetFilters,
+        setCardSetFilters,
         selectedFilterOption,
         setSelectedFilterOption,
         filtersOptions: filtersOptions || ({} as FilterOption),

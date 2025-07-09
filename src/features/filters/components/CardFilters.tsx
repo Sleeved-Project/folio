@@ -5,13 +5,16 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useFilterContext } from '../../../context/FilterContext';
 
 interface CardFiltersProps {
+  isSetsCards?: boolean;
   toggleFilterDetail: (label: string) => void;
 }
 
-export default function CardFilters({ toggleFilterDetail }: CardFiltersProps) {
+export default function CardFilters({ toggleFilterDetail, isSetsCards = false }: CardFiltersProps) {
   const theme = useTheme();
 
-  const { filters, filtersOptions } = useFilterContext();
+  const { cardFilters, cardSetFilters, filtersOptions } = useFilterContext();
+
+  const filters = isSetsCards ? cardSetFilters : cardFilters;
 
   return (
     <View>
