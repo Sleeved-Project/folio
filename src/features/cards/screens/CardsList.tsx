@@ -23,6 +23,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
   const [activeTab, setActiveTab] = useState<TabType>('cards');
   const [isFilterDetailVisible, setIsFilterDetailVisible] = useState<boolean>(false);
   const [selectedFilterIndex, setSelectedFilterIndex] = useState<number | null>(null);
+  const [filters, setFilters] = useState<Filters>();
 
   const theme = useTheme();
 
@@ -33,7 +34,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
     fetchNextPage: fetchNextCardsPage,
     hasNextPage: hasNextCardsPage,
     isFetchingNextPage: isFetchingNextCardsPage,
-  } = useCards(cardName);
+  } = useCards(cardName, filters);
 
   const {
     data: setsData,
@@ -48,31 +49,31 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
     {
       label: 'Artist',
       values: [
-        { label: 'Artist 1', id: '1' },
-        { label: 'Loop', id: '2' },
-        { label: 'Huuh', id: '3' },
-        { label: 'Kiki', id: '4' },
-        { label: 'ldozqo', id: '5' },
+        { label: 'Ken Sugimori', id: '1' },
+        { label: 'Keiji Kinebuchi', id: '2' },
+        { label: 'Mitsuhiro Arita', id: '3' },
+        { label: 'Tomoaki Imakuni', id: '4' },
+        { label: 'Kagemaru Himeno', id: '5' },
       ],
     },
     {
       label: 'Subtype',
       values: [
-        { label: 'Subtype 1', id: '1' },
-        { label: 'Loop', id: '2' },
-        { label: 'Huuh', id: '3' },
-        { label: 'Kiki', id: '4' },
-        { label: 'ldozqo', id: '5' },
+        { label: 'Stage 2', id: '1' },
+        { label: 'Basic', id: '2' },
+        { label: 'Stage 1', id: '3' },
+        { label: 'Special', id: '4' },
+        { label: "Rocket's Secret Machine", id: '5' },
       ],
     },
     {
       label: 'Type',
       values: [
-        { label: 'Type 1', id: '1' },
-        { label: 'Loop', id: '2' },
-        { label: 'Huuh', id: '3' },
-        { label: 'Kiki', id: '4' },
-        { label: 'ldozqo', id: '5' },
+        { label: 'Psychic', id: '1' },
+        { label: 'Grass', id: '2' },
+        { label: 'Fire', id: '3' },
+        { label: 'Water', id: '4' },
+        { label: 'Lightning', id: '5' },
       ],
     },
   ];
@@ -83,8 +84,6 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
     { id: 'sets', label: 'Card Sets' },
     { id: 'cards', label: 'All Cards' },
   ];
-
-  const [filters, setFilters] = useState<Filters>();
 
   return (
     <View
