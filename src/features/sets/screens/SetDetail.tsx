@@ -66,7 +66,6 @@ export default function SetDetail({ setId }: { setId: string }) {
               width: theme.spacing.xxl,
               height: theme.spacing.xxl,
               borderRadius: theme.borderRadius.medium,
-              ...theme.shadows.small,
             }}
           />
         </View>
