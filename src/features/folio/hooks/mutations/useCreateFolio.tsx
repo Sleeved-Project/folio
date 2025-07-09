@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
-import { folioKeys } from '../queries/useAllMyCards';
+import { foliosKeys } from '../queries/useFolios';
 import { useToaster } from '../../../../components/ui/ToasterProvider';
 
 interface CreateFolioPayload {
@@ -25,7 +25,7 @@ export const useCreateFolio = () => {
       return httpClient.post<CreateFolioResponse>('/folios', payload);
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: folioKeys.allMyCards });
+      queryClient.invalidateQueries({ queryKey: foliosKeys.all });
       showToast({
         message: `Folio "${variables.name}" created!`,
         type: 'success',

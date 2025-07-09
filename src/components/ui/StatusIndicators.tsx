@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 
 interface ErrorStateProps {
-  message: string;
+  message?: string;
 }
 
 export function LoadingState() {
@@ -16,7 +16,7 @@ export function LoadingState() {
   );
 }
 
-export function ErrorState({ message }: ErrorStateProps) {
+export function ErrorState({ message = 'An error occurred' }: ErrorStateProps) {
   const theme = useTheme();
 
   return (

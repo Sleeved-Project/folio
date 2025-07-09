@@ -5,14 +5,14 @@ import FolioItem from './FolioItem';
 import CreateFolioButton from './CreateFolioButton';
 
 interface FoliosListProps {
-  folios: FolioItemType[];
+  foliosData: FolioItemType[];
   onFolioPress?: (id: string) => void;
   onCreatePress: () => void;
   isLoading?: boolean;
 }
 
 export default function FoliosList({
-  folios,
+  foliosData,
   onFolioPress,
   onCreatePress,
   isLoading,
@@ -28,7 +28,7 @@ export default function FoliosList({
 
   return (
     <FlatList
-      data={folios}
+      data={foliosData}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <FolioItem folio={item} onPress={onFolioPress} />}
       ListHeaderComponent={<CreateFolioButton onPress={onCreatePress} />}

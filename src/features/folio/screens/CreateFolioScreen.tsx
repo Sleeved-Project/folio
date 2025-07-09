@@ -24,7 +24,7 @@ export default function CreateFolioScreen() {
   const handleSave = useCallback(() => {
     createFolio.mutate(
       {
-        imageUrl: '/assets/icons/icon-1.png',
+        imageUrl: 'https://res.cloudinary.com/dlgw148r2/image/upload/v1752003117/icon-1_qrqwwg.png',
         name,
         cards: [],
       },

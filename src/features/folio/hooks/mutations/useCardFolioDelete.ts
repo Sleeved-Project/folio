@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
-import { folioKeys } from '../queries/useAllMyCards';
+import { folioCardsKeys } from '../queries/useAllMyCards';
+import { foliosKeys } from '../queries/useFolios';
+import { cardKeys } from '../../../cards/hooks/queries/useCardsQuery';
 import { useToaster } from '../../../../components/ui/ToasterProvider';
 
 interface DeleteCardPayload {
@@ -20,7 +22,10 @@ export const useCardFolioDelete = () => {
       return httpClient.delete<DeleteCardResponse>(`/folios/cards/${cardId}`);
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries({ queryKey: folioKeys.allMyCards });
+      queryClient.invalidateQueries({ queryKey: folioCardsKeys.all });
+      queryClient.invalidateQueries({ queryKey: foliosKeys.all });
+      queryClient.invalidateQueries({ queryKey: cardKeys.list('') });
+
       showToast({
         message: response.message || 'Card removed from your collection!',
         type: 'success',
