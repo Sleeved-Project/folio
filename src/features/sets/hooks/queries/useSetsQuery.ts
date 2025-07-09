@@ -1,11 +1,12 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
-import { FormattedSetsListResponse, SetsListResponse } from '../../types';
-import { mapSetData } from '../../mappers/setMapper';
+import { FormattedSetsListResponse, SetDetailType, SetsListResponse } from '../../types';
+import { mapSetData, mapSetDetailData } from '../../mappers/setMapper';
 
 export const setKeys = {
   all: ['sets'] as const,
   list: (cardName: string) => [...setKeys.all, 'list', cardName] as const,
+  details: (id: string) => [...setKeys.all, 'details', id] as const,
 };
 
 export const useSets = (cardName: string) => {
@@ -30,5 +31,18 @@ export const useSets = (cardName: string) => {
     initialPageParam: 1,
     staleTime: 5 * 60 * 1000,
     retry: false,
+  });
+};
+
+export const useSetDetailedInfo = (setId: string) => {
+  return useQuery({
+    queryKey: setKeys.details(setId),
+    queryFn: async () => {
+      if (!setId) throw new Error('Set ID is required');
+      const response = await httpClient.get<SetDetailType>(`/sets/${setId}/details`);
+      return mapSetDetailData(response);
+    },
+    enabled: !!setId,
+    staleTime: 5 * 60 * 1000,
   });
 };

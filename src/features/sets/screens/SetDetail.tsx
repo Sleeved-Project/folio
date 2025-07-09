@@ -6,7 +6,7 @@ import CircularProgressBar from '../components/CircularProgressBar';
 import SearchBar from '../../../components/ui/SearchBar';
 import CardListDisplay from '../../cards/components/CardListDisplay';
 import CardKPIStats from '../../cards/components/CardKPIStats';
-import { useSetDetailedInfo } from '../hooks/queries/useSetDetail';
+import { useSetDetailedInfo } from '../hooks/queries/useSetsQuery';
 import { useSetCards } from '../hooks/queries/useSetCards';
 
 export default function SetDetail({ setId }: { setId: string }) {

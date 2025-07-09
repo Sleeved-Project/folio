@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useCardDetailedInfo } from '../hooks/queries/useCardDetail';
+import { useCardDetailedInfo } from '../hooks/queries/useCardsQuery';
 import { LoadingState, ErrorState } from '../../../components/ui/StatusIndicators';
 import InfoGrid from '../../../components/ui/InfoGrid';
 import InfoItem from '../../../components/ui/InfoItem';
