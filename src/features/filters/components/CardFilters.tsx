@@ -30,8 +30,7 @@ export default function CardFilters({ toggleFilterDetail }: CardFiltersProps) {
               style={[
                 styles.filterContainer,
                 {
-                  paddingHorizontal: theme.spacing.md,
-                  paddingVertical: theme.spacing.sm,
+                  padding: theme.spacing.sm,
                   backgroundColor: theme.colors.background.tertiary,
                   borderRadius: theme.borderRadius.large,
                 },
