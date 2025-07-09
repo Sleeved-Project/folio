@@ -70,7 +70,6 @@ export default function CardListDisplay({
               width: CARD_WIDTH,
               height: CARD_HEIGHT,
               borderRadius: theme.borderRadius.medium,
-              ...theme.shadows.small,
             }}
           />
           {item.occurrence && item.occurrence > 0 && (

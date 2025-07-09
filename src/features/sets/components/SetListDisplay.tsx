@@ -58,7 +58,6 @@ export default function SetListDisplay({ set }: SetListDisplayProps) {
                 width: 32,
                 height: 32,
                 borderRadius: theme.borderRadius.medium,
-                ...theme.shadows.small,
               }}
             />
           </View>
