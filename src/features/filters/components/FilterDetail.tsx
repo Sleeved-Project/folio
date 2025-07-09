@@ -6,12 +6,13 @@ import { useEffect, useState } from 'react';
 import { Check, Minus } from 'lucide-react-native';
 import { useFilterContext } from '../../../context/FilterContext';
 import BackButton from '../../../components/ui/BackButton';
+import { FilterTypeEnum } from '../types';
 
 interface FilterDetailProps {
-  isSetsCards?: boolean;
+  filterType: FilterTypeEnum;
 }
 
-export default function FilterDetail({ isSetsCards = false }: FilterDetailProps) {
+export default function FilterDetail({ filterType }: FilterDetailProps) {
   const theme = useTheme();
   const [allFiltersChecked, setAllFiltersChecked] = useState(false);
   const { selectedFilterOption, cardFilters, setCardFilters, cardSetFilters, setCardSetFilters } =
@@ -19,8 +20,18 @@ export default function FilterDetail({ isSetsCards = false }: FilterDetailProps)
   const label = selectedFilterOption ? Object.keys(selectedFilterOption)[0] : '';
   const values = selectedFilterOption ? selectedFilterOption[label] : [];
 
-  const filters = isSetsCards ? cardSetFilters : cardFilters;
-  const setFilters = isSetsCards ? setCardSetFilters : setCardFilters;
+  const filtersStateMapping = {
+    card: cardFilters,
+    set: cardSetFilters,
+  };
+
+  const setFiltersStateMapping = {
+    card: setCardFilters,
+    set: setCardSetFilters,
+  };
+
+  const filters = filtersStateMapping[filterType];
+  const setFilters = setFiltersStateMapping[filterType];
 
   useEffect(() => {
     const currentFiltersValueLength = filters?.find((filter) => filter.label === label)?.values

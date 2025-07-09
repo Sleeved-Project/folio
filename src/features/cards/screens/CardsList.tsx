@@ -11,6 +11,7 @@ import SetsList from '../../sets/screens/SetsList';
 import { FormattedSet } from '../../sets/types';
 import { router } from 'expo-router';
 import { useFilterContext } from '../../../context/FilterContext';
+import { FilterTypeEnum } from '../../filters/types';
 
 type TabType = 'sets' | 'cards';
 
@@ -82,7 +83,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
         setSearchQuery={(newName: string) => setCardName(newName)}
       />
       {isFiltersVisible && activeTab !== 'sets' && (
-        <CardFilters toggleFilterDetail={toggleFilterDetail} />
+        <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.CARD} />
       )}
       {activeTab === 'sets' ? (
         <SetsList

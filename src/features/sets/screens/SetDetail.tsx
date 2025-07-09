@@ -11,6 +11,7 @@ import { useSetCards } from '../hooks/queries/useSetCards';
 import CardFilters from '../../filters/components/CardFilters';
 import { router } from 'expo-router';
 import { useFilterContext } from '../../../context/FilterContext';
+import { FilterTypeEnum } from '../../filters/types';
 
 export default function SetDetail({ setId }: { setId: string }) {
   const theme = useTheme();
@@ -98,7 +99,7 @@ export default function SetDetail({ setId }: { setId: string }) {
         searchQuery={cardName}
         setSearchQuery={(newName: string) => setCardName(newName)}
       />
-      <CardFilters toggleFilterDetail={toggleFilterDetail} isSetsCards />
+      <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.SET} />
       <CardListDisplay
         cards={cards}
         hasNextPage={hasNextCardsPage}

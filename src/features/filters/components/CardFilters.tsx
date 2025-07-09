@@ -3,18 +3,25 @@ import { useTheme } from '../../../theme/useTheme';
 import { ChevronDown } from 'lucide-react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useFilterContext } from '../../../context/FilterContext';
+import { FilterTypeEnum } from '../types';
 
 interface CardFiltersProps {
-  isSetsCards?: boolean;
+  filterType: FilterTypeEnum;
   toggleFilterDetail: (label: string) => void;
 }
 
-export default function CardFilters({ toggleFilterDetail, isSetsCards = false }: CardFiltersProps) {
+export default function CardFilters({ toggleFilterDetail, filterType }: CardFiltersProps) {
   const theme = useTheme();
 
   const { cardFilters, cardSetFilters, filtersOptions } = useFilterContext();
 
-  const filters = isSetsCards ? cardSetFilters : cardFilters;
+  const filtersMapping = {
+    card: cardFilters,
+    set: cardSetFilters,
+  };
+
+  const filters = filtersMapping[filterType];
+  console.log('CardFilters - filters:', filters);
 
   return (
     <View>
