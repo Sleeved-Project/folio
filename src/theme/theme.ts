@@ -10,7 +10,7 @@ export const theme = {
     warning: '#f0ad4e',
 
     variants: {
-      primaryLight: '#2196F31A',
+      primaryLight: '#BBDEFB',
     },
 
     background: {

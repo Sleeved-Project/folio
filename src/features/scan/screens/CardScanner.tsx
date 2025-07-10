@@ -8,6 +8,7 @@ import { useRouter } from 'expo-router';
 import { ScannerState } from '../types';
 import { getScannerStatusText, isErrorState, isLoadingState } from '../utils/scan-utils';
 import { SCREEN_DIMENSIONS, FRAME_WIDTH, FRAME_HEIGHT } from '../../../constants';
+import { compressImage } from '../utils/image';
 
 export default function CardScanner() {
   const { hasPermission, requestPermission } = useCameraPermission();
@@ -34,16 +35,17 @@ export default function CardScanner() {
     if (camera.current) {
       try {
         setScannerState('capturing');
-        console.log('Taking photo...');
 
         const photo = await camera.current.takePhoto({
           flash: 'off',
           enableShutterSound: false,
         });
 
+        const portraitUri = await compressImage(photo.path);
+
         setScannerState('analyzing');
 
-        scanCard(photo.path, {
+        scanCard(portraitUri, {
           onSuccess: (cards) => {
             if (cards && cards.length > 0) {
               router.push({
@@ -54,10 +56,9 @@ export default function CardScanner() {
                   highlightedCardId: cards[0].id,
                 },
               });
-            } else {
-              // API responded but found no cards
-              setScannerState('error_not_detected');
+              return setScannerState('ready'); // Reset state after successful scan
             }
+            return setScannerState('error_not_detected');
           },
           onError: (error) => {
             console.warn('Error analyzing card:', error);
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     position: 'absolute',
-    bottom: 120,
+    bottom: 150,
     left: 0,
     right: 0,
     alignItems: 'center',
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
   },
   captureButton: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 50,
     alignSelf: 'center',
     padding: 16,
     borderRadius: 40,

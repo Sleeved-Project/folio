@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { Card } from '../../cards/types';
 import { Button } from '../../../components/ui';
 import { useTheme } from '../../../theme/useTheme';
+import BackButton from '../../../components/ui/BackButton';
 
 interface CardScanSuccessProps {
   cards: Card[];
@@ -17,6 +18,9 @@ export default function CardScanSuccess({ cards, highlightedCardId }: CardScanSu
 
   return (
     <>
+      <View style={{ position: 'absolute', top: 40, left: 16, zIndex: 10 }}>
+        <BackButton />
+      </View>
       <Image
         source={{ uri: highlightedCard.imageSmall }}
         style={[styles.image, { borderRadius: theme.borderRadius.medium }]}
@@ -37,7 +41,7 @@ export default function CardScanSuccess({ cards, highlightedCardId }: CardScanSu
             onPress={() => router.push(`/card/${highlightedCard.id}`)}
           />
         </View>
-        <Button title="Scan again" variant="outline" onPress={() => router.replace('/scan')} />
+        <Button title="Scan again" variant="outline" onPress={() => router.back()} />
         <Button
           title="Show other results"
           variant="ghost"
@@ -77,6 +81,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   image: {
+    marginTop: 24,
     width: 345,
     height: 480,
   },
