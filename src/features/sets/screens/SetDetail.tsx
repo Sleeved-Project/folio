@@ -43,9 +43,14 @@ export default function SetDetail({ setId }: { setId: string }) {
       [label]: selected,
     });
     router.push({
-      pathname: '/(sets)/filter-set-cards-detail',
+      pathname: '/filter-detail',
+      params: {
+        filterType: FilterTypeEnum.SET,
+      },
     });
   };
+
+  const areFiltersVisible = true;
 
   return (
     <View
@@ -99,7 +104,9 @@ export default function SetDetail({ setId }: { setId: string }) {
         searchQuery={cardName}
         setSearchQuery={(newName: string) => setCardName(newName)}
       />
-      <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.SET} />
+      {areFiltersVisible && (
+        <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.SET} />
+      )}
       <CardListDisplay
         cards={cards}
         hasNextPage={hasNextCardsPage}

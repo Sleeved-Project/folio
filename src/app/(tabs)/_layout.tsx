@@ -19,7 +19,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="(cards)"
+        name="index"
         options={{
           title: 'Cards',
           headerTitle: () => <TabHeader displayBackButton={false} />,
@@ -82,14 +82,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="(sets)"
-        options={{
-          href: null,
-          headerTitle: () => <TabHeader displayBackButton={true} />,
-        }}
-      />
-      <Tabs.Screen
-        name="index"
+        name="set/[setId]"
         options={{
           href: null,
           headerTitle: () => <TabHeader displayBackButton={true} />,

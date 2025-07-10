@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
-import { ErrorState } from '../../../../components/ui/StatusIndicators';
-import SetDetail from '../../../../features/sets/screens/SetDetail';
+import { ErrorState } from '../../../components/ui/StatusIndicators';
+import SetDetail from '../../../features/sets/screens/SetDetail';
 
 export default function SetDetailPage() {
   const { setId } = useLocalSearchParams();

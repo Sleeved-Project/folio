@@ -21,7 +21,6 @@ export default function CardFilters({ toggleFilterDetail, filterType }: CardFilt
   };
 
   const filters = filtersMapping[filterType];
-  console.log('CardFilters - filters:', filters);
 
   return (
     <View>
