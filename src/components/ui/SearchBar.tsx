@@ -61,10 +61,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderRadius: 50,
+    height: 40,
   },
   input: {
     flex: 1,
     paddingHorizontal: 10,
     fontSize: 16,
+    height: 40,
   },
 });
