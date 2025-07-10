@@ -6,13 +6,33 @@ import { useEffect, useState } from 'react';
 import { Check, Minus } from 'lucide-react-native';
 import { useFilterContext } from '../../../context/FilterContext';
 import BackButton from '../../../components/ui/BackButton';
+import { FilterTypeEnum } from '../types';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function FilterDetail() {
+interface FilterDetailProps {
+  filterType: FilterTypeEnum;
+}
+
+export default function FilterDetail({ filterType }: FilterDetailProps) {
   const theme = useTheme();
   const [allFiltersChecked, setAllFiltersChecked] = useState(false);
-  const { selectedFilterOption, filters, setFilters } = useFilterContext();
+  const { selectedFilterOption, cardFilters, setCardFilters, cardSetFilters, setCardSetFilters } =
+    useFilterContext();
   const label = selectedFilterOption ? Object.keys(selectedFilterOption)[0] : '';
   const values = selectedFilterOption ? selectedFilterOption[label] : [];
+
+  const filtersStateMapping = {
+    card: cardFilters,
+    set: cardSetFilters,
+  };
+
+  const setFiltersStateMapping = {
+    card: setCardFilters,
+    set: setCardSetFilters,
+  };
+
+  const filters = filtersStateMapping[filterType];
+  const setFilters = setFiltersStateMapping[filterType];
 
   useEffect(() => {
     const currentFiltersValueLength = filters?.find((filter) => filter.label === label)?.values
@@ -44,97 +64,99 @@ export default function FilterDetail() {
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: theme.colors.background.primary,
-        },
-      ]}
-    >
-      <View style={styles.labelContainer}>
-        <BackButton />
-        <Text
-          style={[
-            styles.filterLabel,
-            {
-              color: theme.colors.text.primary,
-              fontSize: theme.typography.fontSizes.lg,
-              fontWeight: theme.typography.fontWeights.bold,
-            },
-          ]}
-        >
-          {label}
-        </Text>
-        <TouchableOpacity
-          onPress={handleToggleAllFilters}
-          style={[
-            styles.checkBoxContainer,
-            {
-              borderColor: theme.colors.border.black,
-              borderRadius: theme.borderRadius.small,
-              backgroundColor: allFiltersChecked
-                ? theme.colors.text.black
-                : theme.colors.background.primary,
-            },
-          ]}
-        >
-          {allFiltersChecked ? (
-            <Check color={theme.colors.background.primary} width={18} height={18} />
-          ) : (
-            <Minus color={theme.colors.text.primary} width={18} height={18} />
-          )}
-        </TouchableOpacity>
-      </View>
-      <ScrollView style={{ marginTop: 16 }}>
-        {values.map((value, index) => (
-          <FilterOption
-            key={index + value.id.toString()}
-            option={value}
-            isChecked={
-              filters?.some(
-                (filter) => filter.label === label && filter.values.includes(value.id)
-              ) ?? false
-            }
-            updateFiltersCallback={(newFilter: number) => {
-              if (!setFilters) return;
-
-              const currentFilters = filters ?? [];
-              const existingIndex = currentFilters.findIndex((filter) => filter.label === label);
-
-              if (existingIndex === -1) {
-                setFilters([...currentFilters, { label: label, values: [value.id] }]);
-                return;
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background.primary }}>
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: theme.colors.background.primary,
+          },
+        ]}
+      >
+        <View style={styles.labelContainer}>
+          <BackButton />
+          <Text
+            style={[
+              styles.filterLabel,
+              {
+                color: theme.colors.text.primary,
+                fontSize: theme.typography.fontSizes.lg,
+                fontWeight: theme.typography.fontWeights.bold,
+              },
+            ]}
+          >
+            {label}
+          </Text>
+          <TouchableOpacity
+            onPress={handleToggleAllFilters}
+            style={[
+              styles.checkBoxContainer,
+              {
+                borderColor: theme.colors.border.black,
+                borderRadius: theme.borderRadius.small,
+                backgroundColor: allFiltersChecked
+                  ? theme.colors.text.black
+                  : theme.colors.background.primary,
+              },
+            ]}
+          >
+            {allFiltersChecked ? (
+              <Check color={theme.colors.background.primary} width={18} height={18} />
+            ) : (
+              <Minus color={theme.colors.text.primary} width={18} height={18} />
+            )}
+          </TouchableOpacity>
+        </View>
+        <ScrollView style={{ marginTop: 16 }}>
+          {values.map((value, index) => (
+            <FilterOption
+              key={index + value.id.toString()}
+              option={value}
+              isChecked={
+                filters?.some(
+                  (filter) => filter.label === label && filter.values.includes(value.id)
+                ) ?? false
               }
+              updateFiltersCallback={(newFilter: number) => {
+                if (!setFilters) return;
 
-              const existingFilter = currentFilters[existingIndex];
-              const valueExists = existingFilter.values.includes(newFilter);
+                const currentFilters = filters ?? [];
+                const existingIndex = currentFilters.findIndex((filter) => filter.label === label);
 
-              if (valueExists) {
-                const updatedValues = existingFilter.values.filter((v) => v !== newFilter);
-                if (updatedValues.length === 0) {
-                  setFilters(currentFilters.filter((_, i) => i !== existingIndex));
+                if (existingIndex === -1) {
+                  setFilters([...currentFilters, { label: label, values: [value.id] }]);
+                  return;
+                }
+
+                const existingFilter = currentFilters[existingIndex];
+                const valueExists = existingFilter.values.includes(newFilter);
+
+                if (valueExists) {
+                  const updatedValues = existingFilter.values.filter((v) => v !== newFilter);
+                  if (updatedValues.length === 0) {
+                    setFilters(currentFilters.filter((_, i) => i !== existingIndex));
+                  } else {
+                    const updatedFilters = [...currentFilters];
+                    updatedFilters[existingIndex] = {
+                      ...existingFilter,
+                      values: updatedValues,
+                    };
+                    setFilters(updatedFilters);
+                  }
                 } else {
                   const updatedFilters = [...currentFilters];
                   updatedFilters[existingIndex] = {
                     ...existingFilter,
-                    values: updatedValues,
+                    values: [...existingFilter.values, newFilter],
                   };
                   setFilters(updatedFilters);
                 }
-              } else {
-                const updatedFilters = [...currentFilters];
-                updatedFilters[existingIndex] = {
-                  ...existingFilter,
-                  values: [...existingFilter.values, newFilter],
-                };
-                setFilters(updatedFilters);
-              }
-            }}
-          />
-        ))}
-      </ScrollView>
-    </View>
+              }}
+            />
+          ))}
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 }
 

@@ -11,6 +11,7 @@ import SetsList from '../../sets/screens/SetsList';
 import { FormattedSet } from '../../sets/types';
 import { router } from 'expo-router';
 import { useFilterContext } from '../../../context/FilterContext';
+import { FilterTypeEnum } from '../../filters/types';
 
 type TabType = 'sets' | 'cards';
 
@@ -20,9 +21,9 @@ interface CardsListProps {
 
 export default function CardsList({ isFiltersVisible = false }: CardsListProps) {
   const [cardName, setCardName] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<TabType>('sets');
+  const [activeTab, setActiveTab] = useState<TabType>('cards');
   const theme = useTheme();
-  const { filters, filtersOptions, setSelectedFilterOption } = useFilterContext();
+  const { cardFilters, filtersOptions, setSelectedFilterOption } = useFilterContext();
 
   const {
     data: cardsData,
@@ -31,7 +32,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
     fetchNextPage: fetchNextCardsPage,
     hasNextPage: hasNextCardsPage,
     isFetchingNextPage: isFetchingNextCardsPage,
-  } = useCards(cardName, filters);
+  } = useCards(cardName, cardFilters);
 
   const {
     data: setsData,
@@ -57,7 +58,10 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
         [label]: selected,
       });
       router.push({
-        pathname: '/(cards)/filter-detail',
+        pathname: '/filter-detail',
+        params: {
+          filterType: activeTab === 'cards' ? FilterTypeEnum.CARD : FilterTypeEnum.SET,
+        },
       });
     }
   };
@@ -82,7 +86,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
         setSearchQuery={(newName: string) => setCardName(newName)}
       />
       {isFiltersVisible && activeTab !== 'sets' && (
-        <CardFilters toggleFilterDetail={toggleFilterDetail} />
+        <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.CARD} />
       )}
       {activeTab === 'sets' ? (
         <SetsList

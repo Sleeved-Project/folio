@@ -8,10 +8,15 @@ import CardListDisplay from '../../cards/components/CardListDisplay';
 import CardKPIStats from '../../cards/components/CardKPIStats';
 import { useSetDetailedInfo } from '../hooks/queries/useSetsQuery';
 import { useSetCards } from '../hooks/queries/useSetCards';
+import CardFilters from '../../filters/components/CardFilters';
+import { router } from 'expo-router';
+import { useFilterContext } from '../../../context/FilterContext';
+import { FilterTypeEnum } from '../../filters/types';
 
 export default function SetDetail({ setId }: { setId: string }) {
   const theme = useTheme();
   const [cardName, setCardName] = React.useState<string>('');
+  const { cardSetFilters, filtersOptions, setSelectedFilterOption } = useFilterContext();
 
   const {
     data: setData,
@@ -26,10 +31,26 @@ export default function SetDetail({ setId }: { setId: string }) {
     fetchNextPage: fetchNextCardsPage,
     hasNextPage: hasNextCardsPage,
     isFetchingNextPage: isFetchingNextCardsPage,
-  } = useSetCards(setId, cardName);
+  } = useSetCards(setId, cardName, cardSetFilters);
 
   const cards = cardsData?.pages.flatMap((page) => page.data) ?? [];
   const set = setData || ({} as FormattedSetDetailType);
+
+  const toggleFilterDetail = (label: string) => {
+    const selected = filtersOptions[label];
+    if (!selected) return;
+    setSelectedFilterOption?.({
+      [label]: selected,
+    });
+    router.push({
+      pathname: '/filter-detail',
+      params: {
+        filterType: FilterTypeEnum.SET,
+      },
+    });
+  };
+
+  const areFiltersVisible = true;
 
   return (
     <View
@@ -83,7 +104,9 @@ export default function SetDetail({ setId }: { setId: string }) {
         searchQuery={cardName}
         setSearchQuery={(newName: string) => setCardName(newName)}
       />
-      {/* Add the filters here */}
+      {areFiltersVisible && (
+        <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.SET} />
+      )}
       <CardListDisplay
         cards={cards}
         hasNextPage={hasNextCardsPage}
