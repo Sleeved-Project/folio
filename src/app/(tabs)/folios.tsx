@@ -11,8 +11,8 @@ import EmptyStateCards from '../../features/folio/components/EmptyStateCards';
 type FolioTabType = 'cards' | 'folios';
 
 const tabOptions = [
-  { id: 'cards' as const, label: 'My Cards' },
-  { id: 'folios' as const, label: 'My Folios' },
+  { id: 'cards' as const, label: 'My cards' },
+  { id: 'folios' as const, label: 'My folios' },
 ];
 
 export default function Folio() {
