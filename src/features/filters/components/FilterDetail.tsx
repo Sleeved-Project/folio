@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react';
 import { Check, Minus } from 'lucide-react-native';
 import { useFilterContext } from '../../../context/FilterContext';
 import BackButton from '../../../components/ui/BackButton';
-import { FilterTypeEnum } from '../types';
+import { Filters, FilterTypeEnum } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SearchBar from '../../../components/ui/SearchBar';
+import { useToaster } from '../../../components/ui/ToasterProvider';
 
 interface FilterDetailProps {
   filterType: FilterTypeEnum;
@@ -15,6 +16,7 @@ interface FilterDetailProps {
 
 export default function FilterDetail({ filterType }: FilterDetailProps) {
   const theme = useTheme();
+  const { showToast } = useToaster();
   const [allFiltersChecked, setAllFiltersChecked] = useState(false);
   const {
     selectedFilterOption,
@@ -28,22 +30,19 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
     artistName,
     setArtistName,
   } = useFilterContext();
-
   const label = Object.keys(selectedFilterOption)[0];
   const values = selectedFilterOption[label];
-
   const filtersStateMapping = {
     card: cardFilters,
     set: cardSetFilters,
   };
-
   const setFiltersStateMapping = {
     card: setCardFilters,
     set: setCardSetFilters,
   };
-
   const filters = filtersStateMapping[filterType];
   const setFilters = setFiltersStateMapping[filterType];
+  const [tempFilters, setTempFilters] = useState<Filters>(filters);
 
   useEffect(() => {
     const currentFiltersValueLength = filters?.find((filter) => filter.label === label)?.values
@@ -58,7 +57,7 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
   const handleToggleAllFilters = () => {
     if (!setFilters) return;
 
-    const currentFilters = filters ?? [];
+    const currentFilters = tempFilters ?? [];
 
     const existingIndex = currentFilters.findIndex((filter) => {
       return filter.label === label;
@@ -71,7 +70,45 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
     // }
     // If it exists, we remove it
     setAllFiltersChecked(false);
+
+    setTempFilters(currentFilters.filter((_, i) => i !== existingIndex));
     setFilters(currentFilters.filter((_, i) => i !== existingIndex));
+  };
+
+  const updateFilters = (newFilter: number) => {
+    if (!setFilters) return;
+
+    const currentFilters = tempFilters ?? [];
+    const existingIndex = currentFilters.findIndex((filter) => filter.label === label);
+
+    if (existingIndex === -1) {
+      setTempFilters([...currentFilters, { label: label, values: [newFilter] }]);
+      return;
+    }
+
+    const existingFilter = currentFilters[existingIndex];
+    const valueExists = existingFilter.values.includes(newFilter);
+
+    if (valueExists) {
+      const updatedValues = existingFilter.values.filter((v) => v !== newFilter);
+      if (updatedValues.length === 0) {
+        setTempFilters(currentFilters.filter((_, i) => i !== existingIndex));
+      } else {
+        const updatedFilters = [...currentFilters];
+        updatedFilters[existingIndex] = {
+          ...existingFilter,
+          values: updatedValues,
+        };
+        setTempFilters(updatedFilters);
+      }
+    } else {
+      const updatedFilters = [...currentFilters];
+      updatedFilters[existingIndex] = {
+        ...existingFilter,
+        values: [...existingFilter.values, newFilter],
+      };
+      setTempFilters(updatedFilters);
+    }
   };
 
   const displayFilterOptions = (item: { id: number; value: string }) => {
@@ -79,44 +116,11 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
       <FilterOption
         option={item}
         isChecked={
-          filters?.some((filter) => filter.label === label && filter.values.includes(item.id)) ??
-          false
+          tempFilters?.some(
+            (filter) => filter.label === label && filter.values.includes(item.id)
+          ) ?? false
         }
-        updateFiltersCallback={(newFilter: number) => {
-          if (!setFilters) return;
-
-          const currentFilters = filters ?? [];
-          const existingIndex = currentFilters.findIndex((filter) => filter.label === label);
-
-          if (existingIndex === -1) {
-            setFilters([...currentFilters, { label: label, values: [newFilter] }]);
-            return;
-          }
-
-          const existingFilter = currentFilters[existingIndex];
-          const valueExists = existingFilter.values.includes(newFilter);
-
-          if (valueExists) {
-            const updatedValues = existingFilter.values.filter((v) => v !== newFilter);
-            if (updatedValues.length === 0) {
-              setFilters(currentFilters.filter((_, i) => i !== existingIndex));
-            } else {
-              const updatedFilters = [...currentFilters];
-              updatedFilters[existingIndex] = {
-                ...existingFilter,
-                values: updatedValues,
-              };
-              setFilters(updatedFilters);
-            }
-          } else {
-            const updatedFilters = [...currentFilters];
-            updatedFilters[existingIndex] = {
-              ...existingFilter,
-              values: [...existingFilter.values, newFilter],
-            };
-            setFilters(updatedFilters);
-          }
-        }}
+        updateFiltersCallback={updateFilters}
       />
     );
   };
@@ -166,7 +170,7 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
           </TouchableOpacity>
         </View>
         {label === 'artists' && (
-          <SearchBar searchQuery={artistName} setSearchQuery={setArtistName} />
+          <SearchBar searchQuery={artistName} setSearchQuery={setArtistName} searchType="artist" />
         )}
         <FlatList
           data={values}
@@ -183,6 +187,22 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
           }}
           onEndReachedThreshold={0.5}
         />
+        <TouchableOpacity
+          onPress={() => {
+            setFilters?.(tempFilters ?? []);
+            showToast({ message: 'Filters updated successfully', type: 'success' });
+          }}
+          style={[
+            styles.addButton,
+            {
+              backgroundColor: theme.colors.primary,
+              borderRadius: theme.borderRadius.medium,
+            },
+          ]}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.addButtonText}>Apply Filters</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -193,6 +213,7 @@ const styles = StyleSheet.create({
     padding: 24,
     flex: 1,
     gap: 8,
+    position: 'relative',
   },
   labelContainer: {
     flexDirection: 'row',
@@ -209,5 +230,19 @@ const styles = StyleSheet.create({
   },
   filterLabel: {
     textTransform: 'capitalize',
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 48,
+  },
+  addButtonText: {
+    color: 'white',
+    fontWeight: '600',
+    fontSize: 16,
   },
 });

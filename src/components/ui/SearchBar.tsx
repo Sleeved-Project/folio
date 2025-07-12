@@ -7,11 +7,13 @@ import { useTheme } from '../../theme/useTheme';
 interface SearchBarProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  searchType?: 'Pokemon' | 'artist' | 'set';
 }
 
-export default function SearchBar({ searchQuery, setSearchQuery }: SearchBarProps) {
+export default function SearchBar({ searchQuery, setSearchQuery, searchType }: SearchBarProps) {
   const [inputValue, setInputValue] = useState(searchQuery);
   const theme = useTheme();
+  const placeholderText = `Search by ${searchType || 'name'}`;
 
   // We are debouncing the query to avoid too many updates, it will only be sent after 1 second of inactivity
   const debouncedSetSearchQuery = useRef(
@@ -48,7 +50,7 @@ export default function SearchBar({ searchQuery, setSearchQuery }: SearchBarProp
         style={[styles.input, { color: theme.colors.text.primary }]}
         value={inputValue}
         onChangeText={setInputValue}
-        placeholder="Enter the name of a Pokemon"
+        placeholder={placeholderText}
         placeholderTextColor={theme.colors.text.tertiary}
       />
     </View>
