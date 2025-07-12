@@ -36,7 +36,7 @@ export default function CardScanSuccess({ cards, highlightedCardId }: CardScanSu
             </Text>
           </View>
           <Button
-            title="See more"
+            title="View card details"
             variant="primary"
             onPress={() => router.push(`/card/${highlightedCard.id}`)}
           />
