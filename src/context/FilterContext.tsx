@@ -3,6 +3,7 @@ import { FilterOption, Filters } from '../features/filters/types';
 import { useFilters } from '../features/filters/hooks/queries/useFiltersQuery';
 
 type FilterContextType = {
+  removeAllFilters: () => void;
   filtersOptions: FilterOption;
   selectedFilterOption: FilterOption;
   setSelectedFilterOption?: (option: FilterOption) => void;
@@ -29,6 +30,12 @@ export function FilterProvider({ children }: { children: ReactNode }) {
 
   const { data: filtersOptions } = useFilters();
 
+  const removeAllFilters = () => {
+    setCardFilters([]);
+    setCardSetFilters([]);
+    setSelectedFilterOption({} as FilterOption);
+  };
+
   return (
     <FilterContext.Provider
       value={{
@@ -38,6 +45,7 @@ export function FilterProvider({ children }: { children: ReactNode }) {
         setCardSetFilters,
         selectedFilterOption,
         setSelectedFilterOption,
+        removeAllFilters,
         filtersOptions: filtersOptions || ({} as FilterOption),
       }}
     >
