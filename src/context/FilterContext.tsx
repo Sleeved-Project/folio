@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { FilterOption, Filters } from '../features/filters/types';
 import { useFilters } from '../features/filters/hooks/queries/useFiltersQuery';
 
@@ -10,6 +10,13 @@ type FilterContextType = {
   setCardFilters?: (filters: Filters) => void;
   cardSetFilters?: Filters;
   setCardSetFilters?: (filters: Filters) => void;
+  artistName: string;
+  setArtistName: (name: string) => void;
+  isLoading: boolean;
+  error: Error | null;
+  fetchNextPage?: () => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
 };
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
@@ -23,11 +30,47 @@ export function useFilterContext() {
 export function FilterProvider({ children }: { children: ReactNode }) {
   const [cardFilters, setCardFilters] = useState<Filters>([]);
   const [cardSetFilters, setCardSetFilters] = useState<Filters>([]);
-  const [selectedFilterOption, setSelectedFilterOption] = useState<FilterOption>(
-    {} as FilterOption
-  );
+  const [selectedFilterOption, setSelectedFilterOption] = useState<FilterOption>({});
+  const [artistName, setArtistName] = useState<string>('');
+  const {
+    data: filtersOptionsData,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useFilters(artistName);
 
-  const { data: filtersOptions } = useFilters();
+  const allFilterOptions = filtersOptionsData?.pages.reduce((acc, page) => {
+    const merged = { ...acc };
+
+    // Merge artists with deduplication
+    if (page.artists) {
+      merged.artists = [
+        ...(acc.artists || []),
+        ...page.artists.filter(
+          (newArtist) => !(acc.artists || []).some((a) => a.id === newArtist.id)
+        ),
+      ];
+    }
+
+    // Merge other keys shallowly
+    for (const key in page) {
+      if (key !== 'artists') {
+        merged[key] = page[key];
+      }
+    }
+
+    return merged;
+  }, {} as FilterOption);
+
+  useEffect(() => {
+    if (selectedFilterOption.artists && allFilterOptions?.artists) {
+      setSelectedFilterOption({
+        artists: allFilterOptions.artists,
+      });
+    }
+  }, [filtersOptionsData]);
 
   return (
     <FilterContext.Provider
@@ -38,7 +81,14 @@ export function FilterProvider({ children }: { children: ReactNode }) {
         setCardSetFilters,
         selectedFilterOption,
         setSelectedFilterOption,
-        filtersOptions: filtersOptions || ({} as FilterOption),
+        filtersOptions: allFilterOptions || {},
+        artistName,
+        setArtistName,
+        isLoading,
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
       }}
     >
       {children}

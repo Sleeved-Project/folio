@@ -48,7 +48,7 @@ export default function SearchBar({ searchQuery, setSearchQuery }: SearchBarProp
         style={[styles.input, { color: theme.colors.text.primary }]}
         value={inputValue}
         onChangeText={setInputValue}
-        placeholder="Search"
+        placeholder="Enter the name of a Pokemon"
         placeholderTextColor={theme.colors.text.tertiary}
       />
     </View>
