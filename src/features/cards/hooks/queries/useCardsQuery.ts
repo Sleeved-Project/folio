@@ -21,7 +21,7 @@ export const useCards = (cardName: string, filters?: Filters) => {
       });
 
       if (cardName.trim()) {
-        params.append('name', cardName);
+        params.append('name', cardName.trim());
       }
 
       if (filters) {
