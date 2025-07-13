@@ -22,12 +22,8 @@ export const useCardFolioUpdate = () => {
         occurrence,
       });
     },
-    onSuccess: (response, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: folioCardsKeys.all });
-      showToast({
-        message: `Card added x${variables.occurrence} to your collection!`,
-        type: 'success',
-      });
     },
     onError: (error) => {
       showToast({

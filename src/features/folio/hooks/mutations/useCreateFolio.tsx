@@ -24,12 +24,8 @@ export const useCreateFolio = () => {
     mutationFn: async (payload) => {
       return httpClient.post<CreateFolioResponse>('/folios', payload);
     },
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: foliosKeys.all });
-      showToast({
-        message: `Folio "${variables.name}" created!`,
-        type: 'success',
-      });
     },
     onError: (error) => {
       showToast({

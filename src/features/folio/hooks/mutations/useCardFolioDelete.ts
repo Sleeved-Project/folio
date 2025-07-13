@@ -22,16 +22,11 @@ export const useCardFolioDelete = () => {
     mutationFn: async ({ cardId }) => {
       return httpClient.delete<DeleteCardResponse>(`/folios/cards/${cardId}`);
     },
-    onSuccess: (response) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: folioCardsKeys.all });
       queryClient.invalidateQueries({ queryKey: foliosKeys.all });
       queryClient.invalidateQueries({ queryKey: cardKeys.list('') });
       queryClient.invalidateQueries({ queryKey: setKeys.all });
-
-      showToast({
-        message: response.message || 'Card removed from your collection!',
-        type: 'success',
-      });
     },
     onError: (error) => {
       showToast({
