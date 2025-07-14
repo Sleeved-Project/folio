@@ -11,11 +11,13 @@ import { useAuth } from '../context/AuthContext';
 import { LogOut, Settings } from 'lucide-react-native';
 import AccountSvg from '../../../components/ui/AccountSvg';
 import { useTheme } from '../../../theme/useTheme';
+import { useFilterContext } from '../../../context/FilterContext';
 
 export default function UserMenu() {
   const { logout, user } = useAuth();
   const [menuVisible, setMenuVisible] = useState(false);
   const theme = useTheme();
+  const { removeAllFilters } = useFilterContext();
 
   const handleLogout = async () => {
     Alert.alert('Logout', 'Are you sure you want to log out?', [
@@ -26,6 +28,7 @@ export default function UserMenu() {
         onPress: async () => {
           try {
             setMenuVisible(false);
+            removeAllFilters();
             await logout();
           } catch {
             Alert.alert('Logout Failed', 'There was a problem logging out. Please try again.');

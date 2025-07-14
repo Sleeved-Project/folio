@@ -8,7 +8,6 @@ import { useRouter } from 'expo-router';
 import { ScannerState } from '../types';
 import { getScannerStatusText, isErrorState, isLoadingState } from '../utils/scan-utils';
 import { SCREEN_DIMENSIONS, FRAME_WIDTH, FRAME_HEIGHT } from '../../../constants';
-import { compressImage } from '../utils/image';
 
 export default function CardScanner() {
   const { hasPermission, requestPermission } = useCameraPermission();
@@ -41,11 +40,9 @@ export default function CardScanner() {
           enableShutterSound: false,
         });
 
-        const portraitUri = await compressImage(photo.path);
-
         setScannerState('analyzing');
 
-        scanCard(portraitUri, {
+        scanCard(photo.path, {
           onSuccess: (cards) => {
             if (cards && cards.length > 0) {
               router.push({

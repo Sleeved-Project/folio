@@ -21,11 +21,10 @@ export const useCardFolioCollect = () => {
     mutationFn: async ({ cardId }: CollectPayload) => {
       return httpClient.post('/folios/cards', { cardId });
     },
-    onSuccess: (response) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: folioCardsKeys.all });
       queryClient.invalidateQueries({ queryKey: cardKeys.list('') });
       queryClient.invalidateQueries({ queryKey: setKeys.all });
-      showToast({ message: response.message || 'Card added to your collection!', type: 'success' });
     },
     onError: (error) => {
       showToast({ message: error.message || 'An error occured, please try later', type: 'error' });

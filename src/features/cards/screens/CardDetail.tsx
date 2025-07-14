@@ -20,7 +20,7 @@ import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
 type TabType = 'details' | 'prices';
 
 export default function CardDetail({ cardId }: { cardId: string }) {
-  const [activeTab, setActiveTab] = useState<TabType>('details');
+  const [activeTab, setActiveTab] = useState<TabType>('prices');
   const [previousCardQuantity, setPreviousCardQuantity] = useState<number>(0);
 
   const theme = useTheme();
@@ -51,8 +51,8 @@ export default function CardDetail({ cardId }: { cardId: string }) {
   useRefetchOnFocus(refetchCardDetail);
 
   const tabOptions: TabOption<TabType>[] = [
-    { id: 'details', label: 'Details' },
     { id: 'prices', label: 'Prices' },
+    { id: 'details', label: 'Details' },
   ];
 
   const handleCollectionChange = React.useCallback(

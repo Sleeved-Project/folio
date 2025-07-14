@@ -13,8 +13,9 @@ export const useSets = (cardName: string) => {
   return useInfiniteQuery({
     queryKey: setKeys.list(cardName),
     queryFn: async ({ pageParam = 1 }) => {
+      const trimmedCardName = cardName.trim();
       const response = await httpClient.get<SetsListResponse>(
-        `/sets?page=${pageParam}&limit=30&name=${cardName}`
+        `/sets?page=${pageParam}&limit=30&name=${trimmedCardName}`
       );
 
       const formattedData = response.data.map((set) => mapSetData(set));
