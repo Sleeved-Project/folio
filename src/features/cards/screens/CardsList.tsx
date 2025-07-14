@@ -84,6 +84,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
       <SearchBar
         searchQuery={cardName}
         setSearchQuery={(newName: string) => setCardName(newName)}
+        searchPlaceholder={activeTab === 'cards' ? 'Pokemon' : 'set'}
       />
       {isFiltersVisible && activeTab !== 'sets' && (
         <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.CARD} />
