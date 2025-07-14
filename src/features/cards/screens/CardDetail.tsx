@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useCardDetail } from '../hooks/queries/useCardsQuery';
 import { useCardFolioDelete } from '../../folio/hooks/mutations/useCardFolioDelete';
@@ -21,14 +21,14 @@ type TabType = 'details' | 'prices';
 
 export default function CardDetail({ cardId }: { cardId: string }) {
   const [activeTab, setActiveTab] = useState<TabType>('prices');
+  const [previousCardQuantity, setPreviousCardQuantity] = useState<number>(0);
+
   const theme = useTheme();
+  const scrollRef = useRef<ScrollView>(null);
+
   const { mutate: deleteCardFolio } = useCardFolioDelete();
   const { mutate: collectCard } = useCardFolioCollect();
   const { mutate: updateCardFolio } = useCardFolioUpdate();
-
-  const { toggleDrawer, gestureHandler, drawerAnimatedStyle, cardImageAnimatedStyle } =
-    useDrawerAnimation();
-
   const {
     data: basicCardData,
     isLoading: isLoadingBasic,
@@ -36,11 +36,17 @@ export default function CardDetail({ cardId }: { cardId: string }) {
     refetch: refetchCardDetail,
   } = useCardDetail(cardId as string);
 
-  const [previousCardQuantity, setPreviousCardQuantity] = useState<number>(0);
+  const { toggleDrawer, gestureHandler, drawerAnimatedStyle, cardImageAnimatedStyle } =
+    useDrawerAnimation();
 
   useEffect(() => {
     setPreviousCardQuantity(basicCardData?.occurrence ?? 0);
   }, [cardId, basicCardData?.occurrence]);
+
+  // Reset scroll position when cardId changes
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ y: 0, animated: false });
+  }, [cardId]);
 
   useRefetchOnFocus(refetchCardDetail);
 
@@ -100,7 +106,11 @@ export default function CardDetail({ cardId }: { cardId: string }) {
         onDragHandlePress={toggleDrawer}
         headerComponent={<CardMetaInfo number={basicCardData.number} set={basicCardData.set} />}
       >
-        <ScrollView showsVerticalScrollIndicator={false} style={styles.detailContent}>
+        <ScrollView
+          ref={scrollRef}
+          showsVerticalScrollIndicator={false}
+          style={styles.detailContent}
+        >
           <AddCardButton
             cardId={cardId}
             onQuantityChange={handleCollectionChange}
