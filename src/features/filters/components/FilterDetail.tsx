@@ -8,7 +8,6 @@ import BackButton from '../../../components/ui/BackButton';
 import { Filters, FilterTypeEnum } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SearchBar from '../../../components/ui/SearchBar';
-import { useToaster } from '../../../components/ui/ToasterProvider';
 
 interface FilterDetailProps {
   filterType: FilterTypeEnum;
@@ -16,7 +15,6 @@ interface FilterDetailProps {
 
 export default function FilterDetail({ filterType }: FilterDetailProps) {
   const theme = useTheme();
-  const { showToast } = useToaster();
   const [allFiltersChecked, setAllFiltersChecked] = useState(false);
   const {
     selectedFilterOption,
@@ -187,7 +185,6 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
         <TouchableOpacity
           onPress={() => {
             setFilters?.(tempFilters ?? []);
-            showToast({ message: 'Filters updated successfully', type: 'success' });
           }}
           style={[
             styles.addButton,
