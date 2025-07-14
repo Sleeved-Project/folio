@@ -62,13 +62,6 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
     const existingIndex = currentFilters.findIndex((filter) => {
       return filter.label === label;
     });
-    // If the filter with this label doesn't exist, we add it with all values
-    // if (existingIndex === -1) {
-    //   setFilters([...currentFilters, { label: label, values: values.map((v) => v.id) }]);
-    //   setAllFiltersChecked(true);
-    //   return;
-    // }
-    // If it exists, we remove it
     setAllFiltersChecked(false);
 
     setTempFilters(currentFilters.filter((_, i) => i !== existingIndex));
@@ -170,7 +163,11 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
           </TouchableOpacity>
         </View>
         {label === 'artists' && (
-          <SearchBar searchQuery={artistName} setSearchQuery={setArtistName} searchType="artist" />
+          <SearchBar
+            searchQuery={artistName}
+            setSearchQuery={setArtistName}
+            searchPlaceholder="artist"
+          />
         )}
         <FlatList
           data={values}

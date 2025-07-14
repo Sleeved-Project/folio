@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
 import { PaginatedFilterOption } from '../../types';
-import { mapPaginatedFilterOptiontoFilterOption } from '../../mappers/filterMapper';
+import { mapPaginatedFilterOptionToFilterOption } from '../../mappers/filterMapper';
 
 export const filterKeys = {
   all: ['filter'] as const,
@@ -15,7 +15,7 @@ export const useFilters = (artistName: string) => {
       const response = await httpClient.get<PaginatedFilterOption>(
         `/filters/cards?page=${pageParam}&limit=30&name=${artistName.trim()}`
       );
-      const filterOption = mapPaginatedFilterOptiontoFilterOption(response);
+      const filterOption = mapPaginatedFilterOptionToFilterOption(response);
 
       return filterOption;
     },

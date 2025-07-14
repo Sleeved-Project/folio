@@ -1,6 +1,6 @@
 import { FilterOption, PaginatedFilterOption } from '../types';
 
-export function mapPaginatedFilterOptiontoFilterOption(
+export function mapPaginatedFilterOptionToFilterOption(
   paginatedFilterOption: PaginatedFilterOption
 ): FilterOption {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

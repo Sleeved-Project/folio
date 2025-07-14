@@ -103,7 +103,7 @@ export default function SetDetail({ setId }: { setId: string }) {
       <SearchBar
         searchQuery={cardName}
         setSearchQuery={(newName: string) => setCardName(newName)}
-        searchType="Pokemon"
+        searchPlaceholder="Pokemon"
       />
       {areFiltersVisible && (
         <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.SET} />

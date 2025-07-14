@@ -45,7 +45,7 @@ export function FilterProvider({ children }: { children: ReactNode }) {
   const allFilterOptions = filtersOptionsData?.pages.reduce((acc, page) => {
     const merged = { ...acc };
 
-    // Merge artists with deduplication
+    // If artists exist, merge them with the new page's artists
     if (page.artists) {
       merged.artists = [
         ...(acc.artists || []),
@@ -55,7 +55,7 @@ export function FilterProvider({ children }: { children: ReactNode }) {
       ];
     }
 
-    // Merge other keys shallowly
+    // Merge other keys shallowly as we don't need have pagination for them
     for (const key in page) {
       if (key !== 'artists') {
         merged[key] = page[key];
