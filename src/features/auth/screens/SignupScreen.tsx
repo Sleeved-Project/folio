@@ -1,89 +1,149 @@
-import React, { useState } from 'react';
-import { Alert, Keyboard } from 'react-native';
+import React, { useState, useCallback, useMemo } from 'react';
+import { Alert, SafeAreaView, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-
-import AuthLayout from '../components/AuthLayout';
 import { useAuth } from '../context/AuthContext';
-import { FormTextInput } from '../../../components/ui';
-import { signupSchema, type SignupFormValues } from '../schemas/userSchema';
 import { getErrorMessage } from '../../../lib/errors/errors-utils';
+
+import SignupEmailStep from '../components/steps/SignupEmailStep';
+import SignupPseudoStep from '../components/steps/SignupPseudoStep';
+import SignupPasswordStep from '../components/steps/SignupPasswordStep';
+import { useTheme } from '../../../theme/useTheme';
+
+type EmailStepProps = {
+  onContinue: (email: string) => void;
+  defaultValue: string;
+};
+
+type PseudoStepProps = {
+  onContinue: (pseudo: string) => void;
+  onBack: () => void;
+  defaultValue: string;
+};
+
+type PasswordStepProps = {
+  onSubmit: ({ password }: { password: string }) => Promise<void>;
+  onBack: () => void;
+  isLoading?: boolean;
+};
+
+type StepProps = EmailStepProps | PseudoStepProps | PasswordStepProps;
+
+type StepConfig = {
+  key: string;
+  component: React.ComponentType<StepProps>;
+  getProps: () => StepProps;
+};
 
 const SignupScreen: React.FC = () => {
   const { signup } = useAuth();
+  const [stepIndex, setStepIndex] = useState(0);
+  const [email, setEmail] = useState('');
+  const [pseudo, setPseudo] = useState('');
   const [isLoading, setLoading] = useState(false);
+
+  const theme = useTheme();
   const router = useRouter();
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignupFormValues>({
-    resolver: zodResolver(signupSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-      verifyPassword: '',
+  const nextStep = useCallback(() => {
+    setStepIndex((i) => Math.min(i + 1, steps.length - 1));
+  }, []);
+
+  const prevStep = useCallback(() => {
+    setStepIndex((i) => Math.max(i - 1, 0));
+  }, []);
+
+  const handleEmailContinue = useCallback(
+    (email: string) => {
+      // @TODO: Validate email uniqueness with API call
+      setEmail(email);
+      nextStep();
     },
-  });
+    [nextStep]
+  );
 
-  const onSubmit = async (data: SignupFormValues) => {
-    try {
-      setLoading(true);
-      const result = await signup(data.email, data.password);
+  const handlePseudoContinue = useCallback(
+    (pseudo: string) => {
+      // @TODO: Validate pseudo uniqueness with API call
+      setPseudo(pseudo);
+      nextStep();
+    },
+    [nextStep]
+  );
 
-      if (result && result.requiresVerification) {
-        router.replace({
-          pathname: '/verify-email',
-          params: { email: result.email },
-        });
+  const handlePasswordSubmit = useCallback(
+    async ({ password }: { password: string }) => {
+      try {
+        setLoading(true);
+        const result = await signup(email, password, pseudo);
+        if (result && result.requiresVerification) {
+          router.replace({
+            pathname: '/verify-email',
+            params: { email: result.email },
+          });
+        }
+      } catch (err) {
+        Alert.alert('Signup Failed', getErrorMessage(err));
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error('SignupScreen: Signup failed:', err);
-      Alert.alert('Signup Failed', getErrorMessage(err));
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [signup, email, pseudo, router]
+  );
+
+  const steps: StepConfig[] = useMemo(
+    () => [
+      {
+        key: 'email',
+        component: SignupEmailStep as React.ComponentType<StepProps>,
+        getProps: (): EmailStepProps => ({
+          onContinue: handleEmailContinue,
+          defaultValue: email,
+        }),
+      },
+      {
+        key: 'pseudo',
+        component: SignupPseudoStep as React.ComponentType<StepProps>,
+        getProps: (): PseudoStepProps => ({
+          onContinue: handlePseudoContinue,
+          onBack: prevStep,
+          defaultValue: pseudo,
+        }),
+      },
+      {
+        key: 'password',
+        component: SignupPasswordStep as React.ComponentType<StepProps>,
+        getProps: (): PasswordStepProps => ({
+          onSubmit: handlePasswordSubmit,
+          onBack: prevStep,
+          isLoading,
+        }),
+      },
+    ],
+    [
+      email,
+      pseudo,
+      isLoading,
+      handleEmailContinue,
+      handlePseudoContinue,
+      handlePasswordSubmit,
+      prevStep,
+    ]
+  );
+
+  const StepComponent = steps[stepIndex].component;
+  const stepProps = steps[stepIndex].getProps();
 
   return (
-    <AuthLayout
-      title="Let's get started"
-      buttonTitle="Sign up"
-      isLoading={isLoading}
-      onSubmit={handleSubmit(onSubmit)}
-      redirectType="signin"
-    >
-      <FormTextInput
-        control={control}
-        name="email"
-        label="Email Address"
-        placeholder="Enter your email address"
-        inputType="email"
-        error={errors.email?.message}
-        returnKeyType="next"
-      />
-      <FormTextInput
-        control={control}
-        name="password"
-        label="Password"
-        placeholder="Create a secure password (min. 6 characters)"
-        inputType="password"
-        error={errors.password?.message}
-        returnKeyType="next"
-      />
-      <FormTextInput
-        control={control}
-        name="verifyPassword"
-        label="Confirm Password"
-        placeholder="Re-enter your password to confirm"
-        inputType="password"
-        error={errors.verifyPassword?.message}
-        returnKeyType="done"
-        onSubmitEditing={Keyboard.dismiss}
-      />
-    </AuthLayout>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background.primary }}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <View style={{ flex: 1 }}>
+          <StepComponent {...stepProps} />
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
