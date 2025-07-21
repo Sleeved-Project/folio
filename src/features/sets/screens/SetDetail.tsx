@@ -50,7 +50,7 @@ export default function SetDetail({ setId }: { setId: string }) {
     });
   };
 
-  const areFiltersVisible = true;
+  const areFiltersVisible = false;
 
   return (
     <View
