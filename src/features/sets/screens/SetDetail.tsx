@@ -50,8 +50,6 @@ export default function SetDetail({ setId }: { setId: string }) {
     });
   };
 
-  const areFiltersVisible = false;
-
   return (
     <View
       style={[
@@ -105,9 +103,7 @@ export default function SetDetail({ setId }: { setId: string }) {
         setSearchQuery={(newName: string) => setCardName(newName)}
         searchPlaceholder="Pokemon"
       />
-      {areFiltersVisible && (
-        <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.SET} />
-      )}
+      <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.SET} />
       <CardListDisplay
         cards={cards}
         hasNextPage={hasNextCardsPage}
