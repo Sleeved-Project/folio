@@ -11,16 +11,19 @@ export type FilterGroup = {
 }[];
 
 export type PaginatedFilterOption = {
-  meta: {
-    total: number;
-    perPage: number;
-    currentPage: number;
-    lastPage: number;
-    firstPage: number;
-    firstPageUrl: string;
-    lastPageUrl: string;
-    nextPageUrl: string | null;
-    previousPageUrl: string | null;
+  paginatedArtists: {
+    data: FilterGroup;
+    meta: {
+      total: number;
+      perPage: number;
+      currentPage: number;
+      lastPage: number;
+      firstPage: number;
+      firstPageUrl: string;
+      lastPageUrl: string;
+      nextPageUrl: string | null;
+      previousPageUrl: string | null;
+    };
   };
 } & {
   [key: string]: FilterGroup;
