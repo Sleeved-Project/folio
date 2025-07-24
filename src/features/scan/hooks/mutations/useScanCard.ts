@@ -10,7 +10,7 @@ export const useScanCard = () => {
       const formData = new FormData();
 
       const fileData: FormDataFile = {
-        uri: `file://${photoPath}`,
+        uri: photoPath,
         type: 'image/jpeg',
         name: 'card_photo.jpg',
       };

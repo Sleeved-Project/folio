@@ -45,11 +45,11 @@
         }
       ],
       [
-        "react-native-vision-camera",
+        "expo-camera",
         {
-          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera.",
-          "enableMicrophonePermission": true,
-          "microphonePermissionText": "$(PRODUCT_NAME) needs access to your Microphone."
+          "cameraPermission": "Allow Sleeved to access your camera",
+          "microphonePermission": "Allow Sleeved to access your microphone",
+          "recordAudioAndroid": true
         }
       ],
       "expo-asset"
