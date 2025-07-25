@@ -47,9 +47,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow Sleeved to access your camera",
-          "microphonePermission": "Allow Sleeved to access your microphone",
-          "recordAudioAndroid": true
+          "cameraPermission": "Allow Sleeved to access your camera"
         }
       ],
       "expo-asset"
