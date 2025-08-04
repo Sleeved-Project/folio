@@ -24,7 +24,6 @@
     "expo-asset": "~11.1.5",
     "expo-camera": "~16.1.11",
     "expo-constants": "~17.1.6",
-    "expo-dev-client": "~5.2.0",
     "expo-linear-gradient": "~14.1.5",
     "expo-linking": "~7.1.5",
     "expo-router": "~5.0.7",
