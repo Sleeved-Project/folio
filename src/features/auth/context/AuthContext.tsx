@@ -99,6 +99,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsAuthenticated(false);
       } finally {
         setInitialLoadComplete(true);
+        // Hide splash screen once auth verification is complete
+        SplashScreen.hideAsync().catch(() => {
+          console.error('SplashScreen.hideAsync() failed');
+        });
       }
     };
 
