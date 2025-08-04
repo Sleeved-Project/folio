@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { getErrorMessage } from '../../../lib/errors/errors-utils';
 
 import SignupEmailStep from '../components/steps/SignupEmailStep';
-import SignupPseudoStep from '../components/steps/SignupPseudoStep';
+import SignupUsernameStep from '../components/steps/SignupUsernameStep';
 import SignupPasswordStep from '../components/steps/SignupPasswordStep';
 import { useTheme } from '../../../theme/useTheme';
 
@@ -14,8 +14,8 @@ type EmailStepProps = {
   defaultValue: string;
 };
 
-type PseudoStepProps = {
-  onContinue: (pseudo: string) => void;
+type UsernameStepProps = {
+  onContinue: (username: string) => void;
   onBack: () => void;
   defaultValue: string;
 };
@@ -26,7 +26,7 @@ type PasswordStepProps = {
   isLoading?: boolean;
 };
 
-type StepProps = EmailStepProps | PseudoStepProps | PasswordStepProps;
+type StepProps = EmailStepProps | UsernameStepProps | PasswordStepProps;
 
 type StepConfig = {
   key: string;
@@ -38,7 +38,7 @@ const SignupScreen: React.FC = () => {
   const { signup } = useAuth();
   const [stepIndex, setStepIndex] = useState(0);
   const [email, setEmail] = useState('');
-  const [pseudo, setPseudo] = useState('');
+  const [username, setUsername] = useState('');
   const [isLoading, setLoading] = useState(false);
 
   const theme = useTheme();
@@ -61,10 +61,10 @@ const SignupScreen: React.FC = () => {
     [nextStep]
   );
 
-  const handlePseudoContinue = useCallback(
-    (pseudo: string) => {
-      // @TODO: Validate pseudo uniqueness with API call
-      setPseudo(pseudo);
+  const handleUsernameContinue = useCallback(
+    (username: string) => {
+      // @TODO: Validate username uniqueness with API call
+      setUsername(username);
       nextStep();
     },
     [nextStep]
@@ -74,7 +74,7 @@ const SignupScreen: React.FC = () => {
     async ({ password }: { password: string }) => {
       try {
         setLoading(true);
-        const result = await signup(email, password, pseudo);
+        const result = await signup(email, password, username);
         if (result && result.requiresVerification) {
           router.replace({
             pathname: '/verify-email',
@@ -87,7 +87,7 @@ const SignupScreen: React.FC = () => {
         setLoading(false);
       }
     },
-    [signup, email, pseudo, router]
+    [signup, email, username, router]
   );
 
   const steps: StepConfig[] = useMemo(
@@ -101,12 +101,12 @@ const SignupScreen: React.FC = () => {
         }),
       },
       {
-        key: 'pseudo',
-        component: SignupPseudoStep as React.ComponentType<StepProps>,
-        getProps: (): PseudoStepProps => ({
-          onContinue: handlePseudoContinue,
+        key: 'username',
+        component: SignupUsernameStep as React.ComponentType<StepProps>,
+        getProps: (): UsernameStepProps => ({
+          onContinue: handleUsernameContinue,
           onBack: prevStep,
-          defaultValue: pseudo,
+          defaultValue: username,
         }),
       },
       {
@@ -121,10 +121,10 @@ const SignupScreen: React.FC = () => {
     ],
     [
       email,
-      pseudo,
+      username,
       isLoading,
       handleEmailContinue,
-      handlePseudoContinue,
+      handleUsernameContinue,
       handlePasswordSubmit,
       prevStep,
     ]
