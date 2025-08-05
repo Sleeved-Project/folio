@@ -1,8 +1,7 @@
 export interface User {
   id: string;
   email: string;
-  name?: string;
-  fullName?: string;
+  username?: string;
   isVerified: number;
 }
 
@@ -18,7 +17,7 @@ export interface AuthResponse {
 export interface SignupPayload {
   email: string;
   password: string;
-  name?: string;
+  username?: string;
 }
 
 export interface SigninPayload {

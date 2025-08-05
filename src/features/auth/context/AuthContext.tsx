@@ -42,7 +42,7 @@ interface AuthContextType {
   needsVerification: boolean;
 
   // Authentication methods
-  signup: (email: string, password: string, name?: string) => Promise<SignupResult>;
+  signup: (email: string, password: string, username?: string) => Promise<SignupResult>;
   signin: (email: string, password: string) => Promise<SigninResult>;
   logout: () => Promise<void>;
 
@@ -147,12 +147,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * Register a new user
    * @param email User's email
    * @param password User's password
-   * @param name Optional user's name
+   * @param username Optional user's username
    * @returns Promise with registration result
    */
-  const signup = async (email: string, password: string, name?: string) => {
+  const signup = async (email: string, password: string, username?: string) => {
     try {
-      const response = await signupMutation({ email, password, name });
+      const response = await signupMutation({ email, password, username });
 
       if (response.requiresVerification) {
         setPendingVerificationEmail(email);

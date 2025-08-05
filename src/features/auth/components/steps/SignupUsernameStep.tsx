@@ -1,16 +1,16 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signupPseudoSchema, type SignupPseudoFormValues } from '../../schemas/userSchema';
+import { signupUsernameSchema, type SignupUsernameFormValues } from '../../schemas/userSchema';
 import { FormTextInput } from '../../../../components/ui';
 import { AuthStepLayout } from './AuthStepLayout';
 
-export default function SignupPseudoStep({
+export default function SignupUsernameStep({
   onContinue,
   onBack,
   defaultValue,
 }: {
-  onContinue: (pseudo: string) => void;
+  onContinue: (username: string) => void;
   onBack: () => void;
   defaultValue: string;
 }) {
@@ -18,27 +18,27 @@ export default function SignupPseudoStep({
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<SignupPseudoFormValues>({
-    resolver: zodResolver(signupPseudoSchema),
-    defaultValues: { pseudo: defaultValue },
+  } = useForm<SignupUsernameFormValues>({
+    resolver: zodResolver(signupUsernameSchema),
+    defaultValues: { username: defaultValue },
     mode: 'onSubmit',
   });
 
   return (
     <AuthStepLayout
       title="Choose a username"
-      subtitle="This will be your public name on Sleeved."
+      subtitle="This will be your public username on Sleeved."
       onBack={onBack}
       buttonText="Continue"
-      onButtonPress={handleSubmit((data) => onContinue(data.pseudo))}
+      onButtonPress={handleSubmit((data) => onContinue(data.username))}
       buttonDisabled={isSubmitting}
       buttonLoading={isSubmitting}
     >
       <FormTextInput
         control={control}
-        name="pseudo"
+        name="username"
         placeholder="Enter your username"
-        error={errors.pseudo?.message}
+        error={errors.username?.message}
         returnKeyType="done"
         containerStyle={{ marginBottom: 24, width: '100%' }}
       />

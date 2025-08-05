@@ -17,8 +17,8 @@ export const signupPasswordSchema = z.object({
   password: passwordField,
 });
 
-export const signupPseudoSchema = z.object({
-  pseudo: z
+export const signupUsernameSchema = z.object({
+  username: z
     .string()
     .min(3, 'Username must be at least 3 characters')
     .max(20, 'Username must be at most 20 characters')
@@ -27,7 +27,7 @@ export const signupPseudoSchema = z.object({
 
 export type SignupEmailFormValues = z.infer<typeof signupEmailSchema>;
 export type SignupPasswordFormValues = z.infer<typeof signupPasswordSchema>;
-export type SignupPseudoFormValues = z.infer<typeof signupPseudoSchema>;
+export type SignupUsernameFormValues = z.infer<typeof signupUsernameSchema>;
 
 export const signinSchema = z.object({
   email: z.string().email('Invalid email').min(1, 'Email is required'),
