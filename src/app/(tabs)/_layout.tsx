@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import TabHeader from '../../components/ui/TabHeader';
-import { FocusIcon, LayoutGridIcon, WalletIcon, StoreIcon, UserIcon } from 'lucide-react-native';
+import { Focus, List, Wallet } from 'lucide-react-native';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 import { useRouter } from 'expo-router';
@@ -22,23 +22,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'Cards',
+          headerTitle: () => <TabHeader displayBackButton={false} />,
           tabBarIcon: ({ focused }) => (
-            <StoreIcon
-              color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
-              size={24}
-            />
-          ),
-          tabBarActiveTintColor: theme.colors.text.primary,
-          tabBarInactiveTintColor: theme.colors.text.tertiary,
-        }}
-      />
-      <Tabs.Screen
-        name="explorer"
-        options={{
-          title: 'Explorer',
-          tabBarIcon: ({ focused }) => (
-            <LayoutGridIcon
+            <List
               color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
               size={24}
             />
@@ -68,7 +55,7 @@ export default function TabLayout() {
                     },
                   ]}
                 >
-                  <FocusIcon color={theme.colors.primary} size={32} />
+                  <Focus color={theme.colors.primary} size={32} />
                 </View>
               </TouchableOpacity>
             );
@@ -78,23 +65,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="folios"
         options={{
-          title: 'Collection',
+          title: 'My collection',
+          headerTitle: () => <TabHeader title="My collection" />,
           tabBarIcon: ({ focused }) => (
-            <WalletIcon
-              color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
-              size={24}
-            />
-          ),
-          tabBarActiveTintColor: theme.colors.text.primary,
-          tabBarInactiveTintColor: theme.colors.text.tertiary,
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: 'Profile',
-          tabBarIcon: ({ focused }) => (
-            <UserIcon
+            <Wallet
               color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
               size={24}
             />
@@ -107,15 +81,14 @@ export default function TabLayout() {
         name="card/[cardId]"
         options={{
           href: null,
-          headerTitle: () => <TabHeader title="Card details" displayBackButton={true} />,
+          headerTitle: () => <TabHeader displayBackButton={true} />,
         }}
       />
-
       <Tabs.Screen
         name="set/[setId]"
         options={{
           href: null,
-          headerTitle: () => <TabHeader title="Set details" displayBackButton={true} />,
+          headerTitle: () => <TabHeader displayBackButton={true} />,
         }}
       />
     </Tabs>

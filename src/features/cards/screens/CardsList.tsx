@@ -21,7 +21,7 @@ interface CardsListProps {
 
 export default function CardsList({ isFiltersVisible = false }: CardsListProps) {
   const [cardName, setCardName] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<TabType>('sets');
+  const [activeTab, setActiveTab] = useState<TabType>('cards');
   const theme = useTheme();
   const { cardFilters, filtersOptions, setSelectedFilterOption } = useFilterContext();
 
