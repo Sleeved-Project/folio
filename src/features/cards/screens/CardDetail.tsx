@@ -16,6 +16,8 @@ import { useTheme } from '../../../theme/useTheme';
 import AddCardButton from '../components/AddCardButton';
 import { useCardFolioCollect } from '../../folio/hooks/mutations/useCardFolioCollect';
 import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
+import CardAvailableOffers from '../components/CardAvailableOffers';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type TabType = 'details' | 'prices';
 
@@ -25,6 +27,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
 
   const theme = useTheme();
   const scrollRef = useRef<ScrollView>(null);
+  const insets = useSafeAreaInsets();
 
   const { mutate: deleteCardFolio } = useCardFolioDelete();
   const { mutate: collectCard } = useCardFolioCollect();
@@ -109,7 +112,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
         <ScrollView
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
-          style={styles.detailContent}
+          style={[styles.detailContent, { paddingBottom: insets.bottom }]}
         >
           <AddCardButton
             cardId={cardId}
@@ -126,7 +129,10 @@ export default function CardDetail({ cardId }: { cardId: string }) {
           {activeTab === 'details' ? (
             <CardDetailedInfo cardId={cardId} />
           ) : (
-            <CardPricesInfo cardId={cardId} />
+            <>
+              <CardPricesInfo cardId={cardId} />
+              <CardAvailableOffers cardId={cardId} />
+            </>
           )}
         </ScrollView>
       </AnimatedDrawer>

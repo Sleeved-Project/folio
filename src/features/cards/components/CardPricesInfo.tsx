@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, Linking, ScrollView } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DollarSign, Loader } from 'lucide-react-native';
 import { useCardPrices } from '../hooks/queries/useCardPrices';
 import Accordion from '../../../components/ui/Accordion';
@@ -14,7 +13,6 @@ interface CardPricesInfoProps {
 
 export default function CardPricesInfo({ cardId }: CardPricesInfoProps) {
   const { data: priceData, isLoading, error } = useCardPrices(cardId);
-  const insets = useSafeAreaInsets();
 
   // Loading state
   if (isLoading) {
@@ -53,14 +51,7 @@ export default function CardPricesInfo({ cardId }: CardPricesInfoProps) {
   };
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={[
-        styles.contentContainer,
-        { paddingBottom: Math.max(16, insets.bottom) },
-      ]}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {priceData.markets.map((market, marketIndex) => (
         <Accordion
           key={`market-${marketIndex}`}
@@ -83,7 +74,7 @@ export default function CardPricesInfo({ cardId }: CardPricesInfoProps) {
       ))}
       <DisclaimerBox
         text="Prices are for informational purposes only and may vary. Last updated today."
-        containerStyle={{ marginTop: 12 }}
+        containerStyle={{ marginBottom: 12 }}
       />
     </ScrollView>
   );
@@ -93,9 +84,6 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     flex: 1,
-  },
-  contentContainer: {
-    paddingBottom: 16,
   },
   placeholderContainer: {
     justifyContent: 'center',
