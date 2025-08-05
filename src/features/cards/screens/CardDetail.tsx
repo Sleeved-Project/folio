@@ -112,7 +112,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
         <ScrollView
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
-          style={styles.detailContent}
+          style={[styles.detailContent, { paddingBottom: insets.bottom }]}
         >
           <AddCardButton
             cardId={cardId}
@@ -129,10 +129,10 @@ export default function CardDetail({ cardId }: { cardId: string }) {
           {activeTab === 'details' ? (
             <CardDetailedInfo cardId={cardId} />
           ) : (
-            <View style={{ paddingBottom: Math.max(16, insets.bottom) }}>
+            <>
               <CardPricesInfo cardId={cardId} />
               <CardAvailableOffers cardId={cardId} />
-            </View>
+            </>
           )}
         </ScrollView>
       </AnimatedDrawer>

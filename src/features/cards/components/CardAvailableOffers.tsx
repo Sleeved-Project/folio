@@ -1,9 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, ScrollView } from 'react-native';
-import { DollarSign, View } from 'lucide-react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { DollarSign } from 'lucide-react-native';
 import { useTheme } from '../../../theme/useTheme';
 import CardAvailableOfferItem from './CardAvailableOfferItem';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface CardAvailableOffersProps {
   cardId: string;
@@ -11,11 +10,9 @@ interface CardAvailableOffersProps {
 
 export default function CardAvailableOffers({ cardId }: CardAvailableOffersProps) {
   const theme = useTheme();
-  const insets = useSafeAreaInsets();
-
-  console.log('CardAvailableOffers rendered for cardId:', cardId);
 
   // TODODELETE : Mock data for available offers
+  console.log('CardAvailableOffers rendered for cardId:', cardId);
   const availableOffers = [
     {
       id: 0,
@@ -35,31 +32,47 @@ export default function CardAvailableOffers({ cardId }: CardAvailableOffersProps
     },
   ];
 
-  const styles = StyleSheet.create({
-    placeholderContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: theme.spacing?.md || 16,
-    },
-    placeholderText: {
-      color: theme.colors?.text?.secondary || '#666',
-      fontSize: theme.typography?.fontSizes?.sm || 14,
-      marginTop: theme.spacing?.sm || 8,
-    },
-    title: {
-      fontWeight: theme.typography?.fontWeights?.bold || 'bold',
-      fontSize: theme.typography?.fontSizes?.md || 16,
-      marginBottom: 4,
-      color: theme.colors?.text?.primary || '#000',
-    },
-  });
-
   if (availableOffers.length === 0) {
     return (
-      <View style={styles.placeholderContainer}>
-        <DollarSign size={24} color={theme.colors?.text?.secondary || '#999'} />
-        <Text style={styles.placeholderText}>No available offers for this card</Text>
+      <View
+        style={{
+          marginTop: theme.spacing?.sm || 12,
+          marginBottom: theme.spacing?.lg || 24,
+        }}
+      >
+        <Text
+          style={{
+            fontWeight: theme.typography?.fontWeights?.bold || 'bold',
+            fontSize: theme.typography?.fontSizes?.md || 16,
+            marginBottom: 4,
+            color: theme.colors?.text?.primary || '#000',
+          }}
+        >
+          Available Offers
+        </Text>
+        <View
+          style={[
+            styles.placeholderContainer,
+            {
+              padding: theme.spacing?.md || 16,
+              backgroundColor: theme.colors?.background?.secondary || '#f9f9f9',
+              borderRadius: theme.borderRadius?.small || 10,
+              marginTop: theme.spacing?.sm || 12,
+              marginBottom: theme.spacing?.lg || 24,
+            },
+          ]}
+        >
+          <DollarSign size={24} color={theme.colors?.text?.secondary || '#999'} />
+          <Text
+            style={{
+              color: theme.colors?.text?.secondary || '#666',
+              fontSize: theme.typography?.fontSizes?.sm || 14,
+              marginTop: theme.spacing?.sm || 8,
+            }}
+          >
+            No available offers for this card
+          </Text>
+        </View>
       </View>
     );
   }
@@ -67,25 +80,49 @@ export default function CardAvailableOffers({ cardId }: CardAvailableOffersProps
   // TODOCREATE : Add isLoading and error check after future hook integration
 
   return (
-    <ScrollView
-      contentContainerStyle={[{ paddingTop: 16, paddingBottom: Math.max(16, insets.bottom) }]}
-      showsVerticalScrollIndicator={false}
+    <View
+      style={{
+        marginTop: theme.spacing?.sm || 12,
+        marginBottom: theme.spacing?.lg || 24,
+      }}
     >
       <Text
-        style={{
-          fontWeight: theme.typography.fontWeights.bold,
-          fontSize: theme.typography.fontSizes.md,
-          marginBottom: 4,
-        }}
+        style={[
+          styles.title,
+          {
+            fontWeight: theme.typography?.fontWeights?.bold || 'bold',
+            fontSize: theme.typography?.fontSizes?.md || 16,
+            marginBottom: 4,
+            color: theme.colors?.text?.primary || '#000',
+          },
+        ]}
       >
         Available Offers
       </Text>
-      <Text style={{ color: theme.colors.text.secondary, marginBottom: 12 }}>
+      <Text
+        style={[
+          styles.subtitle,
+          { color: theme.colors?.text?.secondary || '#666', marginBottom: 12 },
+        ]}
+      >
         {availableOffers.length} offers found
       </Text>
-      {availableOffers.map((offer) => (
-        <CardAvailableOfferItem key={offer.id} {...offer} />
+      {availableOffers.map((item) => (
+        <CardAvailableOfferItem key={item.id} {...item} />
       ))}
-    </ScrollView>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  placeholderContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    marginBottom: 4,
+  },
+  subtitle: {
+    marginBottom: 12,
+  },
+});
