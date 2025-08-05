@@ -7,7 +7,7 @@ export default function Index() {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
-        <Text>Marketplace</Text>
+        <Text>Profile</Text>
       </View>
     </View>
   );
