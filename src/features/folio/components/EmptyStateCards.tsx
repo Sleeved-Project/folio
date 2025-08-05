@@ -33,7 +33,7 @@ export default function EmptyStateCards() {
       <Button
         title="See all cards"
         variant="primary"
-        onPress={() => router.push('/(tabs)')}
+        onPress={() => router.push('/(tabs)/explorer')}
         buttonStyle={styles.button}
       />
     </View>

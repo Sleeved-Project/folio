@@ -4,7 +4,7 @@ import { AuthResponse } from '../../types';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
 import { authUtils } from '../../utils/auth-utils';
-import { useInitFolio } from '../../../folio/hooks/mutations/useInitFolio';
+import { useInitUser } from '../../../user/hooks/mutations/useInitUser';
 
 interface VerifyEmailPayload {
   email: string;
@@ -14,7 +14,7 @@ interface VerifyEmailPayload {
 export const useVerifyEmailCode = () => {
   const router = useRouter();
   const { setIsAuthenticated, setPendingVerificationEmail } = useAuth();
-  const { mutateAsync: initFolio } = useInitFolio();
+  const { mutateAsync: initUser } = useInitUser();
 
   return useMutation({
     mutationFn: async ({ email, code }: VerifyEmailPayload) => {
@@ -35,9 +35,9 @@ export const useVerifyEmailCode = () => {
       setPendingVerificationEmail(null);
 
       try {
-        await initFolio();
+        await initUser();
       } catch (error) {
-        console.error('Failed to initialize folio:', error);
+        console.error('Failed to initialize user:', error);
       }
 
       router.replace('/');
