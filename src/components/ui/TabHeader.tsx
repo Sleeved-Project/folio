@@ -1,6 +1,5 @@
 import { Text, StyleSheet, View } from 'react-native';
 import BackButton from './BackButton';
-import UserMenu from '../../features/auth/components/UserMenu';
 import { useTheme } from '../../theme/useTheme';
 
 interface TabHeaderProps {
@@ -14,25 +13,22 @@ export default function TabHeader({ title, displayBackButton }: TabHeaderProps) 
   return (
     <View style={styles.container}>
       <View style={styles.side}>{displayBackButton && <BackButton />}</View>
-      <View style={styles.center}>
-        {title && (
-          <Text
-            style={[
-              styles.text,
-              {
-                color: theme.colors.text.primary,
-                backgroundColor: theme.colors.background.primary,
-                fontSize: theme.typography.fontSizes.lg,
-              },
-            ]}
-          >
-            {title}
-          </Text>
-        )}
-      </View>
-      <View style={styles.side}>
-        <UserMenu />
-      </View>
+      {title && (
+        <Text
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          style={[
+            styles.text,
+            {
+              color: theme.colors.text.primary,
+              fontSize: theme.typography.fontSizes.lg,
+            },
+          ]}
+        >
+          {title}
+        </Text>
+      )}
+      <View style={styles.side} />
     </View>
   );
 }
@@ -43,18 +39,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    height: 44,
+    position: 'relative',
   },
   text: {
-    alignSelf: 'center',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    width: '100%',
+    zIndex: 0,
+    paddingHorizontal: 50,
+    fontWeight: '500',
   },
   side: {
     width: 50,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  center: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    zIndex: 1,
   },
 });

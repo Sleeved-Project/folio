@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
+import CardsList from '../../features/cards/screens/CardsList';
 
 export default function Explorer() {
   const theme = useTheme();
@@ -7,7 +8,7 @@ export default function Explorer() {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
-        <Text>Marketplace</Text>
+        <CardsList isFiltersVisible={true} />
       </View>
     </View>
   );
