@@ -3,8 +3,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import StepOne from '../components/steps/StepOne';
 import StepTwo from '../components/steps/StepTwo';
 import ReviewStep from '../components/steps/Review';
-import Stepper from '../components/steps/Stepper';
-import { reducer, initialState } from '../reducer/useSellFormReducer';
+import { Stepper } from '../../../components/ui/stepper';
+import { reducer, initialState, steps } from '../reducer/useSellFormReducer';
 
 export default function MultiStepForm() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -25,7 +25,7 @@ export default function MultiStepForm() {
 
   return (
     <SafeAreaView style={{ padding: 20 }}>
-      <Stepper currentStep={stepIndex} />
+      <Stepper currentStep={stepIndex} steps={steps} />
       {renderStep()}
     </SafeAreaView>
   );

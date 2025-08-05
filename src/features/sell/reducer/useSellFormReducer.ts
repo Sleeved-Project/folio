@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
 import { SellFormAction, SellFormState } from '../types';
 
-export const steps = ['Informations', 'Choix', 'Vérification'];
+export const steps = ['Photos', 'Card', 'Price', 'Grade', 'Review'];
 
 export const initialState: SellFormState = {
   stepIndex: 0,
