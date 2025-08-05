@@ -36,16 +36,16 @@ export default function CardAvailableOffers({ cardId }: CardAvailableOffersProps
     return (
       <View
         style={{
-          marginTop: theme.spacing?.sm || 12,
-          marginBottom: theme.spacing?.lg || 24,
+          marginTop: theme.spacing.sm,
+          marginBottom: theme.spacing.lg,
         }}
       >
         <Text
           style={{
-            fontWeight: theme.typography?.fontWeights?.bold || 'bold',
-            fontSize: theme.typography?.fontSizes?.md || 16,
+            fontWeight: theme.typography.fontWeights.bold,
+            fontSize: theme.typography.fontSizes.md,
             marginBottom: 4,
-            color: theme.colors?.text?.primary || '#000',
+            color: theme.colors.text.primary,
           }}
         >
           Available Offers
@@ -54,20 +54,20 @@ export default function CardAvailableOffers({ cardId }: CardAvailableOffersProps
           style={[
             styles.placeholderContainer,
             {
-              padding: theme.spacing?.md || 16,
-              backgroundColor: theme.colors?.background?.secondary || '#f9f9f9',
-              borderRadius: theme.borderRadius?.small || 10,
-              marginTop: theme.spacing?.sm || 12,
-              marginBottom: theme.spacing?.lg || 24,
+              padding: theme.spacing.md,
+              backgroundColor: theme.colors.background.secondary,
+              borderRadius: theme.borderRadius.small,
+              marginTop: theme.spacing.sm,
+              marginBottom: theme.spacing.lg,
             },
           ]}
         >
-          <DollarSign size={24} color={theme.colors?.text?.secondary || '#999'} />
+          <DollarSign size={24} color={theme.colors.text.secondary} />
           <Text
             style={{
-              color: theme.colors?.text?.secondary || '#666',
-              fontSize: theme.typography?.fontSizes?.sm || 14,
-              marginTop: theme.spacing?.sm || 8,
+              color: theme.colors.text.secondary,
+              fontSize: theme.typography.fontSizes.sm,
+              marginTop: theme.spacing.sm,
             }}
           >
             No available offers for this card
@@ -82,29 +82,24 @@ export default function CardAvailableOffers({ cardId }: CardAvailableOffersProps
   return (
     <View
       style={{
-        marginTop: theme.spacing?.sm || 12,
-        marginBottom: theme.spacing?.lg || 24,
+        marginTop: theme.spacing.sm,
+        marginBottom: theme.spacing.lg,
       }}
     >
       <Text
         style={[
           styles.title,
           {
-            fontWeight: theme.typography?.fontWeights?.bold || 'bold',
-            fontSize: theme.typography?.fontSizes?.md || 16,
+            fontWeight: theme.typography.fontWeights.bold,
+            fontSize: theme.typography.fontSizes.md,
             marginBottom: 4,
-            color: theme.colors?.text?.primary || '#000',
+            color: theme.colors.text.primary,
           },
         ]}
       >
         Available Offers
       </Text>
-      <Text
-        style={[
-          styles.subtitle,
-          { color: theme.colors?.text?.secondary || '#666', marginBottom: 12 },
-        ]}
-      >
+      <Text style={[styles.subtitle, { color: theme.colors.text.secondary, marginBottom: 12 }]}>
         {availableOffers.length} offers found
       </Text>
       {availableOffers.map((item) => (
