@@ -3,33 +3,47 @@ import { useMemo } from 'react';
 import { useTheme } from '../../../../theme/useTheme';
 
 interface ProfilePictureProps {
-  firstname: string;
-  lastname: string;
-  profilePictureUrl?: string;
+  username: string;
+  uri: string | null;
+  size?: 'small' | 'medium' | 'large';
 }
 
-export default function ProfilePicture({
-  firstname,
-  lastname,
-  profilePictureUrl,
-}: ProfilePictureProps) {
+const sizeMap = {
+  small: 40,
+  medium: 60,
+  large: 100,
+};
+
+export default function ProfilePicture({ username, uri, size = 'medium' }: ProfilePictureProps) {
   const theme = useTheme();
   const initials = useMemo(() => {
-    return `${firstname[0] ?? ''}${lastname[0] ?? ''}`.toUpperCase();
-  }, [firstname, lastname]);
+    return `${username[0] ?? ''}${username[1] ?? ''}`.toUpperCase();
+  }, [username]);
+
+  const dimension = sizeMap[size];
 
   return (
     <View
       style={[
         styles.container,
         {
+          width: dimension,
+          height: dimension,
+          borderRadius: dimension / 2,
           backgroundColor: theme.colors.background.secondary,
           borderColor: theme.colors.border.light,
         },
       ]}
     >
-      {profilePictureUrl ? (
-        <Image source={{ uri: profilePictureUrl }} style={styles.image} resizeMode="cover" />
+      {uri ? (
+        <Image
+          source={{ uri }}
+          style={[
+            styles.image,
+            { width: dimension, height: dimension, borderRadius: dimension / 2 },
+          ]}
+          resizeMode="cover"
+        />
       ) : (
         <View
           style={[
@@ -43,7 +57,7 @@ export default function ProfilePicture({
             style={[
               {
                 color: theme.colors.text.black,
-                fontSize: theme.typography.fontSizes.xxl,
+                fontSize: dimension / 2.5, // Ajuste la taille des initiales
                 fontWeight: theme.typography.fontWeights.bold,
               },
             ]}
@@ -58,9 +72,6 @@ export default function ProfilePicture({
 
 const styles = StyleSheet.create({
   container: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
     overflow: 'hidden',
     borderWidth: 2,
     justifyContent: 'center',
@@ -69,7 +80,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: 50,
   },
   placeholder: {
     width: '100%',

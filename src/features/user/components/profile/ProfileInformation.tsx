@@ -8,7 +8,7 @@ interface ProfileInformationProps {
   firstname: string;
   lastname: string;
   username: string;
-  profilePictureUrl?: string;
+  profilePictureUrl: string | null;
   rating?: number;
   ratingCount?: number;
   isUserProfile?: boolean;
@@ -27,11 +27,7 @@ export default function ProfileInformation({
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      <ProfilePicture
-        firstname={firstname}
-        lastname={lastname}
-        profilePictureUrl={profilePictureUrl}
-      />
+      <ProfilePicture username={username} uri={profilePictureUrl} size="large" />
       <Text
         style={[
           styles.name,

@@ -9,7 +9,7 @@ const userData = {
   firstname: 'John',
   lastname: 'Doe',
   username: 'superpoke22',
-  profilePictureUrl: undefined,
+  profilePictureUrl: null,
   rating: 5,
   ratingCount: 10,
 };
