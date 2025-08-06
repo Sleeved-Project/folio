@@ -21,6 +21,7 @@ export default function SearchBar({
   const theme = useTheme();
   const placeholderText = `Search by ${searchPlaceholder}`;
 
+  // We are debouncing the query to avoid too many updates, it will only be sent after 1 second of inactivity
   const debouncedSetSearchQuery = useRef(
     debounce((query: string) => setSearchQuery(query), 1000)
   ).current;
