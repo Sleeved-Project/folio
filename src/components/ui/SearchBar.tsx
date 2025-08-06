@@ -56,6 +56,7 @@ export default function SearchBar({
           borderRadius: theme.borderRadius.round,
           marginTop: theme.spacing.sm,
           marginBottom: theme.spacing.lg,
+          height: 50,
         },
       ]}
     >
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 24,
-    padding: 0, // Reset default padding
+    padding: 0,
   },
   clearButton: {
     padding: 4,
