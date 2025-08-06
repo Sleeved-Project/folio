@@ -5,6 +5,7 @@ import StepTwo from '../components/steps/StepTwo';
 import ReviewStep from '../components/steps/Review';
 import { Stepper } from '../../../components/ui/stepper';
 import { reducer, initialState, steps } from '../reducer/useSellFormReducer';
+import { StyleSheet } from 'react-native';
 
 export default function MultiStepForm() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -24,9 +25,16 @@ export default function MultiStepForm() {
   };
 
   return (
-    <SafeAreaView style={{ padding: 20 }}>
+    <SafeAreaView style={styles.container}>
       <Stepper currentStep={stepIndex} steps={steps} />
       {renderStep()}
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+});

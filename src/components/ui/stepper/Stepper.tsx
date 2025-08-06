@@ -35,7 +35,10 @@ export default function Stepper({ steps, currentStep }: StepperProps) {
 }
 
 const styles = StyleSheet.create({
-  scrollView: {},
+  scrollView: {
+    flexGrow: 0,
+    height: 'auto',
+  },
   container: {
     flexDirection: 'row',
     alignItems: 'center',
