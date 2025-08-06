@@ -56,10 +56,10 @@ export default function TopSellers() {
           renderItem={({ item }) => (
             <TopSellerItem
               id={item.id}
-              name={item.name}
+              username={item.name}
               rate={item.rate ?? 'N/A'}
               sales={item.sales}
-              pictureUrl={item.pictureUrl}
+              profilePictureUrl={item.pictureUrl}
             />
           )}
           horizontal

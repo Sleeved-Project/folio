@@ -8,6 +8,7 @@ export const theme = {
     success: '#4CAF50',
     info: '#2196F3',
     warning: '#f0ad4e',
+    yellow: '#FFD700',
 
     variants: {
       primaryLight: '#BBDEFB',

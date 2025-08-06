@@ -1,8 +1,9 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 import { useAuth } from '../../features/auth/context/AuthContext';
+import ProfileScreen from '../../features/user/screens/ProfileScreen';
 
-export default function Index() {
+export default function Profile() {
   const theme = useTheme();
   const { logout, user } = useAuth();
 
@@ -30,9 +31,9 @@ export default function Index() {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
-        <Text>Profile {user.username}</Text>
-        <TouchableOpacity onPress={handleLogout}>
-          <Text style={{ color: theme.colors.danger }}>Logout</Text>
+        <ProfileScreen isUserProfile={true} />
+        <TouchableOpacity onPress={handleLogout} style={{ marginTop: 24 }}>
+          <Text style={{ color: theme.colors.danger, textAlign: 'center' }}>Logout</Text>
         </TouchableOpacity>
       </View>
     </View>
