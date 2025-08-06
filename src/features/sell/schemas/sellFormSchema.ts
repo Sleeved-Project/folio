@@ -1,31 +1,27 @@
 import { z } from 'zod';
 
-// Schema pour l'étape 1
 export const stepOneSchema = z.object({
   name: z
     .string()
-    .min(2, 'Le nom doit contenir au moins 2 caractères')
-    .max(50, 'Le nom ne peut pas dépasser 50 caractères')
-    .regex(/^[a-zA-ZÀ-ÿ\s]+$/, 'Le nom ne peut contenir que des lettres et des espaces'),
+    .min(2, 'Name must be at least 2 characters long')
+    .max(50, 'Name cannot exceed 50 characters')
+    .regex(/^[a-zA-ZÀ-ÿ\s]+$/, 'Name can only contain letters and spaces'),
 });
 
-// Schema pour l'étape 2
 export const stepTwoSchema = z.object({
   choice: z
     .string()
-    .min(1, 'Veuillez sélectionner une option')
+    .min(1, 'Please select an option')
     .refine((val) => ['A', 'B'].includes(val), {
-      message: 'Option invalide',
+      message: 'Invalid option',
     }),
 });
 
-// Schema complet du formulaire
 export const sellFormSchema = z.object({
   name: stepOneSchema.shape.name,
   choice: stepTwoSchema.shape.choice,
 });
 
-// Types générés automatiquement
 export type StepOneFormData = z.infer<typeof stepOneSchema>;
 export type StepTwoFormData = z.infer<typeof stepTwoSchema>;
 export type SellFormData = z.infer<typeof sellFormSchema>;

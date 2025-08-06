@@ -14,7 +14,6 @@ export default function StepItem({ step, index, isActive, isCompleted }: StepIte
 
   return (
     <View style={styles.stepContainer}>
-      {/* Numéro de l'étape */}
       <View
         style={[
           styles.stepNumber,
@@ -47,7 +46,6 @@ export default function StepItem({ step, index, isActive, isCompleted }: StepIte
         </Text>
       </View>
 
-      {/* Label de l'étape */}
       <Text
         style={[
           {
