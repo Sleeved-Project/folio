@@ -40,7 +40,12 @@ export default function StepLayout({
         {children}
       </ScrollView>
 
-      <View style={[{ marginTop: theme.spacing.md }, styles.buttonRow]}>
+      <View
+        style={[
+          { marginTop: theme.spacing.md, backgroundColor: theme.colors.background.primary },
+          styles.buttonRow,
+        ]}
+      >
         {showPrevButton && (
           <Button title={prevButtonText} onPress={onPrev} buttonStyle={styles.button} />
         )}

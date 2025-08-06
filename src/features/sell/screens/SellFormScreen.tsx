@@ -6,8 +6,10 @@ import ReviewStep from '../components/steps/Review';
 import { Stepper } from '../../../components/ui/stepper';
 import { reducer, initialState, steps } from '../reducer/useSellFormReducer';
 import { StyleSheet } from 'react-native';
+import { useTheme } from '../../../theme/useTheme';
 
 export default function MultiStepForm() {
+  const therme = useTheme();
   const [state, dispatch] = useReducer(reducer, initialState);
   const { stepIndex, formData } = state;
 
@@ -25,7 +27,7 @@ export default function MultiStepForm() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: therme.colors.background.primary }]}>
       <Stepper currentStep={stepIndex} steps={steps} />
       {renderStep()}
     </SafeAreaView>
