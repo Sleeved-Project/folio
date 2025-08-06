@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import TitleSection from '../../../components/ui/TitleSection';
 import { useTheme } from '../../../theme/useTheme';
 import CardForSaleItem from './CardForSaleItem';
@@ -70,23 +70,24 @@ export default function CardsForSale() {
     <View>
       <TitleSection title="Cards for Sale" />
       <View style={[{ marginTop: 8 }]}>
-        <FlatList
-          data={cardsForSale}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <CardForSaleItem item={item} />}
-          numColumns={2}
-          columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
-          ListEmptyComponent={() => (
-            <Text
-              style={[
-                styles.text,
-                { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
-              ]}
-            >
-              No cards available
-            </Text>
-          )}
-        />
+        {cardsForSale.length === 0 ? (
+          <Text
+            style={[
+              styles.text,
+              { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
+            ]}
+          >
+            No cards available
+          </Text>
+        ) : (
+          <View style={[styles.cardsContainer, { gap: GAP }]}>
+            {cardsForSale.map((item) => (
+              <View key={item.id} style={styles.cardWrapper}>
+                <CardForSaleItem item={item} />
+              </View>
+            ))}
+          </View>
+        )}
       </View>
     </View>
   );
@@ -96,5 +97,14 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: '#333',
+  },
+  cardsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  cardWrapper: {
+    width: '48%',
+    marginBottom: 16,
   },
 });

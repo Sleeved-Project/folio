@@ -14,7 +14,7 @@ export default function MarketplaceHome() {
         setSearchQuery={setSearchQuery}
         searchPlaceholder="card or seller"
       />
-      <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <TopSellers />
         <CardsForSale />
       </ScrollView>
