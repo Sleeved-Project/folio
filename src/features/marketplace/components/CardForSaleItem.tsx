@@ -33,7 +33,7 @@ export default function CardForSaleItem({ item }: CardForSaleItemProps) {
             right: 12,
           }}
         >
-          <BadgeLabel label={item.finition} variant="light" />
+          <BadgeLabel label={item.condition} variant="light" />
         </View>
       </View>
       <Text
