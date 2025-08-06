@@ -1,7 +1,10 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { Text } from 'react-native';
 import { SellFormAction } from '../../types';
 import { SellFormData } from '../../schemas/sellFormSchema';
+import StepLayout from './StepLayout';
+import StepHeader from './StepHeader';
+import { useTheme } from '../../../../theme/useTheme';
 
 interface ReviewStepProps {
   dispatch: React.Dispatch<SellFormAction>;
@@ -9,20 +12,34 @@ interface ReviewStepProps {
 }
 
 export default function ReviewStep({ formData, dispatch }: ReviewStepProps) {
+  const theme = useTheme();
+
   const onSubmit = () => {
     console.log('Formulaire final :', formData);
     alert('Formulaire soumis avec succès 🎉');
   };
 
+  const onPrev = () => {
+    dispatch({ type: 'PREV_STEP' });
+  };
+
   return (
-    <View>
-      <Text style={{ fontWeight: 'bold' }}>Récapitulatif :</Text>
-      <Text>Nom : {formData.name}</Text>
-      <Text>Choix : {formData.choice}</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-        <Button title="Retour" onPress={() => dispatch({ type: 'PREV_STEP' })} />
-        <Button title="Soumettre" onPress={onSubmit} />
-      </View>
-    </View>
+    <StepLayout onNext={onSubmit} onPrev={onPrev} nextButtonText="Publish" showPrevButton={true}>
+      <StepHeader
+        title="Review step"
+        description="Lorem ipsum dolor sit amet consectetur adipisicing elit ipsum dolor sit amet."
+      />
+      <Text
+        style={[
+          {
+            fontWeight: theme.typography.fontWeights.semiBold,
+          },
+        ]}
+      >
+        Ad review :
+      </Text>
+      <Text>Name : {formData.name}</Text>
+      <Text>Choice : {formData.choice}</Text>
+    </StepLayout>
   );
 }

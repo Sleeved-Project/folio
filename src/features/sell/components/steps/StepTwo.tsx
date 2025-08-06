@@ -1,10 +1,12 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Picker } from '@react-native-picker/picker';
-import { View, Button, Text } from 'react-native';
+import { Text } from 'react-native';
 import { SellFormAction } from '../../types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { stepTwoSchema, StepTwoFormData, SellFormData } from '../../schemas/sellFormSchema';
+import StepLayout from './StepLayout';
+import StepHeader from './StepHeader';
 
 interface StepTwoProps {
   dispatch: React.Dispatch<SellFormAction>;
@@ -26,26 +28,31 @@ export default function StepTwo({ dispatch, defaultValues }: StepTwoProps) {
     dispatch({ type: 'NEXT_STEP' });
   };
 
+  const onPrev = () => {
+    dispatch({ type: 'PREV_STEP' });
+  };
+
   return (
-    <View>
-      <Text>Choisissez une option :</Text>
+    <StepLayout onNext={handleSubmit(onSubmit)} onPrev={onPrev} showPrevButton={true}>
+      <StepHeader
+        title="Step titel"
+        description="Lorem ipsum dolor sit amet consectetur adipisicing elit ipsum dolor sit amet."
+        infoField="* Required fields"
+      />
+      <Text>Option label:</Text>
       <Controller
         control={control}
         name="choice"
-        rules={{ required: 'Veuillez sélectionner une option' }}
+        rules={{ required: 'Choose an option' }}
         render={({ field: { onChange, value } }) => (
           <Picker selectedValue={value} onValueChange={onChange}>
-            <Picker.Item label="-- Sélectionner --" value="" />
+            <Picker.Item label="-- Select --" value="" />
             <Picker.Item label="Option A" value="A" />
             <Picker.Item label="Option B" value="B" />
           </Picker>
         )}
       />
       {errors.choice && <Text style={{ color: 'red' }}>{errors.choice.message}</Text>}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Button title="Retour" onPress={() => dispatch({ type: 'PREV_STEP' })} />
-        <Button title="Suivant" onPress={handleSubmit(onSubmit)} />
-      </View>
-    </View>
+    </StepLayout>
   );
 }

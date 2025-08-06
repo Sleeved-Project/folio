@@ -29,9 +29,9 @@ export default function StepOne({ dispatch, defaultValues }: StepOneProps) {
   };
 
   return (
-    <StepLayout onNext={handleSubmit(onSubmit)} showPrevButton={true}>
+    <StepLayout onNext={handleSubmit(onSubmit)}>
       <StepHeader
-        title="Exemple title"
+        title="Step title"
         description="Lorem ipsum dolor sit amet consectetur adipisicing elit ipsum dolor sit amet."
         infoField="* Required fields"
       />
