@@ -69,7 +69,7 @@ export default function CardAvailableOfferItem({
           >
             ${price}
           </Text>
-          <BadgeLabel label={condition} variant="light" />
+          <BadgeLabel label={condition} variant="dark" />
         </View>
       </View>
     </View>
