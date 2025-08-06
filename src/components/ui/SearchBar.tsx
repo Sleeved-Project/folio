@@ -46,7 +46,12 @@ export default function SearchBar({
       style={[
         styles.container,
         {
-          backgroundColor: theme.colors.background.secondary,
+          backgroundColor: theme.colors.background.tertiary,
+          shadowColor: theme.shadows.small.shadowColor,
+          shadowOffset: theme.shadows.small.shadowOffset,
+          shadowOpacity: theme.shadows.small.shadowOpacity,
+          shadowRadius: theme.shadows.small.shadowRadius,
+          elevation: theme.shadows.small.elevation,
           borderRadius: theme.borderRadius.round,
           marginTop: theme.spacing.sm,
           marginBottom: theme.spacing.lg,
