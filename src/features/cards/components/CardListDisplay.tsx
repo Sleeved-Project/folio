@@ -1,19 +1,19 @@
+import { useRouter } from 'expo-router';
+import { Check } from 'lucide-react-native';
 import React from 'react';
 import {
-  Text,
-  StyleSheet,
-  View,
+  ActivityIndicator,
   FlatList,
   Image,
+  StyleSheet,
+  Text,
   TouchableOpacity,
-  ActivityIndicator,
   useWindowDimensions,
+  View,
 } from 'react-native';
-import { Card } from '../types';
-import { useRouter } from 'expo-router';
+import BadgeNumber from '../../../components/ui/BadgeNumber';
 import { useTheme } from '../../../theme/useTheme';
-import Badge from '../../../components/ui/Badge';
-import { Check } from 'lucide-react-native';
+import { Card } from '../types';
 
 interface CardListDisplayProps {
   cards: Card[];
@@ -74,7 +74,7 @@ export default function CardListDisplay({
           />
           {item.occurrence && item.occurrence > 0 && (
             <View style={styles.occurenceBadge}>
-              <Badge value={item.occurrence} />
+              <BadgeNumber value={item.occurrence} />
             </View>
           )}
           {item.isOwned && (

@@ -20,6 +20,30 @@ export default function TopSellers() {
         'https://thumbs.dreamstime.com/b/logo-rouge-et-blanc-simple-de-pokemon-eps-74567695.jpg',
       rate: 4.5,
     },
+    {
+      id: 3,
+      name: 'Seller C',
+      sales: 60,
+      pictureUrl:
+        'https://thumbs.dreamstime.com/b/logo-rouge-et-blanc-simple-de-pokemon-eps-74567695.jpg',
+      rate: 4.2,
+    },
+    {
+      id: 4,
+      name: 'Seller D',
+      sales: 50,
+      pictureUrl:
+        'https://thumbs.dreamstime.com/b/logo-rouge-et-blanc-simple-de-pokemon-eps-74567695.jpg',
+      rate: 4.0,
+    },
+    {
+      id: 5,
+      name: 'Seller E',
+      sales: 30,
+      pictureUrl:
+        'https://thumbs.dreamstime.com/b/logo-rouge-et-blanc-simple-de-pokemon-eps-74567695.jpg',
+      rate: 3.8,
+    },
   ];
 
   return (

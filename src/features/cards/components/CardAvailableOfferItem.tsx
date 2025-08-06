@@ -1,7 +1,8 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { useTheme } from '../../../theme/useTheme';
 import { CameraOff } from 'lucide-react-native';
+import React from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import BadgeLabel from '../../../components/ui/BadgeLabel';
+import { useTheme } from '../../../theme/useTheme';
 
 interface CardAvailableOfferItemProps {
   title: string;
@@ -68,7 +69,7 @@ export default function CardAvailableOfferItem({
           >
             ${price}
           </Text>
-          <Text style={styles.condition}>{condition}</Text>
+          <BadgeLabel label={condition} variant="light" />
         </View>
       </View>
     </View>
@@ -113,16 +114,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     marginTop: 8,
-  },
-  condition: {
-    fontSize: 12,
-    marginTop: 4,
-    backgroundColor: '#333333',
-    color: '#ccc',
-    paddingTop: 6,
-    paddingBottom: 6,
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderRadius: 20,
   },
 });

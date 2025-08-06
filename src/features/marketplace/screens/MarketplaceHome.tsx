@@ -2,6 +2,7 @@ import { useState } from 'react';
 import SearchBar from '../../../components/ui/SearchBar';
 import CardsForSale from '../components/CardsForSale';
 import TopSellers from '../components/TopSellers';
+import { ScrollView } from 'react-native';
 
 export default function MarketplaceHome() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -13,8 +14,10 @@ export default function MarketplaceHome() {
         setSearchQuery={setSearchQuery}
         searchPlaceholder="card or seller"
       />
-      <TopSellers />
-      <CardsForSale />
+      <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+        <TopSellers />
+        <CardsForSale />
+      </ScrollView>
     </>
   );
 }

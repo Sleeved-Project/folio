@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 
-interface BadgeProps {
+interface BadgeNumberProps {
   value: number;
 }
 
-export default function Badge({ value }: BadgeProps) {
+export default function BadgeNumber({ value }: BadgeNumberProps) {
   const theme = useTheme();
 
   if (!value) return null;
