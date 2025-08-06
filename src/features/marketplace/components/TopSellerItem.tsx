@@ -1,31 +1,29 @@
 import { View } from 'react-native';
-import { Image, Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import { CameraOff } from 'lucide-react-native';
+import ProfilePicture from '../../user/components/profile/ProfilePicture';
 
 interface TopSellerItemProps {
   id: number;
-  name: string;
+  username: string;
   rate: number | null;
   sales: number;
-  pictureUrl?: string | null;
+  profilePictureUrl: string | null;
 }
 
-export default function TopSellerItem({ id, name, rate, sales, pictureUrl }: TopSellerItemProps) {
+export default function TopSellerItem({
+  id,
+  username,
+  rate,
+  sales,
+  profilePictureUrl,
+}: TopSellerItemProps) {
   const theme = useTheme();
 
   return (
     <View key={id} style={styles.container}>
-      {pictureUrl ? (
-        <View style={[styles.image, { backgroundColor: theme.colors.background.secondary }]}>
-          <Image source={{ uri: pictureUrl }} style={styles.image} />
-        </View>
-      ) : (
-        <View style={[styles.image]}>
-          <CameraOff color={theme.colors.text.secondary} />
-        </View>
-      )}
-      <Text style={[styles.name, { color: theme.colors.text.primary }]}>{name}</Text>
+      <ProfilePicture username={username} uri={profilePictureUrl} />
+      <Text style={[styles.name, { color: theme.colors.text.primary }]}>@{username}</Text>
       <Text style={[styles.sales, { color: theme.colors.text.secondary }]}>
         {rate ?? 'N/A'} - {sales} sales
       </Text>

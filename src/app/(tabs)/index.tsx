@@ -12,52 +12,55 @@ export default function Marketplace() {
   const topSellers = [
     {
       id: 1,
-      name: 'Seller A',
+      username: 'sellerA',
       sales: 100,
-      pictureUrl: null,
+      profilePictureUrl:
+        'https://i2.seadn.io/ethereum/0x8a90cab2b38dba80c64b7734e58ee1db38b8992e/28a919306e2edf12b0e7a5c956a248b4.png?w=1000',
       rate: 4.8,
     },
     {
       id: 2,
-      name: 'Seller B',
+      username: 'sellerB',
       sales: 80,
-      pictureUrl:
+      profilePictureUrl:
         'https://thumbs.dreamstime.com/b/logo-rouge-et-blanc-simple-de-pokemon-eps-74567695.jpg',
       rate: 4.5,
     },
     {
       id: 3,
-      name: 'Seller C',
+      username: 'sellerC',
       sales: 60,
-      pictureUrl: 'https://example.com/seller3.jpg',
+      profilePictureUrl:
+        'https://i2.seadn.io/ethereum/0x8a90cab2b38dba80c64b7734e58ee1db38b8992e/94ae26b425b45ae67acf171ae7b70487.png?w=1000',
       rate: 4.2,
     },
     {
       id: 4,
-      name: 'Seller D',
+      username: 'sellerD',
       sales: 50,
-      pictureUrl: null,
+      profilePictureUrl: null,
       rate: 4.0,
     },
     {
       id: 5,
-      name: 'Seller E',
+      username: 'sellerE',
       sales: 30,
-      pictureUrl: 'https://example.com/seller5.jpg',
+      profilePictureUrl: null,
       rate: 3.8,
     },
     {
       id: 6,
-      name: 'Seller F',
+      username: 'sellerF',
       sales: 20,
-      pictureUrl: 'https://example.com/seller6.jpg',
+      profilePictureUrl:
+        'https://i2.seadn.io/ethereum/0x8a90cab2b38dba80c64b7734e58ee1db38b8992e/d5b4e98d43e25aa170fe7f7dd0ae5c6e.png?w=1000',
       rate: 3.5,
     },
     {
       id: 7,
-      name: 'Seller G',
+      username: 'sellerG',
       sales: 10,
-      pictureUrl: null,
+      profilePictureUrl: null,
       rate: 3.0,
     },
   ];
@@ -88,10 +91,10 @@ export default function Marketplace() {
             renderItem={({ item }) => (
               <TopSellerItem
                 id={item.id}
-                name={item.name}
+                username={item.username}
                 rate={item.rate ?? 'N/A'}
                 sales={item.sales}
-                pictureUrl={item.pictureUrl}
+                profilePictureUrl={item.profilePictureUrl}
               />
             )}
             horizontal
