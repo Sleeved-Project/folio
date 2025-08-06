@@ -4,6 +4,8 @@ import TopSellerItem from '../../features/marketplace/components/TopSellerItem';
 import { FlatList } from 'react-native-gesture-handler';
 import SearchBar from '../../components/ui/SearchBar';
 import { useState } from 'react';
+import { Button } from '../../components/ui';
+import { router } from 'expo-router';
 
 export default function Marketplace() {
   const theme = useTheme();
@@ -65,9 +67,15 @@ export default function Marketplace() {
     },
   ];
 
+  const navigateToSellForm = () => {
+    router.push('/sell-form');
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
+        <Button title="Sell a card" onPress={navigateToSellForm} />
+
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}

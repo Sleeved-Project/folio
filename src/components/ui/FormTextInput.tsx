@@ -23,6 +23,7 @@ type FormTextInputProps<T extends FieldValues> = {
   inputType?: 'text' | 'password' | 'email';
   returnKeyType?: TextInputProps['returnKeyType'];
   onSubmitEditing?: () => void;
+  isRequired?: boolean;
 };
 
 const FormTextInput = <T extends FieldValues>({
@@ -36,6 +37,7 @@ const FormTextInput = <T extends FieldValues>({
   inputType = 'text',
   returnKeyType,
   onSubmitEditing,
+  isRequired = false,
 }: FormTextInputProps<T>) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -45,7 +47,12 @@ const FormTextInput = <T extends FieldValues>({
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && <Text style={[styles.label, { color: theme.colors.text.primary }]}>{label}</Text>}
+      {label && (
+        <Text style={[styles.label, { color: theme.colors.text.primary }]}>
+          {label}
+          {isRequired && <Text style={{ color: theme.colors.danger }}>*</Text>}
+        </Text>
+      )}
 
       <Controller
         control={control}
