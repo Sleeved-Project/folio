@@ -3,24 +3,25 @@ import ProfileInformation from '../components/profile/ProfileInformation';
 import { useState } from 'react';
 import UserAdList from '../components/profile/UserAdList';
 import UserRatingsList from '../components/profile/UserRatingsList';
-
-const userData = {
-  id: '12345',
-  firstname: 'John',
-  lastname: 'Doe',
-  username: 'superpoke22',
-  profilePictureUrl: null,
-  rating: 5,
-  ratingCount: 10,
-};
+import { useUserProfile } from '../hooks/queries/useUserInfo';
+import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
 
 const tabOptions: TabOption<'ads' | 'ratings'>[] = [
   { id: 'ads', label: 'Ads' },
   { id: 'ratings', label: 'Ratings' },
 ];
 
-export default function ProfileScreen({ isUserProfile = false }) {
+interface ProfileScreenProps {
+  isUserProfile?: boolean;
+  userId: string;
+}
+
+export default function ProfileScreen({ isUserProfile = false, userId }: ProfileScreenProps) {
   const [activeTab, setActiveTab] = useState<'ads' | 'ratings'>('ads');
+  const { data: userData, isLoading, error } = useUserProfile(isUserProfile ? undefined : userId);
+
+  if (isLoading) return <LoadingState />;
+  if (error || !userData) return <ErrorState message={error?.message} />;
 
   return (
     <>
@@ -29,8 +30,8 @@ export default function ProfileScreen({ isUserProfile = false }) {
         lastname={userData.lastname}
         username={userData.username}
         profilePictureUrl={userData.profilePictureUrl}
-        rating={userData.rating}
-        ratingCount={userData.ratingCount}
+        rating={5}
+        ratingCount={25}
         isUserProfile={isUserProfile}
       />
 
@@ -41,11 +42,7 @@ export default function ProfileScreen({ isUserProfile = false }) {
         containerStyle={{ marginVertical: 16 }}
       />
 
-      {activeTab === 'ads' ? (
-        <UserAdList userId={userData.id} />
-      ) : (
-        <UserRatingsList userId={userData.id} />
-      )}
+      {activeTab === 'ads' ? <UserAdList userId={userId} /> : <UserRatingsList userId={userId} />}
     </>
   );
 }

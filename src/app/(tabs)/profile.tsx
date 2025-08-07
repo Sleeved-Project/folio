@@ -31,7 +31,7 @@ export default function Profile() {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
-        <ProfileScreen isUserProfile={true} />
+        <ProfileScreen userId={user.id} isUserProfile={true} />
         <TouchableOpacity onPress={handleLogout} style={{ marginTop: 24 }}>
           <Text style={{ color: theme.colors.danger, textAlign: 'center' }}>Logout</Text>
         </TouchableOpacity>

@@ -5,12 +5,12 @@ import StarRating from './StarRating';
 import { Button } from '../../../../components/ui';
 
 interface ProfileInformationProps {
-  firstname: string;
-  lastname: string;
+  firstname: string | null;
+  lastname: string | null;
   username: string;
   profilePictureUrl: string | null;
-  rating?: number;
-  ratingCount?: number;
+  rating: number | null;
+  ratingCount: number | null;
   isUserProfile?: boolean;
 }
 
@@ -28,18 +28,20 @@ export default function ProfileInformation({
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <ProfilePicture username={username} uri={profilePictureUrl} size="large" />
-      <Text
-        style={[
-          styles.name,
-          {
-            color: theme.colors.text.primary,
-            fontSize: theme.typography.fontSizes.lg,
-            fontWeight: theme.typography.fontWeights.bold,
-          },
-        ]}
-      >
-        {`${firstname} ${lastname}`}
-      </Text>
+      {firstname && lastname && (
+        <Text
+          style={[
+            styles.name,
+            {
+              color: theme.colors.text.primary,
+              fontSize: theme.typography.fontSizes.lg,
+              fontWeight: theme.typography.fontWeights.bold,
+            },
+          ]}
+        >
+          {`${firstname} ${lastname}`}
+        </Text>
+      )}
       <Text
         style={{
           color: theme.colors.text.secondary,
@@ -49,7 +51,9 @@ export default function ProfileInformation({
       >
         @{username}
       </Text>
-      {rating && <StarRating style={styles.ratingContainer} rating={rating} count={ratingCount} />}
+      {rating && ratingCount && (
+        <StarRating style={styles.ratingContainer} rating={rating} count={ratingCount} />
+      )}
 
       {isUserProfile && (
         <Button buttonStyle={styles.editButton} title="Edit Profile" onPress={() => {}} />

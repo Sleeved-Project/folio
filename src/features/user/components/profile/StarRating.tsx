@@ -4,7 +4,7 @@ import { useTheme } from '../../../../theme/useTheme';
 
 interface StarRatingProps {
   style?: object;
-  rating?: number;
+  rating: number;
   max?: number;
   count?: number;
 }
