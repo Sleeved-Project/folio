@@ -127,6 +127,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (response && response.token) {
           await authUtils.setToken(response.token);
           setIsAuthenticated(true);
+          // Update user data in query cache
+          if (response.user) {
+            queryClient.setQueryData(userKeys.currentUser(), response.user);
+          }
           return { success: true };
         } else {
           throw new Error('No authentication token received');
@@ -143,7 +147,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw err;
       }
     },
-    [signinMutation]
+    [signinMutation, queryClient]
   );
 
   /**
