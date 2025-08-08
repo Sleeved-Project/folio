@@ -13,7 +13,7 @@ import { useAuth } from '../context/AuthContext';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormTextInput, Button } from '../../../components/ui';
-import { signinSchema, type SigninFormValues } from '../schemas/userSchema';
+import { signinSchema, type SigninFormValues } from '../schemas/authUserSchema';
 import { getErrorMessage } from '../../../lib/errors/errors-utils';
 import AuthRedirectLink from '../components/AuthRedirectLink';
 import logoImage from '../../../../assets/logo.png';

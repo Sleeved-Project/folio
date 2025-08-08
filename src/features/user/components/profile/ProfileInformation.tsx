@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
 import ProfilePicture from './ProfilePicture';
 import { useTheme } from '../../../../theme/useTheme';
 import StarRating from './StarRating';
@@ -24,6 +25,7 @@ export default function ProfileInformation({
   isUserProfile = false,
 }: ProfileInformationProps) {
   const theme = useTheme();
+  const router = useRouter();
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
@@ -56,7 +58,11 @@ export default function ProfileInformation({
       )}
 
       {isUserProfile && (
-        <Button buttonStyle={styles.editButton} title="Edit Profile" onPress={() => {}} />
+        <Button
+          buttonStyle={styles.editButton}
+          title="Edit Profile"
+          onPress={() => router.push('/(profile)/edit-profile')}
+        />
       )}
     </View>
   );

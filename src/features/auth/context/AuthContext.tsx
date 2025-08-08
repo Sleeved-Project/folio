@@ -5,9 +5,11 @@ import { getErrorMessage } from '../../../lib/errors/errors-utils';
 import { authUtils } from '../utils/auth-utils';
 import { useSignin } from '../hooks/mutations/useSignin';
 import { useSignup } from '../hooks/mutations/useSignup';
-import { useCurrentUser } from '../hooks/queries/useCurrentUser';
+import { useCurrentUser, userKeys } from '../hooks/queries/useCurrentUser';
 import { AuthErrorCode, User } from '../types';
 import { ApiError } from '../../../lib/client/types';
+import { useQueryClient } from '@tanstack/react-query';
+import { userProfileKeys } from '../../user/hooks/queries/useUserInfo';
 
 // Prevent auto-hiding of splash screen
 SplashScreen.preventAutoHideAsync().catch(() => {
@@ -59,6 +61,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
  */
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -179,6 +182,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await authUtils.removeToken();
       setIsAuthenticated(false);
       setError(null);
+
+      queryClient.setQueryData(userKeys.currentUser(), null);
+      queryClient.invalidateQueries({ queryKey: userProfileKeys.all });
+      queryClient.removeQueries({ queryKey: userProfileKeys.all });
     } catch (err) {
       console.error('Logout error:', err);
     }

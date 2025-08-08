@@ -24,6 +24,8 @@ type FormTextInputProps<T extends FieldValues> = {
   returnKeyType?: TextInputProps['returnKeyType'];
   onSubmitEditing?: () => void;
   isRequired?: boolean;
+  multiline?: boolean;
+  numberOfLines?: number;
 };
 
 const FormTextInput = <T extends FieldValues>({
@@ -38,6 +40,8 @@ const FormTextInput = <T extends FieldValues>({
   returnKeyType,
   onSubmitEditing,
   isRequired = false,
+  multiline = false,
+  numberOfLines = 4,
 }: FormTextInputProps<T>) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -68,6 +72,7 @@ const FormTextInput = <T extends FieldValues>({
                   color: theme.colors.text.primary,
                   borderRadius: theme.borderRadius.medium,
                 },
+                multiline && styles.multilineInput,
                 isFocused && {
                   borderColor: theme.colors.primary,
                   backgroundColor: theme.colors.states.focus,
@@ -89,11 +94,14 @@ const FormTextInput = <T extends FieldValues>({
               autoCapitalize={inputType === 'email' ? 'none' : 'sentences'}
               returnKeyType={returnKeyType}
               onSubmitEditing={onSubmitEditing}
+              multiline={multiline}
+              numberOfLines={multiline ? numberOfLines : 1}
+              textAlignVertical={multiline ? 'top' : 'center'}
             />
 
             {isPassword && (
               <TouchableOpacity
-                style={styles.toggleButton}
+                style={[styles.toggleButton, multiline && { alignSelf: 'flex-start', top: 15 }]}
                 onPress={() => setShowPassword(!showPassword)}
                 activeOpacity={0.7}
               >
@@ -134,6 +142,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 16,
     fontSize: 16,
+  },
+  multilineInput: {
+    height: 'auto',
+    minHeight: 120,
+    paddingTop: 16,
+    paddingBottom: 16,
+    textAlignVertical: 'top',
   },
   errorText: {
     fontSize: 14,
