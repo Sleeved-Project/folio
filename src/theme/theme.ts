@@ -36,6 +36,7 @@ export const theme = {
     states: {
       focus: '#F0F9FF',
       disabled: 'rgba(0, 0, 0, 0.5)',
+      hover: '#F5F5F5',
     },
   },
 

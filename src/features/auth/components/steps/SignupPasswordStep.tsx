@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signupPasswordSchema, type SignupPasswordFormValues } from '../../schemas/userSchema';
+import { signupPasswordSchema, type SignupPasswordFormValues } from '../../schemas/authUserSchema';
 import { FormTextInput } from '../../../../components/ui';
 import { AuthStepLayout } from './AuthStepLayout';
 

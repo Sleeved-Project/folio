@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signupEmailSchema, type SignupEmailFormValues } from '../../schemas/userSchema';
+import { signupEmailSchema, type SignupEmailFormValues } from '../../schemas/authUserSchema';
 import { FormTextInput, Button } from '../../../../components/ui';
 import AuthRedirectLink from '../AuthRedirectLink';
 import logoImage from '../../../../../assets/logo.png';
