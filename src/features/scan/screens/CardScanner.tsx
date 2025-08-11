@@ -32,7 +32,11 @@ export default function CardScanner() {
     }
     try {
       setScannerState('capturing');
-      const photo = await ref.current?.takePictureAsync();
+      const photo = await ref.current?.takePictureAsync({
+        quality: 0.4, // Reduce quality to 40% (0.0 - 1.0)
+        base64: false, // Don't include base64 data unless needed
+        skipProcessing: false, // Important for card detection - maintains orientation
+      });
 
       setScannerState('analyzing');
       if (!photo) {
