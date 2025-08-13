@@ -6,17 +6,17 @@ import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
 import Button from '../Button';
 import { FRAME_HEIGHT, FRAME_WIDTH, SCREEN_DIMENSIONS } from '../../../constants';
 
-interface PhotoCaptureProps {
+interface PhotoCaptureModalProps {
   onPhotoTaken: (uri: string) => void;
   onClose: () => void;
   subtitle?: string;
 }
 
-export default function PhotoCapture({
+export default function PhotoCaptureModal({
   onPhotoTaken,
   onClose,
   subtitle = 'Place your card here',
-}: PhotoCaptureProps) {
+}: PhotoCaptureModalProps) {
   const ref = useRef<CameraView>(null);
   const facing: CameraType = 'back';
 
