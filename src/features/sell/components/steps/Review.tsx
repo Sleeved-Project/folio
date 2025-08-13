@@ -38,8 +38,8 @@ export default function ReviewStep({ formData, dispatch }: ReviewStepProps) {
       >
         Ad review :
       </Text>
-      <Text>Name : {formData.name}</Text>
-      <Text>Choice : {formData.choice}</Text>
+      <Text>Condition : {formData.condition}</Text>
+      <Text>Finish : {formData.finish}</Text>
     </StepLayout>
   );
 }

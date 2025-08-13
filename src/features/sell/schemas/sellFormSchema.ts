@@ -13,23 +13,38 @@ export const stepOneSchema = z.object({
     .regex(/^[a-zA-ZÀ-ÿ\s]+$/, 'Name can only contain letters and spaces'),
 });
 
-export const stepTwoSchema = z.object({
-  choice: z
+export const StepCardInformationSchema = z.object({
+  condition: z
     .string()
-    .min(1, 'Please select an option')
-    .refine((val) => ['A', 'B'].includes(val), {
-      message: 'Invalid option',
-    }),
+    .min(1, 'Please select a condition')
+    .refine(
+      (val) =>
+        ['mint', 'near_mint', 'excellent', 'good', 'light_played', 'played', 'poor'].includes(val),
+      {
+        message: 'Invalid condition',
+      }
+    ),
+  finish: z
+    .string()
+    .min(1, 'Please select a finish')
+    .refine(
+      (val) =>
+        ['regular', 'foil', 'etched', 'borderless', 'extended_art', 'showcase'].includes(val),
+      {
+        message: 'Invalid finish',
+      }
+    ),
 });
 
 export const sellFormSchema = z.object({
   rectoImage: stepPhotoSchema.shape.rectoImage,
   versoImage: stepPhotoSchema.shape.versoImage,
   name: stepOneSchema.shape.name,
-  choice: stepTwoSchema.shape.choice,
+  condition: StepCardInformationSchema.shape.condition,
+  finish: StepCardInformationSchema.shape.finish,
 });
 
 export type StepPhotoFormData = z.infer<typeof stepPhotoSchema>;
 export type StepOneFormData = z.infer<typeof stepOneSchema>;
-export type StepTwoFormData = z.infer<typeof stepTwoSchema>;
+export type StepCardInformationFormData = z.infer<typeof StepCardInformationSchema>;
 export type SellFormData = z.infer<typeof sellFormSchema>;
