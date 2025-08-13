@@ -5,7 +5,7 @@ import { SellFormData, StepPhotoFormData, stepPhotoSchema } from '../../schemas/
 import { zodResolver } from '@hookform/resolvers/zod';
 import StepHeader from './StepHeader';
 import StepLayout from './StepLayout';
-import FormPhotoPicker from '../../../../components/ui/FormPhotoPicker';
+import FormPhotoPicker from '../../../../components/ui/inputs/FormPhotoPicker';
 
 interface StepPhotoProps {
   dispatch: React.Dispatch<SellFormAction>;

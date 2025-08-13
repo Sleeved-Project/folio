@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, Modal } from 'react-native';
-import { useTheme } from '../../theme/useTheme';
-import PhotoCaptureModal from './scan/PhotoCaptureModal';
+import { useTheme } from '../../../theme/useTheme';
+import PhotoCaptureModal from '../scan/PhotoCaptureModal';
 import { CloudUploadIcon, Trash2Icon } from 'lucide-react-native';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
