@@ -19,15 +19,12 @@ export default function StepItem({ step, index, isActive, isCompleted }: StepIte
           styles.stepNumber,
           {
             backgroundColor: theme.colors.background.tertiary,
-            borderColor: theme.colors.border.light,
           },
           isActive && {
             backgroundColor: theme.colors.primary,
-            borderColor: theme.colors.primary,
           },
           isCompleted && {
             backgroundColor: theme.colors.success,
-            borderColor: theme.colors.success,
           },
         ]}
       >
@@ -78,7 +75,6 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
