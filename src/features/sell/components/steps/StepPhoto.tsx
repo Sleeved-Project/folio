@@ -1,11 +1,11 @@
 import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { SellFormAction } from '../../types';
 import { SellFormData, StepPhotoFormData, stepPhotoSchema } from '../../schemas/sellFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import StepHeader from './StepHeader';
 import StepLayout from './StepLayout';
-import PhotoPicker from '../../../../components/ui/PhotoPicker';
+import FormPhotoPicker from '../../../../components/ui/FormPhotoPicker';
 
 interface StepPhotoProps {
   dispatch: React.Dispatch<SellFormAction>;
@@ -39,34 +39,22 @@ export default function StepPhoto({ dispatch, defaultValues }: StepPhotoProps) {
         infoField="* Required fields"
       />
 
-      <Controller
+      <FormPhotoPicker
         control={control}
         name="rectoImage"
-        render={({ field: { onChange, value } }) => (
-          <PhotoPicker
-            label="Front Side"
-            image={value}
-            onImageChange={onChange}
-            error={errors.rectoImage?.message}
-            placeholder="Tap to take front side photo"
-            isRequired
-          />
-        )}
+        label="Front Side"
+        placeholder="Tap to take front side photo"
+        error={errors.rectoImage?.message}
+        isRequired
       />
 
-      <Controller
+      <FormPhotoPicker
         control={control}
         name="versoImage"
-        render={({ field: { onChange, value } }) => (
-          <PhotoPicker
-            label="Back Side"
-            image={value}
-            onImageChange={onChange}
-            error={errors.versoImage?.message}
-            placeholder="Tap to take back side photo"
-            isRequired
-          />
-        )}
+        label="Back Side"
+        placeholder="Tap to take back side photo"
+        error={errors.versoImage?.message}
+        isRequired
       />
     </StepLayout>
   );
