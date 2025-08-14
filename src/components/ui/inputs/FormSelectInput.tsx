@@ -1,10 +1,11 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import React, { useMemo, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
+import { ChevronDownIcon } from 'lucide-react-native';
+import SelectModal from './SelectModal';
 
-interface SelectOption {
+export interface SelectOption {
   label: string;
   value: string;
 }
@@ -29,18 +30,28 @@ function FormSelectInput<T extends FieldValues>({
   isRequired = false,
 }: FormSelectInputProps<T>) {
   const theme = useTheme();
-  const optionsWithPlaceholder = [{ label: placeholder, value: '' }, ...options];
+  const [showModal, setShowModal] = useState(false);
+
+  const optionsMap = useMemo(() => {
+    return options.reduce(
+      (acc, option) => {
+        acc[option.value] = option.label;
+        return acc;
+      },
+      {} as Record<string, string>
+    );
+  }, [options]);
 
   return (
     <View style={{ marginBottom: theme.spacing.md }}>
       <Text
         style={[
-          styles.label,
           {
             fontSize: theme.typography.fontSizes.md,
             fontWeight: theme.typography.fontWeights.medium,
             color: theme.colors.text.primary,
             marginBottom: theme.spacing.sm,
+            paddingLeft: theme.spacing.xs,
           },
         ]}
       >
@@ -48,53 +59,59 @@ function FormSelectInput<T extends FieldValues>({
         {isRequired && <Text style={{ color: theme.colors.danger }}> *</Text>}
       </Text>
 
-      <View
-        style={[
-          styles.pickerContainer,
-          {
-            borderColor: error ? theme.colors.danger : theme.colors.border.light,
-            borderRadius: theme.borderRadius.medium,
-            backgroundColor: theme.colors.background.secondary,
-          },
-        ]}
-      >
-        <Controller
-          control={control}
-          name={name}
-          render={({ field: { onChange, value } }) => (
-            <Picker
-              selectedValue={value}
-              onValueChange={onChange}
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange, value } }) => (
+          <>
+            <TouchableOpacity
               style={[
-                styles.picker,
+                styles.selectButton,
                 {
-                  color: theme.colors.text.primary,
+                  borderColor: error ? theme.colors.danger : theme.colors.border.light,
+                  borderRadius: theme.borderRadius.medium,
+                  backgroundColor: theme.colors.background.secondary,
+                  paddingHorizontal: theme.spacing.md,
+                  paddingVertical: theme.spacing.md,
                 },
               ]}
+              onPress={() => setShowModal(true)}
+              activeOpacity={0.7}
             >
-              {optionsWithPlaceholder.map((option) => (
-                <Picker.Item
-                  key={option.value}
-                  label={option.label}
-                  value={option.value}
-                  color={theme.colors.text.primary}
-                />
-              ))}
-            </Picker>
-          )}
-        />
-      </View>
+              <Text
+                style={[
+                  styles.selectText,
+                  {
+                    color: value ? theme.colors.text.primary : theme.colors.text.tertiary,
+                    fontSize: theme.typography.fontSizes.md,
+                  },
+                ]}
+              >
+                {optionsMap[value] || placeholder}
+              </Text>
+              <ChevronDownIcon size={20} color={theme.colors.text.secondary} strokeWidth={1.5} />
+            </TouchableOpacity>
+
+            <SelectModal
+              isVisible={showModal}
+              onClose={() => setShowModal(false)}
+              options={options}
+              selectedValue={value}
+              onSelect={onChange}
+              title={label}
+            />
+          </>
+        )}
+      />
 
       {error && (
         <Text
-          style={[
-            styles.error,
-            {
-              color: theme.colors.danger,
-              marginTop: theme.spacing.xs,
-              fontSize: theme.typography.fontSizes.sm,
-            },
-          ]}
+          style={{
+            color: theme.colors.danger,
+            marginTop: theme.spacing.xs,
+            marginLeft: theme.spacing.xs,
+            fontSize: theme.typography.fontSizes.sm,
+          }}
         >
           {error}
         </Text>
@@ -104,23 +121,16 @@ function FormSelectInput<T extends FieldValues>({
 }
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    paddingLeft: 4,
-  },
-  pickerContainer: {
+  selectButton: {
     borderWidth: 1,
-    overflow: 'hidden',
-    paddingHorizontal: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: 54,
   },
-  picker: {
-    height: 54,
-  },
-  error: {
-    fontSize: 14,
-    marginTop: 5,
-    marginLeft: 4,
+  selectText: {
+    textAlign: 'left',
+    flex: 1,
   },
 });
 
