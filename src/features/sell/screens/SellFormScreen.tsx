@@ -1,12 +1,12 @@
 import React, { useReducer } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import StepOne from '../components/steps/StepOne';
 import StepTwo from '../components/steps/StepTwo';
 import ReviewStep from '../components/steps/Review';
 import { Stepper } from '../../../components/ui/stepper';
 import { reducer, initialState, steps } from '../reducer/useSellFormReducer';
 import { StyleSheet } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
+import StepPhoto from '../components/steps/StepPhoto';
 
 export default function MultiStepForm() {
   const therme = useTheme();
@@ -16,7 +16,7 @@ export default function MultiStepForm() {
   const renderStep = () => {
     switch (stepIndex) {
       case 0:
-        return <StepOne dispatch={dispatch} defaultValues={formData} />;
+        return <StepPhoto dispatch={dispatch} defaultValues={formData} />;
       case 1:
         return <StepTwo dispatch={dispatch} defaultValues={formData} />;
       case 2:

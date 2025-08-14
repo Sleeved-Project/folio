@@ -1,5 +1,10 @@
 import { z } from 'zod';
 
+export const stepPhotoSchema = z.object({
+  rectoImage: z.string().min(1, 'Recto image is required'),
+  versoImage: z.string().min(1, 'Verso image is required'),
+});
+
 export const stepOneSchema = z.object({
   name: z
     .string()
@@ -18,10 +23,13 @@ export const stepTwoSchema = z.object({
 });
 
 export const sellFormSchema = z.object({
+  rectoImage: stepPhotoSchema.shape.rectoImage,
+  versoImage: stepPhotoSchema.shape.versoImage,
   name: stepOneSchema.shape.name,
   choice: stepTwoSchema.shape.choice,
 });
 
+export type StepPhotoFormData = z.infer<typeof stepPhotoSchema>;
 export type StepOneFormData = z.infer<typeof stepOneSchema>;
 export type StepTwoFormData = z.infer<typeof stepTwoSchema>;
 export type SellFormData = z.infer<typeof sellFormSchema>;
