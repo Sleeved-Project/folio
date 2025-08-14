@@ -1,20 +1,14 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { SellFormAction } from '../../types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  SellFormData,
   StepCardInformationFormData,
   StepCardInformationSchema,
 } from '../../schemas/sellFormSchema';
 import StepLayout from './StepLayout';
 import StepHeader from './StepHeader';
 import FormSelectInput from '../../../../components/ui/inputs/FormSelectInput';
-
-interface StepCardInformationProps {
-  dispatch: React.Dispatch<SellFormAction>;
-  defaultValues?: Partial<SellFormData>;
-}
+import { useSellForm } from '../../context/SellFormContext';
 
 const CONDITIONS = [
   { label: 'Mint (M)', value: 'mint' },
@@ -35,7 +29,8 @@ const FINISHES = [
   { label: 'Showcase', value: 'showcase' },
 ];
 
-export default function StepCardInformation({ dispatch, defaultValues }: StepCardInformationProps) {
+export default function StepCardInformation() {
+  const { dispatch, formData: defaultValues } = useSellForm();
   const {
     control,
     handleSubmit,
