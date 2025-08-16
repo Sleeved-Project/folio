@@ -11,7 +11,9 @@ export const theme = {
     yellow: '#FFD700',
 
     variants: {
+      transparent: 'transparent',
       primaryLight: '#BBDEFB',
+      primaryAlpha10: '#2196F310',
     },
 
     background: {
