@@ -1,20 +1,17 @@
 import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  StepCardInformationFormData,
-  StepCardInformationSchema,
-} from '../../schemas/sellFormSchema';
-import StepLayout from './StepLayout';
-import StepHeader from './StepHeader';
-import FormSelectInput from '../../../../components/ui/inputs/FormSelectInput';
+import { StepCardInformationFormData, StepCardInformationSchema } from '../schemas/sellFormSchema';
+import StepLayout from './shared/StepLayout';
+import StepHeader from './shared/StepHeader';
+import FormSelectInput from '../../../components/ui/inputs/FormSelectInput';
 import { ActivityIndicator, View } from 'react-native';
-import { useTheme } from '../../../../theme/useTheme';
-import { useCardConditions } from '../../hooks/queries/useCardConditions';
-import { useCardFinishes } from '../../hooks/queries/useCardFinishes';
-import { useSellForm } from '../../context/SellFormContext';
+import { useTheme } from '../../../theme/useTheme';
+import { useCardConditions } from '../hooks/queries/useCardConditions';
+import { useCardFinishes } from '../hooks/queries/useCardFinishes';
+import { useSellForm } from '../context/SellFormContext';
 
-export default function StepCardInformation() {
+export default function CardInformationStep() {
   const { dispatch, formData: defaultValues } = useSellForm();
   const theme = useTheme();
   const { data: conditions, isLoading: conditionsLoading } = useCardConditions();

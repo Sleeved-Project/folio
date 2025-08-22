@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { Eye, EyeOff } from 'lucide-react-native';
-import { useTheme } from '../../theme/useTheme';
+import { useTheme } from '../../../theme/useTheme';
 
 type FormTextInputProps<T extends FieldValues> = {
   control: Control<T>;

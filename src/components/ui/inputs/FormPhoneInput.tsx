@@ -12,10 +12,10 @@ import {
   ActionSheetIOS,
 } from 'react-native';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { useTheme } from '../../theme/useTheme';
+import { useTheme } from '../../../theme/useTheme';
 import { ChevronDown, X } from 'lucide-react-native';
 import Modal from 'react-native-modal';
-import { COUNTRIES_LIST, Country } from '../../lib/utils/countries';
+import { COUNTRIES_LIST, Country } from '../../../lib/utils/countries';
 
 type FormPhoneInputProps<T extends FieldValues> = {
   control: Control<T>;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Text } from 'react-native';
-import StepLayout from './StepLayout';
-import StepHeader from './StepHeader';
-import { useTheme } from '../../../../theme/useTheme';
-import { useSellForm } from '../../context/SellFormContext';
+import StepLayout from './shared/StepLayout';
+import StepHeader from './shared/StepHeader';
+import { useTheme } from '../../../theme/useTheme';
+import { useSellForm } from '../context/SellFormContext';
 
 export default function ReviewStep() {
   const theme = useTheme();

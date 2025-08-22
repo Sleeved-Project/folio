@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native
 import Modal from 'react-native-modal';
 import { X, Check } from 'lucide-react-native';
 import { useTheme } from '../../../theme/useTheme';
-import { SelectOption } from './FormSelectInput';
+import { SelectOption } from '../inputs/FormSelectInput';
 
 interface SelectModalProps {
   isVisible: boolean;

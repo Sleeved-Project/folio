@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { ChevronDownIcon } from 'lucide-react-native';
-import SelectModal from './SelectModal';
+import SelectModal from '../modal/SelectModal';
 
 export interface SelectOption {
   label: string;
