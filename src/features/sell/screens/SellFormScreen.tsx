@@ -1,36 +1,49 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ReviewStep from '../components/steps/Review';
 import { Stepper } from '../../../components/ui/stepper';
-import { reducer, initialState, steps } from '../reducer/useSellFormReducer';
+import { steps } from '../reducer/useSellFormReducer';
 import { StyleSheet } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import StepPhoto from '../components/steps/StepPhoto';
 import StepCardInformation from '../components/steps/StepCardInformation';
+import StepPrice from '../components/steps/prices/StepPrice';
+import { SellFormProvider, useSellForm } from '../context/SellFormContext';
 
-export default function MultiStepForm() {
-  const therme = useTheme();
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { stepIndex, formData } = state;
+function SellFormContent() {
+  const theme = useTheme();
+  const { stepIndex } = useSellForm();
 
   const renderStep = () => {
     switch (stepIndex) {
       case 0:
-        return <StepPhoto dispatch={dispatch} defaultValues={formData} />;
+        return <StepPhoto />;
       case 1:
-        return <StepCardInformation dispatch={dispatch} defaultValues={formData} />;
+        return <StepCardInformation />;
       case 2:
-        return <ReviewStep dispatch={dispatch} formData={formData} />;
+        return <StepPrice />;
+      case 3:
+        return <ReviewStep />;
+      case 4:
+        return <ReviewStep />;
       default:
         return null;
     }
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: therme.colors.background.primary }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <Stepper currentStep={stepIndex} steps={steps} />
       {renderStep()}
     </SafeAreaView>
+  );
+}
+
+export default function SellFormScreen() {
+  return (
+    <SellFormProvider>
+      <SellFormContent />
+    </SellFormProvider>
   );
 }
 

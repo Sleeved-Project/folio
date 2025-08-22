@@ -20,12 +20,13 @@ type FormTextInputProps<T extends FieldValues> = {
   error?: string;
   secureTextEntry?: boolean;
   containerStyle?: ViewStyle;
-  inputType?: 'text' | 'password' | 'email';
+  inputType?: 'text' | 'password' | 'email' | 'numeric';
   returnKeyType?: TextInputProps['returnKeyType'];
   onSubmitEditing?: () => void;
   isRequired?: boolean;
   multiline?: boolean;
   numberOfLines?: number;
+  rightIcon?: React.ReactNode;
 };
 
 const FormTextInput = <T extends FieldValues>({
@@ -42,13 +43,25 @@ const FormTextInput = <T extends FieldValues>({
   isRequired = false,
   multiline = false,
   numberOfLines = 4,
+  rightIcon,
 }: FormTextInputProps<T>) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
 
   const isPassword = inputType === 'password' || secureTextEntry;
+  const hasRightIcon = !!rightIcon || isPassword;
 
+  const getKeyboardType = () => {
+    switch (inputType) {
+      case 'email':
+        return 'email-address';
+      case 'numeric':
+        return 'numeric';
+      default:
+        return 'default';
+    }
+  };
   return (
     <View style={[styles.container, containerStyle]}>
       {label && (
@@ -78,7 +91,7 @@ const FormTextInput = <T extends FieldValues>({
                   backgroundColor: theme.colors.states.focus,
                 },
                 error && { borderColor: theme.colors.danger },
-                isPassword && { paddingRight: 48 },
+                hasRightIcon && { paddingRight: 48 },
               ]}
               placeholder={placeholder}
               placeholderTextColor={theme.colors.text.tertiary}
@@ -90,7 +103,7 @@ const FormTextInput = <T extends FieldValues>({
               }}
               onFocus={() => setIsFocused(true)}
               secureTextEntry={isPassword && !showPassword}
-              keyboardType={inputType === 'email' ? 'email-address' : 'default'}
+              keyboardType={getKeyboardType()}
               autoCapitalize={inputType === 'email' ? 'none' : 'sentences'}
               returnKeyType={returnKeyType}
               onSubmitEditing={onSubmitEditing}
@@ -99,18 +112,29 @@ const FormTextInput = <T extends FieldValues>({
               textAlignVertical={multiline ? 'top' : 'center'}
             />
 
-            {isPassword && (
-              <TouchableOpacity
-                style={[styles.toggleButton, multiline && { alignSelf: 'flex-start', top: 15 }]}
-                onPress={() => setShowPassword(!showPassword)}
-                activeOpacity={0.7}
+            {hasRightIcon && (
+              <View
+                style={[
+                  styles.iconContainer,
+                  styles.rightIcon,
+                  multiline && { alignSelf: 'flex-start', top: 15 },
+                ]}
               >
-                {showPassword ? (
-                  <EyeOff size={22} color={theme.colors.text.secondary} strokeWidth={1.5} />
+                {isPassword ? (
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    activeOpacity={0.7}
+                  >
+                    {showPassword ? (
+                      <EyeOff size={22} color={theme.colors.text.secondary} strokeWidth={1.5} />
+                    ) : (
+                      <Eye size={22} color={theme.colors.text.secondary} strokeWidth={1.5} />
+                    )}
+                  </TouchableOpacity>
                 ) : (
-                  <Eye size={22} color={theme.colors.text.secondary} strokeWidth={1.5} />
+                  rightIcon
                 )}
-              </TouchableOpacity>
+              </View>
             )}
           </View>
         )}
@@ -155,12 +179,15 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginLeft: 4,
   },
-  toggleButton: {
+  rightIcon: {
+    right: 0,
+  },
+  iconContainer: {
     position: 'absolute',
     right: 16,
     height: '100%',
     justifyContent: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: 16,
   },
 });
 

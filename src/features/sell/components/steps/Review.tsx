@@ -1,18 +1,13 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { SellFormAction } from '../../types';
-import { SellFormData } from '../../schemas/sellFormSchema';
 import StepLayout from './StepLayout';
 import StepHeader from './StepHeader';
 import { useTheme } from '../../../../theme/useTheme';
+import { useSellForm } from '../../context/SellFormContext';
 
-interface ReviewStepProps {
-  dispatch: React.Dispatch<SellFormAction>;
-  formData: Partial<SellFormData>;
-}
-
-export default function ReviewStep({ formData, dispatch }: ReviewStepProps) {
+export default function ReviewStep() {
   const theme = useTheme();
+  const { dispatch, formData } = useSellForm();
 
   const onSubmit = () => {
     console.log('Formulaire final :', formData);

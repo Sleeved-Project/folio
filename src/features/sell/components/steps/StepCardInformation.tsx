@@ -1,9 +1,7 @@
 import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { SellFormAction } from '../../types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  SellFormData,
   StepCardInformationFormData,
   StepCardInformationSchema,
 } from '../../schemas/sellFormSchema';
@@ -14,13 +12,10 @@ import { ActivityIndicator, View } from 'react-native';
 import { useTheme } from '../../../../theme/useTheme';
 import { useCardConditions } from '../../hooks/queries/useCardConditions';
 import { useCardFinishes } from '../../hooks/queries/useCardFinishes';
+import { useSellForm } from '../../context/SellFormContext';
 
-interface StepCardInformationProps {
-  dispatch: React.Dispatch<SellFormAction>;
-  defaultValues?: Partial<SellFormData>;
-}
-
-export default function StepCardInformation({ dispatch, defaultValues }: StepCardInformationProps) {
+export default function StepCardInformation() {
+  const { dispatch, formData: defaultValues } = useSellForm();
   const theme = useTheme();
   const { data: conditions, isLoading: conditionsLoading } = useCardConditions();
   const { data: finishes, isLoading: finishesLoading } = useCardFinishes();

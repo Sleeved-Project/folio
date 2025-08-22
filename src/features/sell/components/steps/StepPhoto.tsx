@@ -1,18 +1,14 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { SellFormAction } from '../../types';
-import { SellFormData, StepPhotoFormData, stepPhotoSchema } from '../../schemas/sellFormSchema';
+import { StepPhotoFormData, stepPhotoSchema } from '../../schemas/sellFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import StepHeader from './StepHeader';
 import StepLayout from './StepLayout';
 import FormPhotoPicker from '../../../../components/ui/inputs/FormPhotoPicker';
+import { useSellForm } from '../../context/SellFormContext';
 
-interface StepPhotoProps {
-  dispatch: React.Dispatch<SellFormAction>;
-  defaultValues?: Partial<SellFormData>;
-}
-
-export default function StepPhoto({ dispatch, defaultValues }: StepPhotoProps) {
+export default function StepPhoto() {
+  const { dispatch, formData: defaultValues } = useSellForm();
   const {
     control,
     handleSubmit,
