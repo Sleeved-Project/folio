@@ -1,13 +1,13 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ReviewStep from '../components/steps/Review';
+import ReviewStep from '../steps/ReviewStep';
 import { Stepper } from '../../../components/ui/stepper';
 import { steps } from '../reducer/useSellFormReducer';
 import { StyleSheet } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import StepPhoto from '../components/steps/StepPhoto';
-import StepCardInformation from '../components/steps/StepCardInformation';
-import StepPrice from '../components/steps/prices/StepPrice';
+import PhotoStep from '../steps/PhotoStep';
+import CardInformationStep from '../steps/CardInformationStep';
+import PriceStep from '../steps/PriceStep';
 import { SellFormProvider, useSellForm } from '../context/SellFormContext';
 
 function SellFormContent() {
@@ -17,11 +17,11 @@ function SellFormContent() {
   const renderStep = () => {
     switch (stepIndex) {
       case 0:
-        return <StepPhoto />;
+        return <PhotoStep />;
       case 1:
-        return <StepCardInformation />;
+        return <CardInformationStep />;
       case 2:
-        return <StepPrice />;
+        return <PriceStep />;
       case 3:
         return <ReviewStep />;
       case 4:

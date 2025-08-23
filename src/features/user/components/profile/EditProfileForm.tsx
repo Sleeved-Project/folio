@@ -9,7 +9,7 @@ import { useTheme } from '../../../../theme/useTheme';
 import { useUpdateUserProfile } from '../../hooks/mutations/useEditUser';
 import { UserProfileData } from '../../hooks/queries/useUserInfo';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import FormPhoneInput from '../../../../components/ui/FormPhoneInput';
+import FormPhoneInput from '../../../../components/ui/inputs/FormPhoneInput';
 
 interface EditProfileFormProps {
   userData: UserProfileData;

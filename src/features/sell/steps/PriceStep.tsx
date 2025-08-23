@@ -1,16 +1,16 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { StepPriceFormData, stepPriceSchema } from '../../../schemas/sellFormSchema';
+import { StepPriceFormData, stepPriceSchema } from '../schemas/sellFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormTextInput } from '../../../../../components/ui';
-import StepHeader from '../StepHeader';
-import StepLayout from '../StepLayout';
-import PriceEstimation from './PriceEstimation';
-import { useSellForm } from '../../../context/SellFormContext';
+import { FormTextInput } from '../../../components/ui';
+import StepLayout from '../../../components/ui/multistepsform/StepLayout';
+import StepHeader from '../../../components/ui/multistepsform/StepHeader';
+import PriceEstimation from '../components/PriceEstimation';
+import { useSellForm } from '../context/SellFormContext';
 import { EuroIcon } from 'lucide-react-native';
-import { useTheme } from '../../../../../theme/useTheme';
+import { useTheme } from '../../../theme/useTheme';
 
-export default function StepPrice() {
+export default function PriceStep() {
   const theme = useTheme();
   const { dispatch, formData: defaultValues } = useSellForm();
   const {

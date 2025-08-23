@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
-import { useEstimatedPrice } from '../../../hooks/useEstimatedPrice';
-import { useTheme } from '../../../../../theme/useTheme';
-import { useSellForm } from '../../../context/SellFormContext';
+import { useEstimatedPrice } from '../hooks/useEstimatedPrice';
+import { useTheme } from '../../../theme/useTheme';
+import { useSellForm } from '../context/SellFormContext';
 
 export default function PriceEstimation() {
   const theme = useTheme();
