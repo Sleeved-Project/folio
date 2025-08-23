@@ -118,6 +118,6 @@ const styles = StyleSheet.create({
   },
   tokenCountContainer: {
     flexDirection: 'row',
-    alignContent: 'center',
+    alignItems: 'center',
   },
 });
