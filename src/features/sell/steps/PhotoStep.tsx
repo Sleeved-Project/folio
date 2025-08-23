@@ -2,8 +2,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { StepPhotoFormData, stepPhotoSchema } from '../schemas/sellFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import StepHeader from './shared/StepHeader';
-import StepLayout from './shared/StepLayout';
+import StepLayout from '../../../components/ui/multistepsform/StepLayout';
+import StepHeader from '../../../components/ui/multistepsform/StepHeader';
 import FormPhotoPicker from '../../../components/ui/inputs/FormPhotoPicker';
 import { useSellForm } from '../context/SellFormContext';
 

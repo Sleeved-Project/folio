@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ScrollView, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
-import { useTheme } from '../../../../theme/useTheme';
-import { Button } from '../../../../components/ui';
+import { useTheme } from '../../../theme/useTheme';
+import Button from '../Button';
 
 interface StepLayoutProps {
   children: React.ReactNode;

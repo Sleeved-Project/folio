@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
-import StepLayout from './shared/StepLayout';
-import StepHeader from './shared/StepHeader';
+import StepLayout from '../../../components/ui/multistepsform/StepLayout';
+import StepHeader from '../../../components/ui/multistepsform/StepHeader';
 import { useTheme } from '../../../theme/useTheme';
 import { useSellForm } from '../context/SellFormContext';
 
