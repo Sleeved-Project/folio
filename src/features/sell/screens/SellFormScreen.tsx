@@ -9,6 +9,7 @@ import PhotoStep from '../steps/PhotoStep';
 import CardInformationStep from '../steps/CardInformationStep';
 import PriceStep from '../steps/PriceStep';
 import { SellFormProvider, useSellForm } from '../context/SellFormContext';
+import GradeStep from '../steps/GradeStep';
 
 function SellFormContent() {
   const theme = useTheme();
@@ -23,7 +24,7 @@ function SellFormContent() {
       case 2:
         return <PriceStep />;
       case 3:
-        return <ReviewStep />;
+        return <GradeStep />;
       case 4:
         return <ReviewStep />;
       default:
