@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { SellFormAction, SellFormState } from '../types';
+import { SellFormAction, SellFormState, SellFormStepEnum } from '../types';
 import { SellFormData } from '../schemas/sellFormSchema';
 import { reducer, initialState } from '../reducer/useSellFormReducer';
 
@@ -7,7 +7,7 @@ interface SellFormContextType {
   state: SellFormState;
   dispatch: React.Dispatch<SellFormAction>;
   formData: Partial<SellFormData>;
-  stepIndex: number;
+  stepIndex: SellFormStepEnum;
 }
 
 const SellFormContext = createContext<SellFormContextType | undefined>(undefined);
