@@ -28,7 +28,7 @@ export default function CertificationGenerator({
 
   const { data: certification, isPending, mutate } = useCertificate();
 
-  const handleGenerateCertification = async () => {
+  const handleGenerateCertification = () => {
     if (!availableTokens || availableTokens <= 0) return;
 
     mutate(undefined, {
