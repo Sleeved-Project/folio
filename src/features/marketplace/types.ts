@@ -7,3 +7,9 @@ export interface CardForSale {
   price: number;
   pictureUrl: string;
 }
+
+export type SellerItem = {
+  id: string | number;
+  username: string;
+  avatarUrl?: string;
+};
