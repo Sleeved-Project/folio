@@ -113,11 +113,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingTop: 20,
-    paddingBottom: 30,
+    marginTop: 20,
+    marginBottom: 30,
   },
   image: {
     height: '100%',
+    overflow: 'hidden',
   },
   pagination: {
     position: 'absolute',
