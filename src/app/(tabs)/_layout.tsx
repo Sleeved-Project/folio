@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import TabHeader from '../../components/ui/TabHeader';
-import { FocusIcon, LayoutGridIcon, WalletIcon, StoreIcon, UserIcon } from 'lucide-react-native';
+import { FocusIcon, LayoutGridIcon, WalletIcon } from 'lucide-react-native';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 import { useRouter } from 'expo-router';
@@ -21,20 +21,6 @@ export default function TabLayout() {
     >
       <Tabs.Screen
         name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ focused }) => (
-            <StoreIcon
-              color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
-              size={24}
-            />
-          ),
-          tabBarActiveTintColor: theme.colors.text.primary,
-          tabBarInactiveTintColor: theme.colors.text.tertiary,
-        }}
-      />
-      <Tabs.Screen
-        name="explorer"
         options={{
           title: 'Explorer',
           tabBarIcon: ({ focused }) => (
@@ -81,20 +67,6 @@ export default function TabLayout() {
           title: 'Collection',
           tabBarIcon: ({ focused }) => (
             <WalletIcon
-              color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
-              size={24}
-            />
-          ),
-          tabBarActiveTintColor: theme.colors.text.primary,
-          tabBarInactiveTintColor: theme.colors.text.tertiary,
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: 'Profile',
-          tabBarIcon: ({ focused }) => (
-            <UserIcon
               color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
               size={24}
             />

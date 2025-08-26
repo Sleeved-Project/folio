@@ -1,21 +1,14 @@
-import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
-import { Button } from '../../components/ui';
-import MarketplaceHome from '../../features/marketplace/screens/MarketplaceHome';
 import { useTheme } from '../../theme/useTheme';
+import CardsList from '../../features/cards/screens/CardsList';
 
-export default function Marketplace() {
+export default function Explorer() {
   const theme = useTheme();
-
-  const navigateToSellForm = () => {
-    router.push('/sell-form');
-  };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
-        <Button title="Sell a card" onPress={navigateToSellForm} />
-        <MarketplaceHome />
+        <CardsList isFiltersVisible={true} />
       </View>
     </View>
   );
