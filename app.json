@@ -51,7 +51,8 @@
           "cameraPermission": "Allow Sleeved to access your camera"
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      "expo-secure-store"
     ],
     "extra": {
       "router": {
