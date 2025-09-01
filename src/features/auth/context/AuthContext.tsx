@@ -92,7 +92,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             await httpClient.get('/me', { apiType: 'auth' });
             setIsAuthenticated(true);
           } catch {
-            await authUtils.removeToken();
+            await authUtils.clearTokens();
             setIsAuthenticated(false);
           }
         } else {
@@ -124,9 +124,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         const response = await signinMutation({ email, password });
 
-        if (response && response.token) {
-          await authUtils.setToken(response.token);
+        if (response.token && response.refreshToken) {
+          // Store both tokens
+          await authUtils.setTokens({ token: response.token, refreshToken: response.refreshToken });
+
           setIsAuthenticated(true);
+
           // Update user data in query cache
           if (response.user) {
             queryClient.setQueryData(userKeys.currentUser(), response.user);
@@ -147,7 +150,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw err;
       }
     },
-    [signinMutation, queryClient]
+    [signinMutation, queryClient, router]
   );
 
   /**
@@ -166,8 +169,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { success: true, requiresVerification: true, email };
       }
 
-      if (response.token) {
-        await authUtils.setToken(response.token);
+      if (response.token && response.refreshToken) {
+        await authUtils.setTokens({ token: response.token, refreshToken: response.refreshToken });
+
         setIsAuthenticated(true);
       }
 
@@ -183,10 +187,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    */
   const logout = async () => {
     try {
-      await authUtils.removeToken();
+      // Clear both access and refresh tokens
+      await authUtils.clearTokens();
+
       setIsAuthenticated(false);
       setError(null);
 
+      // Clear user data from cache
       queryClient.setQueryData(userKeys.currentUser(), null);
       queryClient.invalidateQueries({ queryKey: userProfileKeys.all });
       queryClient.removeQueries({ queryKey: userProfileKeys.all });
