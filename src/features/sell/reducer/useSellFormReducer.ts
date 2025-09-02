@@ -1,10 +1,10 @@
 import { useReducer } from 'react';
-import { SellFormAction, SellFormState } from '../types';
+import { SellFormAction, SellFormState, SellFormStepEnum } from '../types';
 
 export const steps = ['Photos', 'Card', 'Price', 'Grade', 'Review'];
 
 export const initialState: SellFormState = {
-  stepIndex: 0,
+  stepIndex: SellFormStepEnum.PHOTOS,
   formData: {},
 };
 

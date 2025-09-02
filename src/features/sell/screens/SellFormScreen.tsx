@@ -10,22 +10,29 @@ import CardInformationStep from '../steps/CardInformationStep';
 import PriceStep from '../steps/PriceStep';
 import { SellFormProvider, useSellForm } from '../context/SellFormContext';
 import GradeStep from '../steps/GradeStep';
+import { SellFormStepEnum } from '../types';
 
 function SellFormContent() {
   const theme = useTheme();
-  const { stepIndex } = useSellForm();
+  const { stepIndex, dispatch } = useSellForm();
+
+  const handleStepPress = (index: number) => {
+    if (index < stepIndex) {
+      dispatch({ type: 'GO_TO_STEP', payload: index });
+    }
+  };
 
   const renderStep = () => {
     switch (stepIndex) {
-      case 0:
+      case SellFormStepEnum.PHOTOS:
         return <PhotoStep />;
-      case 1:
+      case SellFormStepEnum.CARD_INFOS:
         return <CardInformationStep />;
-      case 2:
+      case SellFormStepEnum.PRICE:
         return <PriceStep />;
-      case 3:
+      case SellFormStepEnum.GRADE:
         return <GradeStep />;
-      case 4:
+      case SellFormStepEnum.REVIEW:
         return <ReviewStep />;
       default:
         return null;
@@ -34,7 +41,7 @@ function SellFormContent() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      <Stepper currentStep={stepIndex} steps={steps} />
+      <Stepper currentStep={stepIndex} steps={steps} onStepPress={handleStepPress} />
       {renderStep()}
     </SafeAreaView>
   );
