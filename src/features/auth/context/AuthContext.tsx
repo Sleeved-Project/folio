@@ -1,6 +1,5 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { useRouter, SplashScreen } from 'expo-router';
-import { httpClient } from '../../../lib/client/http-client';
 import { getErrorMessage } from '../../../lib/errors/errors-utils';
 import { authUtils } from '../utils/auth-utils';
 import { useSignin } from '../hooks/mutations/useSignin';
@@ -72,7 +71,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // API hooks
   const { mutateAsync: signinMutation, isPending: isSigninLoading } = useSignin();
   const { mutateAsync: signupMutation, isPending: isSignupLoading } = useSignup();
-  const { data: user, isLoading: isUserLoading } = useCurrentUser();
+  const { data: user, isLoading: isUserLoading, isError: isUserError } = useCurrentUser();
 
   // Computed auth states used for routing decisions
   const needsVerification = !!pendingVerificationEmail;
@@ -87,17 +86,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         const hasToken = await authUtils.isAuthenticated();
 
-        if (hasToken) {
-          try {
-            await httpClient.get('/me', { apiType: 'auth' });
-            setIsAuthenticated(true);
-          } catch {
-            await authUtils.clearTokens();
-            setIsAuthenticated(false);
-          }
-        } else {
-          setIsAuthenticated(false);
+        if (!hasToken) {
+          return setIsAuthenticated(false);
         }
+        return setIsAuthenticated(!isUserError && !!user);
       } catch {
         setIsAuthenticated(false);
       } finally {
@@ -110,7 +102,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     verifyAuthentication();
-  }, []);
+  }, [user, isUserError]);
 
   /**
    * Sign in user with email and password
