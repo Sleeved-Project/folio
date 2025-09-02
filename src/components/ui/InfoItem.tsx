@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     width: '48%',
   },
   fullWidth: {
-    width: '98%',
+    width: '100%',
   },
   iconContainer: {
     marginRight: 12,
