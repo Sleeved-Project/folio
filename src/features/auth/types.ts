@@ -7,6 +7,7 @@ export interface User {
 
 export interface AuthResponse {
   token?: string;
+  refreshToken?: string;
   user: User;
   type?: string;
   requiresVerification?: boolean;
