@@ -1,16 +1,20 @@
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import CardsForSale from '../components/CardsForSale';
 import SearchButton from '../components/SearchButton';
 import TopSellers from '../components/TopSellers';
 
-export default function MarketplaceHome() {
+interface MarketplaceHomeProps {
+  onSearchClick: () => void;
+}
+
+export default function MarketplaceHome({ onSearchClick }: MarketplaceHomeProps) {
   return (
-    <>
-      <SearchButton placeholderText="Search by card or seller" navigateTo="/(marketplace)/search" />
+    <View>
+      <SearchButton placeholderText="Search by card or seller" onPress={onSearchClick} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <TopSellers />
         <CardsForSale />
       </ScrollView>
-    </>
+    </View>
   );
 }

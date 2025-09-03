@@ -90,7 +90,7 @@ export default function SearchScreen() {
       <SearchBar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        searchPlaceholder={activeTab === TAB_CARDS ? 'Search a card' : 'Search a seller'}
+        searchPlaceholder={activeTab === TAB_CARDS ? 'card' : 'seller'}
         showClearButton
       />
       <TabSwitcher
@@ -180,15 +180,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#0000000D',
   },
   chipText: { fontSize: 12, fontWeight: '600' },
-
   loadingBox: { paddingVertical: 20 },
   listContent: { paddingBottom: 20 },
-
-  // Cards grid
   gridRow: { justifyContent: 'space-between' },
   cardGridItem: { width: '48%', marginBottom: 16 },
-
-  // Sellers list
   sellerRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -198,8 +193,6 @@ const styles = StyleSheet.create({
   sellerAvatar: { width: 36, height: 36, borderRadius: 18, marginRight: 12 },
   sellerName: { flex: 1, fontSize: 16, fontWeight: '600' },
   chevron: { fontSize: 22, opacity: 0.3 },
-
-  // Empty
   emptyText: { textAlign: 'center', marginTop: 40 },
   separator: { height: 1, backgroundColor: '#00000010' },
 });

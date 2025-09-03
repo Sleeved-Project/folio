@@ -1,25 +1,17 @@
 import { Search } from 'lucide-react-native';
-import { Text, TouchableOpacity, StyleSheet, View } from 'react-native';
-import { router } from 'expo-router';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 
 interface SearchButtonProps {
   placeholderText?: string;
-  navigateTo: string;
+  onPress?: () => void;
 }
 
-export default function SearchButton({
-  placeholderText = 'Search',
-  navigateTo,
-}: SearchButtonProps) {
+export default function SearchButton({ placeholderText = 'Search', onPress }: SearchButtonProps) {
   const theme = useTheme();
 
-  const handlePress = () => {
-    router.push(navigateTo);
-  };
-
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={handlePress}>
+    <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
       <View
         style={[
           styles.container,

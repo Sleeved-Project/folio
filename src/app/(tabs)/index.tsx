@@ -1,11 +1,14 @@
-import { router } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { Button } from '../../components/ui';
 import MarketplaceHome from '../../features/marketplace/screens/MarketplaceHome';
 import { useTheme } from '../../theme/useTheme';
+import SearchModal from './SearchModal';
+import { router } from 'expo-router';
 
 export default function Marketplace() {
   const theme = useTheme();
+  const [isSearchActive, setIsSearchActive] = useState(false);
 
   const navigateToSellForm = () => {
     router.push('/sell-form');
@@ -13,9 +16,16 @@ export default function Marketplace() {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
+      <SearchModal
+        visible={isSearchActive}
+        onClose={() => {
+          setIsSearchActive(false);
+          Keyboard.dismiss();
+        }}
+      />
       <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
         <Button title="Sell a card" onPress={navigateToSellForm} />
-        <MarketplaceHome />
+        <MarketplaceHome onSearchClick={() => setIsSearchActive(true)} />
       </View>
     </View>
   );
