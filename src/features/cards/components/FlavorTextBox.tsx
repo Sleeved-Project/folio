@@ -1,12 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 
 interface FlavorTextBoxProps {
   text?: string;
+  containerStyle?: ViewStyle;
 }
 
-export default function FlavorTextBox({ text }: FlavorTextBoxProps) {
+export default function FlavorTextBox({ text, containerStyle }: FlavorTextBoxProps) {
   const theme = useTheme();
 
   if (!text) return null;
@@ -19,6 +20,7 @@ export default function FlavorTextBox({ text }: FlavorTextBoxProps) {
           backgroundColor: theme.colors.background.secondary,
           borderRadius: theme.borderRadius.medium,
         },
+        containerStyle,
       ]}
     >
       <Text

@@ -17,7 +17,8 @@
       "bundleIdentifier": "com.anonymous.folio",
       "infoPlist": {
         "NSCameraUsageDescription": "$(PRODUCT_NAME) needs access to your Camera.",
-        "NSMicrophoneUsageDescription": "$(PRODUCT_NAME) needs access to your Microphone."
+        "NSMicrophoneUsageDescription": "$(PRODUCT_NAME) needs access to your Microphone.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -50,7 +51,23 @@
           "cameraPermission": "Allow Sleeved to access your camera"
         }
       ],
-      "expo-asset"
-    ]
+      "expo-asset",
+      "expo-secure-store"
+    ],
+    "extra": {
+      "router": {
+        "root": "./src/app"
+      },
+      "eas": {
+        "projectId": "46eb77ce-953b-4453-90ef-37442d802038"
+      }
+    },
+    "owner": "sleeved",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/46eb77ce-953b-4453-90ef-37442d802038"
+    }
   }
 }

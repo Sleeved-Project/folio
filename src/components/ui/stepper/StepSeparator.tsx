@@ -4,9 +4,15 @@ import { useTheme } from '../../../theme/useTheme';
 
 interface StepSeparatorProps {
   isCompleted: boolean;
+  width?: number;
+  marginHorizontal?: number;
 }
 
-export default function StepSeparator({ isCompleted }: StepSeparatorProps) {
+export default function StepSeparator({
+  isCompleted,
+  width = 64,
+  marginHorizontal = 32,
+}: StepSeparatorProps) {
   const theme = useTheme();
 
   return (
@@ -14,10 +20,9 @@ export default function StepSeparator({ isCompleted }: StepSeparatorProps) {
       style={[
         styles.separator,
         {
-          borderTopWidth: 2,
+          width,
+          marginHorizontal,
           borderTopColor: theme.colors.border.light,
-          borderStyle: 'dashed',
-          backgroundColor: 'transparent',
         },
         isCompleted && {
           borderTopColor: theme.colors.success,
@@ -29,9 +34,10 @@ export default function StepSeparator({ isCompleted }: StepSeparatorProps) {
 
 const styles = StyleSheet.create({
   separator: {
-    width: 64,
     height: 2,
-    marginHorizontal: 32,
     marginBottom: 20,
+    borderTopWidth: 2,
+    borderStyle: 'dashed',
+    backgroundColor: 'transparent',
   },
 });

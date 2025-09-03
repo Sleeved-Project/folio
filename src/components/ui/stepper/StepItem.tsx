@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 
 interface StepItemProps {
@@ -7,63 +7,76 @@ interface StepItemProps {
   index: number;
   isActive: boolean;
   isCompleted: boolean;
+  onPress: () => void;
+  disabled?: boolean;
+  style?: ViewStyle; // 👈 Ajout
 }
 
-export default function StepItem({ step, index, isActive, isCompleted }: StepItemProps) {
+export default function StepItem({
+  step,
+  index,
+  isActive,
+  isCompleted,
+  onPress,
+  disabled,
+  style,
+}: StepItemProps) {
   const theme = useTheme();
 
   return (
-    <View style={styles.stepContainer}>
-      <View
-        style={[
-          styles.stepNumber,
-          {
-            backgroundColor: theme.colors.background.tertiary,
-          },
-          isActive && {
-            backgroundColor: theme.colors.primary,
-          },
-          isCompleted && {
-            backgroundColor: theme.colors.success,
-          },
-        ]}
-      >
+    <TouchableOpacity onPress={onPress} disabled={disabled}>
+      <View style={[styles.stepContainer, style]}>
+        <View
+          style={[
+            styles.stepNumber,
+            {
+              backgroundColor: theme.colors.background.tertiary,
+            },
+            isActive && {
+              backgroundColor: theme.colors.primary,
+            },
+            isCompleted && {
+              backgroundColor: theme.colors.success,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              {
+                fontSize: theme.typography.fontSizes.sm,
+                fontWeight: theme.typography.fontWeights.semiBold,
+                color: theme.colors.text.secondary,
+              },
+              isActive && { color: theme.colors.text.onPrimary },
+              isCompleted && { color: theme.colors.text.onPrimary },
+            ]}
+          >
+            {index + 1}
+          </Text>
+        </View>
+
         <Text
           style={[
             {
-              fontSize: theme.typography.fontSizes.sm,
-              fontWeight: theme.typography.fontWeights.semiBold,
+              fontSize: theme.typography.fontSizes.xs,
               color: theme.colors.text.secondary,
+              textAlign: 'center',
+              fontWeight: theme.typography.fontWeights.regular,
             },
-            isActive && { color: theme.colors.text.onPrimary },
-            isCompleted && { color: theme.colors.text.onPrimary },
+            isActive && {
+              color: theme.colors.primary,
+              fontWeight: theme.typography.fontWeights.semiBold,
+            },
+            isCompleted && {
+              color: theme.colors.success,
+              fontWeight: theme.typography.fontWeights.medium,
+            },
           ]}
         >
-          {index + 1}
+          {step}
         </Text>
       </View>
-
-      <Text
-        style={[
-          {
-            fontSize: theme.typography.fontSizes.xs,
-            color: theme.colors.text.secondary,
-            textAlign: 'center',
-            fontWeight: theme.typography.fontWeights.regular,
-          },
-          isActive && {
-            color: theme.colors.primary,
-            fontWeight: theme.typography.fontWeights.semiBold,
-          },
-          isCompleted && {
-            color: theme.colors.success,
-            fontWeight: theme.typography.fontWeights.medium,
-          },
-        ]}
-      >
-        {step}
-      </Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 

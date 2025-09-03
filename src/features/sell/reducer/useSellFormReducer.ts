@@ -1,10 +1,10 @@
 import { useReducer } from 'react';
-import { SellFormAction, SellFormState } from '../types';
+import { SellFormAction, SellFormState, SellFormStepEnum } from '../types';
 
 export const steps = ['Photos', 'Card', 'Price', 'Grade', 'Review'];
 
 export const initialState: SellFormState = {
-  stepIndex: 0,
+  stepIndex: SellFormStepEnum.PHOTOS,
   formData: {},
 };
 
@@ -14,6 +14,8 @@ export function reducer(state: SellFormState, action: SellFormAction): SellFormS
       return { ...state, stepIndex: state.stepIndex + 1 };
     case 'PREV_STEP':
       return { ...state, stepIndex: state.stepIndex - 1 };
+    case 'GO_TO_STEP':
+      return { ...state, stepIndex: action.payload };
     case 'UPDATE_DATA':
       return {
         ...state,
