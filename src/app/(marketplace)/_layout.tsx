@@ -23,10 +23,9 @@ export default function MarketplaceLayout() {
         }}
       />
       <Stack.Screen
-        name="ad-detail"
+        name="ad/[adId]"
         options={{
-          title: 'Card Details',
-          presentation: 'card',
+          title: 'Ad Details',
         }}
       />
     </Stack>

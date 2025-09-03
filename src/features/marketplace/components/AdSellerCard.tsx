@@ -1,6 +1,8 @@
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import { Seller } from '../types';
+import StarRating from '../../user/components/profile/StarRating';
+import CountryFlagDisplay from '../../../components/ui/CountryFlagDisplay';
 
 interface AdSellerCardProps {
   seller: Seller;
@@ -9,17 +11,18 @@ interface AdSellerCardProps {
 
 export default function AdSellerCard({ seller, onPress }: AdSellerCardProps) {
   const theme = useTheme();
+  const flag = <CountryFlagDisplay countryCode={seller.flag} size={12} />;
 
   return (
     <Pressable onPress={() => onPress?.(seller.id)} style={styles.container}>
       <Image source={{ uri: seller.avatarUrl }} style={styles.avatar} />
       <View style={styles.info}>
         <Text style={[styles.alias, { color: theme.colors.text.primary }]}>
-          {seller.alias} {seller.flag}
+          {seller.alias} {flag} ({seller.flag})
         </Text>
-        <Text style={[styles.rating, { color: theme.colors.text.secondary }]}>
-          ⭐ {seller.rating.toFixed(1)} ({seller.ratingCount})
-        </Text>
+        {seller.rating && seller.ratingCount && (
+          <StarRating rating={seller.rating} count={seller.ratingCount} />
+        )}
       </View>
     </Pressable>
   );

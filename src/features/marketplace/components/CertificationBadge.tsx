@@ -20,8 +20,8 @@ export default function CertificationBadge({ certification }: CertificationBadge
         },
       ]}
     >
-      {certification.authority.logoUrl ? (
-        <Image source={{ uri: certification.authority.logoUrl }} style={styles.image} />
+      {certification.authority.logo ? (
+        <Image source={certification.authority.logo} style={styles.image} />
       ) : (
         <View style={styles.image}>
           <CreativeCommons color={theme.colors.text.secondary} size={18} />
@@ -46,8 +46,8 @@ export default function CertificationBadge({ certification }: CertificationBadge
 
 const styles = StyleSheet.create({
   image: {
-    width: 42,
-    height: 42,
+    width: 40,
+    height: 40,
     resizeMode: 'contain',
     marginRight: 12,
     backgroundColor: '#F0F0F0',

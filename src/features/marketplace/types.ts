@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from 'react-native';
+
 export interface CardForSale {
   id: string;
   name: string;
@@ -25,7 +27,7 @@ export interface Certification {
 
 export interface Authority {
   name: string;
-  logoUrl: string;
+  logo: ImageSourcePropType;
 }
 
 export interface Ad {

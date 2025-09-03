@@ -6,9 +6,12 @@ import AdHeader from '../components/AdHeader';
 import AdSellerCard from '../components/AdSellerCard';
 import CertificationBadge from '../components/CertificationBadge';
 import { useTheme } from '../../../theme/useTheme';
+import certi_PSA from '../../../../assets/icons/certi/certi_PSA.png';
+import certi_SLV from '../../../../assets/icons/certi/certi_SLV.png';
 
 export default function AdDetailScreen() {
   const theme = useTheme();
+  // const { data: ad, isLoading, isError } = useAdDetail();
 
   const handleSeeCardDetail = (id: string) => {
     console.log('See card detail for ad id:', id);
@@ -29,7 +32,7 @@ export default function AdDetailScreen() {
     seller: {
       id: 'seller_1',
       alias: 'superpoke',
-      flag: '🇫🇷',
+      flag: 'FR',
       avatarUrl: 'https://i.pravatar.cc/100?img=1',
       rating: 4.8,
       ratingCount: 191,
@@ -38,15 +41,15 @@ export default function AdDetailScreen() {
       {
         authority: {
           name: 'PSA',
-          logoUrl: 'https://example.com/psa-logo.png',
+          logo: certi_PSA,
         },
         grade: 9,
         label: 'Mint',
       },
       {
         authority: {
-          name: 'CGC',
-          logoUrl: '',
+          name: 'Sleeved',
+          logo: certi_SLV,
         },
         grade: 8.5,
         label: 'Near Mint',

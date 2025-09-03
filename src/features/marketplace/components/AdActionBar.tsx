@@ -1,6 +1,7 @@
 import { View, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '../../../components/ui';
+import { useTheme } from '../../../theme/useTheme';
 
 interface AdActionBarProps {
   ad: {
@@ -13,16 +14,26 @@ interface AdActionBarProps {
 
 export default function AdActionBar({ ad, onSeeCardDetail, onBuy }: AdActionBarProps) {
   const insets = useSafeAreaInsets();
+  const theme = useTheme();
 
   return (
-    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          paddingBottom: insets.bottom,
+          borderColor: theme.colors.border.medium,
+          backgroundColor: theme.colors.background.primary,
+        },
+      ]}
+    >
       <Button
         title="See card detail"
         variant="outline"
         onPress={() => onSeeCardDetail?.(ad.id)}
         buttonStyle={[styles.button]}
       />
-      <Button title="Buy this card" onPress={() => onBuy?.(ad.id)} buttonStyle={[styles.button]} />
+      <Button title="Buy this card" onPress={() => onBuy?.(ad.id)} buttonStyle={styles.button} />
     </View>
   );
 }
@@ -35,8 +46,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderColor: '#ddd',
-    backgroundColor: '#fff',
     position: 'absolute',
     bottom: 0,
     left: 0,
