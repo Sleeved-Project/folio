@@ -1,8 +1,8 @@
 import { useState } from 'react';
+import { ScrollView } from 'react-native';
 import SearchBar from '../../../components/ui/SearchBar';
 import CardsForSale from '../components/CardsForSale';
 import TopSellers from '../components/TopSellers';
-import { ScrollView } from 'react-native';
 
 export default function MarketplaceHome() {
   const [searchQuery, setSearchQuery] = useState('');

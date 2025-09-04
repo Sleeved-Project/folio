@@ -131,7 +131,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
           ) : (
             <>
               <CardPricesInfo cardId={cardId} />
-              <CardAvailableOffers cardId={cardId} />
+              <CardAvailableOffers cardId={cardId} title="Available Offers" />
             </>
           )}
         </ScrollView>

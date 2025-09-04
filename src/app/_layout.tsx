@@ -24,6 +24,7 @@ function AppNavigator() {
       <Stack.Protected guard={isFullyAuthenticated}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="(scan)" />
+        <Stack.Screen name="(marketplace)" />
         <Stack.Screen
           name="filter-detail"
           options={{
