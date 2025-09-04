@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signupUsernameSchema, type SignupUsernameFormValues } from '../../schemas/authUserSchema';
 import { FormTextInput } from '../../../../components/ui';
 import { AuthStepLayout } from './AuthStepLayout';
+import { useCheckAvailability } from '../../hooks/queries/useCheckAvailability';
 
 export default function SignupUsernameStep({
   onContinue,
@@ -14,6 +15,9 @@ export default function SignupUsernameStep({
   onBack: () => void;
   defaultValue: string;
 }) {
+  const [usernameError, setUsernameError] = useState<string | null>(null);
+  const { mutateAsync: checkAvailability, isPending } = useCheckAvailability();
+
   const {
     control,
     handleSubmit,
@@ -24,21 +28,34 @@ export default function SignupUsernameStep({
     mode: 'onSubmit',
   });
 
+  const handleContinue = useCallback(
+    async (data: SignupUsernameFormValues) => {
+      setUsernameError(null);
+      const result = await checkAvailability({ username: data.username });
+
+      if (result.username?.available) {
+        return onContinue(data.username);
+      }
+      return setUsernameError('This username is already taken. Please try another one.');
+    },
+    [checkAvailability, onContinue]
+  );
+
   return (
     <AuthStepLayout
       title="Choose a username"
       subtitle="This will be your public username on Sleeved."
       onBack={onBack}
       buttonText="Continue"
-      onButtonPress={handleSubmit((data) => onContinue(data.username))}
-      buttonDisabled={isSubmitting}
-      buttonLoading={isSubmitting}
+      onButtonPress={handleSubmit(handleContinue)}
+      buttonDisabled={isSubmitting || isPending}
+      buttonLoading={isSubmitting || isPending}
     >
       <FormTextInput
         control={control}
         name="username"
         placeholder="Enter your username"
-        error={errors.username?.message}
+        error={usernameError || errors.username?.message}
         returnKeyType="done"
         containerStyle={{ marginBottom: 24, width: '100%' }}
       />
