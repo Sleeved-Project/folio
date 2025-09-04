@@ -3,7 +3,7 @@ import { Keyboard, StyleSheet, View } from 'react-native';
 import { Button } from '../../components/ui';
 import MarketplaceHome from '../../features/marketplace/screens/MarketplaceHome';
 import { useTheme } from '../../theme/useTheme';
-import SearchModal from './SearchModal';
+import SearchModal from '../../components/ui/modal/SearchModal';
 import { router } from 'expo-router';
 
 export default function Marketplace() {

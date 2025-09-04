@@ -22,20 +22,6 @@ export default function MarketplaceLayout() {
           title: 'Marketplace',
         }}
       />
-      <Stack.Screen
-        name="search"
-        options={{
-          title: 'Search',
-          presentation: 'modal',
-        }}
-      />
-      <Stack.Screen
-        name="ad-detail"
-        options={{
-          title: 'Card Details',
-          presentation: 'card',
-        }}
-      />
     </Stack>
   );
 }

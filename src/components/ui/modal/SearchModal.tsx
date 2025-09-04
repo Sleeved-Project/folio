@@ -1,16 +1,10 @@
+import { X } from 'lucide-react-native';
 import React, { useState } from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  Modal,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import SearchBar from '../../components/ui/SearchBar';
-import { TabOption, TabSwitcher } from '../../components/ui/TabSwitcher';
-import CardForSaleItem from '../../features/marketplace/components/CardForSaleItem';
-import { SellerRowItem } from '../../features/marketplace/components/SellerRowItem';
+import { ActivityIndicator, FlatList, Modal, Pressable, StyleSheet, View } from 'react-native';
+import CardForSaleItem from '../../../features/marketplace/components/CardForSaleItem';
+import { SellerRowItem } from '../../../features/marketplace/components/SellerRowItem';
+import SearchBar from '../SearchBar';
+import { TabOption, TabSwitcher } from '../TabSwitcher';
 
 interface SearchModalProps {
   visible: boolean;
@@ -62,16 +56,19 @@ export default function SearchModal({ visible, onClose }: SearchModalProps) {
   return (
     <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={{ flex: 1 }}>
-        <TouchableWithoutFeedback onPress={onClose}>
-          <View style={styles.modalOverlay} />
-        </TouchableWithoutFeedback>
         <View style={styles.searchContainer}>
-          <SearchBar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            searchPlaceholder={activeTab === TAB_CARDS ? 'card' : 'seller'}
-            showClearButton
-          />
+          <View>
+            <Pressable onPress={onClose}>
+              <X />
+            </Pressable>
+            <SearchBar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              searchPlaceholder={activeTab === TAB_CARDS ? 'card' : 'seller'}
+              showClearButton
+            />
+          </View>
+
           <View style={{ flex: 1 }}>
             <TabSwitcher
               options={tabOptions}
@@ -131,8 +128,7 @@ export default function SearchModal({ visible, onClose }: SearchModalProps) {
 
 const styles = StyleSheet.create({
   modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    height: '100%',
   },
   searchContainer: {
     flex: 1,
