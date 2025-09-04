@@ -8,6 +8,7 @@ import {
   StyleProp,
   ViewStyle,
   TextStyle,
+  View,
 } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 
@@ -21,6 +22,7 @@ export interface ButtonProps extends TouchableOpacityProps {
   buttonStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   loadingColor?: string;
+  leftIcon?: React.ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -31,6 +33,7 @@ const Button: React.FC<ButtonProps> = ({
   buttonStyle,
   textStyle,
   loadingColor,
+  leftIcon,
   ...rest
 }) => {
   const theme = useTheme();
@@ -106,7 +109,14 @@ const Button: React.FC<ButtonProps> = ({
       {loading ? (
         <ActivityIndicator color={getLoadingColor()} size="small" />
       ) : (
-        <Text style={[styles.text, getTextStyles(), textStyle]}>{title}</Text>
+        <View style={[styles.content]}>
+          {leftIcon && (
+            <View style={[styles.iconContainer, { marginRight: theme.spacing.md }]}>
+              {leftIcon}
+            </View>
+          )}
+          <Text style={[styles.text, getTextStyles(), textStyle]}>{title}</Text>
+        </View>
       )}
     </TouchableOpacity>
   );
@@ -124,6 +134,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
     fontSize: 18,

@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    gap: 4,
+    gap: 3,
     alignItems: 'center',
   },
   count: {

@@ -5,10 +5,11 @@ import { useTheme } from '../../../theme/useTheme';
 import CardAvailableOfferItem from './CardAvailableOfferItem';
 
 interface CardAvailableOffersProps {
+  title: string;
   cardId: string;
 }
 
-export default function CardAvailableOffers({ cardId }: CardAvailableOffersProps) {
+export default function CardAvailableOffers({ title, cardId }: CardAvailableOffersProps) {
   const theme = useTheme();
 
   // TODODELETE : Mock data for available offers
@@ -97,7 +98,7 @@ export default function CardAvailableOffers({ cardId }: CardAvailableOffersProps
           },
         ]}
       >
-        Available Offers
+        {title}
       </Text>
       <Text style={[styles.subtitle, { color: theme.colors.text.secondary, marginBottom: 12 }]}>
         {availableOffers.length} offers found

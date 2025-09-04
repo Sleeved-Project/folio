@@ -22,6 +22,12 @@ export default function MarketplaceLayout() {
           title: 'Marketplace',
         }}
       />
+      <Stack.Screen
+        name="ad/[adId]"
+        options={{
+          title: 'Ad Details',
+        }}
+      />
     </Stack>
   );
 }

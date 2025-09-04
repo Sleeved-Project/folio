@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import SearchBar from '../../../components/ui/SearchBar';
 import CardsForSale from '../components/CardsForSale';
 import SearchButton from '../components/SearchButton';
 import TopSellers from '../components/TopSellers';
