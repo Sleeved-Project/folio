@@ -45,7 +45,11 @@ export default function SearchResults({
         <EmptySearchState
           query={searchQuery}
           isLoading={isLoadingCards}
-          error={isErrorCards ? 'An error occurred' : null}
+          error={
+            isErrorCards
+              ? "We couldn't load the cards. Please check your connection and try again."
+              : null
+          }
           icon={<ShoppingBag size={52} color="#000" />}
           title="Discover cards for sale"
           message="Find rare, vintage, and recent cards listed by sellers"
@@ -56,7 +60,11 @@ export default function SearchResults({
       <EmptySearchState
         query={searchQuery}
         isLoading={isLoadingSellers}
-        error={isErrorSellers ? 'An error occurred' : null}
+        error={
+          isErrorSellers
+            ? "We couldn't load the sellers. Please check your connection and try again."
+            : null
+        }
         icon={<UserSearch size={52} color="#000" />}
         title="Connect with trusted sellers"
         message="Find pro shops and collectors listing unique Pokémon cards"
