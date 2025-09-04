@@ -5,7 +5,7 @@ import { httpClient } from '../../../../lib/client/http-client';
 export const useInitUser = () => {
   return useMutation({
     mutationFn: async () => {
-      const response = await httpClient.post('/user/init', {});
+      const response = await httpClient.post('/me/init', {});
       return response;
     },
     onError: () => {
