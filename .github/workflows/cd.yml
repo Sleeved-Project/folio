@@ -22,12 +22,15 @@ jobs:
       - name: Install EAS CLI
         run: npm install -g eas-cli
 
-      - name: Log in to Expo
-        run: eas whoami || eas login --token ${{ secrets.EXPO_TOKEN }}
+      - name: Verify Expo authentication
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas whoami
 
       - name: Publish update to "beta"
         env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           EXPO_PUBLIC_API_ATLAS_BASE_URL: ${{ secrets.EXPO_PUBLIC_API_ATLAS_BASE_URL }}
           EXPO_PUBLIC_API_WARDEN_BASE_URL: ${{ secrets.EXPO_PUBLIC_API_WARDEN_BASE_URL }}
         run: |
-          eas update --branch release ${{ github.ref_name}} --message "Automated release with EAS Update"
+          eas update --branch release ${{ github.ref_name }} --message "Automated release with EAS Update"
