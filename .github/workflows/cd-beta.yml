@@ -1,4 +1,4 @@
-name: EAS Update (Beta)
+name: EAS Update
 
 on:
   release:

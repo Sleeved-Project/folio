@@ -51,3 +51,9 @@ export interface Offer {
   condition: string;
   thumbnail: string;
 }
+
+export type SellerItem = {
+  id: string | number;
+  username: string;
+  avatarUrl?: string;
+};
