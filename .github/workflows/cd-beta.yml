@@ -29,7 +29,6 @@ jobs:
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
-          npx eas login --non-interactive
           npx eas whoami
 
       - name: 🚀 Publish update
