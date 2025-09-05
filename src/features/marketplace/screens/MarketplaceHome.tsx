@@ -1,23 +1,20 @@
-import { useState } from 'react';
-import { ScrollView } from 'react-native';
-import SearchBar from '../../../components/ui/SearchBar';
+import { Button, ScrollView, View } from 'react-native';
 import CardsForSale from '../components/CardsForSale';
 import TopSellers from '../components/TopSellers';
+import { router } from 'expo-router';
 
 export default function MarketplaceHome() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const navigateToSellForm = () => {
+    router.push('/sell-form');
+  };
 
   return (
-    <>
-      <SearchBar
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        searchPlaceholder="card or seller"
-      />
+    <View>
+      <Button title="Sell a card" onPress={navigateToSellForm} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <TopSellers />
         <CardsForSale />
       </ScrollView>
-    </>
+    </View>
   );
 }

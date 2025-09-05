@@ -19,7 +19,7 @@ export default function SearchBar({
 }: SearchBarProps) {
   const [inputValue, setInputValue] = useState(searchQuery);
   const theme = useTheme();
-  const placeholderText = `Search by ${searchPlaceholder}`;
+  const placeholderText = `${searchPlaceholder}`;
 
   // We are debouncing the query to avoid too many updates, it will only be sent after 1 second of inactivity
   const debouncedSetSearchQuery = useRef(
@@ -56,7 +56,7 @@ export default function SearchBar({
           borderRadius: theme.borderRadius.round,
           marginTop: theme.spacing.sm,
           marginBottom: theme.spacing.lg,
-          height: 50,
+          height: 44,
         },
       ]}
     >

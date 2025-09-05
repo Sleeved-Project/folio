@@ -164,7 +164,7 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
           <SearchBar
             searchQuery={artistName}
             setSearchQuery={setArtistName}
-            searchPlaceholder="artist"
+            searchPlaceholder="Search by artist"
           />
         )}
         <FlatList
