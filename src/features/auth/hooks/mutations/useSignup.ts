@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
-import { authUtils } from '../../utils/auth-utils';
 import type { AuthResponse, SignupPayload } from '../../types';
 import { userKeys } from '../queries/useCurrentUser';
 
@@ -12,11 +11,6 @@ export const useSignup = () => {
       const response = await httpClient.post<AuthResponse>('/register', userData, {
         apiType: 'auth',
       });
-
-      // Only set token if it exists (won't exist for unverified emails)
-      if (response.token) {
-        await authUtils.setToken(response.token);
-      }
 
       return response;
     },
