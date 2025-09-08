@@ -30,7 +30,7 @@ export const useVerifyEmailCode = () => {
       if (!response.token) {
         throw new Error('Verification failed: No token received');
       }
-      await authUtils.setToken(response.token);
+      await authUtils.setTokens({ token: response.token, refreshToken: response.refreshToken });
       setIsAuthenticated(true);
       setPendingVerificationEmail(null);
 
