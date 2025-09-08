@@ -1,6 +1,7 @@
 import { Redirect } from 'expo-router';
 import { useAuth } from '../features/auth/context/AuthContext';
 import { LoadingScreen } from '../components/ui/LoadingScreen';
+import OnboardingScreen from '../features/auth/screens/OnboardingScreen';
 
 export default function Index() {
   const { isLoading, isFullyAuthenticated, needsVerification, pendingVerificationEmail } =
@@ -25,5 +26,5 @@ export default function Index() {
     return <Redirect href="/(tabs)" />;
   }
 
-  return <Redirect href="/sign-up" />;
+  return <OnboardingScreen />;
 }
