@@ -9,7 +9,7 @@ export const useUpdateUserProfile = () => {
 
   return useMutation({
     mutationFn: async (userData: UserProfileFormValues) => {
-      const response = await httpClient.patch<UserProfileData>('/user', userData);
+      const response = await httpClient.patch<UserProfileData>('/me', userData);
       return response;
     },
     onSuccess: (updatedUser) => {
