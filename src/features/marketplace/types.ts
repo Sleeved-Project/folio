@@ -10,6 +10,10 @@ export interface CardForSale {
   pictureUrl: string;
 }
 
+export interface HasStripeAccountResponse {
+  hasStripeAccount: boolean;
+}
+
 export interface Seller {
   id: string;
   alias: string;
