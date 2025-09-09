@@ -20,7 +20,7 @@ export function useUserProfile(userId?: string) {
   return useQuery<UserProfileData>({
     queryKey: userProfileKeys.details(userId as string),
     queryFn: async () => {
-      const uri = userId ? `/user/${userId}` : '/user';
+      const uri = userId ? `/me/${userId}` : '/me';
 
       const response = await httpClient.get<UserProfileData>(uri);
       return response;

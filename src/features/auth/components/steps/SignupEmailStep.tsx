@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,6 +7,7 @@ import { FormTextInput, Button } from '../../../../components/ui';
 import AuthRedirectLink from '../AuthRedirectLink';
 import logoImage from '../../../../../assets/logo.png';
 import { theme } from '../../../../theme/theme';
+import { useCheckAvailability } from '../../hooks/queries/useCheckAvailability';
 
 export default function SignupEmailStep({
   onContinue,
@@ -15,6 +16,10 @@ export default function SignupEmailStep({
   onContinue: (email: string) => void;
   defaultValue: string;
 }) {
+  const [emailError, setEmailError] = useState<string | null>(null);
+
+  const { mutateAsync: checkAvailability, isPending } = useCheckAvailability();
+
   const {
     control,
     handleSubmit,
@@ -24,6 +29,19 @@ export default function SignupEmailStep({
     defaultValues: { email: defaultValue },
     mode: 'onSubmit',
   });
+
+  const handleContinue = useCallback(
+    async (data: SignupEmailFormValues) => {
+      setEmailError(null);
+      const result = await checkAvailability({ email: data.email });
+
+      if (result.email?.available) {
+        return onContinue(data.email);
+      }
+      return setEmailError('This email is already in use. Please try another one or sign in.');
+    },
+    [checkAvailability, onContinue]
+  );
 
   return (
     <View style={styles.container}>
@@ -37,7 +55,7 @@ export default function SignupEmailStep({
             label="Email Address"
             placeholder="Enter your email address"
             inputType="email"
-            error={errors.email?.message}
+            error={emailError || errors.email?.message}
             returnKeyType="done"
             containerStyle={{ marginBottom: theme.spacing.lg, width: '100%' }}
           />
@@ -46,9 +64,9 @@ export default function SignupEmailStep({
       <View style={styles.bottomContent}>
         <Button
           title="Continue"
-          onPress={handleSubmit((data) => onContinue(data.email))}
-          disabled={isSubmitting}
-          loading={isSubmitting}
+          onPress={handleSubmit(handleContinue)}
+          disabled={isSubmitting || isPending}
+          loading={isSubmitting || isPending}
         />
         <AuthRedirectLink type="signin" />
       </View>

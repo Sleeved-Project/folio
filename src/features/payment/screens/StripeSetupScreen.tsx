@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     gap: theme.spacing.lg,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: theme.borderRadius.medium,
   },
   logo: {
     width: 80,
