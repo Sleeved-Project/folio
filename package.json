@@ -30,6 +30,7 @@
     "expo-router": "~5.1.5",
     "expo-secure-store": "~14.2.4",
     "expo-status-bar": "~2.2.3",
+    "expo-updates": "~0.28.17",
     "lodash": "^4.17.21",
     "lucide-react-native": "^0.513.0",
     "react": "19.0.0",
@@ -45,7 +46,7 @@
     "react-native-svg": "15.11.2",
     "react-native-web": "^0.20.0",
     "zod": "^3.25.51",
-    "expo-updates": "~0.28.17"
+    "expo-dev-client": "~5.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
