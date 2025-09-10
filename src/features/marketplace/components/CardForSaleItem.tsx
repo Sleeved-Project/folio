@@ -1,13 +1,13 @@
 import { Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import BadgeLabel from '../../../components/ui/BadgeLabel';
 import { useTheme } from '../../../theme/useTheme';
-import { CardForSale } from '../types';
+import { Ad } from '../types';
 
-interface CardForSaleItemProps {
-  item: CardForSale;
+interface AdItemProps {
+  item: Ad;
 }
 
-export default function CardForSaleItem({ item }: CardForSaleItemProps) {
+export default function CardForSaleItem({ item }: AdItemProps) {
   const theme = useTheme();
   const width = useWindowDimensions().width - 32;
   const GAP = 8;
@@ -19,7 +19,7 @@ export default function CardForSaleItem({ item }: CardForSaleItemProps) {
     <View key={item.id} style={styles.cardItem}>
       <View style={{ position: 'relative' }}>
         <Image
-          source={{ uri: item.pictureUrl }}
+          source={{ uri: item.rectoImageUrl }}
           style={{
             width: CARD_WIDTH,
             height: CARD_HEIGHT,
@@ -47,11 +47,11 @@ export default function CardForSaleItem({ item }: CardForSaleItemProps) {
           },
         ]}
       >
-        {item.name} ({item.finition})
+        {item.card.id} ({item.finish})
       </Text>
-      <Text style={[{ color: theme.colors.text.secondary }]}>{item.set}</Text>
+      <Text style={[{ color: theme.colors.text.secondary }]}>{item.seller.username}</Text>
       <Text style={[styles.cardPrice, { fontWeight: theme.typography.fontWeights.bold }]}>
-        ${item.price}
+        ${item.originalPrice}
       </Text>
     </View>
   );

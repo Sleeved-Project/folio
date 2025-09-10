@@ -1,12 +1,12 @@
+import { ShoppingBag, UserSearch } from 'lucide-react-native';
 import { useMemo } from 'react';
-import { ActivityIndicator, FlatList, View, StyleSheet } from 'react-native';
-import { TabSwitcher, TabOption } from '../../../components/ui/TabSwitcher';
-import { EmptySearchState } from '../../../features/marketplace/components/EmptySearchState';
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
+import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
 import CardForSaleItem from '../../../features/marketplace/components/CardForSaleItem';
+import { EmptySearchState } from '../../../features/marketplace/components/EmptySearchState';
 import { SellerRowItem } from '../../../features/marketplace/components/SellerRowItem';
-import { UserSearch, ShoppingBag } from 'lucide-react-native';
-import { useSearchCardsForSale } from '../../../features/marketplace/hooks/useSearchCards';
-import { useSearchSellers } from '../../../features/marketplace/hooks/useSearchSellers';
+import { useSearchCardAds } from '../../../features/marketplace/hooks/queries/useAdsList';
+import { useSearchSellers } from '../../../features/marketplace/hooks/queries/useSearchSellers';
 
 const TAB_CARDS = 'cards';
 const TAB_SELLERS = 'sellers';
@@ -27,7 +27,7 @@ export default function SearchResults({
     data: cardsResults,
     isLoading: isLoadingCards,
     isError: isErrorCards,
-  } = useSearchCardsForSale(searchQuery);
+  } = useSearchCardAds(searchQuery);
   const {
     data: sellersResults,
     isLoading: isLoadingSellers,
@@ -72,6 +72,8 @@ export default function SearchResults({
     );
   }, [searchQuery, isLoadingCards, isErrorCards, isLoadingSellers, isErrorSellers, activeTab]);
 
+  const cardsFlat = cardsResults?.pages?.flatMap((page) => page.data) ?? [];
+
   return (
     <View style={styles.container}>
       <TabSwitcher
@@ -86,7 +88,7 @@ export default function SearchResults({
         </View>
       ) : activeTab === TAB_CARDS ? (
         <FlatList
-          data={cardsResults}
+          data={cardsFlat}
           key="cardsGrid"
           keyExtractor={(item) => `card-${item.id}`}
           renderItem={({ item }) => (
