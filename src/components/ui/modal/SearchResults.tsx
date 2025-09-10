@@ -1,10 +1,10 @@
+import { ShoppingBag, UserSearch } from 'lucide-react-native';
 import { useMemo } from 'react';
-import { ActivityIndicator, FlatList, View, StyleSheet } from 'react-native';
-import { TabSwitcher, TabOption } from '../../../components/ui/TabSwitcher';
-import { EmptySearchState } from '../../../features/marketplace/components/EmptySearchState';
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
+import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
 import CardForSaleItem from '../../../features/marketplace/components/CardForSaleItem';
-import { SellerRowItem } from '../../../features/marketplace/components/SellerRowItem';
-import { UserSearch, ShoppingBag } from 'lucide-react-native';
+import { EmptySearchState } from '../../../features/marketplace/components/EmptySearchState';
+import SellersListDisplay from '../../../features/marketplace/components/SellersListDisplay';
 import { useSearchCardsForSale } from '../../../features/marketplace/hooks/useSearchCards';
 import { useSearchSellers } from '../../../features/marketplace/hooks/useSearchSellers';
 
@@ -29,11 +29,15 @@ export default function SearchResults({
     isError: isErrorCards,
   } = useSearchCardsForSale(searchQuery);
   const {
-    data: sellersResults,
-    isLoading: isLoadingSellers,
-    isError: isErrorSellers,
+    data: usersData,
+    isLoading: isLoadingUsers,
+    isError: isErrorUsers,
+    fetchNextPage: fetchNextUsersPage,
+    hasNextPage: hasNextUsersPage,
+    isFetchingNextPage: isFetchingNextUsersPage,
   } = useSearchSellers(searchQuery);
 
+  const users = usersData?.pages.flatMap((page) => page.data) ?? [];
   const tabOptions: TabOption<TabType>[] = [
     { id: TAB_CARDS, label: 'Cards' },
     { id: TAB_SELLERS, label: 'Sellers' },
@@ -56,21 +60,22 @@ export default function SearchResults({
         />
       );
     }
+
     return (
       <EmptySearchState
         query={searchQuery}
-        isLoading={isLoadingSellers}
+        isLoading={isLoadingUsers}
         error={
-          isErrorSellers
-            ? "We couldn't load the sellers. Please check your connection and try again."
+          isErrorUsers
+            ? "We couldn't load the users. Please check your connection and try again."
             : null
         }
         icon={<UserSearch size={52} color="#000" />}
-        title="Connect with trusted sellers"
+        title="Connect with trusted users"
         message="Find pro shops and collectors listing unique Pokémon cards"
       />
     );
-  }, [searchQuery, isLoadingCards, isErrorCards, isLoadingSellers, isErrorSellers, activeTab]);
+  }, [searchQuery, isLoadingCards, isErrorCards, isLoadingUsers, isErrorUsers, activeTab]);
 
   return (
     <View style={styles.container}>
@@ -80,7 +85,7 @@ export default function SearchResults({
         onTabChange={setActiveTab}
         containerStyle={styles.tabSwitcherContainer}
       />
-      {isLoadingCards || (isLoadingSellers && searchQuery.trim().length > 0) ? (
+      {isLoadingCards || (isLoadingUsers && searchQuery.trim().length > 0) ? (
         <View style={styles.loadingBox}>
           <ActivityIndicator />
         </View>
@@ -101,26 +106,17 @@ export default function SearchResults({
           removeClippedSubviews
           windowSize={7}
           initialNumToRender={6}
+          pagingEnabled
         />
       ) : (
-        <FlatList
-          data={sellersResults}
-          key="sellersList"
-          keyExtractor={(item) => `seller-${item.id}`}
-          renderItem={({ item }) => (
-            <SellerRowItem
-              item={item}
-              onPress={() => {
-                // Navigate to seller details
-              }}
-            />
-          )}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          contentContainerStyle={styles.listContent}
+        <SellersListDisplay
+          users={users}
+          hasNextPage={hasNextUsersPage}
+          isFetchingNextPage={isFetchingNextUsersPage}
+          isLoading={isLoadingUsers}
+          fetchNextPage={fetchNextUsersPage}
           ListEmptyComponent={renderEmptyState}
-          removeClippedSubviews
-          windowSize={11}
-          initialNumToRender={10}
+          error={isErrorUsers ? new Error("Couldn't load users") : null}
         />
       )}
     </View>
@@ -134,5 +130,4 @@ const styles = StyleSheet.create({
   listContent: { paddingBottom: 20 },
   gridRow: { justifyContent: 'space-between' },
   cardGridItem: { width: '48%', marginBottom: 16 },
-  separator: { height: 1, backgroundColor: '#00000010' },
 });

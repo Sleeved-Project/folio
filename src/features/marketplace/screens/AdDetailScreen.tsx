@@ -31,6 +31,7 @@ export default function AdDetailScreen() {
     imageVerso: 'https://i.pinimg.com/736x/b9/eb/42/b9eb42b06ef014d539d1e9f3b2871608.jpg',
     seller: {
       id: 'seller_1',
+      username: 'SuperPoke',
       alias: 'superpoke',
       flag: 'FR',
       avatarUrl: 'https://i.pravatar.cc/100?img=1',

@@ -12,6 +12,7 @@ export interface CardForSale {
 
 export interface Seller {
   id: string;
+  username: string;
   alias: string;
   flag: string;
   avatarUrl: string;
@@ -57,3 +58,18 @@ export type SellerItem = {
   username: string;
   avatarUrl?: string;
 };
+
+export interface UsersListResponse {
+  data: Seller[];
+  meta: {
+    currentPage: number;
+    firstPage: number;
+    firstPageUrl: string;
+    lastPage: number;
+    lastPageUrl: string;
+    nextPageUrl: string | null;
+    perPage: number;
+    previousPageUrl: string | null;
+    total: number;
+  };
+}
