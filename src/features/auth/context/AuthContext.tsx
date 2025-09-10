@@ -8,7 +8,6 @@ import { useCurrentUser, userKeys } from '../hooks/queries/useCurrentUser';
 import { AuthErrorCode, User } from '../types';
 import { ApiError } from '../../../lib/client/types';
 import { useQueryClient } from '@tanstack/react-query';
-import { userProfileKeys } from '../../user/hooks/queries/useUserInfo';
 
 // Prevent auto-hiding of splash screen
 SplashScreen.preventAutoHideAsync().catch(() => {
@@ -187,8 +186,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       // Clear user data from cache
       queryClient.setQueryData(userKeys.currentUser(), null);
-      queryClient.invalidateQueries({ queryKey: userProfileKeys.all });
-      queryClient.removeQueries({ queryKey: userProfileKeys.all });
+      queryClient.invalidateQueries();
+      queryClient.removeQueries();
     } catch (err) {
       console.error('Logout error:', err);
     }
