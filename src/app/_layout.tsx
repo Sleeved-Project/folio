@@ -8,6 +8,8 @@ import { StyleSheet } from 'react-native';
 import { useAuth } from '../features/auth/context/AuthContext';
 import { ToasterProvider } from '../components/ui/ToasterProvider';
 import { FilterProvider } from '../context/FilterContext';
+import { StripeProvider } from '@stripe/stripe-react-native';
+import { config } from '../config';
 
 function AppNavigator() {
   const { isFullyAuthenticated } = useAuth();
@@ -49,7 +51,13 @@ export default function RootLayout() {
         <AuthProvider>
           <ToasterProvider>
             <FilterProvider>
-              <AppNavigator />
+              <StripeProvider
+                publishableKey={config.REACT_APP_STRIPE_PUBLISHABLE_KEY}
+                urlScheme="folio://ad/ad_123"
+                setReturnUrlSchemeOnAndroid={true}
+              >
+                <AppNavigator />
+              </StripeProvider>
             </FilterProvider>
           </ToasterProvider>
         </AuthProvider>
