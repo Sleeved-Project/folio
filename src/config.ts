@@ -13,7 +13,6 @@ const config = {
   API_WARDEN_BASE_URL:
     process.env.EXPO_PUBLIC_API_WARDEN_BASE_URL || 'http://localhost:8081/api/v1',
   IS_DEV_MODE: parseBoolean(process.env.EXPO_PUBLIC_IS_DEV_MODE), // Set to true for development mode to skip auth
-  REACT_APP_STRIPE_PUBLISHABLE_KEY: process.env.EXPO_APP_STRIPE_PUBLISHABLE_KEY || '',
 } as const;
 
 try {

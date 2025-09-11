@@ -7,3 +7,7 @@ export interface CreatePaymentSheetResponse {
   ephemeralKey: string;
   customer: string;
 }
+
+export interface FetchPublishableKeyResponse {
+  publishableKey: string;
+}
