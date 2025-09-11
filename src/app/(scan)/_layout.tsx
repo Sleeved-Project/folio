@@ -17,6 +17,7 @@ export default function ScanLayout() {
       <Stack.Screen name="scan" />
       <Stack.Screen name="scan-result" />
       <Stack.Screen name="additional-results" />
+      <Stack.Screen name="scan-identify" />
     </Stack>
   );
 }

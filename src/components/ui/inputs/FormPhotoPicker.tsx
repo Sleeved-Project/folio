@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, Modal } from 'react-native';
+import React from 'react';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import PhotoCaptureModal from '../scan/PhotoCaptureModal';
 import { CloudUploadIcon, Trash2Icon } from 'lucide-react-native';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
+import { CARD_ASPECT_RATIO, SCREEN_DIMENSIONS } from '../../../constants';
+
+const CONTAINER_HEIGHT = SCREEN_DIMENSIONS.WIDTH / CARD_ASPECT_RATIO;
 
 interface FormPhotoPickerProps<T extends FieldValues> {
   control: Control<T>;
@@ -13,6 +15,8 @@ interface FormPhotoPickerProps<T extends FieldValues> {
   error?: string;
   isRequired?: boolean;
   disabled?: boolean;
+  mode?: 'full' | 'identify-front-side' | 'identify-back-side';
+  onOpenScanner?: (mode?: 'full' | 'identify-front-side' | 'identify-back-side') => void;
 }
 
 export default function FormPhotoPicker<T extends FieldValues>({
@@ -23,22 +27,14 @@ export default function FormPhotoPicker<T extends FieldValues>({
   error,
   isRequired = false,
   disabled = false,
+  mode,
+  onOpenScanner,
 }: FormPhotoPickerProps<T>) {
   const theme = useTheme();
-  const [showCamera, setShowCamera] = useState(false);
 
-  const handleTakePhoto = () => {
+  const handleOpen = () => {
     if (disabled) return;
-    setShowCamera(true);
-  };
-
-  const handlePhotoTaken = (uri: string, onChange: (value: string) => void) => {
-    onChange(uri);
-    setShowCamera(false);
-  };
-
-  const handleCloseCamera = () => {
-    setShowCamera(false);
+    onOpenScanner?.(mode);
   };
 
   const removeImage = (onChange: (value: string) => void) => {
@@ -70,16 +66,11 @@ export default function FormPhotoPicker<T extends FieldValues>({
           <>
             {value ? (
               <TouchableOpacity
-                style={[
-                  styles.imageContainer,
-                  {
-                    borderRadius: theme.borderRadius.medium,
-                  },
-                ]}
-                onPress={handleTakePhoto}
+                style={[styles.photoContainer, { borderRadius: theme.borderRadius.medium }]}
+                onPress={handleOpen}
               >
                 <View style={styles.imageWrapper}>
-                  <Image source={{ uri: value }} style={styles.image} />
+                  <Image source={{ uri: value }} style={styles.image} resizeMode="contain" />
                   {!disabled && (
                     <TouchableOpacity
                       style={[
@@ -99,13 +90,13 @@ export default function FormPhotoPicker<T extends FieldValues>({
             ) : (
               <TouchableOpacity
                 style={[
-                  styles.imageContainerEmpty,
+                  styles.emptyContainer,
                   {
                     borderRadius: theme.borderRadius.medium,
                     borderColor: theme.colors.border.light,
                   },
                 ]}
-                onPress={handleTakePhoto}
+                onPress={handleOpen}
               >
                 <View style={styles.placeholder}>
                   <CloudUploadIcon
@@ -127,13 +118,6 @@ export default function FormPhotoPicker<T extends FieldValues>({
                 </View>
               </TouchableOpacity>
             )}
-
-            <Modal visible={showCamera} animationType="slide" presentationStyle="fullScreen">
-              <PhotoCaptureModal
-                onPhotoTaken={(uri) => handlePhotoTaken(uri, onChange)}
-                onClose={handleCloseCamera}
-              />
-            </Modal>
           </>
         )}
       />
@@ -154,18 +138,23 @@ export default function FormPhotoPicker<T extends FieldValues>({
 }
 
 const styles = StyleSheet.create({
-  container: {},
-  label: {},
-  imageContainerEmpty: {
-    height: 120,
+  container: {
+    width: '100%',
+  },
+  label: {
+    alignSelf: 'flex-start',
+  },
+  photoContainer: {
+    width: '100%',
+    height: CONTAINER_HEIGHT,
+    overflow: 'hidden',
+  },
+  emptyContainer: {
     borderWidth: 2,
     borderStyle: 'dashed',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  imageContainer: {
-    height: 250,
-    overflow: 'hidden',
+    height: 120,
   },
   imageWrapper: {
     position: 'relative',
@@ -175,7 +164,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
   },
   removeButton: {
     position: 'absolute',

@@ -5,6 +5,8 @@ import { Card } from '../../cards/types';
 import { Button } from '../../../components/ui';
 import { useTheme } from '../../../theme/useTheme';
 import BackButton from '../../../components/ui/BackButton';
+import { downloadTempImage } from '../../../lib/utils/files';
+import { useScanContext } from '../context/ScanContext';
 
 interface CardScanSuccessProps {
   cards: Card[];
@@ -12,10 +14,24 @@ interface CardScanSuccessProps {
 }
 
 export default function CardScanSuccess({ cards, highlightedCardId }: CardScanSuccessProps) {
+  const { setScanCardData } = useScanContext();
+
   const router = useRouter();
   const theme = useTheme();
   const highlightedCard: Card = cards.find((card) => card.id === highlightedCardId) || cards[0];
 
+  const handleSellCard = async () => {
+    const localImageUri = await downloadTempImage(highlightedCard.extractedTempImageUrl || '');
+
+    setScanCardData({
+      id: highlightedCard.id,
+      frontCardCroppedImage: localImageUri,
+    });
+
+    router.push({
+      pathname: '/sell-form',
+    });
+  };
   return (
     <>
       <View style={{ position: 'absolute', top: 40, left: 16, zIndex: 10 }}>
@@ -41,7 +57,7 @@ export default function CardScanSuccess({ cards, highlightedCardId }: CardScanSu
             onPress={() => router.push(`/card/${highlightedCard.id}`)}
           />
         </View>
-        <Button title="Scan again" variant="outline" onPress={() => router.back()} />
+        <Button title="Sell this card" variant="outline" onPress={handleSellCard} />
         <Button
           title="Show other results"
           variant="ghost"

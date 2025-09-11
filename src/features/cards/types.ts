@@ -5,6 +5,7 @@ export interface Card {
   bestTrendPrice?: string;
   occurrence?: number;
   isOwned?: boolean;
+  extractedTempImageUrl: string;
 }
 
 export interface CardsListResponse {
