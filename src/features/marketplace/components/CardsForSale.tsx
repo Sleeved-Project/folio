@@ -1,22 +1,19 @@
-import { useRouter } from 'expo-router';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import TitleSection from '../../../components/ui/TitleSection';
 import { useTheme } from '../../../theme/useTheme';
-import CardForSaleItem from './CardForSaleItem';
 import { useAdsList } from '../hooks/queries/useAdsList';
+import CardForSaleItem from './CardForSaleItem';
 
 export default function CardsForSale() {
   const theme = useTheme();
-  const router = useRouter();
   const { data: adsList, isLoading, isError } = useAdsList();
+
+  const adsListFlat = adsList?.pages.flatMap((page) => page.data) ?? [];
+  const GAP = 8;
 
   if (isLoading) {
     return <Text>Loading...</Text>;
   }
-
-  const adsListFlat = adsList?.pages.flatMap((page) => page.data) ?? [];
-
-  const GAP = 8;
 
   if (isError) {
     return (
@@ -44,9 +41,7 @@ export default function CardsForSale() {
         <View style={[styles.cardsContainer, { gap: GAP }]}>
           {adsListFlat?.map((item) => (
             <View key={item.id} style={styles.cardWrapper}>
-              <Pressable onPress={() => router.push(`/ad/${item.id}`)}>
-                <CardForSaleItem item={item} />
-              </Pressable>
+              <CardForSaleItem item={item} />
             </View>
           ))}
         </View>

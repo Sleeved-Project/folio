@@ -35,9 +35,9 @@ export const useSearchCardAds = (query: string) => {
     queryKey: adsKeys.search(query),
     queryFn: async ({ pageParam = 1 }) => {
       const params = new URLSearchParams({
+        query,
         page: String(pageParam),
         limit: '20',
-        query,
       });
 
       const queryString = params.toString().replace(/%2C/g, ',');

@@ -1,5 +1,5 @@
 import { ImageSourcePropType } from 'react-native';
-import { Card } from '../cards/types';
+import { LabelItem } from '../../types';
 
 export interface HasStripeAccountResponse {
   hasStripeAccount: boolean;
@@ -32,13 +32,23 @@ export interface Ad {
   rectoImageUrl: string;
   versoImageUrl: string;
   status: string;
-  condition: string;
-  finish: string;
-  card: Card;
+  condition: Condition;
+  finish: Finish;
+  card: AdCard;
   certificate?: Certification;
   seller: Seller;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface AdCard {
+  id: string;
+  name: string;
+  imageSmall: string;
+  imageLarge?: string;
+  bestTrendPrice?: string;
+  occurrence?: number;
+  isOwned?: boolean;
 }
 
 export interface AdsListResponse {
@@ -56,8 +66,12 @@ export interface AdsListResponse {
   };
 }
 
-export type SellerItem = {
+export type Condition = LabelItem;
+
+export type Finish = LabelItem;
+
+export interface SellerItem {
   id: string;
   username: string;
   avatarUrl: string;
-};
+}
