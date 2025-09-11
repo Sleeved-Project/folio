@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import SearchResults from '../../components/ui/modal/SearchResults';
 import SearchBar from '../../components/ui/SearchBar';
 import MarketplaceHome from '../../features/marketplace/screens/MarketplaceHome';
 import { useTheme } from '../../theme/useTheme';
+import { useState } from 'react';
 
 export default function Marketplace() {
   const theme = useTheme();

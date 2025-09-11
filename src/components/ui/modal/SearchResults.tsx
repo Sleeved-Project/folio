@@ -4,9 +4,9 @@ import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
 import CardForSaleItem from '../../../features/marketplace/components/CardForSaleItem';
 import { EmptySearchState } from '../../../features/marketplace/components/EmptySearchState';
+import { useSearchCardAds } from '../../../features/marketplace/hooks/queries/useAdsList';
+import { useSearchSellers } from '../../../features/marketplace/hooks/queries/useSearchSellers';
 import SellersListDisplay from '../../../features/marketplace/components/SellersListDisplay';
-import { useSearchCardsForSale } from '../../../features/marketplace/hooks/useSearchCards';
-import { useSearchSellers } from '../../../features/marketplace/hooks/useSearchSellers';
 
 const TAB_CARDS = 'cards';
 const TAB_SELLERS = 'sellers';
@@ -27,11 +27,11 @@ export default function SearchResults({
     data: cardsResults,
     isLoading: isLoadingCards,
     isError: isErrorCards,
-  } = useSearchCardsForSale(searchQuery);
+  } = useSearchCardAds(searchQuery);
   const {
     data: usersData,
-    isLoading: isLoadingUsers,
-    isError: isErrorUsers,
+    isLoading: isLoadingSellers,
+    isError: isErrorSellers,
     fetchNextPage: fetchNextUsersPage,
     hasNextPage: hasNextUsersPage,
     isFetchingNextPage: isFetchingNextUsersPage,
@@ -64,10 +64,10 @@ export default function SearchResults({
     return (
       <EmptySearchState
         query={searchQuery}
-        isLoading={isLoadingUsers}
+        isLoading={isLoadingSellers}
         error={
-          isErrorUsers
-            ? "We couldn't load the users. Please check your connection and try again."
+          isErrorSellers
+            ? "We couldn't load the sellers. Please check your connection and try again."
             : null
         }
         icon={<UserSearch size={52} color="#000" />}
@@ -75,7 +75,9 @@ export default function SearchResults({
         message="Find pro shops and collectors listing unique Pokémon cards"
       />
     );
-  }, [searchQuery, isLoadingCards, isErrorCards, isLoadingUsers, isErrorUsers, activeTab]);
+  }, [searchQuery, isLoadingCards, isErrorCards, isLoadingSellers, isErrorSellers, activeTab]);
+
+  const cardsFlat = cardsResults?.pages?.flatMap((page) => page.data) ?? [];
 
   return (
     <View style={styles.container}>
@@ -85,13 +87,13 @@ export default function SearchResults({
         onTabChange={setActiveTab}
         containerStyle={styles.tabSwitcherContainer}
       />
-      {isLoadingCards || (isLoadingUsers && searchQuery.trim().length > 0) ? (
+      {isLoadingCards || (isLoadingSellers && searchQuery.trim().length > 0) ? (
         <View style={styles.loadingBox}>
           <ActivityIndicator />
         </View>
       ) : activeTab === TAB_CARDS ? (
         <FlatList
-          data={cardsResults}
+          data={cardsFlat}
           key="cardsGrid"
           keyExtractor={(item) => `card-${item.id}`}
           renderItem={({ item }) => (
@@ -113,10 +115,10 @@ export default function SearchResults({
           users={users}
           hasNextPage={hasNextUsersPage}
           isFetchingNextPage={isFetchingNextUsersPage}
-          isLoading={isLoadingUsers}
+          isLoading={isLoadingSellers}
           fetchNextPage={fetchNextUsersPage}
           ListEmptyComponent={renderEmptyState}
-          error={isErrorUsers ? new Error("Couldn't load users") : null}
+          error={isErrorSellers ? new Error("Couldn't load sellers") : null}
         />
       )}
     </View>

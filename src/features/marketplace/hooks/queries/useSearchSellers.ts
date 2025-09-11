@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { httpClient } from '../../../lib/client/http-client';
-import { UsersListResponse } from '../types';
+import { UsersListResponse } from '../../types';
+import { httpClient } from '../../../../lib/client/http-client';
 
 export const usersKeys = {
   all: ['users'] as const,
