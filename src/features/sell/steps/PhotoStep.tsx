@@ -1,4 +1,5 @@
-import React from 'react';
+// ...existing code...
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { StepPhotoFormData, stepPhotoSchema } from '../schemas/sellFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -6,25 +7,44 @@ import StepLayout from '../../../components/ui/multistepsform/StepLayout';
 import StepHeader from '../../../components/ui/multistepsform/StepHeader';
 import FormPhotoPicker from '../../../components/ui/inputs/FormPhotoPicker';
 import { useSellForm } from '../context/SellFormContext';
+import { useScanContext } from '../../../features/scan/context/ScanContext';
+import { useRouter } from 'expo-router';
 
 export default function PhotoStep() {
   const { dispatch, formData: defaultValues } = useSellForm();
+  const { scanCardData } = useScanContext();
+  const router = useRouter();
+
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<StepPhotoFormData>({
     resolver: zodResolver(stepPhotoSchema),
     defaultValues: {
-      rectoImage: defaultValues?.rectoImage || '',
-      versoImage: defaultValues?.versoImage || '',
+      rectoImage: scanCardData?.frontCardCroppedImage || defaultValues?.rectoImage || '',
+      versoImage: scanCardData?.backCardCroppedImage || defaultValues?.versoImage || '',
     },
     mode: 'onChange',
   });
 
+  useEffect(() => {
+    if (scanCardData?.frontCardCroppedImage || scanCardData?.backCardCroppedImage) {
+      reset({
+        rectoImage: scanCardData.frontCardCroppedImage || defaultValues?.rectoImage || '',
+        versoImage: scanCardData.backCardCroppedImage || defaultValues?.versoImage || '',
+      });
+    }
+  }, [scanCardData, reset, defaultValues]);
+
   const onSubmit = (data: StepPhotoFormData) => {
     dispatch({ type: 'UPDATE_DATA', payload: data });
     dispatch({ type: 'NEXT_STEP' });
+  };
+
+  const openScanner = (mode?: 'full' | 'identify-front-side' | 'identify-back-side') => {
+    router.push({ pathname: '/scan', params: { mode } });
   };
 
   return (
@@ -42,6 +62,8 @@ export default function PhotoStep() {
         placeholder="Tap to take front side photo"
         error={errors.rectoImage?.message}
         isRequired
+        mode="identify-front-side"
+        onOpenScanner={openScanner}
       />
 
       <FormPhotoPicker
@@ -51,6 +73,8 @@ export default function PhotoStep() {
         placeholder="Tap to take back side photo"
         error={errors.versoImage?.message}
         isRequired
+        mode="identify-back-side"
+        onOpenScanner={openScanner}
       />
     </StepLayout>
   );

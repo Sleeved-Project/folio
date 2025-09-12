@@ -1,19 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { SelectOption } from '../../../../components/ui/inputs/FormSelectInput';
-
-const mockConditions: SelectOption[] = [
-  { label: 'Mint (M)', value: 'mint' },
-  { label: 'Near Mint (NM)', value: 'near_mint' },
-  { label: 'Excellent (EX)', value: 'excellent' },
-  { label: 'Good (G)', value: 'good' },
-  { label: 'Light Played (LP)', value: 'light_played' },
-  { label: 'Played (P)', value: 'played' },
-  { label: 'Poor', value: 'poor' },
-];
+import { httpClient } from '../../../../lib/client/http-client';
+import { conditionsInputDTO } from '../../types';
+import { mapConditionsInputDTOToSelectOption } from '../../mappers/conditionMapper';
 
 const fetchCardConditions = async (): Promise<SelectOption[]> => {
-  await new Promise((resolve) => setTimeout(resolve, 800));
-  return mockConditions;
+  const response = await httpClient.get<conditionsInputDTO[]>(`/cards/conditions`);
+  return mapConditionsInputDTOToSelectOption(response);
 };
 
 export const useCardConditions = () => {

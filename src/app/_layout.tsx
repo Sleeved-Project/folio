@@ -4,18 +4,18 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '../lib/query/query-client';
 import { AuthProvider } from '../features/auth/context/AuthContext';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { StyleSheet } from 'react-native';
+import { LogBox, StyleSheet } from 'react-native';
 import { useAuth } from '../features/auth/context/AuthContext';
 import { ToasterProvider } from '../components/ui/ToasterProvider';
 import { FilterProvider } from '../context/FilterContext';
+import { ScanProvider } from '../features/scan/context/ScanContext';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { useFetchPublishableKey } from '../features/payment/hooks/queries/useFetchPublishableKey';
 import { LoadingScreen } from '../components/ui/LoadingScreen';
 
 function AppNavigator() {
   const { isFullyAuthenticated } = useAuth();
-  const { data, isLoading, error } = useFetchPublishableKey();
-  console.log({ data, isLoading, error });
+  const { data, isLoading } = useFetchPublishableKey();
 
   if (isLoading || !data) {
     return <LoadingScreen />;
@@ -58,15 +58,18 @@ function AppNavigator() {
 }
 
 export default function RootLayout() {
-  // const { data: publishableKey, isLoading, error } = useFetchPublishableKey();
+  LogBox.ignoreAllLogs(true);
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <ToasterProvider>
-            <FilterProvider>
-              <AppNavigator />
-            </FilterProvider>
+            <ScanProvider>
+              <FilterProvider>
+                <AppNavigator />
+              </FilterProvider>
+            </ScanProvider>
           </ToasterProvider>
         </AuthProvider>
       </QueryClientProvider>

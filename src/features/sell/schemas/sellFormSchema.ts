@@ -14,26 +14,8 @@ export const stepOneSchema = z.object({
 });
 
 export const StepCardInformationSchema = z.object({
-  condition: z
-    .string()
-    .min(1, 'Please select a condition')
-    .refine(
-      (val) =>
-        ['mint', 'near_mint', 'excellent', 'good', 'light_played', 'played', 'poor'].includes(val),
-      {
-        message: 'Invalid condition',
-      }
-    ),
-  finish: z
-    .string()
-    .min(1, 'Please select a finish')
-    .refine(
-      (val) =>
-        ['regular', 'foil', 'etched', 'borderless', 'extended_art', 'showcase'].includes(val),
-      {
-        message: 'Invalid finish',
-      }
-    ),
+  condition: z.string().min(1, 'Please select a condition'),
+  finish: z.string().min(1, 'Please select a finish'),
 });
 
 export const stepPriceSchema = z.object({

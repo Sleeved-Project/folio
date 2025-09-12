@@ -1,18 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { SelectOption } from '../../../../components/ui/inputs/FormSelectInput';
-
-const mockFinishes: SelectOption[] = [
-  { label: 'Regular', value: 'regular' },
-  { label: 'Foil', value: 'foil' },
-  { label: 'Etched Foil', value: 'etched' },
-  { label: 'Borderless', value: 'borderless' },
-  { label: 'Extended Art', value: 'extended_art' },
-  { label: 'Showcase', value: 'showcase' },
-];
+import { finishesInputDTO } from '../../types';
+import { httpClient } from '../../../../lib/client/http-client';
+import { mapFinishesInputDTOToSelectOption } from '../../mappers/finishMapper';
 
 const fetchCardFinishes = async (): Promise<SelectOption[]> => {
-  await new Promise((resolve) => setTimeout(resolve, 800));
-  return mockFinishes;
+  const response = await httpClient.get<finishesInputDTO[]>(`/cards/finishes`);
+  return mapFinishesInputDTOToSelectOption(response);
 };
 
 export const useCardFinishes = () => {

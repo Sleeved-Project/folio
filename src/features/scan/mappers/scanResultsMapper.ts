@@ -9,10 +9,7 @@ export function mapScanResultToCards(scanResults: CardScanResult[]): Card[] {
   }
 
   return scanResults.map((result) => ({
-    id: result.id,
-    imageSmall: result.imageSmall,
-    imageLarge: result.imageLarge,
+    ...result,
     bestTrendPrice: displayScanPrice(result.bestTrendPrice),
-    similarity: result.similarity,
   }));
 }
