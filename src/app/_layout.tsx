@@ -15,15 +15,15 @@ import { LoadingScreen } from '../components/ui/LoadingScreen';
 
 function AppNavigator() {
   const { isFullyAuthenticated } = useAuth();
-  const { data, isLoading } = useFetchPublishableKey();
+  const { data: stripeData, isLoading: isStripeDataLoading } = useFetchPublishableKey();
 
-  if (isLoading || !data) {
+  if (isStripeDataLoading || !stripeData) {
     return <LoadingScreen />;
   }
 
   return (
     <StripeProvider
-      publishableKey={data.publishableKey}
+      publishableKey={stripeData.publishableKey}
       urlScheme="folio://ad/ad_123"
       setReturnUrlSchemeOnAndroid={true}
     >

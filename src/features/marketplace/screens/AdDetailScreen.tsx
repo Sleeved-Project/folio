@@ -35,11 +35,10 @@ export default function AdDetailScreen() {
       });
 
       if (!error) {
-        console.log('Payment sheet initialized');
         setPaymentSheetReady(true);
       }
     } catch (error) {
-      console.log('Error initializing payment sheet', error);
+      console.error('Error initializing payment sheet', error);
     } finally {
       setLoading(false);
     }
