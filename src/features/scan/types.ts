@@ -12,6 +12,14 @@ export interface CardScanResult {
   imageLarge: string;
   bestTrendPrice: string;
   similarity: number;
+  extractedTempImageUrl: string;
+}
+
+export interface CardIdentifyResult {
+  id: string;
+  name: string;
+  potentialMatchedCard: string;
+  extractedTempImageUrl: string;
 }
 
 export interface ScanResponse {

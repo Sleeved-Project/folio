@@ -8,6 +8,7 @@ import ReviewItem from '../../../components/ui/multistepsform/ReviewItem';
 import { useSubmitSellForm } from '../hooks/mutations/useSubmitSellForm';
 import { useToaster } from '../../../components/ui/ToasterProvider';
 import { useRouter } from 'expo-router';
+import { useScanContext } from '../../scan/context/ScanContext';
 
 export default function ReviewStep() {
   const theme = useTheme();
@@ -15,6 +16,7 @@ export default function ReviewStep() {
   const { showToast } = useToaster();
   const { dispatch, formData } = useSellForm();
   const { mutate: submitForm, isPending } = useSubmitSellForm();
+  const { clearScanData } = useScanContext();
 
   const onSubmit = () => {
     submitForm(formData, {
@@ -23,6 +25,7 @@ export default function ReviewStep() {
           message: `Your ad has ${data.id} been successfully created!`,
           type: 'success',
         });
+        clearScanData();
         router.replace('/');
       },
       onError: (error) => {

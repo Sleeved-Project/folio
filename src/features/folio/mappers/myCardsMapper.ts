@@ -6,6 +6,7 @@ export function mapMyCardsApiToCards(data: RawMyCard[]): Card[] {
     id: item.id,
     imageSmall: item.card?.imageSmall ?? '',
     occurrence: item.occurrence ?? 1,
+    extractedTempImageUrl: item.card?.extractedTempImageUrl ?? '',
     ...item.card,
   }));
 }
