@@ -31,7 +31,6 @@ export interface Ad {
   originalPrice: number;
   rectoImageUrl: string;
   versoImageUrl: string;
-  status: string;
   condition: Condition;
   finish: Finish;
   card: AdCard;
@@ -46,9 +45,6 @@ export interface AdCard {
   name: string;
   imageSmall: string;
   imageLarge?: string;
-  bestTrendPrice?: string;
-  occurrence?: number;
-  isOwned?: boolean;
 }
 
 export interface AdsListResponse {

@@ -4,7 +4,7 @@ import { AdsListResponse } from '../../types';
 
 export const adsKeys = {
   all: ['ads'] as const,
-  search: (query: string) => [...adsKeys.all, 'search', { query }] as const,
+  searchAds: (query: string) => [...adsKeys.all, 'searchAds', { query }] as const,
 };
 
 export const useAdsList = () => {
@@ -32,7 +32,7 @@ export const useAdsList = () => {
 
 export const useSearchCardAds = (query: string) => {
   return useInfiniteQuery({
-    queryKey: adsKeys.search(query),
+    queryKey: adsKeys.searchAds(query),
     queryFn: async ({ pageParam = 1 }) => {
       const params = new URLSearchParams({
         query,
