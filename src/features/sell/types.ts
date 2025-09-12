@@ -19,12 +19,16 @@ export type SellFormAction =
   | { type: 'UPDATE_DATA'; payload: Partial<SellFormData> }
   | { type: 'GO_TO_STEP'; payload: SellFormStepEnum };
 
-export interface conditionsInputDTO {
+export interface ConditionsInputDTO {
   id: number;
   label: string;
 }
 
-export interface finishesInputDTO {
+export interface FinishesInputDTO {
   id: number;
   label: string;
+}
+
+export interface AdvicePriceInputDTO {
+  advicePrice: string;
 }

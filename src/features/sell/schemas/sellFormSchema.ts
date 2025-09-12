@@ -3,14 +3,7 @@ import { z } from 'zod';
 export const stepPhotoSchema = z.object({
   rectoImage: z.string().min(1, 'Recto image is required'),
   versoImage: z.string().min(1, 'Verso image is required'),
-});
-
-export const stepOneSchema = z.object({
-  name: z
-    .string()
-    .min(2, 'Name must be at least 2 characters long')
-    .max(50, 'Name cannot exceed 50 characters')
-    .regex(/^[a-zA-ZÀ-ÿ\s]+$/, 'Name can only contain letters and spaces'),
+  cardId: z.string().optional(),
 });
 
 export const StepCardInformationSchema = z.object({
@@ -45,7 +38,7 @@ export const stepGradeSchema = z.object({
 export const sellFormSchema = z.object({
   rectoImage: stepPhotoSchema.shape.rectoImage,
   versoImage: stepPhotoSchema.shape.versoImage,
-  name: stepOneSchema.shape.name,
+  cardId: stepPhotoSchema.shape.cardId,
   condition: StepCardInformationSchema.shape.condition,
   finish: StepCardInformationSchema.shape.finish,
   price: stepPriceSchema.shape.price,
@@ -53,7 +46,6 @@ export const sellFormSchema = z.object({
 });
 
 export type StepPhotoFormData = z.infer<typeof stepPhotoSchema>;
-export type StepOneFormData = z.infer<typeof stepOneSchema>;
 export type StepCardInformationFormData = z.infer<typeof StepCardInformationSchema>;
 export type StepPriceFormData = z.infer<typeof stepPriceSchema>;
 export type StepGradeFormData = z.infer<typeof stepGradeSchema>;

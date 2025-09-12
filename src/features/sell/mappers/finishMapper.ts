@@ -1,8 +1,8 @@
 import { SelectOption } from '../../../components/ui/inputs/FormSelectInput';
-import { finishesInputDTO } from '../types';
+import { FinishesInputDTO } from '../types';
 
 export function mapFinishesInputDTOToSelectOption(
-  conditionsInputDTO: finishesInputDTO[]
+  conditionsInputDTO: FinishesInputDTO[]
 ): SelectOption[] {
   return conditionsInputDTO.map((condition) => ({
     label: condition.label,

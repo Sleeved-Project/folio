@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { SelectOption } from '../../../../components/ui/inputs/FormSelectInput';
 import { httpClient } from '../../../../lib/client/http-client';
-import { conditionsInputDTO } from '../../types';
+import { ConditionsInputDTO } from '../../types';
 import { mapConditionsInputDTOToSelectOption } from '../../mappers/conditionMapper';
 
 const fetchCardConditions = async (): Promise<SelectOption[]> => {
-  const response = await httpClient.get<conditionsInputDTO[]>(`/cards/conditions`);
+  const response = await httpClient.get<ConditionsInputDTO[]>(`/cards/conditions`);
   return mapConditionsInputDTOToSelectOption(response);
 };
 

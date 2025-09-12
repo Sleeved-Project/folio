@@ -69,7 +69,7 @@ export default function PriceEstimation() {
             },
           ]}
         >
-          {estimatedPrice.toFixed(2)} €
+          {estimatedPrice}
         </Text>
       )}
     </View>

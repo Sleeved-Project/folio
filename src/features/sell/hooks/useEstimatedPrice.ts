@@ -1,20 +1,27 @@
 import { useQuery } from '@tanstack/react-query';
 import { SellFormData } from '../schemas/sellFormSchema';
+import { httpClient } from '../../../lib/client/http-client';
+import { AdvicePriceInputDTO } from '../types';
+import { CurrencyEnum, formatAdvicePriceMapper } from '../mappers/advicePriceMapper';
 
-// Mock data fetching function
-const fetchEstimatedPrice = async (formData: Partial<SellFormData>): Promise<number> => {
-  console.log('Fetching estimated price with data:', formData);
-  await new Promise((resolve) => setTimeout(resolve, 800));
-  return 45.99;
+const fetchEstimatedPrice = async (formData: Partial<SellFormData>): Promise<string> => {
+  if (!formData.cardId || !formData.condition || !formData.finish) {
+    throw new Error('Card ID is required for price estimation');
+  }
+  const response = await httpClient.get<AdvicePriceInputDTO>(
+    `/cards/${formData.cardId}/advices?conditions=${formData.condition}&finishes=${formData.finish}`
+  );
+
+  return formatAdvicePriceMapper(response.advicePrice, CurrencyEnum.EUR);
 };
 
 export function useEstimatedPrice(formData: Partial<SellFormData>) {
-  const { rectoImage, condition, finish } = formData;
+  const { cardId, condition, finish } = formData;
 
   return useQuery({
-    queryKey: ['estimated-price', rectoImage, condition, finish],
+    queryKey: ['estimated-price', cardId, condition, finish],
     queryFn: () => fetchEstimatedPrice(formData),
-    enabled: !!(rectoImage && condition && finish),
+    enabled: !!(cardId && condition && finish),
     staleTime: 5 * 60 * 1000,
   });
 }
