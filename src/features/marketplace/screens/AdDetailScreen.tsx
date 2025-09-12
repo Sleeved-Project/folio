@@ -10,6 +10,7 @@ import certi_PSA from '../../../../assets/icons/certi/certi_PSA.png';
 import certi_SLV from '../../../../assets/icons/certi/certi_SLV.png';
 import { useStripe } from '@stripe/stripe-react-native';
 import { useFetchPaymentSheet } from '../../payment/hooks/mutations/useFetchPaymentSheet';
+import { router } from 'expo-router';
 
 export default function AdDetailScreen() {
   const theme = useTheme();
@@ -18,6 +19,7 @@ export default function AdDetailScreen() {
   const { mutateAsync: fetchPaymentSheetParams } = useFetchPaymentSheet();
   const [loading, setLoading] = useState(false);
   const [paymentSheetReady, setPaymentSheetReady] = useState(false);
+  const [canBuy, setCanBuy] = useState(true);
 
   const initializePaymentSheet = async () => {
     try {
@@ -60,8 +62,8 @@ export default function AdDetailScreen() {
       Alert.alert(`Error code: ${error.code}`, error.message);
     } else {
       setLoading(false);
-      // TODO navigate to orders screen
-      Alert.alert('Success', 'Your order is confirmed!');
+      setCanBuy(false);
+      router.push('/order-confirmation');
     }
   };
 
@@ -137,6 +139,7 @@ export default function AdDetailScreen() {
         onSeeCardDetail={handleSeeCardDetail}
         onBuy={openPaymentSheet}
         isLoading={loading}
+        canBuy={canBuy}
       />
     </>
   );

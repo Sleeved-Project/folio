@@ -5,7 +5,7 @@ import { CreatePaymentSheetResponse } from '../../types';
 export const useFetchPaymentSheet = () => {
   return useMutation({
     mutationFn: async () => {
-      const response = await httpClient.get<CreatePaymentSheetResponse>(`/payment/sheet`);
+      const response = await httpClient.get<CreatePaymentSheetResponse>(`/payment/1/sheet`);
       return response;
     },
   });
