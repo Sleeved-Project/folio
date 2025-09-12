@@ -1,44 +1,33 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
 import TitleSection from '../../../components/ui/TitleSection';
-import { useTheme } from '../../../theme/useTheme';
+import { useAdsList } from '../hooks/queries/useAdsList';
 import CardForSaleItem from './CardForSaleItem';
-import { useCardsForSale } from '../hooks/useCardsForSale';
-import { useRouter } from 'expo-router';
 
 export default function CardsForSale() {
-  const theme = useTheme();
-  const router = useRouter();
-  const { data: cardsForSale, isLoading } = useCardsForSale();
+  const { data: adsList, isLoading, error } = useAdsList();
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
-
-  if (!cardsForSale) {
-    return (
-      <Text
-        style={[
-          styles.text,
-          { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
-        ]}
-      >
-        No cards available
-      </Text>
-    );
-  }
-
+  const adsListFlat = adsList?.pages.flatMap((page) => page.data) ?? [];
   const GAP = 8;
+
+  if (isLoading) return <LoadingState />;
+  if (error) return <ErrorState message={error?.message} />;
 
   return (
     <View>
       <TitleSection title="Cards for Sale" />
       <View style={[{ marginTop: 8 }]}>
-        <View style={[styles.cardsContainer, { gap: GAP }]}>
-          {cardsForSale?.map((item) => (
+        <View
+          style={{
+            gap: GAP,
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+          }}
+        >
+          {adsListFlat?.map((item) => (
             <View key={item.id} style={styles.cardWrapper}>
-              <Pressable onPress={() => router.push(`/ad/${item.id}`)}>
-                <CardForSaleItem item={item} />
-              </Pressable>
+              <CardForSaleItem item={item} />
             </View>
           ))}
         </View>
@@ -48,15 +37,6 @@ export default function CardsForSale() {
 }
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 16,
-    color: '#333',
-  },
-  cardsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
   cardWrapper: {
     width: '48%',
     marginBottom: 16,

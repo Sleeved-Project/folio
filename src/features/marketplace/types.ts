@@ -1,14 +1,5 @@
 import { ImageSourcePropType } from 'react-native';
-
-export interface CardForSale {
-  id: string;
-  name: string;
-  finition: string;
-  condition: string;
-  set: string;
-  price: number;
-  pictureUrl: string;
-}
+import { LabelItem } from '../../types';
 
 export interface HasStripeAccountResponse {
   hasStripeAccount: boolean;
@@ -16,6 +7,7 @@ export interface HasStripeAccountResponse {
 
 export interface Seller {
   id: string;
+  username: string;
   alias: string;
   flag: string;
   avatarUrl: string;
@@ -36,28 +28,46 @@ export interface Authority {
 
 export interface Ad {
   id: string;
-  title: string;
-  price: {
-    amount: number;
-    currency: string;
-  };
-  condition: string;
-  imageRecto: string;
-  imageVerso: string;
+  originalPrice: number;
+  rectoImageUrl: string;
+  versoImageUrl: string;
+  condition: Condition;
+  finish: Finish;
+  card: AdCard;
+  certificate?: Certification;
   seller: Seller;
-  certification?: Certification;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface Offer {
+export interface AdCard {
   id: string;
-  seller: { id: string; alias: string };
-  price: { amount: number; currency: string };
-  condition: string;
-  thumbnail: string;
+  name: string;
+  imageSmall: string;
+  imageLarge?: string;
 }
 
-export type SellerItem = {
-  id: string | number;
+export interface AdsListResponse {
+  data: Ad[];
+  meta: {
+    currentPage: number;
+    firstPage: number;
+    firstPageUrl: string;
+    lastPage: number;
+    lastPageUrl: string;
+    nextPageUrl: string | null;
+    perPage: number;
+    previousPageUrl: string | null;
+    total: number;
+  };
+}
+
+export type Condition = LabelItem;
+
+export type Finish = LabelItem;
+
+export interface SellerItem {
+  id: string;
   username: string;
-  avatarUrl?: string;
-};
+  avatarUrl: string;
+}
