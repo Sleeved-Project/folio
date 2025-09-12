@@ -1,10 +1,11 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import { SellerItem } from '../types';
+import ProfilePicture from '../../user/components/profile/ProfilePicture';
+import { Seller } from '../types';
 
 interface SellerRowItemProps {
-  item: SellerItem;
+  item: Seller;
   onPress?: () => void;
 }
 
@@ -12,12 +13,10 @@ export function SellerRowItem({ item, onPress }: SellerRowItemProps) {
   const theme = useTheme();
   return (
     <TouchableOpacity style={styles.row} onPress={onPress} activeOpacity={0.7}>
-      {item.avatarUrl ? (
-        <Image source={{ uri: item.avatarUrl }} style={styles.avatar} />
-      ) : (
-        <View style={[styles.avatar, { backgroundColor: theme.colors.background.tertiary }]} />
-      )}
-      <Text style={[styles.name, { color: theme.colors.text.primary }]}>{item.username}</Text>
+      <ProfilePicture username={item.username} uri={item.avatarUrl} size="small" />
+      <Text style={[styles.name, { color: theme.colors.text.primary, paddingLeft: 12 }]}>
+        {item.username}
+      </Text>
       <Text style={[styles.chevron, { color: theme.colors.text.secondary }]}>›</Text>
     </TouchableOpacity>
   );
