@@ -4,7 +4,8 @@ export type ScannerState =
   | 'analyzing'
   | 'error_not_detected'
   | 'error_capture_failed'
-  | 'error_analysis_failed';
+  | 'error_analysis_failed'
+  | { type: 'error_custom'; message: string };
 
 export interface CardScanResult {
   id: string;
@@ -20,6 +21,7 @@ export interface CardIdentifyResult {
   name: string;
   potentialMatchedCard: string;
   extractedTempImageUrl: string;
+  is_back_side: boolean;
 }
 
 export interface ScanResponse {
