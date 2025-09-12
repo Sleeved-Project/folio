@@ -15,8 +15,45 @@ import { router } from 'expo-router';
 export default function AdDetailScreen() {
   const theme = useTheme();
   // const { data: ad, isLoading, isError } = useAdDetail();
+  // TODODELETE: Replace with hook fetch data from API
+  const [ad] = useState({
+    id: 'ad_123',
+    title: 'Scyther holo',
+    price: { amount: 29.9, currency: 'EUR' },
+    condition: 'Bonne condition',
+    imageRecto: 'https://images.pokemontcg.io/base1/1.png',
+    imageVerso: 'https://i.pinimg.com/736x/b9/eb/42/b9eb42b06ef014d539d1e9f3b2871608.jpg',
+    seller: {
+      id: 'seller_1',
+      username: 'superpoke',
+      alias: 'superpoke',
+      flag: 'FR',
+      avatarUrl: 'https://i.pravatar.cc/100?img=1',
+      rating: 4.8,
+      ratingCount: 191,
+    },
+    certification: [
+      {
+        authority: {
+          name: 'PSA',
+          logo: certi_PSA,
+        },
+        grade: 9,
+        label: 'Mint',
+      },
+      {
+        authority: {
+          name: 'Sleeved',
+          logo: certi_SLV,
+        },
+        grade: 8.5,
+        label: 'Near Mint',
+      },
+    ],
+  });
+
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
-  const { mutateAsync: fetchPaymentSheetParams } = useFetchPaymentSheet();
+  const { mutateAsync: fetchPaymentSheetParams } = useFetchPaymentSheet(ad.id);
   const [loading, setLoading] = useState(false);
   const [paymentSheetReady, setPaymentSheetReady] = useState(false);
   const [canBuy, setCanBuy] = useState(true);
@@ -65,43 +102,6 @@ export default function AdDetailScreen() {
       router.push('/order-confirmation');
     }
   };
-
-  // TODODELETE: Replace with hook fetch data from API
-  const [ad] = useState({
-    id: 'ad_123',
-    title: 'Scyther holo',
-    price: { amount: 29.9, currency: 'EUR' },
-    condition: 'Bonne condition',
-    imageRecto: 'https://images.pokemontcg.io/base1/1.png',
-    imageVerso: 'https://i.pinimg.com/736x/b9/eb/42/b9eb42b06ef014d539d1e9f3b2871608.jpg',
-    seller: {
-      id: 'seller_1',
-      username: 'superpoke',
-      alias: 'superpoke',
-      flag: 'FR',
-      avatarUrl: 'https://i.pravatar.cc/100?img=1',
-      rating: 4.8,
-      ratingCount: 191,
-    },
-    certification: [
-      {
-        authority: {
-          name: 'PSA',
-          logo: certi_PSA,
-        },
-        grade: 9,
-        label: 'Mint',
-      },
-      {
-        authority: {
-          name: 'Sleeved',
-          logo: certi_SLV,
-        },
-        grade: 8.5,
-        label: 'Near Mint',
-      },
-    ],
-  });
 
   return (
     <>
