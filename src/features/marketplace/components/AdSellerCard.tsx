@@ -1,8 +1,8 @@
-import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
+import { User } from 'lucide-react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import { Seller } from '../types';
 import StarRating from '../../user/components/profile/StarRating';
-import CountryFlagDisplay from '../../../components/ui/CountryFlagDisplay';
+import { Seller } from '../types';
 
 interface AdSellerCardProps {
   seller: Seller;
@@ -11,14 +11,34 @@ interface AdSellerCardProps {
 
 export default function AdSellerCard({ seller, onPress }: AdSellerCardProps) {
   const theme = useTheme();
-  const flag = <CountryFlagDisplay countryCode={seller.flag} size={12} />;
 
   return (
     <Pressable onPress={() => onPress?.(seller.id)} style={styles.container}>
-      <Image source={{ uri: seller.avatarUrl }} style={styles.avatar} />
+      {seller.avatarUrl ? (
+        <Image source={{ uri: seller.avatarUrl }} style={styles.avatar} />
+      ) : (
+        <View
+          style={[
+            styles.avatar,
+            {
+              backgroundColor: theme.colors.background.secondary,
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+          ]}
+        >
+          <User size={20} color={theme.colors.text.secondary} />
+        </View>
+      )}
       <View style={styles.info}>
-        <Text style={[styles.alias, { color: theme.colors.text.primary }]}>
-          {seller.alias} {flag} ({seller.flag})
+        <Text
+          style={{
+            color: theme.colors.text.primary,
+            fontSize: theme.typography.fontSizes.md,
+            fontWeight: theme.typography.fontWeights.bold,
+          }}
+        >
+          {seller.username}
         </Text>
         {seller.rating && seller.ratingCount && (
           <StarRating rating={seller.rating} count={seller.ratingCount} />
@@ -38,19 +58,12 @@ const styles = StyleSheet.create({
     borderBottomColor: '#BEBEBE',
   },
   avatar: {
-    width: 48,
-    height: 48,
+    width: 40,
+    height: 40,
     borderRadius: 24,
     marginRight: 12,
   },
   info: {
     flex: 1,
-  },
-  alias: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  rating: {
-    fontSize: 14,
   },
 });

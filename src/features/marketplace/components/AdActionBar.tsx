@@ -2,12 +2,10 @@ import { View, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '../../../components/ui';
 import { useTheme } from '../../../theme/useTheme';
+import { Ad } from '../types';
 
 interface AdActionBarProps {
-  ad: {
-    id: string;
-    title: string;
-  };
+  ad: Ad;
   onSeeCardDetail?: (id: string) => void;
   onBuy?: (id: string) => void;
 }

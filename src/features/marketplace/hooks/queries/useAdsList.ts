@@ -4,6 +4,7 @@ import { AdsListResponse } from '../../types';
 
 export const adsKeys = {
   all: ['ads'] as const,
+  getAdById: (id: string) => [...adsKeys.all, 'ad', id] as const,
   searchAds: (query: string) => [...adsKeys.all, 'searchAds', { query }] as const,
 };
 
@@ -41,6 +42,7 @@ export const useSearchCardAds = (query: string) => {
       });
 
       const queryString = params.toString().replace(/%2C/g, ',');
+      console.log('Fetching ads with query:', queryString);
       const response = await httpClient.get<AdsListResponse>(`/ads/search?${queryString}`);
       return response;
     },

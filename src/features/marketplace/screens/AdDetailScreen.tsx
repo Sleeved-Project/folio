@@ -1,17 +1,18 @@
-import { useState } from 'react';
+import { router } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import CardAvailableOffers from '../../cards/components/CardAvailableOffers';
+import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
+import { useTheme } from '../../../theme/useTheme';
 import AdActionBar from '../components/AdActionBar';
 import AdHeader from '../components/AdHeader';
 import AdSellerCard from '../components/AdSellerCard';
-import CertificationBadge from '../components/CertificationBadge';
-import { useTheme } from '../../../theme/useTheme';
-import certi_PSA from '../../../../assets/icons/certi/certi_PSA.png';
-import certi_SLV from '../../../../assets/icons/certi/certi_SLV.png';
+import { useAdDetail } from '../hooks/queries/useAdDetail';
 
-export default function AdDetailScreen() {
+export default function AdDetailScreen({ adId }: { adId: string }) {
   const theme = useTheme();
-  // const { data: ad, isLoading, isError } = useAdDetail();
+  const { data: ad, isLoading, error } = useAdDetail(adId);
+
+  if (isLoading) return <LoadingState />;
+  if (error || !ad) return <ErrorState message="Failed to load ad details." />;
 
   const handleSeeCardDetail = (id: string) => {
     console.log('See card detail for ad id:', id);
@@ -21,71 +22,44 @@ export default function AdDetailScreen() {
     console.log('Buy ad id:', id);
   };
 
-  // TODODELETE: Replace with hook fetch data from API
-  const [ad] = useState({
-    id: 'ad_123',
-    title: 'Scyther holo',
-    price: { amount: 29.9, currency: 'USD' },
-    condition: 'Bonne condition',
-    imageRecto: 'https://images.pokemontcg.io/base1/1.png',
-    imageVerso: 'https://i.pinimg.com/736x/b9/eb/42/b9eb42b06ef014d539d1e9f3b2871608.jpg',
-    seller: {
-      id: 'seller_1',
-      username: 'superpoke',
-      alias: 'superpoke',
-      flag: 'FR',
-      avatarUrl: 'https://i.pravatar.cc/100?img=1',
-      rating: 4.8,
-      ratingCount: 191,
-    },
-    certification: [
-      {
-        authority: {
-          name: 'PSA',
-          logo: certi_PSA,
-        },
-        grade: 9,
-        label: 'Mint',
-      },
-      {
-        authority: {
-          name: 'Sleeved',
-          logo: certi_SLV,
-        },
-        grade: 8.5,
-        label: 'Near Mint',
-      },
-    ],
-  });
+  const handleSeller = (sellerId: string) => {
+    router.push(`/profile/${sellerId}`);
+  };
 
   return (
     <>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
-        <AdHeader imageRecto={ad.imageRecto} imageVerso={ad.imageVerso} title={ad.title} />
+        <AdHeader
+          imageRecto={ad.rectoImageUrl}
+          imageVerso={ad.versoImageUrl}
+          title={ad.card.name}
+        />
 
-        <AdSellerCard seller={ad.seller} />
+        <AdSellerCard seller={ad.seller} onPress={handleSeller} />
 
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.text.black }]}>{ad.title}</Text>
+          <Text style={[styles.sectionTitle, { color: theme.colors.text.black }]}>
+            {ad.card.name}
+          </Text>
           <Text
             style={{
-              fontSize: 16,
-              fontWeight: '600',
+              fontSize: theme.typography.fontSizes.md,
+              fontWeight: theme.typography.fontWeights.medium,
               color: theme.colors.text.secondary,
             }}
           >
-            {ad.price.amount} {ad.price.currency} · {ad.condition}
+            {ad.originalPrice} · {ad.condition.label}
           </Text>
         </View>
 
-        {ad.certification &&
-          ad.certification.map((cert, index) => (
+        {/* {ad.certificate &&
+          ad.certificate?.map((cert, index) => (
             <CertificationBadge key={index} certification={cert} />
-          ))}
+          ))} */}
 
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <CardAvailableOffers cardId={ad.id} title="Other selling" />
-        </View>
+        </View> */}
       </ScrollView>
 
       <AdActionBar ad={ad} onSeeCardDetail={handleSeeCardDetail} onBuy={handleBuy} />
@@ -99,6 +73,7 @@ const styles = StyleSheet.create({
   },
   section: {
     marginHorizontal: 16,
+    gap: 4,
     marginTop: 16,
   },
   sectionTitle: {
