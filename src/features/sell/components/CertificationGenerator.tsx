@@ -8,6 +8,7 @@ import { useCertificationToken } from '../hooks/queries/useCertificationToken';
 import CertificationResult from './CertificationResult';
 import { useToaster } from '../../../components/ui/ToasterProvider';
 import { useSellForm } from '../context/SellFormContext';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface CertificationGeneratorProps {
   onCertificationGenerated: (certification: Certification) => void;
@@ -19,15 +20,12 @@ export default function CertificationGenerator({
   existingCertification,
 }: CertificationGeneratorProps) {
   const theme = useTheme();
+  const queryClient = useQueryClient();
   const { formData } = useSellForm();
 
   const { showToast } = useToaster();
 
-  const {
-    data: availableTokens,
-    isFetching: tokensLoading,
-    decrementToken,
-  } = useCertificationToken();
+  const { data: availableTokens, isFetching: tokensLoading } = useCertificationToken();
 
   const { data: certification, isPending, mutate } = useCertificate(formData);
 
@@ -37,7 +35,7 @@ export default function CertificationGenerator({
     mutate(undefined, {
       onSuccess: (data) => {
         onCertificationGenerated(data);
-        decrementToken();
+        queryClient.invalidateQueries({ queryKey: ['certification-token'] });
       },
       onError: (error) => {
         showToast({
