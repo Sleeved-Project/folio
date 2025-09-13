@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
-import { useEstimatedPrice } from '../hooks/useEstimatedPrice';
+import { useEstimatedPrice } from '../hooks/queries/useEstimatedPrice';
 import { useTheme } from '../../../theme/useTheme';
 import { useSellForm } from '../context/SellFormContext';
 

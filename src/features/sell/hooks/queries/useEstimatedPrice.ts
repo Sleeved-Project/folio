@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { SellFormData } from '../schemas/sellFormSchema';
-import { httpClient } from '../../../lib/client/http-client';
-import { AdvicePriceInputDTO } from '../types';
-import { CurrencyEnum, formatAdvicePriceMapper } from '../mappers/advicePriceMapper';
+import { SellFormData } from '../../schemas/sellFormSchema';
+import { httpClient } from '../../../../lib/client/http-client';
+import { AdvicePriceInputDTO } from '../../types';
+import { CurrencyEnum, formatAdvicePriceMapper } from '../../mappers/advicePriceMapper';
 
 const fetchEstimatedPrice = async (formData: Partial<SellFormData>): Promise<string> => {
   if (!formData.cardId || !formData.condition || !formData.finish) {
