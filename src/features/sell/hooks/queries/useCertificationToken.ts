@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-let serverTokenCount = 3;
+let serverTokenCount = 10;
 
 const fetchCertificationTokenCount = async (): Promise<number> => {
   await new Promise((resolve) => setTimeout(resolve, 800));
