@@ -25,6 +25,7 @@ export default function PhotoStep() {
     defaultValues: {
       rectoImage: scanCardData?.frontCardCroppedImage || defaultValues?.rectoImage || '',
       versoImage: scanCardData?.backCardCroppedImage || defaultValues?.versoImage || '',
+      cardId: scanCardData?.id || defaultValues?.cardId || '',
     },
     mode: 'onChange',
   });
@@ -34,6 +35,7 @@ export default function PhotoStep() {
       reset({
         rectoImage: scanCardData.frontCardCroppedImage || defaultValues?.rectoImage || '',
         versoImage: scanCardData.backCardCroppedImage || defaultValues?.versoImage || '',
+        cardId: scanCardData.id || defaultValues?.cardId || '',
       });
     }
   }, [scanCardData, reset, defaultValues]);
