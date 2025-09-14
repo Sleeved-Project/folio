@@ -5,9 +5,6 @@ import { AdvicePriceInputDTO } from '../../types';
 import { CurrencyEnum, formatAdvicePriceMapper } from '../../mappers/advicePriceMapper';
 
 const fetchEstimatedPrice = async (formData: Partial<SellFormData>): Promise<string> => {
-  if (!formData.cardId || !formData.condition || !formData.finish) {
-    throw new Error('Card ID is required for price estimation');
-  }
   const response = await httpClient.get<AdvicePriceInputDTO>(
     `/cards/${formData.cardId}/advices?conditions=${formData.condition}&finishes=${formData.finish}`
   );
