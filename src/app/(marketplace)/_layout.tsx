@@ -28,6 +28,13 @@ export default function MarketplaceLayout() {
           title: 'Ad Details',
         }}
       />
+      <Stack.Screen
+        name="order-confirmation"
+        options={{
+          headerShown: false,
+          title: 'Order Confirmation',
+        }}
+      />
     </Stack>
   );
 }

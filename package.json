@@ -46,7 +46,8 @@
     "react-native-svg": "15.11.2",
     "react-native-web": "^0.20.0",
     "zod": "^3.25.51",
-    "expo-dev-client": "~5.2.4"
+    "expo-dev-client": "~5.2.4",
+    "@stripe/stripe-react-native": "0.45.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

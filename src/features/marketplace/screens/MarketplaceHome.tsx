@@ -17,7 +17,6 @@ export default function MarketplaceHome() {
     } else {
       router.push('/sell-form');
     }
-    router.push('/sell-form');
   };
 
   return (
