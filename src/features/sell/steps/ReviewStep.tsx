@@ -9,10 +9,13 @@ import { useSubmitSellForm } from '../hooks/mutations/useSubmitSellForm';
 import { useToaster } from '../../../components/ui/ToasterProvider';
 import { useRouter } from 'expo-router';
 import { useScanContext } from '../../scan/context/ScanContext';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ReviewStep() {
   const theme = useTheme();
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const { showToast } = useToaster();
   const { dispatch, formData } = useSellForm();
   const { mutate: submitForm, isPending } = useSubmitSellForm();
@@ -20,12 +23,13 @@ export default function ReviewStep() {
 
   const onSubmit = () => {
     submitForm(formData, {
-      onSuccess: (data) => {
+      onSuccess: () => {
         showToast({
-          message: `Your ad has ${data.id} been successfully created!`,
+          message: `Your ad has been successfully created!`,
           type: 'success',
         });
         clearScanData();
+        queryClient.invalidateQueries({ queryKey: ['ads'] });
         router.replace('/');
       },
       onError: (error) => {
