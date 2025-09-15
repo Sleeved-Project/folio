@@ -24,7 +24,7 @@ function AppNavigator() {
   return (
     <StripeProvider
       publishableKey={stripeData.publishableKey}
-      urlScheme="folio://ad/ad_123"
+      urlScheme="folio://marketplace/"
       setReturnUrlSchemeOnAndroid={true}
     >
       <Stack screenOptions={{ headerShown: false }}>
