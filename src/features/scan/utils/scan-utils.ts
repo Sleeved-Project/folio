@@ -4,6 +4,10 @@ import { ScannerState } from '../types';
  * Determine the status text to display based on scanner state
  */
 export function getScannerStatusText(scannerState: ScannerState): string {
+  if (typeof scannerState === 'object' && scannerState.type === 'error_custom') {
+    return scannerState.message;
+  }
+
   switch (scannerState) {
     case 'ready':
       return 'Place your card here';
@@ -24,9 +28,11 @@ export function getScannerStatusText(scannerState: ScannerState): string {
  * Check if the current scanner state is an error state
  */
 export function isErrorState(scannerState: ScannerState): boolean {
+  if (typeof scannerState === 'object') {
+    return scannerState.type.startsWith('error_');
+  }
   return scannerState.startsWith('error_');
 }
-
 /**
  * Check if the current scanner state is a loading state
  */

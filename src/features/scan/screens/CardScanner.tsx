@@ -59,29 +59,35 @@ export default function CardScanner({ mode = 'full' }: CardScannerProps) {
     // Process based on mode
     switch (mode) {
       case 'identify-front-side':
-        scanCardIdentify(photoUri, {
-          onSuccess: async (cardIdentify) => {
-            await ScanService.processFrontSideScan(cardIdentify, router, setScanCardData);
-            resetState();
-          },
-          onError: (error) => {
-            console.warn('Error identifying card:', error);
-            setError();
-          },
-        });
+        scanCardIdentify(
+          { photoUri },
+          {
+            onSuccess: async (cardIdentify) => {
+              await ScanService.processFrontSideScan(cardIdentify, router, setScanCardData);
+              resetState();
+            },
+            onError: (error) => {
+              console.warn('Error identifying card (front):', error);
+              setError();
+            },
+          }
+        );
         break;
 
       case 'identify-back-side':
-        scanCardIdentify(photoUri, {
-          onSuccess: async (cardIdentify) => {
-            await ScanService.processBackSideScan(cardIdentify, router, setScanCardData);
-            resetState();
-          },
-          onError: (error) => {
-            console.warn('Error identifying card:', error);
-            setError();
-          },
-        });
+        scanCardIdentify(
+          { photoUri, isBackSide: true },
+          {
+            onSuccess: async (cardIdentify) => {
+              await ScanService.processBackSideScan(cardIdentify, router, setScanCardData);
+              resetState();
+            },
+            onError: (error) => {
+              console.warn('Error identifying card (back):', error);
+              setError();
+            },
+          }
+        );
         break;
 
       case 'full':

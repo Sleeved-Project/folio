@@ -41,8 +41,11 @@ export function useCardCapture() {
     }
   }, [scannerState]);
 
-  const setError = useCallback(() => {
+  const setError = useCallback((message?: string) => {
     setCapturedPhotoUri(null);
+    if (message) {
+      return setScannerState({ type: 'error_custom', message });
+    }
     setScannerState('error_not_detected');
   }, []);
 
