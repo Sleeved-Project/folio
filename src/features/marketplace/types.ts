@@ -28,7 +28,7 @@ export interface Authority {
 
 export interface Ad {
   id: string;
-  originalPrice: number;
+  originalPrice: string;
   rectoImageUrl: string;
   versoImageUrl: string;
   condition: Condition;
