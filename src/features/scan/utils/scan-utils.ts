@@ -24,6 +24,9 @@ export function getScannerStatusText(scannerState: ScannerState): string {
   }
 }
 
+/**
+ * Check if the current scanner state is an error state
+ */
 export function isErrorState(scannerState: ScannerState): boolean {
   if (typeof scannerState === 'object') {
     return scannerState.type.startsWith('error_');
