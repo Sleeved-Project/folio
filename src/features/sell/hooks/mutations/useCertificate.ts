@@ -32,12 +32,8 @@ export interface CertificationInputDTO {
 }
 
 const fetchCertification = async (formData: Partial<SellFormData>): Promise<Certification> => {
-  if (!formData.rectoImage) {
-    throw new Error('Image is required');
-  }
-
   const fileData: FormDataFile = {
-    uri: formData.rectoImage,
+    uri: formData.rectoImage!,
     type: 'image/jpeg',
     name: 'recto_photo.jpg',
   };
