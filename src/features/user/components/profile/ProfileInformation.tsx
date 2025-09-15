@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import ProfilePicture from './ProfilePicture';
 import { useTheme } from '../../../../theme/useTheme';
-import StarRating from './StarRating';
+// import StarRating from './StarRating';
 import { Button } from '../../../../components/ui';
 
 interface ProfileInformationProps {
@@ -20,8 +20,8 @@ export default function ProfileInformation({
   lastname,
   username,
   profilePictureUrl,
-  rating,
-  ratingCount,
+  // rating,
+  // ratingCount,
   isUserProfile = false,
 }: ProfileInformationProps) {
   const theme = useTheme();
@@ -53,9 +53,9 @@ export default function ProfileInformation({
       >
         @{username}
       </Text>
-      {rating && ratingCount && (
+      {/* {rating && ratingCount && (
         <StarRating style={styles.ratingContainer} rating={rating} count={ratingCount} />
-      )}
+      )} */}
 
       {isUserProfile && (
         <Button

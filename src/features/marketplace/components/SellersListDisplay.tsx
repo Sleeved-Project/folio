@@ -3,6 +3,7 @@ import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-nativ
 import { Seller } from '../types';
 import { SellerRowItem } from './SellerRowItem';
 import { theme } from '../../../theme/theme';
+import { router } from 'expo-router';
 
 interface UsersListDisplayProps {
   users: Seller[];
@@ -32,7 +33,7 @@ export default function SellersListDisplay({
         <SellerRowItem
           item={item}
           onPress={() => {
-            // Navigate to user details
+            router.push(`/seller/${item.id}`);
           }}
         />
       )}

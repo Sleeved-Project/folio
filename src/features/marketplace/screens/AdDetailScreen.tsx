@@ -25,7 +25,7 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
   };
 
   const handleSeller = (sellerId: string) => {
-    router.push(`/profile/${sellerId}`);
+    router.push(`/seller/${sellerId}`);
   };
 
   if (isLoading) return <LoadingState />;
