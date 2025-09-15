@@ -22,8 +22,8 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
   const [paymentSheetReady, setPaymentSheetReady] = useState(false);
   const [canBuy, setCanBuy] = useState(true);
 
-  const handleSeeCardDetail = (id: string) => {
-    console.log('See card detail for ad id:', id);
+  const handleSeeCardDetail = (cardId: string) => {
+    router.push(`/card/${cardId}`);
   };
 
   const handleSeller = (sellerId: string) => {

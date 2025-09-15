@@ -36,7 +36,7 @@ export default function AdActionBar({
       <Button
         title="See card detail"
         variant="outline"
-        onPress={() => onSeeCardDetail?.(ad.id)}
+        onPress={() => onSeeCardDetail?.(ad.card.id)}
         buttonStyle={[styles.button]}
       />
       {canBuy && (
