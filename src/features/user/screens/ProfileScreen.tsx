@@ -1,15 +1,17 @@
-import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
+// import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
 import ProfileInformation from '../components/profile/ProfileInformation';
-import { useState } from 'react';
+// import { useState } from 'react';
 import UserAdList from '../components/profile/UserAdList';
-import UserRatingsList from '../components/profile/UserRatingsList';
+// import UserRatingsList from '../components/profile/UserRatingsList';
 import { useUserProfile } from '../hooks/queries/useUserInfo';
 import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
+// import { User } from 'lucide-react-native';
+import TitleSection from '../../../components/ui/TitleSection';
 
-const tabOptions: TabOption<'ads' | 'ratings'>[] = [
-  { id: 'ads', label: 'Ads' },
-  { id: 'ratings', label: 'Ratings' },
-];
+// const tabOptions: TabOption<'ads' | 'ratings'>[] = [
+//   { id: 'ads', label: 'Ads' },
+//   { id: 'ratings', label: 'Ratings' },
+// ];
 
 interface ProfileScreenProps {
   isUserProfile?: boolean;
@@ -17,7 +19,7 @@ interface ProfileScreenProps {
 }
 
 export default function ProfileScreen({ isUserProfile = false, userId }: ProfileScreenProps) {
-  const [activeTab, setActiveTab] = useState<'ads' | 'ratings'>('ads');
+  // const [activeTab, setActiveTab] = useState<'ads' | 'ratings'>('ads');
   const { data: userData, isLoading, error } = useUserProfile(isUserProfile ? undefined : userId);
 
   if (isLoading) return <LoadingState />;
@@ -35,14 +37,16 @@ export default function ProfileScreen({ isUserProfile = false, userId }: Profile
         isUserProfile={isUserProfile}
       />
 
-      <TabSwitcher
+      {/* <TabSwitcher
         options={tabOptions}
         activeTabId={activeTab}
         onTabChange={setActiveTab}
         containerStyle={{ marginVertical: 16 }}
-      />
+      /> */}
 
-      {activeTab === 'ads' ? <UserAdList userId={userId} /> : <UserRatingsList userId={userId} />}
+      {/* {activeTab === 'ads' ? <UserAdList userId={userId} /> : <UserRatingsList userId={userId} />} */}
+      <TitleSection title="User Ads" />
+      <UserAdList userId={userId} />
     </>
   );
 }

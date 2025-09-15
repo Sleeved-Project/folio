@@ -40,7 +40,6 @@ export function useUserAds(userId: string) {
         limit: '20',
       });
 
-      console.log(`/users/${userId}/ads?${params.toString()}`);
       const response = await httpClient.get<AdsListResponse>(
         `/users/${userId}/ads?${params.toString()}`
       );
