@@ -2,9 +2,9 @@ import { ScrollView, View } from 'react-native';
 import CardsForSale from '../components/CardsForSale';
 import TopSellers from '../components/TopSellers';
 import { router } from 'expo-router';
-import { Button } from '../../../components/ui';
 import { useHasStripeAccount } from '../hooks/useHasStripeAccount';
 import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
+import { Button } from '../../../components/ui';
 
 export default function MarketplaceHome() {
   const { data: hasStripeAccount, refetch: refetchHasStripeAccount } = useHasStripeAccount();
