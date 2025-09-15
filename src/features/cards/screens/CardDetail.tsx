@@ -39,7 +39,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
     refetch: refetchCardDetail,
   } = useCardDetail(cardId as string);
 
-  const { toggleDrawer, gestureHandler, drawerAnimatedStyle, cardImageAnimatedStyle } =
+  const { toggleDrawer, panGesture, drawerAnimatedStyle, cardImageAnimatedStyle } =
     useDrawerAnimation();
 
   useEffect(() => {
@@ -104,7 +104,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
       />
 
       <AnimatedDrawer
-        gestureHandler={gestureHandler}
+        gesture={panGesture}
         animatedStyle={drawerAnimatedStyle}
         onDragHandlePress={toggleDrawer}
         headerComponent={<CardMetaInfo number={basicCardData.number} set={basicCardData.set} />}

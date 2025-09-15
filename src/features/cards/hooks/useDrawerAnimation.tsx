@@ -3,18 +3,13 @@ import {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-  useAnimatedGestureHandler,
   runOnJS,
   Easing,
   interpolate,
   Extrapolate,
 } from 'react-native-reanimated';
+import { Gesture } from 'react-native-gesture-handler';
 import { SCREEN_DIMENSIONS, DRAWER_DIMENSIONS, ANIMATION_CONFIG } from '../../../constants';
-
-interface GestureContext {
-  startY: number;
-  [key: string]: unknown;
-}
 
 // Destructure constants for easier access
 const { EXPANDED_HEIGHT, COLLAPSED_HEIGHT } = DRAWER_DIMENSIONS;
@@ -39,22 +34,22 @@ export const useDrawerAnimation = () => {
     });
   };
 
-  // Gesture handler for drawer dragging
-  const gestureHandler = useAnimatedGestureHandler({
-    onStart: (_, ctx: GestureContext) => {
-      ctx.startY = drawerTranslateY.value;
-    },
-    onActive: (event, ctx) => {
+  // Modern gesture API for drawer dragging
+  const panGesture = Gesture.Pan()
+    .onStart(() => {
+      // Store start position - handled automatically in new API
+    })
+    .onUpdate((event) => {
       // Calculate new position, but limit to prevent dragging too far
-      const newPosition = ctx.startY + event.translationY;
+      const newPosition = event.translationY;
 
       // Don't let drawer go above its expanded position or below collapsed position
       drawerTranslateY.value = Math.max(
         0,
         Math.min(newPosition, EXPANDED_HEIGHT - COLLAPSED_HEIGHT)
       );
-    },
-    onEnd: (event) => {
+    })
+    .onEnd((event) => {
       // Determine threshold for snapping
       const snapThreshold = (EXPANDED_HEIGHT - COLLAPSED_HEIGHT) / 2;
 
@@ -74,8 +69,7 @@ export const useDrawerAnimation = () => {
         });
         runOnJS(setIsCollapsed)(false);
       }
-    },
-  });
+    });
 
   // Animated styles for the drawer
   const drawerAnimatedStyle = useAnimatedStyle(() => {
@@ -110,7 +104,7 @@ export const useDrawerAnimation = () => {
   return {
     isCollapsed,
     toggleDrawer,
-    gestureHandler,
+    panGesture, // Replace gestureHandler with panGesture
     drawerAnimatedStyle,
     cardImageAnimatedStyle,
     constants: {

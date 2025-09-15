@@ -1,17 +1,14 @@
 import React, { ReactNode } from 'react';
 import { View, StyleSheet, Platform, ViewStyle } from 'react-native';
-import { PanGestureHandler, GestureEvent } from 'react-native-gesture-handler';
+import { GestureDetector, GestureType } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PanGestureHandlerEventPayload } from 'react-native-screens';
 import { useTheme } from '../../../theme/useTheme';
-
-type GestureHandlerType = (event: GestureEvent<PanGestureHandlerEventPayload>) => void;
 
 interface AnimatedDrawerProps {
   children: ReactNode;
   headerComponent?: ReactNode;
-  gestureHandler: GestureHandlerType;
+  gesture: GestureType;
   animatedStyle: object;
   onDragHandlePress?: () => void;
   style?: ViewStyle;
@@ -23,7 +20,7 @@ interface AnimatedDrawerProps {
 export default function AnimatedDrawer({
   children,
   headerComponent,
-  gestureHandler,
+  gesture,
   animatedStyle,
   onDragHandlePress,
   style,
@@ -37,7 +34,7 @@ export default function AnimatedDrawer({
   const handleColor = dragHandleColor || theme.colors.border.medium;
 
   return (
-    <PanGestureHandler onGestureEvent={gestureHandler}>
+    <GestureDetector gesture={gesture}>
       <Animated.View
         style={[
           styles.container,
@@ -66,7 +63,7 @@ export default function AnimatedDrawer({
 
         {insets.bottom > 0 && <View style={{ height: -insets.bottom }} />}
       </Animated.View>
-    </PanGestureHandler>
+    </GestureDetector>
   );
 }
 
