@@ -31,6 +31,13 @@ export default function MarketplaceLayout() {
           title: 'Order Confirmation',
         }}
       />
+      <Stack.Screen
+        name="seller/[sellerId]"
+        options={{
+          title: 'Seller Profile',
+          headerBackTitle: 'Back',
+        }}
+      />
     </Stack>
   );
 }
