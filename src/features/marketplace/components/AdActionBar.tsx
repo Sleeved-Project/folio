@@ -6,11 +6,19 @@ import { Ad } from '../types';
 
 interface AdActionBarProps {
   ad: Ad;
+  isLoading: boolean;
+  canBuy: boolean;
   onSeeCardDetail?: (id: string) => void;
   onBuy?: (id: string) => void;
 }
 
-export default function AdActionBar({ ad, onSeeCardDetail, onBuy }: AdActionBarProps) {
+export default function AdActionBar({
+  ad,
+  onSeeCardDetail,
+  onBuy,
+  isLoading,
+  canBuy,
+}: AdActionBarProps) {
   const insets = useSafeAreaInsets();
   const theme = useTheme();
 
@@ -31,7 +39,14 @@ export default function AdActionBar({ ad, onSeeCardDetail, onBuy }: AdActionBarP
         onPress={() => onSeeCardDetail?.(ad.id)}
         buttonStyle={[styles.button]}
       />
-      <Button title="Buy this card" onPress={() => onBuy?.(ad.id)} buttonStyle={styles.button} />
+      {canBuy && (
+        <Button
+          title="Buy this card"
+          onPress={() => onBuy?.(ad.id)}
+          buttonStyle={styles.button}
+          disabled={isLoading}
+        />
+      )}
     </View>
   );
 }

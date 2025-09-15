@@ -1,14 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import { CertificationInputDTO } from '../hooks/mutations/useCertificate';
+import { Certification } from '../hooks/mutations/useCertificate';
 import InfoGrid from '../../../components/ui/InfoGrid';
 import InfoItem from '../../../components/ui/InfoItem';
 import { BadgeCheckIcon, CalendarCheckIcon, HashIcon } from 'lucide-react-native';
 import FlavorTextBox from '../../cards/components/FlavorTextBox';
 
 interface CertificationResultProps {
-  certification: CertificationInputDTO;
+  certification: Certification;
 }
 
 export default function CertificationResult({ certification }: CertificationResultProps) {

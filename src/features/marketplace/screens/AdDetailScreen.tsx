@@ -1,29 +1,74 @@
+import { useStripe } from '@stripe/stripe-react-native';
 import { router } from 'expo-router';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
 import { useTheme } from '../../../theme/useTheme';
 import AdActionBar from '../components/AdActionBar';
 import AdHeader from '../components/AdHeader';
 import AdSellerCard from '../components/AdSellerCard';
 import { useAdDetail } from '../hooks/queries/useAdDetail';
+import { useFetchPaymentSheet } from '../../payment/hooks/mutations/useFetchPaymentSheet';
 
 export default function AdDetailScreen({ adId }: { adId: string }) {
   const theme = useTheme();
   const { data: ad, isLoading, error } = useAdDetail(adId);
-
   if (isLoading) return <LoadingState />;
   if (error || !ad) return <ErrorState message="Failed to load ad details." />;
+
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const { mutateAsync: fetchPaymentSheetParams } = useFetchPaymentSheet(ad.id);
+  const [loading, setLoading] = useState(false);
+  const [paymentSheetReady, setPaymentSheetReady] = useState(false);
+  const [canBuy, setCanBuy] = useState(true);
 
   const handleSeeCardDetail = (id: string) => {
     console.log('See card detail for ad id:', id);
   };
 
-  const handleBuy = (id: string) => {
-    console.log('Buy ad id:', id);
-  };
-
   const handleSeller = (sellerId: string) => {
     router.push(`/profile/${sellerId}`);
+  };
+
+  const initializePaymentSheet = async () => {
+    try {
+      setLoading(true);
+      const { paymentIntent, ephemeralKey, customer } = await fetchPaymentSheetParams();
+
+      const { error } = await initPaymentSheet({
+        merchantDisplayName: 'Sleeved',
+        customerId: customer,
+        customerEphemeralKeySecret: ephemeralKey,
+        paymentIntentClientSecret: paymentIntent,
+        returnURL: 'folio://ad/ad_123',
+      });
+
+      if (!error) {
+        setPaymentSheetReady(true);
+      }
+    } catch (error) {
+      console.error('Error initializing payment sheet', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const openPaymentSheet = async () => {
+    if (!paymentSheetReady) {
+      await initializePaymentSheet();
+    }
+
+    const { error } = await presentPaymentSheet();
+    console.log('Present payment sheet', { error });
+
+    if (error) {
+      setLoading(false);
+      Alert.alert(`Error code: ${error.code}`, error.message);
+    } else {
+      setLoading(false);
+      setCanBuy(false);
+      router.push('/order-confirmation');
+    }
   };
 
   return (
@@ -62,7 +107,13 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
         </View> */}
       </ScrollView>
 
-      <AdActionBar ad={ad} onSeeCardDetail={handleSeeCardDetail} onBuy={handleBuy} />
+      <AdActionBar
+        ad={ad}
+        onSeeCardDetail={handleSeeCardDetail}
+        onBuy={openPaymentSheet}
+        isLoading={loading}
+        canBuy={canBuy}
+      />
     </>
   );
 }
