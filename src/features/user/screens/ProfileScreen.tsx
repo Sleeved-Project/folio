@@ -45,7 +45,7 @@ export default function ProfileScreen({ isUserProfile = false, userId }: Profile
       /> */}
 
       {/* {activeTab === 'ads' ? <UserAdList userId={userId} /> : <UserRatingsList userId={userId} />} */}
-      <TitleSection title="User Ads" />
+      <TitleSection title="Ads" />
       <UserAdList userId={userId} />
     </>
   );
