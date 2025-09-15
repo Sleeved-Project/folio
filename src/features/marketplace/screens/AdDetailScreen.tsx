@@ -11,13 +11,11 @@ import { useAdDetail } from '../hooks/queries/useAdDetail';
 import { useFetchPaymentSheet } from '../../payment/hooks/mutations/useFetchPaymentSheet';
 
 export default function AdDetailScreen({ adId }: { adId: string }) {
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const theme = useTheme();
   const { data: ad, isLoading, error } = useAdDetail(adId);
-  if (isLoading) return <LoadingState />;
-  if (error || !ad) return <ErrorState message="Failed to load ad details." />;
 
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
-  const { mutateAsync: fetchPaymentSheetParams } = useFetchPaymentSheet(ad.id);
+  const { mutateAsync: fetchPaymentSheetParams } = useFetchPaymentSheet(adId);
   const [loading, setLoading] = useState(false);
   const [paymentSheetReady, setPaymentSheetReady] = useState(false);
   const [canBuy, setCanBuy] = useState(true);
@@ -29,6 +27,9 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
   const handleSeller = (sellerId: string) => {
     router.push(`/profile/${sellerId}`);
   };
+
+  if (isLoading) return <LoadingState />;
+  if (error || !ad) return <ErrorState message="Failed to load ad details." />;
 
   const initializePaymentSheet = async () => {
     try {
