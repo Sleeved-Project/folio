@@ -4,6 +4,7 @@ import { AdsListResponse } from '../../types';
 
 export const adsKeys = {
   all: ['ads'] as const,
+  getAdById: (id: string) => [...adsKeys.all, 'ad', id] as const,
   searchAds: (query: string) => [...adsKeys.all, 'searchAds', { query }] as const,
 };
 

@@ -4,7 +4,7 @@ import { SellFormData } from '../../schemas/sellFormSchema';
 interface SellFormPayload {
   rectoImage: string;
   versoImage: string;
-  name: string;
+  cardId: string;
   condition: string;
   finish: string;
   price: number;
@@ -15,8 +15,8 @@ function mapFormDataToPayload(formData: Partial<SellFormData>): SellFormPayload 
   return {
     rectoImage: formData.rectoImage!,
     versoImage: formData.versoImage!,
-    name: formData.name!,
     condition: formData.condition!,
+    cardId: formData.cardId!,
     finish: formData.finish!,
     price: Number(formData.price)!,
     certificationId: formData.certification?.id,

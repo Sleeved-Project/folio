@@ -6,7 +6,7 @@ export const useHasStripeAccount = () => {
   return useQuery({
     queryKey: ['hasStripeAccount'],
     queryFn: async () => {
-      const data = await httpClient.get<HasStripeAccountResponse>('/user/stripe');
+      const data = await httpClient.get<HasStripeAccountResponse>('/me/stripe');
       return data.hasStripeAccount;
     },
   });

@@ -3,12 +3,12 @@ import StepLayout from '../../../components/ui/multistepsform/StepLayout';
 import StepHeader from '../../../components/ui/multistepsform/StepHeader';
 import { useSellForm } from '../context/SellFormContext';
 import CertificationGenerator from '../components/CertificationGenerator';
-import { CertificationInputDTO } from '../hooks/mutations/useCertificate';
+import { Certification } from '../hooks/mutations/useCertificate';
 
 export default function GradeStep() {
   const { formData, dispatch } = useSellForm();
 
-  const handleCertificationGenerated = (certification: CertificationInputDTO) => {
+  const handleCertificationGenerated = (certification: Certification) => {
     dispatch({
       type: 'UPDATE_DATA',
       payload: {

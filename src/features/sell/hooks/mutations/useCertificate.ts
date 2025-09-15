@@ -1,6 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
+import { SellFormData } from '../../schemas/sellFormSchema';
+import { httpClient } from '../../../../lib/client/http-client';
+import { FormDataFile } from '../../../../lib/client/types';
+import { mapCertificationInputDTOToCertification } from '../../mappers/certificationMapper';
 
-export interface CertificationInputDTO {
+export interface Certification {
   id: string;
   globalRate: string;
   label: string;
@@ -12,25 +16,44 @@ export interface CertificationInputDTO {
   description: string;
 }
 
-const mockCertificationData: CertificationInputDTO = {
-  id: 'ABC123456',
-  globalRate: '9.0',
-  label: 'Mint',
-  certifiedAt: new Date().toLocaleDateString(),
-  centeringRate: '8.5',
-  cornerRate: '9.0',
-  edgeRate: '8.8',
-  surfaceRate: '9.2',
-  description: 'Excellent condition with minor imperfections.',
-};
+export interface CertificationInputDTO {
+  id: string;
+  globalRating: string;
+  centeringRating: string;
+  cornerRating: string;
+  edgeRating: string;
+  surfaceRating: string;
+  certifiedAt: string;
+  grade: {
+    label: string;
+    description: string;
+    code: string;
+  };
+}
 
-const fetchCertification = async (): Promise<CertificationInputDTO> => {
-  await new Promise((resolve) => setTimeout(resolve, 800));
-  return mockCertificationData;
-};
+const fetchCertification = async (formData: Partial<SellFormData>): Promise<Certification> => {
+  const fileData: FormDataFile = {
+    uri: formData.rectoImage!,
+    type: 'image/jpeg',
+    name: 'recto_photo.jpg',
+  };
 
-export const useCertificate = () => {
-  return useMutation({
-    mutationFn: fetchCertification,
+  const formDataToSend = new FormData();
+
+  formDataToSend.append('file', fileData as unknown as Blob);
+  formDataToSend.append('cardId', formData.cardId || '');
+
+  const response = await httpClient.post<CertificationInputDTO>('/scan/grade', formDataToSend, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   });
+
+  return mapCertificationInputDTOToCertification(response);
 };
+
+export function useCertificate(formData: Partial<SellFormData>) {
+  return useMutation({
+    mutationFn: () => fetchCertification(formData),
+  });
+}

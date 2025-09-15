@@ -2,17 +2,23 @@ import { View, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '../../../components/ui';
 import { useTheme } from '../../../theme/useTheme';
+import { Ad } from '../types';
 
 interface AdActionBarProps {
-  ad: {
-    id: string;
-    title: string;
-  };
+  ad: Ad;
+  isLoading: boolean;
+  canBuy: boolean;
   onSeeCardDetail?: (id: string) => void;
   onBuy?: (id: string) => void;
 }
 
-export default function AdActionBar({ ad, onSeeCardDetail, onBuy }: AdActionBarProps) {
+export default function AdActionBar({
+  ad,
+  onSeeCardDetail,
+  onBuy,
+  isLoading,
+  canBuy,
+}: AdActionBarProps) {
   const insets = useSafeAreaInsets();
   const theme = useTheme();
 
@@ -30,10 +36,17 @@ export default function AdActionBar({ ad, onSeeCardDetail, onBuy }: AdActionBarP
       <Button
         title="See card detail"
         variant="outline"
-        onPress={() => onSeeCardDetail?.(ad.id)}
+        onPress={() => onSeeCardDetail?.(ad.card.id)}
         buttonStyle={[styles.button]}
       />
-      <Button title="Buy this card" onPress={() => onBuy?.(ad.id)} buttonStyle={styles.button} />
+      {canBuy && (
+        <Button
+          title="Buy this card"
+          onPress={() => onBuy?.(ad.id)}
+          buttonStyle={styles.button}
+          disabled={isLoading}
+        />
+      )}
     </View>
   );
 }

@@ -7,6 +7,7 @@ export default function MarketplaceLayout() {
   return (
     <Stack
       screenOptions={{
+        headerShown: true,
         headerStyle: {
           backgroundColor: theme.colors.background.primary,
         },
@@ -17,15 +18,17 @@ export default function MarketplaceLayout() {
       }}
     >
       <Stack.Screen
-        name="index"
-        options={{
-          title: 'Marketplace',
-        }}
-      />
-      <Stack.Screen
         name="ad/[adId]"
         options={{
           title: 'Ad Details',
+          headerBackTitle: 'Back',
+        }}
+      />
+      <Stack.Screen
+        name="order-confirmation"
+        options={{
+          headerShown: false,
+          title: 'Order Confirmation',
         }}
       />
     </Stack>

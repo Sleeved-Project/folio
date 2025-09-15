@@ -3,14 +3,16 @@ import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { Button } from '../../../components/ui';
 import { CircleStopIcon } from 'lucide-react-native';
 import { useTheme } from '../../../theme/useTheme';
-import { CertificationInputDTO, useCertificate } from '../hooks/mutations/useCertificate';
+import { Certification, useCertificate } from '../hooks/mutations/useCertificate';
 import { useCertificationToken } from '../hooks/queries/useCertificationToken';
 import CertificationResult from './CertificationResult';
 import { useToaster } from '../../../components/ui/ToasterProvider';
+import { useSellForm } from '../context/SellFormContext';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface CertificationGeneratorProps {
-  onCertificationGenerated: (certification: CertificationInputDTO) => void;
-  existingCertification?: CertificationInputDTO;
+  onCertificationGenerated: (certification: Certification) => void;
+  existingCertification?: Certification;
 }
 
 export default function CertificationGenerator({
@@ -18,15 +20,14 @@ export default function CertificationGenerator({
   existingCertification,
 }: CertificationGeneratorProps) {
   const theme = useTheme();
+  const queryClient = useQueryClient();
+  const { formData } = useSellForm();
+
   const { showToast } = useToaster();
 
-  const {
-    data: availableTokens,
-    isFetching: tokensLoading,
-    decrementToken,
-  } = useCertificationToken();
+  const { data: availableTokens, isFetching: tokensLoading } = useCertificationToken();
 
-  const { data: certification, isPending, mutate } = useCertificate();
+  const { data: certification, isPending, mutate } = useCertificate(formData);
 
   const handleGenerateCertification = () => {
     if (!availableTokens || availableTokens <= 0) return;
@@ -34,7 +35,7 @@ export default function CertificationGenerator({
     mutate(undefined, {
       onSuccess: (data) => {
         onCertificationGenerated(data);
-        decrementToken();
+        queryClient.invalidateQueries({ queryKey: ['certification-token'] });
       },
       onError: (error) => {
         showToast({
