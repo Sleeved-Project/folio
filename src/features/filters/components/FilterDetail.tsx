@@ -8,6 +8,7 @@ import BackButton from '../../../components/ui/BackButton';
 import { Filters, FilterTypeEnum } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SearchBar from '../../../components/ui/SearchBar';
+import { router } from 'expo-router';
 
 interface FilterDetailProps {
   filterType: FilterTypeEnum;
@@ -185,6 +186,7 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
         <TouchableOpacity
           onPress={() => {
             setFilters?.(tempFilters ?? []);
+            router.back();
           }}
           style={[
             styles.addButton,
