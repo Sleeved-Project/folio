@@ -40,7 +40,7 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
         customerId: customer,
         customerEphemeralKeySecret: ephemeralKey,
         paymentIntentClientSecret: paymentIntent,
-        returnURL: 'folio://ad/ad_123',
+        returnURL: `folio://ad/${ad.id}`,
       });
 
       if (!error) {
