@@ -34,6 +34,7 @@ export interface Ad {
   condition: Condition;
   finish: Finish;
   card: AdCard;
+  status: { id: string; label: string };
   certificate?: Certification;
   seller: Seller;
   createdAt: string;
@@ -85,4 +86,11 @@ export interface UsersListResponse {
     previousPageUrl: string | null;
     total: number;
   };
+}
+
+export enum AdStatusEnum {
+  PUBLISHED = 'Published',
+  SOLD = 'Sold',
+  ARCHIVED = 'Archived',
+  DRAFT = 'Draft',
 }

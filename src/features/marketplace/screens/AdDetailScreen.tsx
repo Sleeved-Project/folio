@@ -9,6 +9,7 @@ import AdHeader from '../components/AdHeader';
 import AdSellerCard from '../components/AdSellerCard';
 import { useAdDetail } from '../hooks/queries/useAdDetail';
 import { useFetchPaymentSheet } from '../../payment/hooks/mutations/useFetchPaymentSheet';
+import { AdStatusEnum } from '../types';
 
 export default function AdDetailScreen({ adId }: { adId: string }) {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -18,7 +19,7 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
   const { mutateAsync: fetchPaymentSheetParams } = useFetchPaymentSheet(adId);
   const [loading, setLoading] = useState(false);
   const [paymentSheetReady, setPaymentSheetReady] = useState(false);
-  const [canBuy, setCanBuy] = useState(true);
+  const [canBuy, setCanBuy] = useState(ad?.status.label === AdStatusEnum.PUBLISHED);
 
   const handleSeeCardDetail = (cardId: string) => {
     router.push(`/card/${cardId}`);
