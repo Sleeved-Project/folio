@@ -42,7 +42,6 @@ export const useSearchCardAds = (query: string) => {
       });
 
       const queryString = params.toString().replace(/%2C/g, ',');
-      console.log('Fetching ads with query:', queryString);
       const response = await httpClient.get<AdsListResponse>(`/ads/search?${queryString}`);
       return response;
     },
