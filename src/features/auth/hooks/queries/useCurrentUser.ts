@@ -3,11 +3,7 @@ import { httpClient } from '../../../../lib/client/http-client';
 import { User } from '../../types';
 import { authUtils } from '../../utils/auth-utils';
 import { useState, useEffect } from 'react';
-
-export const userKeys = {
-  all: ['user'] as const,
-  currentUser: () => [...userKeys.all, 'current'] as const,
-};
+import { userKeys } from '../../utils/authQueryKeys';
 
 export const useCurrentUser = () => {
   const [hasToken, setHasToken] = useState<boolean | null>(null);
@@ -29,7 +25,7 @@ export const useCurrentUser = () => {
         return user;
       } catch (error) {
         if (error instanceof Error && error.message.includes('401')) {
-          await authUtils.removeToken();
+          await authUtils.clearTokens();
           setHasToken(false);
         }
         throw error;
