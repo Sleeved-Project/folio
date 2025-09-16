@@ -30,13 +30,11 @@ export default function UserAdList({ userId }: UserAdListProps) {
           paddingBottom: insets.bottom,
         }}
       >
-        <>
-          {adsListFlat?.map((item) => (
-            <View key={item.id} style={styles.cardWrapper}>
-              <CardForSaleItem item={item} />
-            </View>
-          ))}
-        </>
+        {adsListFlat?.map((item) => (
+          <View key={item.id} style={styles.cardWrapper}>
+            <CardForSaleItem item={item} />
+          </View>
+        ))}
       </View>
     </ScrollView>
   );
