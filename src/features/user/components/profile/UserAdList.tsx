@@ -18,7 +18,7 @@ export default function UserAdList({ userId }: UserAdListProps) {
   const GAP = 8;
 
   return (
-    <View>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View
         style={{
           gap: GAP,
@@ -27,13 +27,15 @@ export default function UserAdList({ userId }: UserAdListProps) {
           justifyContent: 'space-between',
         }}
       >
-        {adsListFlat?.map((item) => (
-          <ScrollView key={item.id} style={styles.cardWrapper} showsVerticalScrollIndicator={false}>
-            <CardForSaleItem item={item} />
-          </ScrollView>
-        ))}
+        <>
+          {adsListFlat?.map((item) => (
+            <View key={item.id} style={styles.cardWrapper}>
+              <CardForSaleItem item={item} />
+            </View>
+          ))}
+        </>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
