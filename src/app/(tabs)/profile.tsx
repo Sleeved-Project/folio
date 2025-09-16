@@ -1,28 +1,11 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useTheme } from '../../theme/useTheme';
+import { StyleSheet, View } from 'react-native';
 import { useAuth } from '../../features/auth/context/AuthContext';
 import ProfileScreen from '../../features/user/screens/ProfileScreen';
+import { useTheme } from '../../theme/useTheme';
 
 export default function Profile() {
   const theme = useTheme();
-  const { logout, user } = useAuth();
-
-  const handleLogout = async () => {
-    Alert.alert('Logout', 'Are you sure you want to log out?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Logout',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await logout();
-          } catch {
-            Alert.alert('Logout Failed', 'There was a problem logging out. Please try again.');
-          }
-        },
-      },
-    ]);
-  };
+  const { user } = useAuth();
 
   if (!user) {
     return null;
@@ -32,9 +15,6 @@ export default function Profile() {
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
         <ProfileScreen userId={user.id} isUserProfile={true} />
-        <TouchableOpacity onPress={handleLogout} style={{ marginTop: 24 }}>
-          <Text style={{ color: theme.colors.danger, textAlign: 'center' }}>Logout</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );

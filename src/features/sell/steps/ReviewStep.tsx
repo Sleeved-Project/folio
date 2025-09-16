@@ -55,6 +55,7 @@ export default function ReviewStep() {
       onPrev={onPrev}
       nextButtonText="Publish"
       showPrevButton={true}
+      isPrevDisabled={isPending}
       isNextDisabled={isPending}
     >
       <StepHeader
