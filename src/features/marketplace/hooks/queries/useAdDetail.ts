@@ -13,5 +13,7 @@ export const useAdDetail = (adId: string) => {
     },
     enabled: !!adId,
     retry: false,
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
 };
