@@ -11,6 +11,7 @@ interface StepLayoutProps {
   prevButtonText?: string;
   showNextButton?: boolean;
   showPrevButton?: boolean;
+  isPrevDisabled?: boolean;
   isNextDisabled?: boolean;
 }
 
@@ -22,6 +23,7 @@ export default function StepLayout({
   prevButtonText = 'Back',
   showNextButton = true,
   showPrevButton = false,
+  isPrevDisabled = false,
   isNextDisabled = false,
 }: StepLayoutProps) {
   const theme = useTheme();
@@ -47,7 +49,12 @@ export default function StepLayout({
         ]}
       >
         {showPrevButton && (
-          <Button title={prevButtonText} onPress={onPrev} buttonStyle={styles.button} />
+          <Button
+            title={prevButtonText}
+            onPress={onPrev}
+            disabled={isPrevDisabled}
+            buttonStyle={styles.button}
+          />
         )}
         {showNextButton && (
           <Button

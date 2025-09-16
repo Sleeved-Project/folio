@@ -47,7 +47,13 @@ export default function CertificationGenerator({
   };
 
   const canCertify = useMemo(() => {
-    return availableTokens && availableTokens > 0 && !isPending && !tokensLoading;
+    return (
+      availableTokens &&
+      availableTokens > 0 &&
+      !isPending &&
+      !tokensLoading &&
+      !existingCertification
+    );
   }, [availableTokens, isPending, tokensLoading]);
 
   const displayCertification = useMemo(() => {
