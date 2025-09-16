@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { LoadingScreen } from '../../../../components/ui/LoadingScreen';
 import { ErrorState } from '../../../../components/ui/StatusIndicators';
 import CardForSaleItem from '../../../marketplace/components/CardForSaleItem';
@@ -28,9 +28,9 @@ export default function UserAdList({ userId }: UserAdListProps) {
         }}
       >
         {adsListFlat?.map((item) => (
-          <View key={item.id} style={styles.cardWrapper}>
+          <ScrollView key={item.id} style={styles.cardWrapper} showsVerticalScrollIndicator={false}>
             <CardForSaleItem item={item} />
-          </View>
+          </ScrollView>
         ))}
       </View>
     </View>
