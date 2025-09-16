@@ -46,6 +46,7 @@ export default function CardForSaleItem({ item }: AdItemProps) {
               style={{
                 width: CARD_WIDTH,
                 height: CARD_HEIGHT,
+                borderRadius: theme.borderRadius.medium,
               }}
             />
           )}
