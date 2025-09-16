@@ -66,7 +66,6 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
       const { error } = await presentPaymentSheet();
 
       if (error) {
-        console.log('PaymentSheet Error', error);
         if (error.code === 'Canceled') {
           // Cancel payment intent + update ad status to "available" if the user cancels
           setPaymentSheetReady(false);
