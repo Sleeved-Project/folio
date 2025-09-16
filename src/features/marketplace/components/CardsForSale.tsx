@@ -1,44 +1,200 @@
-import { StyleSheet, View } from 'react-native';
+import { useCallback, useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  RefreshControl,
+  ActivityIndicator,
+  Text,
+  useWindowDimensions,
+  ViewStyle,
+} from 'react-native';
 import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
 import TitleSection from '../../../components/ui/TitleSection';
 import { useAdsList } from '../hooks/queries/useAdsList';
 import CardForSaleItem from './CardForSaleItem';
+import { useTheme } from '../../../theme/useTheme';
+import { Ad } from '../types';
+import { Button } from '../../../components/ui';
 
-export default function CardsForSale() {
-  const { data: adsList, isLoading, error } = useAdsList();
+interface CardsForSaleProps {
+  hasStripeAccount?: boolean;
+  onSellPress?: () => void;
+  containerStyle?: ViewStyle;
+}
 
-  const adsListFlat = adsList?.pages.flatMap((page) => page.data) ?? [];
-  const GAP = 8;
+const CardForSaleItemRenderer = ({
+  item,
+  cardWidth,
+  gap,
+}: {
+  item: Ad;
+  cardWidth: number;
+  gap: number;
+}) => (
+  <View style={{ width: cardWidth, marginHorizontal: gap / 2 }}>
+    <CardForSaleItem item={item} />
+  </View>
+);
 
-  if (isLoading) return <LoadingState />;
-  if (error) return <ErrorState message={error?.message} />;
+const CardsForSaleHeader = ({ onSellPress }: { onSellPress?: () => void }) => {
+  const theme = useTheme();
 
   return (
-    <View>
-      <TitleSection title="Cards for Sale" />
-      <View style={[{ marginTop: 8 }]}>
-        <View
-          style={{
-            gap: GAP,
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-          }}
-        >
-          {adsListFlat?.map((item) => (
-            <View key={item.id} style={styles.cardWrapper}>
-              <CardForSaleItem item={item} />
-            </View>
-          ))}
+    <>
+      {onSellPress && (
+        <View style={{ marginBottom: theme.spacing.md }}>
+          <Button title="Sell a card" onPress={onSellPress} />
         </View>
+      )}
+      <TitleSection title="Cards for sale" style={{ marginBottom: theme.spacing.md }} />
+    </>
+  );
+};
+
+const CardsForSaleFooter = ({
+  isFetchingNextPage,
+  isLoading,
+  error,
+}: {
+  isFetchingNextPage: boolean;
+  isLoading: boolean;
+  error: unknown;
+}) => {
+  const theme = useTheme();
+
+  if (isFetchingNextPage || isLoading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator color={theme.colors.primary} size="small" />
+        <Text style={[styles.text, { color: theme.colors.text.secondary }]}>Loading...</Text>
       </View>
+    );
+  }
+  if (error) {
+    return (
+      <Text style={[styles.text, styles.errorText, { color: theme.colors.danger }]}>
+        Error loading cards
+      </Text>
+    );
+  }
+  return null;
+};
+
+const EmptyCardsMessage = ({
+  isFetchingNextPage,
+  isLoading,
+}: {
+  isFetchingNextPage: boolean;
+  isLoading: boolean;
+}) => {
+  const theme = useTheme();
+
+  if (isFetchingNextPage || isLoading) return null;
+
+  return (
+    <Text
+      style={[
+        styles.text,
+        { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
+      ]}
+    >
+      No cards available for sale
+    </Text>
+  );
+};
+
+export default function CardsForSale({ onSellPress, containerStyle }: CardsForSaleProps) {
+  const theme = useTheme();
+  const width = useWindowDimensions().width - 32;
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+    useAdsList();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const GAP = 8;
+  const NUM_COLUMNS = 2;
+  const CARD_WIDTH = (width - GAP * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
+
+  const items = data?.pages.flatMap((page) => page.data) ?? [];
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  }, [refetch]);
+
+  if (isLoading && !refreshing) return <LoadingState />;
+  if (error)
+    return <ErrorState message={error instanceof Error ? error.message : 'Failed to load ads'} />;
+
+  return (
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: theme.colors.background.primary },
+        containerStyle,
+      ]}
+    >
+      <FlatList
+        data={items}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
+        renderItem={({ item }) => (
+          <CardForSaleItemRenderer item={item} cardWidth={CARD_WIDTH} gap={GAP} />
+        )}
+        numColumns={NUM_COLUMNS}
+        columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
+        ListHeaderComponent={<CardsForSaleHeader onSellPress={onSellPress} />}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listContent}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={theme.colors.primary}
+            colors={[theme.colors.primary]}
+            progressBackgroundColor={theme.colors.background.tertiary}
+            title="Refreshing cards..."
+            titleColor={theme.colors.text.secondary}
+          />
+        }
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          <CardsForSaleFooter
+            isFetchingNextPage={isFetchingNextPage}
+            isLoading={isLoading}
+            error={error}
+          />
+        }
+        ListEmptyComponent={
+          <EmptyCardsMessage isFetchingNextPage={isFetchingNextPage} isLoading={isLoading} />
+        }
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  cardWrapper: {
-    width: '48%',
-    marginBottom: 16,
+  container: {
+    flex: 1,
+  },
+  listContent: {
+    paddingTop: 16,
+    paddingBottom: 32,
+  },
+  text: {
+    textAlign: 'center',
+    padding: 16,
+  },
+  errorText: {
+    fontWeight: '500',
+  },
+  loaderContainer: {
+    padding: 16,
+    alignItems: 'center',
   },
 });
