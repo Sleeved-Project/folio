@@ -18,7 +18,7 @@ export default function EmptyStateCards() {
           { color: theme.colors.text.primary, marginTop: theme.spacing.xl },
         ]}
       >
-        You haven&#39;t owned cards yet
+        You currently don&#39;t own any cards
       </Text>
 
       <Text
