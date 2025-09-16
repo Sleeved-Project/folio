@@ -1,9 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import ProfilePicture from './ProfilePicture';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../../../theme/useTheme';
+import ProfilePicture from './ProfilePicture';
 // import StarRating from './StarRating';
+import { Edit, LogOut } from 'lucide-react-native';
 import { Button } from '../../../../components/ui';
+import { theme } from '../../../../theme/theme';
+import { useAuth } from '../../../auth/context/AuthContext';
 
 interface ProfileInformationProps {
   firstname: string | null;
@@ -26,6 +29,24 @@ export default function ProfileInformation({
 }: ProfileInformationProps) {
   const theme = useTheme();
   const router = useRouter();
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    Alert.alert('Logout', 'Are you sure you want to log out?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Logout',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await logout();
+          } catch {
+            Alert.alert('Logout Failed', 'There was a problem logging out. Please try again.');
+          }
+        },
+      },
+    ]);
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
@@ -58,11 +79,28 @@ export default function ProfileInformation({
       )} */}
 
       {isUserProfile && (
-        <Button
-          buttonStyle={styles.editButton}
-          title="Edit Profile"
-          onPress={() => router.push('/(profile)/edit-profile')}
-        />
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 8,
+          }}
+        >
+          <Button
+            buttonStyle={[styles.editButton, styles.button]}
+            title="Edit Profile"
+            leftIcon={<Edit color="white" size={16} />}
+            onPress={() => router.push('/(profile)/edit-profile')}
+          />
+
+          <Button
+            buttonStyle={[styles.logoutButton, styles.button]}
+            title="Logout"
+            onPress={handleLogout}
+            leftIcon={<LogOut color="white" size={16} />}
+          />
+        </View>
       )}
     </View>
   );
@@ -81,8 +119,14 @@ const styles = StyleSheet.create({
   ratingContainer: {
     marginTop: 4,
   },
-  editButton: {
+  button: {
     marginTop: 16,
-    width: '100%',
+    paddingHorizontal: 24,
+  },
+  editButton: {
+    backgroundColor: theme.colors.primary,
+  },
+  logoutButton: {
+    backgroundColor: theme.colors.danger,
   },
 });
