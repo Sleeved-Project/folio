@@ -10,6 +10,7 @@ import AdSellerCard from '../components/AdSellerCard';
 import { useAdDetail } from '../hooks/queries/useAdDetail';
 import { useFetchPaymentSheet } from '../../payment/hooks/mutations/useFetchPaymentSheet';
 import { useCancelPaymentSheet } from '../../payment/hooks/mutations/useCancelPaymentSheet';
+import { AdStatusEnum } from '../types';
 
 export default function AdDetailScreen({ adId }: { adId: string }) {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
