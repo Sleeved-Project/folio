@@ -1,6 +1,5 @@
 import { ScrollView, View, StyleSheet } from 'react-native';
 import CardsForSale from '../components/CardsForSale';
-import TopSellers from '../components/TopSellers';
 import { router } from 'expo-router';
 import { useHasStripeAccount } from '../hooks/useHasStripeAccount';
 import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
@@ -23,15 +22,14 @@ export default function MarketplaceHome() {
 
   return (
     <View style={styles.container}>
+      <Button title="Sell a card" onPress={navigateToStripeSetup} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: insets.bottom,
         }}
       >
-        <Button title="Sell a card" onPress={navigateToStripeSetup} />
-
-        <TopSellers />
+        {/* <TopSellers /> */}
         <CardsForSale />
       </ScrollView>
     </View>
