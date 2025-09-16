@@ -1,6 +1,5 @@
 import { ScrollView, View } from 'react-native';
 import CardsForSale from '../components/CardsForSale';
-import TopSellers from '../components/TopSellers';
 import { router } from 'expo-router';
 import { useHasStripeAccount } from '../hooks/useHasStripeAccount';
 import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
@@ -23,7 +22,7 @@ export default function MarketplaceHome() {
     <View>
       <Button title="Sell a card" onPress={navigateToStripeSetup} />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <TopSellers />
+        {/* <TopSellers /> */}
         <CardsForSale />
       </ScrollView>
     </View>

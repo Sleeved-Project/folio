@@ -1,23 +1,20 @@
 import { StyleSheet, View } from 'react-native';
-import { useState } from 'react';
 import { useTheme } from '../../theme/useTheme';
-import { TabSwitcher } from '../../components/ui/TabSwitcher';
 import MyCardsScreen from '../../features/folio/screens/MyCardsScreen';
-import MyFoliosScreen from '../../features/folio/screens/MyFoliosScreen';
 import { useAllMyCards } from '../../features/folio/hooks/queries/useAllMyCards';
 import { LoadingState } from '../../components/ui/StatusIndicators';
 import EmptyStateCards from '../../features/folio/components/EmptyStateCards';
 
-type FolioTabType = 'cards' | 'folios';
+// type FolioTabType = 'cards' | 'folios';
 
-const tabOptions = [
-  { id: 'cards' as const, label: 'My cards' },
-  { id: 'folios' as const, label: 'My folios' },
-];
+// const tabOptions = [
+//   { id: 'cards' as const, label: 'My cards' },
+//   { id: 'folios' as const, label: 'My folios' },
+// ];
 
 export default function Folio() {
   const theme = useTheme();
-  const [activeTab, setActiveTab] = useState<FolioTabType>('cards');
+  // const [activeTab, setActiveTab] = useState<FolioTabType>('cards');
   const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useAllMyCards();
 
@@ -34,7 +31,7 @@ export default function Folio() {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
       <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
-        <TabSwitcher
+        {/* <TabSwitcher
           options={tabOptions}
           activeTabId={activeTab}
           onTabChange={(tabId) => setActiveTab(tabId)}
@@ -51,7 +48,15 @@ export default function Folio() {
           />
         ) : (
           <MyFoliosScreen />
-        )}
+        )} */}
+        <MyCardsScreen
+          myCardsData={myCardsDataFlatMap}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          isLoading={isLoading}
+          error={error}
+        />
       </View>
     </View>
   );
