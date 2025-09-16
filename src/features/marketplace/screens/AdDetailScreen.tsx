@@ -19,7 +19,6 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
   const { mutateAsync: fetchPaymentSheetParams } = useFetchPaymentSheet(adId);
   const [loading, setLoading] = useState(false);
   const [paymentSheetReady, setPaymentSheetReady] = useState(false);
-  const [canBuy, setCanBuy] = useState(ad?.status.label === AdStatusEnum.PUBLISHED);
 
   const handleSeeCardDetail = (cardId: string) => {
     router.push(`/card/${cardId}`);
@@ -71,7 +70,6 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
       }
 
       setLoading(false);
-      setCanBuy(false);
       router.push('/order-confirmation');
     } catch (err: unknown) {
       setLoading(false);
@@ -122,7 +120,7 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
         onSeeCardDetail={handleSeeCardDetail}
         onBuy={openPaymentSheet}
         isLoading={loading}
-        canBuy={canBuy}
+        canBuy={ad.status.label === AdStatusEnum.PUBLISHED}
       />
     </>
   );
