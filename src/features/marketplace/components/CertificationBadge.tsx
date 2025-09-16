@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
-import logo_SLV from '../../../../assets/icons/certi/certi_SLV.png';
+import logo_SLVIcon from '../../../../assets/icons/certi/certi_SLV.png';
 import { useTheme } from '../../../theme/useTheme';
 import { Certification } from '../types';
 
@@ -27,7 +27,7 @@ export default function CertificationBadge({ certification }: CertificationBadge
           <CreativeCommons color={theme.colors.text.secondary} size={18} />
         </View>
       )} */}
-      <Image source={logo_SLV} style={styles.image} />
+      <Image source={logo_SLVIcon} style={styles.image} />
       <View style={{ flex: 1 }}>
         <Text style={[styles.authority, { color: theme.colors.text.primary }]}>
           Certified by : Sleeved
