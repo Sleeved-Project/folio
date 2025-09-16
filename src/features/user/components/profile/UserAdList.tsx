@@ -20,14 +20,13 @@ export default function UserAdList({ userId }: UserAdListProps) {
   const GAP = 8;
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView style={{ paddingBottom: insets.bottom }} showsVerticalScrollIndicator={false}>
       <View
         style={{
           gap: GAP,
           flexDirection: 'row',
           flexWrap: 'wrap',
           justifyContent: 'space-between',
-          paddingBottom: insets.bottom,
         }}
       >
         {adsListFlat?.map((item) => (
