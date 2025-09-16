@@ -9,7 +9,7 @@ import AdHeader from '../components/AdHeader';
 import AdSellerCard from '../components/AdSellerCard';
 import { useAdDetail } from '../hooks/queries/useAdDetail';
 import { useFetchPaymentSheet } from '../../payment/hooks/mutations/useFetchPaymentSheet';
-import { AdStatusEnum } from '../types';
+import { useCancelPaymentSheet } from '../../payment/hooks/mutations/useCancelPaymentSheet';
 
 export default function AdDetailScreen({ adId }: { adId: string }) {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -17,9 +17,10 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
   const { data: ad, isLoading, error } = useAdDetail(adId);
 
   const { mutateAsync: fetchPaymentSheetParams } = useFetchPaymentSheet(adId);
+  const { mutateAsync: cancelPaymentSheet } = useCancelPaymentSheet(adId);
   const [loading, setLoading] = useState(false);
   const [paymentSheetReady, setPaymentSheetReady] = useState(false);
-  const [canBuy, setCanBuy] = useState(ad?.status.label === AdStatusEnum.PUBLISHED);
+  const [canBuy, setCanBuy] = useState(true);
 
   const handleSeeCardDetail = (cardId: string) => {
     router.push(`/card/${cardId}`);
@@ -65,6 +66,13 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
       const { error } = await presentPaymentSheet();
 
       if (error) {
+        console.log('PaymentSheet Error', error);
+        if (error.code === 'Canceled') {
+          // Cancel payment intent + update ad status to "available" if the user cancels
+          setPaymentSheetReady(false);
+          await cancelPaymentSheet();
+          return;
+        }
         throw new Error(
           error.message || 'Stripe Payment Sheet must be initialized before presenting'
         );
