@@ -1,5 +1,5 @@
-import { CreativeCommons } from 'lucide-react-native';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import logo_SLV from '../../../../assets/icons/certi/certi_SLV.png';
 import { useTheme } from '../../../theme/useTheme';
 import { Certification } from '../types';
 
@@ -20,26 +20,22 @@ export default function CertificationBadge({ certification }: CertificationBadge
         },
       ]}
     >
-      {certification.authority.logo ? (
-        <Image source={certification.authority.logo} style={styles.image} />
+      {/* {certification.authority.logo ? (
+        <Image source={logo_SLV} style={styles.image} />
       ) : (
         <View style={styles.image}>
           <CreativeCommons color={theme.colors.text.secondary} size={18} />
         </View>
-      )}
+      )} */}
+      <Image source={logo_SLV} style={styles.image} />
       <View style={{ flex: 1 }}>
         <Text style={[styles.authority, { color: theme.colors.text.primary }]}>
-          Certified by : {certification.authority.name}
+          Certified by : Sleeved
         </Text>
         <Text style={[styles.grade, { color: theme.colors.text.secondary }]}>
-          Grade : {certification.grade} ({certification.label})
+          Grade : {certification.globalRating}
         </Text>
       </View>
-      <>
-        <Text style={[styles.grade, { color: theme.colors.text.secondary }]}>
-          {certification.grade}
-        </Text>
-      </>
     </View>
   );
 }

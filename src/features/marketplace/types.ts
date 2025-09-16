@@ -16,9 +16,13 @@ export interface Seller {
 }
 
 export interface Certification {
-  authority: Authority;
-  grade: number;
-  label: string;
+  id: string;
+  centeringRating: string;
+  certifiedAt: string;
+  cornerRating: string;
+  edgeRating: string;
+  globalRating: string;
+  surfaceRating: string;
 }
 
 export interface Authority {
