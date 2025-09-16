@@ -45,31 +45,39 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
         returnURL: `folio://ad/${ad.id}`,
       });
 
-      if (!error) {
-        setPaymentSheetReady(true);
+      if (error) {
+        throw error;
       }
-    } catch (error) {
-      console.error('Error initializing payment sheet', error);
+      setPaymentSheetReady(true);
+    } catch (err: unknown) {
+      throw new Error((err as Error).message);
     } finally {
       setLoading(false);
     }
   };
 
   const openPaymentSheet = async () => {
-    if (!paymentSheetReady) {
-      await initializePaymentSheet();
-    }
+    try {
+      if (!paymentSheetReady) {
+        await initializePaymentSheet();
+      }
 
-    const { error } = await presentPaymentSheet();
-    console.log('Present payment sheet', { error });
+      const { error } = await presentPaymentSheet();
 
-    if (error) {
-      setLoading(false);
-      Alert.alert(`Error code: ${error.code}`, error.message);
-    } else {
+      if (error) {
+        throw new Error(
+          error.message || 'Stripe Payment Sheet must be initialized before presenting'
+        );
+      }
+
       setLoading(false);
       setCanBuy(false);
       router.push('/order-confirmation');
+    } catch (err: unknown) {
+      setLoading(false);
+      const message =
+        err instanceof Error ? err.message : 'An unknown error occurred while processing payment';
+      Alert.alert('Payment Error', message);
     }
   };
 
