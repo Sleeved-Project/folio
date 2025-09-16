@@ -1,6 +1,6 @@
-import { User } from 'lucide-react-native';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
+import ProfilePicture from '../../user/components/profile/ProfilePicture';
 import StarRating from '../../user/components/profile/StarRating';
 import { Seller } from '../types';
 
@@ -14,28 +14,14 @@ export default function AdSellerCard({ seller, onPress }: AdSellerCardProps) {
 
   return (
     <Pressable onPress={() => onPress?.(seller.id)} style={styles.container}>
-      {seller.avatarUrl ? (
-        <Image source={{ uri: seller.avatarUrl }} style={styles.avatar} />
-      ) : (
-        <View
-          style={[
-            styles.avatar,
-            {
-              backgroundColor: theme.colors.background.secondary,
-              justifyContent: 'center',
-              alignItems: 'center',
-            },
-          ]}
-        >
-          <User size={20} color={theme.colors.text.secondary} />
-        </View>
-      )}
+      <ProfilePicture username={seller.username} uri={seller.avatarUrl} size="small" />
       <View style={styles.info}>
         <Text
           style={{
             color: theme.colors.text.primary,
             fontSize: theme.typography.fontSizes.md,
             fontWeight: theme.typography.fontWeights.bold,
+            paddingLeft: 10,
           }}
         >
           {seller.username}
