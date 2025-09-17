@@ -13,7 +13,7 @@ export default function OrderCartRecap({ ad }: { ad: CheckoutAd }) {
       {/* Card Info */}
       <View style={{ flex: 1 }}>
         <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-          {ad.card.name} · ${ad.originalPrice}
+          {ad.card.name} · ({ad.finish.label}) · ${ad.originalPrice}
         </Text>
         <Text style={{ color: '#555', marginVertical: theme.spacing.xs }}>
           Condition: <Text style={{ fontWeight: '500' }}>{ad.condition.label}</Text>
