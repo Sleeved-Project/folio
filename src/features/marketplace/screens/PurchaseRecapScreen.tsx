@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PenLine } from 'lucide-react-native';
 import PriceCheckout from '../components/PriceCheckout';
 import { Checkout } from '../types';
+import { useCancelPaymentSheet } from '../../payment/hooks/mutations/useCancelPaymentSheet';
 
 const Link = ({ label, onPress }: { label?: string; onPress?: () => void }) => {
   const theme = useTheme();
@@ -92,6 +93,8 @@ export default function PurchaseRecapScreen({ adId }: { adId: string }) {
 
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const { mutateAsync: fetchPaymentSheetParams } = useFetchPaymentSheet(adId);
+  const { mutateAsync: cancelPaymentSheet } = useCancelPaymentSheet(adId);
+
   const [paymentSheetReady, setPaymentSheetReady] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isModifying, setIsModifying] = useState(false);
@@ -129,6 +132,12 @@ export default function PurchaseRecapScreen({ adId }: { adId: string }) {
       const { error } = await presentPaymentSheet();
 
       if (error) {
+        if (error.code === 'Canceled') {
+          // Cancel payment intent + update ad status to "available" if the user cancels
+          setPaymentSheetReady(false);
+          await cancelPaymentSheet();
+          return;
+        }
         throw new Error(
           error.message || 'Stripe Payment Sheet must be initialized before presenting'
         );
