@@ -45,6 +45,45 @@ export interface Ad {
   updatedAt: string;
 }
 
+export interface Checkout {
+  id: string;
+  ad: CheckoutAd;
+  prices: CheckoutPrice;
+}
+export interface CheckoutAd {
+  id: string;
+  originalPrice: string;
+  condition: Condition;
+  rectoImageUrl: string;
+  finish: Finish;
+  card: {
+    name: string;
+  };
+  status: { id: string; label: string };
+  deliveryAddress: {
+    id: string;
+  };
+  certificate?: Certification;
+  seller: CheckoutSeller;
+}
+export interface CheckoutCertificate {
+  grade: {
+    label: string;
+  };
+  global_rating: string;
+}
+export interface CheckoutSeller {
+  id: string;
+  username: string;
+  avatarUrl?: string;
+}
+
+export interface CheckoutPrice {
+  shippingCost: string;
+  serviceCost: string;
+  totalCost: string;
+}
+
 export interface AdCard {
   id: string;
   name: string;
@@ -97,4 +136,22 @@ export enum AdStatusEnum {
   SOLD = 'Sold',
   ARCHIVED = 'Archived',
   DRAFT = 'Draft',
+}
+
+export interface UpdateBuyerAddressParams {
+  address: string;
+  additionalInfo?: string;
+  city: string;
+  zipCode: string;
+  country: string;
+  countryCode: string;
+}
+
+export interface Address {
+  address: string;
+  additionalInfo: string;
+  city: string;
+  zipCode: string;
+  country: string;
+  countryCode: string;
 }

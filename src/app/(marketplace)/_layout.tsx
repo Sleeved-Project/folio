@@ -32,6 +32,14 @@ export default function MarketplaceLayout() {
         }}
       />
       <Stack.Screen
+        name="purchase-recap/[adId]"
+        options={{
+          title: 'Recap Screen',
+          headerBackTitle: 'Back',
+          // headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="seller/[sellerId]"
         options={{
           title: 'Seller Profile',

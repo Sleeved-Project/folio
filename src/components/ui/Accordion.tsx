@@ -20,6 +20,7 @@ interface AccordionProps {
   title: string;
   children: React.ReactNode;
   initiallyOpen?: boolean;
+  shouldTakeFullWidth?: boolean;
   rightElement?: React.ReactNode;
 }
 
@@ -27,6 +28,7 @@ export default function Accordion({
   title,
   children,
   initiallyOpen = false,
+  shouldTakeFullWidth = false,
   rightElement,
 }: AccordionProps) {
   const [isOpen, setIsOpen] = useState(initiallyOpen);
@@ -45,6 +47,7 @@ export default function Accordion({
           backgroundColor: theme.colors.background.primary,
           borderColor: theme.colors.border.light,
           borderRadius: theme.borderRadius.medium,
+          width: shouldTakeFullWidth ? '100%' : 'auto',
         },
       ]}
     >
