@@ -12,10 +12,10 @@ export default function TabLayout() {
     <Tabs
       backBehavior="history"
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         tabBarStyle: {
-          backgroundColor: theme.colors.background.primary,
-          borderTopColor: theme.colors.border.light,
+          backgroundColor: theme.colors.background.secondary,
+          borderTopColor: theme.colors.primary,
         },
       }}
     >
@@ -25,11 +25,11 @@ export default function TabLayout() {
           title: 'Home',
           tabBarIcon: ({ focused }) => (
             <StoreIcon
-              color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
+              color={focused ? theme.colors.primaryForeground : theme.colors.text.tertiary}
               size={24}
             />
           ),
-          tabBarActiveTintColor: theme.colors.text.primary,
+          tabBarActiveTintColor: theme.colors.primaryForeground,
           tabBarInactiveTintColor: theme.colors.text.tertiary,
         }}
       />
@@ -39,11 +39,11 @@ export default function TabLayout() {
           title: 'Explorer',
           tabBarIcon: ({ focused }) => (
             <LayoutGridIcon
-              color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
+              color={focused ? theme.colors.primaryForeground : theme.colors.text.tertiary}
               size={24}
             />
           ),
-          tabBarActiveTintColor: theme.colors.text.primary,
+          tabBarActiveTintColor: theme.colors.primaryForeground,
           tabBarInactiveTintColor: theme.colors.text.tertiary,
         }}
       />
@@ -68,7 +68,7 @@ export default function TabLayout() {
                     },
                   ]}
                 >
-                  <FocusIcon color={theme.colors.primary} size={32} />
+                  <FocusIcon color={theme.colors.primaryForeground} size={32} />
                 </View>
               </TouchableOpacity>
             );
@@ -81,11 +81,11 @@ export default function TabLayout() {
           title: 'Collection',
           tabBarIcon: ({ focused }) => (
             <WalletIcon
-              color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
+              color={focused ? theme.colors.primaryForeground : theme.colors.text.tertiary}
               size={24}
             />
           ),
-          tabBarActiveTintColor: theme.colors.text.primary,
+          tabBarActiveTintColor: theme.colors.primaryForeground,
           tabBarInactiveTintColor: theme.colors.text.tertiary,
         }}
       />
@@ -95,11 +95,11 @@ export default function TabLayout() {
           title: 'Profile',
           tabBarIcon: ({ focused }) => (
             <UserIcon
-              color={focused ? theme.colors.text.primary : theme.colors.text.tertiary}
+              color={focused ? theme.colors.primaryForeground : theme.colors.text.tertiary}
               size={24}
             />
           ),
-          tabBarActiveTintColor: theme.colors.text.primary,
+          tabBarActiveTintColor: theme.colors.primaryForeground,
           tabBarInactiveTintColor: theme.colors.text.tertiary,
         }}
       />

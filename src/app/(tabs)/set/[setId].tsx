@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { ErrorState } from '../../../components/ui/StatusIndicators';
 import SetDetail from '../../../features/sets/screens/SetDetail';
+import ScreenContainer from '../../../components/ui/ScreenContainer';
 
 export default function SetDetailPage() {
   const { setId } = useLocalSearchParams();
@@ -9,5 +10,9 @@ export default function SetDetailPage() {
     return <ErrorState message="Missing set ID" />;
   }
 
-  return <SetDetail setId={setId as string} />;
+  return (
+    <ScreenContainer>
+      <SetDetail setId={setId as string} />
+    </ScreenContainer>
+  );
 }

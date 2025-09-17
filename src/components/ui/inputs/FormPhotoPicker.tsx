@@ -93,7 +93,7 @@ export default function FormPhotoPicker<T extends FieldValues>({
                   styles.emptyContainer,
                   {
                     borderRadius: theme.borderRadius.medium,
-                    borderColor: theme.colors.border.light,
+                    borderColor: theme.colors.border.medium,
                   },
                 ]}
                 onPress={handleOpen}

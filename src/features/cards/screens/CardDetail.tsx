@@ -126,14 +126,16 @@ export default function CardDetail({ cardId }: { cardId: string }) {
             containerStyle={{ marginTop: 8 }}
           />
 
-          {activeTab === 'details' ? (
-            <CardDetailedInfo cardId={cardId} />
-          ) : (
-            <>
-              <CardPricesInfo cardId={cardId} />
-              {/* <CardAvailableOffers cardId={cardId} title="Available Offers" /> */}
-            </>
-          )}
+          <View style={{ marginBottom: theme.spacing.xl }}>
+            {activeTab === 'details' ? (
+              <CardDetailedInfo cardId={cardId} />
+            ) : (
+              <>
+                <CardPricesInfo cardId={cardId} />
+                {/* <CardAvailableOffers cardId={cardId} title="Available Offers" /> */}
+              </>
+            )}
+          </View>
         </ScrollView>
       </AnimatedDrawer>
     </View>

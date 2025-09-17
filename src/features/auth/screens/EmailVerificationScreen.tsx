@@ -204,7 +204,6 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   resendButtonText: {
-    color: '#2196F3',
     fontWeight: '600',
     fontSize: 16,
   },

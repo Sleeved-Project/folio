@@ -9,6 +9,7 @@ import { Filters, FilterTypeEnum } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SearchBar from '../../../components/ui/SearchBar';
 import { router } from 'expo-router';
+import { Button } from '../../../components/ui';
 
 interface FilterDetailProps {
   filterType: FilterTypeEnum;
@@ -183,22 +184,13 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
           }}
           onEndReachedThreshold={0.5}
         />
-        <TouchableOpacity
+        <Button
           onPress={() => {
             setFilters?.(tempFilters ?? []);
             router.back();
           }}
-          style={[
-            styles.addButton,
-            {
-              backgroundColor: theme.colors.primary,
-              borderRadius: theme.borderRadius.medium,
-            },
-          ]}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.addButtonText}>Apply Filters</Text>
-        </TouchableOpacity>
+          title="Apply filters"
+        />
       </View>
     </SafeAreaView>
   );
@@ -230,11 +222,6 @@ const styles = StyleSheet.create({
   addButton: {
     position: 'absolute',
     bottom: 10,
-    alignSelf: 'center',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 48,
   },
   addButtonText: {
     color: 'white',

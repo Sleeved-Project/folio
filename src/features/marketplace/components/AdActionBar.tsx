@@ -35,7 +35,7 @@ export default function AdActionBar({
     >
       <Button
         title="See card detail"
-        variant="outline"
+        variant="secondary"
         onPress={() => onSeeCardDetail?.(ad.card.id)}
         buttonStyle={[styles.button]}
       />

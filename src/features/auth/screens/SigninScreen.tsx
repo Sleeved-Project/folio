@@ -71,7 +71,9 @@ const SigninScreen: React.FC = () => {
               onSubmitEditing={Keyboard.dismiss}
             />
             <TouchableOpacity style={styles.forgotPassword}>
-              <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+              <Text style={[styles.forgotPasswordText, { color: theme.colors.primaryForeground }]}>
+                Forgot password?
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

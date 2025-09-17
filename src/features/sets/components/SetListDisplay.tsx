@@ -63,13 +63,7 @@ export default function SetListDisplay({ set }: SetListDisplayProps) {
           </View>
           <View style={styles.occurenceBadge}>
             {set.nbOwned > 0 && <Text style={styles.badgeText}>{set.nbOwned}</Text>}
-            <CircularProgressBar
-              size={24}
-              strokeWidth={6}
-              progressPercent={set.totalPercentage}
-              bgColor={'grey'}
-              pgColor={'black'}
-            />
+            <CircularProgressBar size={24} strokeWidth={6} progressPercent={set.totalPercentage} />
           </View>
         </View>
       </TouchableOpacity>

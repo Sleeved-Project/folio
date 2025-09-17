@@ -44,7 +44,7 @@ const CardsForSaleHeader = ({ onSellPress }: { onSellPress?: () => void }) => {
     <>
       {onSellPress && (
         <View style={{ marginBottom: theme.spacing.md }}>
-          <Button title="Sell a card" onPress={onSellPress} />
+          <Button title="SELL A CARD" variant="gradient" onPress={onSellPress} />
         </View>
       )}
       <TitleSection title="Cards for sale" style={{ marginBottom: theme.spacing.md }} />
@@ -104,7 +104,7 @@ const EmptyCardsMessage = ({
   );
 };
 
-export default function CardsForSale({ onSellPress, containerStyle }: CardsForSaleProps) {
+export default function CardsForSale({ onSellPress }: CardsForSaleProps) {
   const theme = useTheme();
   const width = useWindowDimensions().width - 32;
   const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
@@ -128,63 +128,51 @@ export default function CardsForSale({ onSellPress, containerStyle }: CardsForSa
     return <ErrorState message={error instanceof Error ? error.message : 'Failed to load ads'} />;
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: theme.colors.background.primary },
-        containerStyle,
-      ]}
-    >
-      <FlatList
-        data={items}
-        keyExtractor={(item, index) => `${item.id}-${index}`}
-        renderItem={({ item }) => (
-          <CardForSaleItemRenderer item={item} cardWidth={CARD_WIDTH} gap={GAP} />
-        )}
-        numColumns={NUM_COLUMNS}
-        columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
-        ListHeaderComponent={<CardsForSaleHeader onSellPress={onSellPress} />}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContent}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor={theme.colors.primary}
-            colors={[theme.colors.primary]}
-            progressBackgroundColor={theme.colors.background.tertiary}
-            title="Refreshing cards..."
-            titleColor={theme.colors.text.secondary}
-          />
+    <FlatList
+      data={items}
+      keyExtractor={(item, index) => `${item.id}-${index}`}
+      renderItem={({ item }) => (
+        <CardForSaleItemRenderer item={item} cardWidth={CARD_WIDTH} gap={GAP} />
+      )}
+      numColumns={NUM_COLUMNS}
+      columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
+      ListHeaderComponent={<CardsForSaleHeader onSellPress={onSellPress} />}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ marginTop: theme.spacing.md, paddingBottom: theme.spacing.lg }}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          tintColor={theme.colors.primary}
+          colors={[theme.colors.primary]}
+          progressBackgroundColor={theme.colors.background.tertiary}
+          title="Refreshing cards..."
+          titleColor={theme.colors.text.secondary}
+        />
+      }
+      onEndReached={() => {
+        if (hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
         }
-        onEndReached={() => {
-          if (hasNextPage && !isFetchingNextPage) {
-            fetchNextPage();
-          }
-        }}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={
-          <CardsForSaleFooter
-            isFetchingNextPage={isFetchingNextPage}
-            isLoading={isLoading}
-            error={error}
-          />
-        }
-        ListEmptyComponent={
-          <EmptyCardsMessage isFetchingNextPage={isFetchingNextPage} isLoading={isLoading} />
-        }
-      />
-    </View>
+      }}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={
+        <CardsForSaleFooter
+          isFetchingNextPage={isFetchingNextPage}
+          isLoading={isLoading}
+          error={error}
+        />
+      }
+      ListEmptyComponent={
+        <EmptyCardsMessage isFetchingNextPage={isFetchingNextPage} isLoading={isLoading} />
+      }
+    />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  listContent: {
-    paddingTop: 16,
-    paddingBottom: 32,
   },
   text: {
     textAlign: 'center',

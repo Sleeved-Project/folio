@@ -1,11 +1,11 @@
+// ...existing code...
 import { useRouter } from 'expo-router';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../../../theme/useTheme';
 import ProfilePicture from './ProfilePicture';
 // import StarRating from './StarRating';
 import { Edit, LogOut } from 'lucide-react-native';
 import { Button } from '../../../../components/ui';
-import { theme } from '../../../../theme/theme';
 import { useAuth } from '../../../auth/context/AuthContext';
 
 interface ProfileInformationProps {
@@ -49,9 +49,44 @@ export default function ProfileInformation({
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.colors.background.secondary,
+          borderRadius: theme.borderRadius.medium,
+          padding: theme.spacing.md,
+          ...theme.shadows.small,
+          borderColor: theme.colors.border.light,
+          marginBottom: theme.spacing.md,
+        },
+      ]}
+    >
+      {isUserProfile && (
+        <TouchableOpacity
+          onPress={handleLogout}
+          accessibilityLabel="Logout"
+          style={[
+            styles.logoutButton,
+            {
+              top: theme.spacing.xs,
+              right: theme.spacing.xs,
+              borderRadius: theme.borderRadius.medium,
+              backgroundColor: theme.colors.background.primary,
+              padding: theme.spacing.xs,
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+          ]}
+        >
+          <LogOut color={theme.colors.danger} size={16} />
+          <Text style={{ color: theme.colors.primaryForeground }}>Logout</Text>
+        </TouchableOpacity>
+      )}
+
       <ProfilePicture username={username} uri={profilePictureUrl} size="large" />
-      {firstname && lastname && (
+
+      {firstname && lastname ? (
         <Text
           style={[
             styles.name,
@@ -64,43 +99,29 @@ export default function ProfileInformation({
         >
           {`${firstname} ${lastname}`}
         </Text>
-      )}
+      ) : null}
+
       <Text
-        style={{
-          color: theme.colors.text.secondary,
-          fontSize: theme.typography.fontSizes.md,
-          fontWeight: theme.typography.fontWeights.medium,
-        }}
+        style={[
+          styles.username,
+          {
+            color: theme.colors.text.secondary,
+            fontSize: theme.typography.fontSizes.md,
+            fontWeight: theme.typography.fontWeights.medium,
+          },
+        ]}
       >
         @{username}
       </Text>
-      {/* {rating && ratingCount && (
-        <StarRating style={styles.ratingContainer} rating={rating} count={ratingCount} />
-      )} */}
 
       {isUserProfile && (
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 8,
-          }}
-        >
-          <Button
-            buttonStyle={[styles.editButton, styles.button]}
-            title="Edit Profile"
-            leftIcon={<Edit color="white" size={16} />}
-            onPress={() => router.push('/(profile)/edit-profile')}
-          />
-
-          <Button
-            buttonStyle={[styles.logoutButton, styles.button]}
-            title="Logout"
-            onPress={handleLogout}
-            leftIcon={<LogOut color="white" size={16} />}
-          />
-        </View>
+        <Button
+          title="EDIT PROFILE"
+          leftIcon={<Edit color={theme.colors.background.primary} size={16} />}
+          onPress={() => router.push('/(profile)/edit-profile')}
+          fullWidth={true}
+          variant="gradient"
+        />
       )}
     </View>
   );
@@ -111,22 +132,20 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 4,
+    gap: 8,
+    position: 'relative',
+    borderWidth: 1,
   },
   name: {
     marginTop: 8,
   },
-  ratingContainer: {
-    marginTop: 4,
-  },
-  button: {
-    marginTop: 16,
-    paddingHorizontal: 24,
-  },
-  editButton: {
-    backgroundColor: theme.colors.primary,
+  username: {
+    marginBottom: 8,
   },
   logoutButton: {
-    backgroundColor: theme.colors.danger,
+    position: 'absolute',
+    // top/right/size set inline with theme
+    zIndex: 5,
   },
 });
+// ...existing code...

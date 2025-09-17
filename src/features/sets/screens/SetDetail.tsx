@@ -51,20 +51,16 @@ export default function SetDetail({ setId }: { setId: string }) {
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: theme.colors.background.primary,
-          paddingTop: theme.spacing.md,
-          paddingHorizontal: theme.spacing.md,
-          gap: theme.spacing.md,
-        },
-      ]}
-    >
-      <View style={[styles.setHeader]}>
-        <View>
-          <Text style={{ fontSize: 24, fontWeight: 'bold', color: theme.colors.text.primary }}>
+    <View style={{ marginBottom: theme.spacing.xl }}>
+      <View style={[styles.setHeader, { marginVertical: theme.spacing.md }]}>
+        <View style={{ gap: theme.spacing.xs, marginBottom: theme.spacing.md }}>
+          <Text
+            style={{
+              fontSize: theme.typography.fontSizes.xxl,
+              fontWeight: theme.typography.fontWeights.bold,
+              color: theme.colors.primaryForeground,
+            }}
+          >
             {set.name}
           </Text>
           <Text style={{ color: theme.colors.text.secondary }}>Edited in {set.releaseDate}</Text>
@@ -74,8 +70,6 @@ export default function SetDetail({ setId }: { setId: string }) {
             size={theme.spacing.xl}
             strokeWidth={8}
             progressPercent={set.totalPercentage}
-            bgColor={'grey'}
-            pgColor={'black'}
           />
           <Image
             source={{ uri: set.imageSymbol }}
@@ -104,14 +98,16 @@ export default function SetDetail({ setId }: { setId: string }) {
         searchPlaceholder="Search by Pokemon"
       />
       <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.SET} />
-      <CardListDisplay
-        cards={cards}
-        hasNextPage={hasNextCardsPage}
-        isFetchingNextPage={isFetchingNextCardsPage}
-        fetchNextPage={fetchNextCardsPage}
-        isLoading={isCardsLoading}
-        error={cardsError}
-      />
+      <View style={{ marginTop: theme.spacing.xl }}>
+        <CardListDisplay
+          cards={cards}
+          hasNextPage={hasNextCardsPage}
+          isFetchingNextPage={isFetchingNextCardsPage}
+          fetchNextPage={fetchNextCardsPage}
+          isLoading={isCardsLoading}
+          error={cardsError}
+        />
+      </View>
     </View>
   );
 }
