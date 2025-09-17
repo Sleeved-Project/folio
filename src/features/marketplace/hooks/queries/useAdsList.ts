@@ -28,6 +28,9 @@ export const useAdsList = () => {
     initialPageParam: 1,
     staleTime: 5 * 60 * 1000,
     retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 };
 
