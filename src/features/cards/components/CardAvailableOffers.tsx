@@ -1,7 +1,10 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { DollarSign } from 'lucide-react-native';
+import React, { useMemo } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
+import TitleSection from '../../../components/ui/TitleSection';
 import { useTheme } from '../../../theme/useTheme';
+import { useCardAvailableOffers } from '../hooks/queries/useCardAvailableOffers';
 import CardAvailableOfferItem from './CardAvailableOfferItem';
 
 interface CardAvailableOffersProps {
@@ -11,101 +14,54 @@ interface CardAvailableOffersProps {
 
 export default function CardAvailableOffers({ title, cardId }: CardAvailableOffersProps) {
   const theme = useTheme();
+  const { data, isLoading, error } = useCardAvailableOffers(cardId);
 
-  // TODODELETE : Mock data for available offers
-  console.log('CardAvailableOffers rendered for cardId:', cardId);
-  const availableOffers = [
-    {
-      id: 0,
-      title: 'Example Offer 1',
-      seller: 'Seller A',
-      price: '10.00',
-      pictureUrl: null,
-      condition: 'Near Mint',
-    },
-    {
-      id: 1,
-      title: 'Example Offer 2',
-      seller: 'Seller B',
-      price: '12.50',
-      pictureUrl: 'https://example.com/image2.jpg',
-      condition: 'Lightly Played',
-    },
-  ];
+  const availableOffers = useMemo(() => {
+    return data?.pages.flatMap((page) => page.data) || [];
+  }, [data]);
 
-  if (availableOffers.length === 0) {
-    return (
-      <View
-        style={{
-          marginTop: theme.spacing.sm,
-          marginBottom: theme.spacing.lg,
-        }}
-      >
-        <Text
-          style={{
-            fontWeight: theme.typography.fontWeights.bold,
-            fontSize: theme.typography.fontSizes.md,
-            marginBottom: 4,
-            color: theme.colors.text.primary,
-          }}
-        >
-          Available Offers
-        </Text>
-        <View
-          style={[
-            styles.placeholderContainer,
-            {
-              padding: theme.spacing.md,
-              backgroundColor: theme.colors.background.secondary,
-              borderRadius: theme.borderRadius.small,
-              marginTop: theme.spacing.sm,
-              marginBottom: theme.spacing.lg,
-            },
-          ]}
-        >
-          <DollarSign size={24} color={theme.colors.text.secondary} />
-          <Text
-            style={{
-              color: theme.colors.text.secondary,
-              fontSize: theme.typography.fontSizes.sm,
-              marginTop: theme.spacing.sm,
-            }}
-          >
-            No available offers for this card
-          </Text>
-        </View>
-      </View>
-    );
-  }
+  const containerStyle = {
+    marginTop: theme.spacing.sm,
+    marginBottom: theme.spacing.lg,
+  };
 
-  // TODOCREATE : Add isLoading and error check after future hook integration
+  const placeholderStyle = {
+    ...styles.placeholderContainer,
+    padding: theme.spacing.md,
+    backgroundColor: theme.colors.background.secondary,
+    borderRadius: theme.borderRadius.small,
+    marginTop: theme.spacing.sm,
+  };
+
+  const subtitleStyle = {
+    ...styles.subtitle,
+    color: theme.colors.text.secondary,
+    marginBottom: 12,
+  };
+
+  const emptyTextStyle = {
+    color: theme.colors.text.secondary,
+    fontSize: theme.typography.fontSizes.sm,
+    marginTop: theme.spacing.sm,
+  };
+
+  if (isLoading) return <LoadingState />;
+  if (error) return <ErrorState message="Failed to load available offers." />;
 
   return (
-    <View
-      style={{
-        marginTop: theme.spacing.sm,
-        marginBottom: theme.spacing.lg,
-      }}
-    >
-      <Text
-        style={[
-          styles.title,
-          {
-            fontWeight: theme.typography.fontWeights.bold,
-            fontSize: theme.typography.fontSizes.md,
-            marginBottom: 4,
-            color: theme.colors.text.primary,
-          },
-        ]}
-      >
-        {title}
+    <View style={containerStyle}>
+      <TitleSection title={title} />
+      <Text style={subtitleStyle}>
+        {availableOffers.length} offer{availableOffers.length > 1 ? 's' : ''} found
       </Text>
-      <Text style={[styles.subtitle, { color: theme.colors.text.secondary, marginBottom: 12 }]}>
-        {availableOffers.length} offers found
-      </Text>
-      {availableOffers.map((item) => (
-        <CardAvailableOfferItem key={item.id} {...item} />
-      ))}
+      {availableOffers.length > 0 ? (
+        availableOffers.map((offer) => <CardAvailableOfferItem key={offer.id} {...offer} />)
+      ) : (
+        <View style={placeholderStyle}>
+          <DollarSign size={24} color={theme.colors.text.secondary} />
+          <Text style={emptyTextStyle}>No available offers for this card</Text>
+        </View>
+      )}
     </View>
   );
 }
