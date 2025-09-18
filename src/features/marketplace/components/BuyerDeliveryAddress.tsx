@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { Button, FormTextInput } from '../../../components/ui';
 import { useForm } from 'react-hook-form';
-import { BuyerAddressFormValues, buyerAddress } from '../schemas/sellerAddressSchema';
+import { BuyerAddressFormValues, buyerAddress } from '../schemas/buyerAddressSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FilledInput from '../../../components/ui/FilledInput';
 import { theme } from '../../../theme/theme';
