@@ -46,11 +46,11 @@ const Link = ({ label, onPress }: { label?: string; onPress?: () => void }) => {
 };
 
 export default function PurchaseRecapScreen({ adId }: { adId: string }) {
+  const theme = useTheme();
   const insets = useSafeAreaInsets();
   // const { data: checkout, isLoading, error } = useCheckout(adId);
   // if (isLoading) return <LoadingState />;
   // if (error || !checkout) return <ErrorState message="Failed to load checkout." />;
-
   const checkout: Checkout = {
     id: 'checkout_123',
     ad: {
@@ -156,7 +156,14 @@ export default function PurchaseRecapScreen({ adId }: { adId: string }) {
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={[styles.container, { paddingBottom: insets.bottom }]}
+      contentContainerStyle={[
+        styles.container,
+        {
+          paddingBottom: insets.bottom,
+          paddingHorizontal: theme.spacing.md,
+          paddingTop: theme.spacing.md,
+        },
+      ]}
     >
       <Accordion title={'Seller'} initiallyOpen shouldTakeFullWidth>
         <PurchaseRecapSellerCard seller={checkout.ad.seller} />
@@ -200,8 +207,6 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 16,
-    paddingHorizontal: 16,
   },
   button: {
     width: '100%',

@@ -22,8 +22,9 @@ export default function MarketplaceLayout() {
       <Stack.Screen
         name="purchase-recap/[adId]"
         options={{
-          title: 'Recap Screen',
+          title: 'Checkout',
           headerBackTitle: 'Back',
+          headerTintColor: theme.colors.primaryForeground,
           // headerShown: false,
         }}
       />
