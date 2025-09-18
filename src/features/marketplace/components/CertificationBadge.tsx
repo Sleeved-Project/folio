@@ -5,9 +5,13 @@ import { Certification } from '../types';
 
 interface CertificationBadgeProps {
   certification: Certification;
+  shouldMarginLeft?: boolean;
 }
 
-export default function CertificationBadge({ certification }: CertificationBadgeProps) {
+export default function CertificationBadge({
+  certification,
+  shouldMarginLeft = true,
+}: CertificationBadgeProps) {
   const theme = useTheme();
 
   return (
@@ -17,6 +21,7 @@ export default function CertificationBadge({ certification }: CertificationBadge
         {
           backgroundColor: theme.colors.background.secondary,
           borderColor: theme.colors.border.black,
+          marginHorizontal: shouldMarginLeft ? 16 : 0,
         },
       ]}
     >
@@ -53,7 +58,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   badge: {
-    marginHorizontal: 16,
     marginTop: 16,
     padding: 12,
     borderRadius: 8,
