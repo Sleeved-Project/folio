@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, FormTextInput } from '../../../components/ui';
 import { useForm } from 'react-hook-form';
 import { BuyerAddressFormValues, buyerAddress } from '../schemas/sellerAddressSchema';
@@ -7,7 +7,7 @@ import { useBuyerDeliveryAddress } from '../hooks/mutations/useBuyerDeliveryAddr
 import FilledInput from '../../../components/ui/FilledInput';
 import { theme } from '../../../theme/theme';
 import { useCreateBuyerAddress } from '../hooks/queries/useCreateBuyerAddress';
-import { getErrorMessage } from '../../../lib/errors/errors-utils';
+import { useToaster } from '../../../components/ui/ToasterProvider';
 
 interface BuyerDeliveryAddressProps {
   isModifying: boolean;
@@ -20,6 +20,7 @@ export default function BuyerDeliveryAddress({
 }: BuyerDeliveryAddressProps) {
   const { mutate: updateDeliveryAddress, isPending } = useBuyerDeliveryAddress();
   const { data: buyerAddressData } = useCreateBuyerAddress(buyerAddressId);
+  const { showToast } = useToaster();
 
   const {
     control,
@@ -41,8 +42,8 @@ export default function BuyerDeliveryAddress({
   const onSubmit = async (data: BuyerAddressFormValues) => {
     try {
       updateDeliveryAddress(data);
-    } catch (err: unknown) {
-      Alert.alert('Updating the address failed', getErrorMessage(err));
+    } catch {
+      showToast({ message: 'Updating the address failed.', type: 'error' });
     }
   };
 

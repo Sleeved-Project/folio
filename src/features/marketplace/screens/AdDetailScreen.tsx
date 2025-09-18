@@ -7,6 +7,7 @@ import AdHeader from '../components/AdHeader';
 import AdSellerCard from '../components/AdSellerCard';
 import { useAdDetail } from '../hooks/queries/useAdDetail';
 import CertificationBadge from '../components/CertificationBadge';
+import { AdStatusEnum } from '../types';
 
 export default function AdDetailScreen({ adId }: { adId: string }) {
   const theme = useTheme();
@@ -58,7 +59,12 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
         </View> */}
       </ScrollView>
 
-      <AdActionBar ad={ad} onSeeCardDetail={handleSeeCardDetail} onBuy={handleBuy} />
+      <AdActionBar
+        ad={ad}
+        onSeeCardDetail={handleSeeCardDetail}
+        onBuy={handleBuy}
+        canBuy={ad.status.label === AdStatusEnum.PUBLISHED}
+      />
     </>
   );
 }
