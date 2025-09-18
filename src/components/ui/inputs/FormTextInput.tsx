@@ -82,13 +82,13 @@ const FormTextInput = <T extends FieldValues>({
                 {
                   borderColor: theme.colors.border.light,
                   backgroundColor: theme.colors.background.secondary,
-                  color: theme.colors.text.primary,
+                  color: theme.colors.primaryForeground,
                   borderRadius: theme.borderRadius.medium,
                 },
                 multiline && styles.multilineInput,
                 isFocused && {
                   borderColor: theme.colors.primary,
-                  backgroundColor: theme.colors.states.focus,
+                  backgroundColor: theme.colors.background.secondary,
                 },
                 error && { borderColor: theme.colors.danger },
                 hasRightIcon && { paddingRight: 48 },

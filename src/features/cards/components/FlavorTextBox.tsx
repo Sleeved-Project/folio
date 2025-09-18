@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     marginTop: 8,
-    marginBottom: 24,
   },
   text: {
     fontStyle: 'italic',

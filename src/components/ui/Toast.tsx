@@ -98,7 +98,7 @@ export default function Toast({ toast }: ToastProps) {
       <View style={styles.iconWrapper}>
         <Icon color={theme.colors.text.onPrimary} size={18} />
       </View>
-      <Text style={[styles.text, { color: theme.colors.text.onPrimary }]} numberOfLines={2}>
+      <Text style={[styles.text, { color: theme.colors.primaryForeground }]} numberOfLines={2}>
         {displayedToast.message}
       </Text>
     </Animated.View>

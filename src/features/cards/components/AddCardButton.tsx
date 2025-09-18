@@ -189,7 +189,7 @@ export default function AddCardButton({
             activeOpacity={0.7}
             delayLongPress={500}
           >
-            <Minus size={ICON_SIZE} color="white" />
+            <Minus size={ICON_SIZE} color={theme.colors.primaryForeground} />
           </TouchableOpacity>
 
           <View
@@ -201,7 +201,7 @@ export default function AddCardButton({
               },
             ]}
           >
-            <Text style={[styles.quantityText, { color: theme.colors.primary }]}>
+            <Text style={[styles.quantityText, { color: theme.colors.primaryForeground }]}>
               {`${quantity} ${quantity === 1 ? 'card' : 'cards'} owned`}
             </Text>
           </View>
@@ -222,7 +222,7 @@ export default function AddCardButton({
             delayLongPress={500}
             disabled={isMaxQuantity}
           >
-            <Plus size={ICON_SIZE} color="white" />
+            <Plus size={ICON_SIZE} color={theme.colors.primaryForeground} />
           </TouchableOpacity>
         </View>
       </View>
@@ -249,7 +249,9 @@ export default function AddCardButton({
         activeOpacity={0.7}
         disabled={isRecentlyRemoved}
       >
-        <Text style={styles.addButtonText}>Add to my collection</Text>
+        <Text style={[styles.addButtonText, { color: theme.colors.primaryForeground }]}>
+          Add to my collection
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -267,7 +269,6 @@ const styles = StyleSheet.create({
     height: BUTTON_HEIGHT,
   },
   addButtonText: {
-    color: 'white',
     fontWeight: '600',
     fontSize: 16,
   },

@@ -4,6 +4,7 @@ import { Card } from '../../cards/types';
 import CardKPIStats from '../../cards/components/CardKPIStats';
 import CardListDisplay from '../../cards/components/CardListDisplay';
 import { useMainFolioStatistics } from '../hooks/queries/useMainFolioStatistics';
+import { useTheme } from '../../../theme/useTheme';
 
 interface MyCardsScreenProps {
   myCardsData: Card[];
@@ -33,9 +34,10 @@ export default function MyCardsScreen({
   // This is useful when the user navigates back to this screen
   // and we want to ensure the data is up-to-date
   useRefetchOnFocus(refetchMyCardsStats);
+  const theme = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <CardListDisplay
         cards={myCardsData}
         hasNextPage={hasNextPage}
@@ -45,15 +47,17 @@ export default function MyCardsScreen({
         error={error}
         listOrigin="collection"
         ListHeaderComponent={
-          <CardKPIStats
-            cardCount={myCardsStats?.totalCardsCount}
-            cardMarketValue={myCardsStats?.cardMarketPrice}
-            cardMarketTrending={myCardsStats?.cardMarketTrending}
-            tcgPlayerValue={myCardsStats?.tcgPlayerPrice}
-            tcgPlayerTrending={myCardsStats?.tcgPlayerTrending}
-            isLoading={isLoadingMyCardsStats}
-            isError={!!myCardsStatsError}
-          />
+          <View style={{ marginBottom: theme.spacing.xl }}>
+            <CardKPIStats
+              cardCount={myCardsStats?.totalCardsCount}
+              cardMarketValue={myCardsStats?.cardMarketPrice}
+              cardMarketTrending={myCardsStats?.cardMarketTrending}
+              tcgPlayerValue={myCardsStats?.tcgPlayerPrice}
+              tcgPlayerTrending={myCardsStats?.tcgPlayerTrending}
+              isLoading={isLoadingMyCardsStats}
+              isError={!!myCardsStatsError}
+            />
+          </View>
         }
       />
     </View>

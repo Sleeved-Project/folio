@@ -72,7 +72,6 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
         styles.container,
         {
           backgroundColor: theme.colors.background.primary,
-          gap: theme.spacing.md,
         },
       ]}
     >
@@ -89,25 +88,27 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
       {isFiltersVisible && activeTab !== 'sets' && (
         <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.CARD} />
       )}
-      {activeTab === 'sets' ? (
-        <SetsList
-          sets={sets}
-          hasNextPage={hasNextSetsPage}
-          isFetchingNextPage={isFetchingNextSetsPage}
-          isLoading={isSetsLoading}
-          fetchNextPage={fetchNextSetsPage}
-          error={setsError}
-        />
-      ) : (
-        <CardListDisplay
-          cards={cards}
-          hasNextPage={hasNextCardsPage}
-          isFetchingNextPage={isFetchingNextCardsPage}
-          isLoading={isCardsLoading}
-          fetchNextPage={fetchNextCardsPage}
-          error={cardsError}
-        />
-      )}
+      <View style={{ marginTop: theme.spacing.xl, flex: 1 }}>
+        {activeTab === 'sets' ? (
+          <SetsList
+            sets={sets}
+            hasNextPage={hasNextSetsPage}
+            isFetchingNextPage={isFetchingNextSetsPage}
+            isLoading={isSetsLoading}
+            fetchNextPage={fetchNextSetsPage}
+            error={setsError}
+          />
+        ) : (
+          <CardListDisplay
+            cards={cards}
+            hasNextPage={hasNextCardsPage}
+            isFetchingNextPage={isFetchingNextCardsPage}
+            isLoading={isCardsLoading}
+            fetchNextPage={fetchNextCardsPage}
+            error={cardsError}
+          />
+        )}
+      </View>
     </View>
   );
 }

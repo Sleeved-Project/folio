@@ -73,17 +73,39 @@ export default function CardListDisplay({
             }}
           />
           {item.occurrence && item.occurrence > 0 && (
-            <View style={styles.occurenceBadge}>
+            <View
+              style={[
+                styles.occurenceBadge,
+                {
+                  top: 8,
+                  right: 8,
+                  backgroundColor: theme.colors.primary,
+                  borderRadius: 64,
+                  borderColor: theme.colors.variants.primaryLight,
+                  borderWidth: 2,
+                },
+              ]}
+            >
               <BadgeNumber value={item.occurrence} />
             </View>
           )}
           {item.isOwned && (
-            <View style={styles.occurenceBadge}>
-              <Check
-                size={20}
-                color={theme.colors.background.secondary}
-                style={{ backgroundColor: theme.colors.text.black, borderRadius: 12 }}
-              />
+            <View
+              style={[
+                styles.occurenceBadge,
+                {
+                  top: '50%',
+                  left: '50%',
+                  transform: [{ translateX: -16 }],
+                  backgroundColor: theme.colors.primary,
+                  padding: theme.spacing.xs,
+                  borderRadius: 64,
+                  borderColor: theme.colors.variants.primaryLight,
+                  borderWidth: 2,
+                },
+              ]}
+            >
+              <Check size={20} color={theme.colors.primaryForeground} />
             </View>
           )}
         </View>
@@ -92,69 +114,60 @@ export default function CardListDisplay({
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      <FlatList
-        data={cards}
-        keyExtractor={(card, index) => `${card.id}-${index}`}
-        renderItem={displayCardsList}
-        numColumns={NUM_COLUMNS}
-        columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
-        ListHeaderComponent={ListHeaderComponent}
-        onEndReached={() => {
-          if (hasNextPage && !isFetchingNextPage && fetchNextPage) {
-            fetchNextPage();
-          }
-        }}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={() => {
-          if (isFetchingNextPage || isLoading) {
-            return (
-              <View style={styles.loaderContainer}>
-                <ActivityIndicator color={theme.colors.primary} size="small" />
-                <Text style={[styles.text, { color: theme.colors.text.secondary }]}>
-                  Loading...
-                </Text>
-              </View>
-            );
-          }
-          if (error) {
-            return (
-              <Text style={[styles.text, styles.errorText, { color: theme.colors.danger }]}>
-                Error loading cards
-              </Text>
-            );
-          }
-          return null;
-        }}
-        ListEmptyComponent={() => {
-          if (isFetchingNextPage || isLoading) return null;
-
+    <FlatList
+      data={cards}
+      keyExtractor={(card, index) => `${card.id}-${index}`}
+      renderItem={displayCardsList}
+      numColumns={NUM_COLUMNS}
+      columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
+      ListHeaderComponent={ListHeaderComponent}
+      contentContainerStyle={{
+        paddingBottom: theme.spacing.lg,
+      }}
+      onEndReached={() => {
+        if (hasNextPage && !isFetchingNextPage && fetchNextPage) {
+          fetchNextPage();
+        }
+      }}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={() => {
+        if (isFetchingNextPage || isLoading) {
           return (
-            <Text
-              style={[
-                styles.text,
-                { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
-              ]}
-            >
-              No cards available
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator color={theme.colors.primary} size="small" />
+              <Text style={[styles.text, { color: theme.colors.text.secondary }]}>Loading...</Text>
+            </View>
+          );
+        }
+        if (error) {
+          return (
+            <Text style={[styles.text, styles.errorText, { color: theme.colors.danger }]}>
+              Error loading cards
             </Text>
           );
-        }}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContent}
-      />
-    </View>
+        }
+        return null;
+      }}
+      ListEmptyComponent={() => {
+        if (isFetchingNextPage || isLoading) return null;
+
+        return (
+          <Text
+            style={[
+              styles.text,
+              { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
+            ]}
+          >
+            No cards available
+          </Text>
+        );
+      }}
+      showsVerticalScrollIndicator={false}
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  listContent: {
-    paddingTop: 16,
-    paddingBottom: 32,
-  },
   text: {
     textAlign: 'center',
     padding: 16,
@@ -171,7 +184,5 @@ const styles = StyleSheet.create({
   },
   occurenceBadge: {
     position: 'absolute',
-    top: 8,
-    right: 8,
   },
 });

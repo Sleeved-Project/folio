@@ -5,8 +5,9 @@ import UserAdList from '../components/profile/UserAdList';
 // import UserRatingsList from '../components/profile/UserRatingsList';
 import { useUserProfile } from '../hooks/queries/useUserInfo';
 import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
+import { View } from 'react-native';
+import { useTheme } from '../../../theme/useTheme';
 // import { User } from 'lucide-react-native';
-import TitleSection from '../../../components/ui/TitleSection';
 
 // const tabOptions: TabOption<'ads' | 'ratings'>[] = [
 //   { id: 'ads', label: 'Ads' },
@@ -19,6 +20,7 @@ interface ProfileScreenProps {
 }
 
 export default function ProfileScreen({ isUserProfile = false, userId }: ProfileScreenProps) {
+  const theme = useTheme();
   // const [activeTab, setActiveTab] = useState<'ads' | 'ratings'>('ads');
   const { data: userData, isLoading, error } = useUserProfile(isUserProfile ? undefined : userId);
 
@@ -26,7 +28,7 @@ export default function ProfileScreen({ isUserProfile = false, userId }: Profile
   if (error || !userData) return <ErrorState message={error?.message} />;
 
   return (
-    <>
+    <View style={{ paddingTop: theme.spacing.lg, flex: 1 }}>
       <ProfileInformation
         firstname={userData.firstname}
         lastname={userData.lastname}
@@ -45,8 +47,7 @@ export default function ProfileScreen({ isUserProfile = false, userId }: Profile
       /> */}
 
       {/* {activeTab === 'ads' ? <UserAdList userId={userId} /> : <UserRatingsList userId={userId} />} */}
-      <TitleSection title="Ads" />
       <UserAdList userId={userId} />
-    </>
+    </View>
   );
 }

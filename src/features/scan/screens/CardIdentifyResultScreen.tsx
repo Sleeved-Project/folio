@@ -94,7 +94,7 @@ export default function CardIdentifyResult({
     <View style={styles.safeAreaView}>
       <LinearGradient
         colors={[
-          theme.colors.primary,
+          theme.colors.variants.primaryLight,
           theme.colors.background.secondary,
           theme.colors.background.primary,
         ]}
@@ -168,7 +168,7 @@ export default function CardIdentifyResult({
           />
           <Button
             title="Retry scan"
-            variant="outline"
+            variant="secondary"
             onPress={handleRetry}
             buttonStyle={styles.retryButton}
           />

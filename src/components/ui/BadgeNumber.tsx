@@ -11,7 +11,7 @@ export default function BadgeNumber({ value }: BadgeNumberProps) {
 
   if (!value) return null;
   return (
-    <View style={[styles.badge, { backgroundColor: theme.colors.background.secondary }]}>
+    <View style={[styles.badge, { backgroundColor: theme.colors.primary }]}>
       <Text
         style={[
           styles.text,

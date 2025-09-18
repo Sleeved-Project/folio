@@ -54,6 +54,7 @@ export default function StepLayout({
             onPress={onPrev}
             disabled={isPrevDisabled}
             buttonStyle={styles.button}
+            variant="secondary"
           />
         )}
         {showNextButton && (
@@ -62,6 +63,7 @@ export default function StepLayout({
             onPress={onNext}
             disabled={isNextDisabled}
             buttonStyle={styles.button}
+            variant="primary"
           />
         )}
       </View>

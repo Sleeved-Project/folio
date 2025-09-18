@@ -33,7 +33,7 @@ export default function StepItem({
               backgroundColor: theme.colors.background.tertiary,
             },
             isActive && {
-              backgroundColor: theme.colors.primary,
+              backgroundColor: theme.colors.variants.primaryLight,
             },
             isCompleted && {
               backgroundColor: theme.colors.success,
@@ -47,7 +47,7 @@ export default function StepItem({
                 fontWeight: theme.typography.fontWeights.semiBold,
                 color: theme.colors.text.secondary,
               },
-              isActive && { color: theme.colors.text.onPrimary },
+              isActive && { color: theme.colors.primaryForeground },
               isCompleted && { color: theme.colors.text.onPrimary },
             ]}
           >
@@ -64,7 +64,7 @@ export default function StepItem({
               fontWeight: theme.typography.fontWeights.regular,
             },
             isActive && {
-              color: theme.colors.primary,
+              color: theme.colors.primaryForeground,
               fontWeight: theme.typography.fontWeights.semiBold,
             },
             isCompleted && {

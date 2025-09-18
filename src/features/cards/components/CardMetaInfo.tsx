@@ -23,16 +23,20 @@ export default function CardMetaInfo({ number, set }: CardMetaInfoProps) {
               style={styles.setSymbol}
               resizeMode="contain"
             />
-            <Text style={[styles.setName, { color: theme.colors.text.secondary }]}>{set.name}</Text>
+            <Text style={[styles.setName, { color: theme.colors.primaryForeground }]}>
+              {set.name}
+            </Text>
           </View>
         </View>
 
         <View>
-          <Text style={[styles.cardNumber, { color: theme.colors.text.primary }]}>#{number}</Text>
+          <Text style={[styles.cardNumber, { color: theme.colors.primaryForeground }]}>
+            #{number}
+          </Text>
         </View>
       </View>
 
-      <View style={[styles.divider, { backgroundColor: theme.colors.border.light }]} />
+      <View style={[styles.divider, { backgroundColor: theme.colors.border.medium }]} />
     </>
   );
 }

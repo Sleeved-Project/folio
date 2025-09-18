@@ -78,7 +78,7 @@ export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
       )}
 
       {hasFlavorText && (
-        <View style={styles.flavorSection}>
+        <View>
           <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>
             Description
           </Text>
@@ -95,9 +95,6 @@ const styles = StyleSheet.create({
   },
   subtypesSection: {
     marginBottom: 20,
-  },
-  flavorSection: {
-    marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 16,
