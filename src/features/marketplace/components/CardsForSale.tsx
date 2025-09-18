@@ -32,7 +32,12 @@ const CardForSaleItemRenderer = ({
   cardWidth: number;
   gap: number;
 }) => (
-  <View style={{ width: cardWidth, marginHorizontal: gap / 2 }}>
+  <View
+    style={{ width: cardWidth, marginHorizontal: gap / 2 }}
+    accessibilityRole="button"
+    accessibilityLabel={`Card ${item.card?.name}, ${item.finish.label} finish, condition ${item.condition.label}, sold by ${item.seller.username}, price ${item.originalPrice} dollars`}
+    accessibilityHint="Tap to view card details"
+  >
     <CardForSaleItem item={item} />
   </View>
 );
@@ -44,10 +49,18 @@ const CardsForSaleHeader = ({ onSellPress }: { onSellPress?: () => void }) => {
     <>
       {onSellPress && (
         <View style={{ marginBottom: theme.spacing.md }}>
-          <Button title="Sell a card" onPress={onSellPress} />
+          <Button
+            title="Sell a card"
+            onPress={onSellPress}
+            accessibilityLabel="Sell a card"
+            accessibilityHint="Tap to list a new card for sale"
+          />
         </View>
       )}
-      <TitleSection title="Cards for sale" style={{ marginBottom: theme.spacing.md }} />
+      <TitleSection
+        title="Cards for sale"
+        style={{ marginBottom: theme.spacing.md }}
+      />
     </>
   );
 };
@@ -65,15 +78,20 @@ const CardsForSaleFooter = ({
 
   if (isFetchingNextPage || isLoading) {
     return (
-      <View style={styles.loaderContainer}>
+      <View style={styles.loaderContainer} accessibilityLiveRegion="polite">
         <ActivityIndicator color={theme.colors.primary} size="small" />
-        <Text style={[styles.text, { color: theme.colors.text.secondary }]}>Loading...</Text>
+        <Text style={[styles.text, { color: theme.colors.text.secondary }]}>
+          Loading...
+        </Text>
       </View>
     );
   }
   if (error) {
     return (
-      <Text style={[styles.text, styles.errorText, { color: theme.colors.danger }]}>
+      <Text
+        style={[styles.text, styles.errorText, { color: theme.colors.danger }]}
+        accessibilityRole="alert"
+      >
         Error loading cards
       </Text>
     );
@@ -98,6 +116,7 @@ const EmptyCardsMessage = ({
         styles.text,
         { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
       ]}
+      accessibilityRole="text"
     >
       No cards available for sale
     </Text>
@@ -129,11 +148,7 @@ export default function CardsForSale({ onSellPress, containerStyle }: CardsForSa
 
   return (
     <View
-      style={[
-        styles.container,
-        { backgroundColor: theme.colors.background.primary },
-        containerStyle,
-      ]}
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }, containerStyle]}
     >
       <FlatList
         data={items}

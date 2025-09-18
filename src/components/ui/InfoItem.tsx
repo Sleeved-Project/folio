@@ -10,6 +10,7 @@ interface InfoItemProps {
   accentBorder?: boolean;
   useEllipsis?: boolean;
   numberOfLines?: number;
+  accessibilityLabel?: string; // garde juste accessibilityLabel
 }
 
 export default function InfoItem({
@@ -20,6 +21,7 @@ export default function InfoItem({
   accentBorder = false,
   useEllipsis = true,
   numberOfLines = 1,
+  accessibilityLabel,
 }: InfoItemProps) {
   const theme = useTheme();
 
@@ -27,6 +29,8 @@ export default function InfoItem({
 
   return (
     <View
+      accessible={!!accessibilityLabel}
+      accessibilityLabel={accessibilityLabel}
       style={[
         styles.container,
         fullWidth ? styles.fullWidth : styles.halfWidth,
@@ -65,24 +69,10 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     marginBottom: 12,
   },
-  halfWidth: {
-    width: '48%',
-  },
-  fullWidth: {
-    width: '100%',
-  },
-  iconContainer: {
-    marginRight: 12,
-  },
-  content: {
-    flex: 1,
-  },
-  label: {
-    fontSize: 12,
-    marginBottom: 4,
-  },
-  value: {
-    fontSize: 15,
-    fontWeight: '500',
-  },
+  halfWidth: { width: '48%' },
+  fullWidth: { width: '100%' },
+  iconContainer: { marginRight: 12 },
+  content: { flex: 1 },
+  label: { fontSize: 12, marginBottom: 4 },
+  value: { fontSize: 15, fontWeight: '500' },
 });

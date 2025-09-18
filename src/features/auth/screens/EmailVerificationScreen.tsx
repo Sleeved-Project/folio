@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Alert,
   TouchableOpacity,
   SafeAreaView,
   KeyboardAvoidingView,
@@ -22,6 +21,7 @@ export const EmailVerificationScreen: React.FC = () => {
   const [verificationCode, setVerificationCode] = useState<string>('');
   const [countdown, setCountdown] = useState<number>(60);
   const [canResend, setCanResend] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>('');
 
   const { mutate: resendVerification, isPending: isResending } = useResendVerification();
   const { mutate: verifyEmailCode, isPending: isVerifying } = useVerifyEmailCode();
@@ -39,18 +39,18 @@ export const EmailVerificationScreen: React.FC = () => {
 
   const handleResendVerification = () => {
     if (!email) {
-      Alert.alert('Error', 'Email address is missing');
+      setAlertMessage('Email address is missing');
       return;
     }
 
     resendVerification(email, {
       onSuccess: (response) => {
-        Alert.alert('Success', response.message || 'Verification code has been resent.');
+        setAlertMessage(response.message || 'Verification code has been resent.');
         setCanResend(false);
         setCountdown(60);
       },
       onError: (error) => {
-        Alert.alert('Error', 'Failed to resend verification code. Please try again later.');
+        setAlertMessage('Failed to resend verification code. Please try again later.');
         console.error('Failed to resend verification:', error);
       },
     });
@@ -58,7 +58,7 @@ export const EmailVerificationScreen: React.FC = () => {
 
   const handleCodeVerification = () => {
     if (!email || !verificationCode) {
-      Alert.alert('Error', 'Email address or verification code is missing');
+      setAlertMessage('Email address or verification code is missing');
       return;
     }
 
@@ -66,17 +66,11 @@ export const EmailVerificationScreen: React.FC = () => {
       { email, code: verificationCode },
       {
         onSuccess: (response) => {
-          Alert.alert('Success', response.message || 'Email verified successfully!', [
-            {
-              text: 'Continue',
-              onPress: () => {
-                router.replace('/(tabs)');
-              },
-            },
-          ]);
+          setAlertMessage(response.message || 'Email verified successfully!');
+          router.replace('/(tabs)');
         },
         onError: (error) => {
-          Alert.alert('Verification Failed', 'Invalid or expired code. Please try again.');
+          setAlertMessage('Invalid or expired code. Please try again.');
           console.error('Email verification failed:', error);
         },
       }
@@ -99,26 +93,40 @@ export const EmailVerificationScreen: React.FC = () => {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.contentContainer}>
-            <Text style={styles.title}>Verify Your Email</Text>
+            <Text style={styles.title} accessibilityRole="header">
+              Verify Your Email
+            </Text>
 
-            <Text style={styles.message}>We&#39;ve sent a verification code to:</Text>
+            <Text style={styles.message}>We've sent a verification code to:</Text>
             <Text style={styles.email}>{email}</Text>
 
             <Text style={styles.instructions}>
               Enter the 6-digit code below to verify your account.
             </Text>
 
-            <VerificationCodeInput length={6} onCodeFilled={handleCodeFilled} />
+            {/* Verification code input */}
+            <VerificationCodeInput
+              length={6}
+              onCodeFilled={handleCodeFilled}
+              accessibilityLabel="Verification code input"
+            />
           </View>
         </ScrollView>
 
         <View style={styles.actionsContainer}>
+          {/* Bouton de vérification */}
           <Button
             title={isVerifying ? 'Verifying...' : 'Verify email'}
             onPress={handleCodeVerification}
             disabled={!verificationCode || verificationCode.length < 6 || isVerifying}
+            accessibilityLabel={
+              !verificationCode || verificationCode.length < 6
+                ? 'Enter the full 6-digit code to enable verification'
+                : 'Verify your email address'
+            }
           />
 
+          {/* Bouton de renvoi du code */}
           <TouchableOpacity
             onPress={handleResendVerification}
             disabled={!canResend || isResending}
@@ -126,6 +134,14 @@ export const EmailVerificationScreen: React.FC = () => {
               styles.resendButton,
               (!canResend || isResending) && styles.resendButtonDisabled,
             ]}
+            accessibilityLabel={
+              isResending
+                ? 'Sending verification code'
+                : canResend
+                  ? 'Resend verification code'
+                  : `Resend code in ${countdown} seconds`
+            }
+            accessibilityLiveRegion="polite"
           >
             <Text style={styles.resendButtonText}>
               {isResending
@@ -135,6 +151,16 @@ export const EmailVerificationScreen: React.FC = () => {
                   : `Resend code in ${countdown}s`}
             </Text>
           </TouchableOpacity>
+
+          {/* Texte invisible pour alertes */}
+          {alertMessage ? (
+            <Text
+              accessibilityLiveRegion="polite"
+              style={styles.hiddenText}
+            >
+              {alertMessage}
+            </Text>
+          ) : null}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -207,5 +233,10 @@ const styles = StyleSheet.create({
     color: '#2196F3',
     fontWeight: '600',
     fontSize: 16,
+  },
+  hiddenText: {
+    position: 'absolute',
+    height: 0,
+    width: 0,
   },
 });

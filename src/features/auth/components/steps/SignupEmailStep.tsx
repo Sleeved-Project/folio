@@ -9,22 +9,17 @@ import logoImage from '../../../../../assets/logo.png';
 import { theme } from '../../../../theme/theme';
 import { useCheckAvailability } from '../../hooks/queries/useCheckAvailability';
 
-export default function SignupEmailStep({
-  onContinue,
-  defaultValue,
-}: {
+interface SignupEmailStepProps {
   onContinue: (email: string) => void;
   defaultValue: string;
-}) {
+}
+
+export default function SignupEmailStep({ onContinue, defaultValue }: SignupEmailStepProps) {
   const [emailError, setEmailError] = useState<string | null>(null);
 
   const { mutateAsync: checkAvailability, isPending } = useCheckAvailability();
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<SignupEmailFormValues>({
+  const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignupEmailFormValues>({
     resolver: zodResolver(signupEmailSchema),
     defaultValues: { email: defaultValue },
     mode: 'onSubmit',
@@ -34,7 +29,6 @@ export default function SignupEmailStep({
     async (data: SignupEmailFormValues) => {
       setEmailError(null);
       const result = await checkAvailability({ email: data.email });
-
       if (result.email?.available) {
         return onContinue(data.email);
       }
@@ -46,8 +40,14 @@ export default function SignupEmailStep({
   return (
     <View style={styles.container}>
       <View style={styles.centerContent}>
-        <Image source={logoImage} style={styles.logo} />
-        <Text style={styles.title}>Get started with Sleeved</Text>
+        <Image
+          source={logoImage}
+          style={styles.logo}
+          accessibilityLabel="Sleeved app logo"
+        />
+        <Text style={styles.title} accessibilityRole="header">
+          Get started with Sleeved
+        </Text>
         <View style={styles.inputWrapper}>
           <FormTextInput
             control={control}
@@ -58,6 +58,7 @@ export default function SignupEmailStep({
             error={emailError || errors.email?.message}
             returnKeyType="done"
             containerStyle={{ marginBottom: theme.spacing.lg, width: '100%' }}
+            accessibilityLabel="Email input field"
           />
         </View>
       </View>
@@ -67,6 +68,7 @@ export default function SignupEmailStep({
           onPress={handleSubmit(handleContinue)}
           disabled={isSubmitting || isPending}
           loading={isSubmitting || isPending}
+          accessibilityLabel="Continue button"
         />
         <AuthRedirectLink type="signin" />
       </View>
@@ -99,11 +101,6 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.xxl,
     textAlign: 'center',
   },
-  inputWrapper: {
-    width: '100%',
-  },
-  bottomContent: {
-    width: '100%',
-    marginBottom: theme.spacing.xl,
-  },
+  inputWrapper: { width: '100%' },
+  bottomContent: { width: '100%', marginBottom: theme.spacing.xl },
 });

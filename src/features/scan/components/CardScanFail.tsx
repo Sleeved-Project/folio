@@ -10,14 +10,26 @@ export default function CardScanFail() {
   const theme = useTheme();
 
   return (
-    <>
+    <View
+      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+      accessible
+      accessibilityRole="alert"
+      accessibilityLabel="Card scan failed screen"
+    >
       <Image
         source={cardVerso}
         style={[styles.image, { borderRadius: theme.borderRadius.medium }]}
+        accessible
+        accessibilityRole="image"
+        accessibilityLabel="Card back image"
       />
       <View style={styles.actionContainer}>
-        <Text style={[styles.text, { color: theme.colors.text.primary }]}>
-          Oops no card match found !
+        <Text
+          style={[styles.text, { color: theme.colors.text.primary }]}
+          accessible
+          accessibilityRole="text"
+        >
+          Oops no card match found!
         </Text>
         <Button
           title="Scan again"
@@ -25,9 +37,11 @@ export default function CardScanFail() {
           onPress={() => router.replace('/scan')}
           buttonStyle={styles.actionButton}
           textStyle={[styles.textStyle, { color: theme.colors.text.primary }]}
+          accessibilityLabel="Scan again"
+          accessibilityHint="Press to retry scanning a card"
         />
       </View>
-    </>
+    </View>
   );
 }
 

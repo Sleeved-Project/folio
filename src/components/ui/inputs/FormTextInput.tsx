@@ -27,6 +27,8 @@ type FormTextInputProps<T extends FieldValues> = {
   multiline?: boolean;
   numberOfLines?: number;
   rightIcon?: React.ReactNode;
+  accessibilityLabel?: string; // <-- Ajouté
+  accessibilityHint?: string;  // <-- Ajouté
 };
 
 const FormTextInput = <T extends FieldValues>({
@@ -44,6 +46,8 @@ const FormTextInput = <T extends FieldValues>({
   multiline = false,
   numberOfLines = 4,
   rightIcon,
+  accessibilityLabel,
+  accessibilityHint,
 }: FormTextInputProps<T>) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -54,14 +58,12 @@ const FormTextInput = <T extends FieldValues>({
 
   const getKeyboardType = () => {
     switch (inputType) {
-      case 'email':
-        return 'email-address';
-      case 'numeric':
-        return 'numeric';
-      default:
-        return 'default';
+      case 'email': return 'email-address';
+      case 'numeric': return 'numeric';
+      default: return 'default';
     }
   };
+
   return (
     <View style={[styles.container, containerStyle]}>
       {label && (
@@ -110,20 +112,20 @@ const FormTextInput = <T extends FieldValues>({
               multiline={multiline}
               numberOfLines={multiline ? numberOfLines : 1}
               textAlignVertical={multiline ? 'top' : 'center'}
+              accessible
+              accessibilityLabel={accessibilityLabel || `${label || ''}${isRequired ? ' (required)' : ''}`}
+              accessibilityHint={accessibilityHint || (multiline ? 'Enter multiple lines of text' : 'Enter text')}
             />
 
             {hasRightIcon && (
-              <View
-                style={[
-                  styles.iconContainer,
-                  styles.rightIcon,
-                  multiline && { alignSelf: 'flex-start', top: 15 },
-                ]}
-              >
+              <View style={[styles.iconContainer, styles.rightIcon, multiline && { alignSelf: 'flex-start', top: 15 }]}>
                 {isPassword ? (
                   <TouchableOpacity
                     onPress={() => setShowPassword(!showPassword)}
                     activeOpacity={0.7}
+                    accessible
+                    accessibilityRole="button"
+                    accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? (
                       <EyeOff size={22} color={theme.colors.text.secondary} strokeWidth={1.5} />
@@ -131,64 +133,35 @@ const FormTextInput = <T extends FieldValues>({
                       <Eye size={22} color={theme.colors.text.secondary} strokeWidth={1.5} />
                     )}
                   </TouchableOpacity>
-                ) : (
-                  rightIcon
-                )}
+                ) : rightIcon}
               </View>
             )}
           </View>
         )}
       />
 
-      {error && <Text style={[styles.errorText, { color: theme.colors.danger }]}>{error}</Text>}
+      {error && (
+        <Text
+          style={[styles.errorText, { color: theme.colors.danger }]}
+          accessible
+          accessibilityRole="alert"
+        >
+          {error}
+        </Text>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginBottom: 8,
-    paddingLeft: 4,
-  },
-  inputContainer: {
-    position: 'relative',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    height: 54,
-    borderWidth: 1,
-    paddingHorizontal: 16,
-    fontSize: 16,
-  },
-  multilineInput: {
-    height: 'auto',
-    minHeight: 120,
-    paddingTop: 16,
-    paddingBottom: 16,
-    textAlignVertical: 'top',
-  },
-  errorText: {
-    fontSize: 14,
-    marginTop: 5,
-    marginLeft: 4,
-  },
-  rightIcon: {
-    right: 0,
-  },
-  iconContainer: {
-    position: 'absolute',
-    right: 16,
-    height: '100%',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-  },
+  container: { marginBottom: 20 },
+  label: { fontSize: 16, fontWeight: '500', marginBottom: 8, paddingLeft: 4 },
+  inputContainer: { position: 'relative', flexDirection: 'row', alignItems: 'center' },
+  input: { flex: 1, height: 54, borderWidth: 1, paddingHorizontal: 16, fontSize: 16 },
+  multilineInput: { height: 'auto', minHeight: 120, paddingTop: 16, paddingBottom: 16, textAlignVertical: 'top' },
+  errorText: { fontSize: 14, marginTop: 5, marginLeft: 4 },
+  rightIcon: { right: 0 },
+  iconContainer: { position: 'absolute', right: 16, height: '100%', justifyContent: 'center', paddingHorizontal: 16 },
 });
 
 export default FormTextInput;

@@ -1,7 +1,21 @@
 import { Text } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 
-export default function TitleSection({ title, style }: { title: string; style?: object }) {
+export default function TitleSection({
+  title,
+  style,
+  accessible,
+  accessibilityRole,
+  accessibilityLabel,
+  accessibilityHint,
+}: {
+  title: string;
+  style?: object;
+  accessible?: boolean;
+  accessibilityRole?: 'header' | 'text';
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+}) {
   const theme = useTheme();
 
   return (
@@ -16,6 +30,10 @@ export default function TitleSection({ title, style }: { title: string; style?: 
         },
         style,
       ]}
+      accessible={accessible}
+      accessibilityRole={accessibilityRole}
+      accessibilityLabel={accessibilityLabel ?? title}
+      accessibilityHint={accessibilityHint}
     >
       {title}
     </Text>

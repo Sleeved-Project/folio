@@ -24,9 +24,7 @@ export default function CertificationGenerator({
   const { formData } = useSellForm();
 
   const { showToast } = useToaster();
-
   const { data: availableTokens, isFetching: tokensLoading } = useCertificationToken();
-
   const { data: certification, isPending, mutate } = useCertificate(formData);
 
   const handleGenerateCertification = () => {
@@ -61,33 +59,43 @@ export default function CertificationGenerator({
   }, [certification, existingCertification]);
 
   return (
-    <View>
+    <View accessible accessibilityLabel="Certification generator">
       <View
         style={[
           styles.rowContainer,
-          {
-            marginBottom: theme.spacing.md,
-          },
+          { marginBottom: theme.spacing.md },
         ]}
+        accessible
+        accessibilityRole="text"
+        accessibilityLabel={`Remaining tokens: ${
+          tokensLoading ? 'Loading...' : availableTokens || 0
+        }`}
       >
         <Text
           style={{
             fontSize: theme.typography.fontSizes.md,
             color: theme.colors.text.secondary,
           }}
+          accessible
+          accessibilityRole="text"
+          accessibilityLabel="Remaining tokens label"
         >
           Remaining tokens
         </Text>
+
         {tokensLoading ? (
-          <ActivityIndicator size="small" color={theme.colors.primary} />
+          <ActivityIndicator
+            size="small"
+            color={theme.colors.primary}
+            accessible
+            accessibilityLabel="Loading token count"
+          />
         ) : (
           <View
-            style={[
-              styles.tokenCountContainer,
-              {
-                gap: theme.spacing.xs,
-              },
-            ]}
+            style={[styles.tokenCountContainer, { gap: theme.spacing.xs }]}
+            accessible
+            accessibilityRole="text"
+            accessibilityLabel={`${availableTokens || 0} tokens available`}
           >
             <Text
               style={{
@@ -110,9 +118,20 @@ export default function CertificationGenerator({
         loading={isPending}
         buttonStyle={{ marginBottom: theme.spacing.lg }}
         leftIcon={<CircleStopIcon color={theme.colors.text.onPrimary} size={20} />}
+        accessibilityRole="button"
+        accessibilityLabel="Certify with AI"
+        accessibilityHint="Generates a certification using AI for the current form"
+        accessibilityState={{ disabled: !canCertify, busy: isPending }}
       />
 
-      {displayCertification && <CertificationResult certification={displayCertification} />}
+      {displayCertification && (
+        <View
+          accessible
+          accessibilityLabel="Generated certification result"
+        >
+          <CertificationResult certification={displayCertification} />
+        </View>
+      )}
     </View>
   );
 }

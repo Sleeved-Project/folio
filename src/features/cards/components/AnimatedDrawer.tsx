@@ -50,11 +50,17 @@ export default function AnimatedDrawer({
           animatedStyle,
           style,
         ]}
+        accessible
+        accessibilityRole="adjustable"
+        accessibilityLabel="Drawer. Swipe up or down to adjust."
       >
         {showDragHandle && (
           <View
             style={styles.dragHandleContainer}
             onTouchStart={Platform.OS === 'web' ? onDragHandlePress : undefined}
+            accessible
+            accessibilityRole="button"
+            accessibilityLabel="Drag handle. Swipe up or down to open or close drawer."
           >
             <View style={[styles.dragHandle, { backgroundColor: handleColor }]} />
           </View>
@@ -64,7 +70,7 @@ export default function AnimatedDrawer({
 
         <View style={[styles.contentContainer, contentContainerStyle]}>{children}</View>
 
-        {insets.bottom > 0 && <View style={{ height: -insets.bottom }} />}
+        {insets.bottom > 0 && <View style={{ height: insets.bottom }} />}
       </Animated.View>
     </PanGestureHandler>
   );

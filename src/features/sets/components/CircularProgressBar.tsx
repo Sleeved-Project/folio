@@ -22,9 +22,13 @@ const CircularProgressBar = ({
   const svgProgress = 100 - progressPercent;
 
   return (
-    <View>
+    <View
+      accessible
+      accessibilityRole="progressbar"
+      accessibilityLabel="Circular progress bar"
+      accessibilityValue={{ min: 0, max: 100, now: progressPercent }}
+    >
       <Svg width={size} height={size}>
-        {/* Background Circle */}
         <Circle
           stroke={bgColor ? bgColor : '#f2f2f2'}
           fill="none"
@@ -33,8 +37,6 @@ const CircularProgressBar = ({
           r={radius}
           {...{ strokeWidth }}
         />
-
-        {/* Progress Circle */}
         <Circle
           stroke={pgColor ? pgColor : '#3b5998'}
           fill="none"

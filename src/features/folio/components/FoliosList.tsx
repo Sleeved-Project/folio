@@ -19,9 +19,11 @@ export default function FoliosList({
 }: FoliosListProps) {
   if (isLoading) {
     return (
-      <View style={styles.container}>
+      <View style={styles.container} accessible accessibilityLabel="Loading Folios" accessibilityHint="Displays a loading indicator while fetching folios">
         <CreateFolioButton onPress={onCreatePress} />
-        Loading folios...
+        <View accessible accessibilityRole="text" accessibilityLabel="Loading Text" accessibilityHint="Indicates that folios are loading">
+          Loading folios...
+        </View>
       </View>
     );
   }
@@ -30,7 +32,9 @@ export default function FoliosList({
     <FlatList
       data={foliosData}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <FolioItem folio={item} onPress={onFolioPress} />}
+      renderItem={({ item }) => (
+        <FolioItem folio={item} onPress={onFolioPress} />
+      )}
       ListHeaderComponent={<CreateFolioButton onPress={onCreatePress} />}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.container}

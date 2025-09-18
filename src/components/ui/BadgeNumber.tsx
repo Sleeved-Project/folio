@@ -10,8 +10,14 @@ export default function BadgeNumber({ value }: BadgeNumberProps) {
   const theme = useTheme();
 
   if (!value) return null;
+
   return (
-    <View style={[styles.badge, { backgroundColor: theme.colors.background.secondary }]}>
+    <View
+      style={[styles.badge, { backgroundColor: theme.colors.background.secondary }]}
+      accessible
+      accessibilityRole="text"
+      accessibilityLabel={`Badge count: ${value}`}
+    >
       <Text
         style={[
           styles.text,

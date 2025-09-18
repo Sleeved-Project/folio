@@ -54,6 +54,8 @@ export default function FormPhotoPicker<T extends FieldValues>({
             marginBottom: theme.spacing.sm,
           },
         ]}
+        accessible
+        accessibilityRole="header"
       >
         {label}
         {isRequired && <Text style={{ color: theme.colors.danger }}>*</Text>}
@@ -68,6 +70,11 @@ export default function FormPhotoPicker<T extends FieldValues>({
               <TouchableOpacity
                 style={[styles.photoContainer, { borderRadius: theme.borderRadius.medium }]}
                 onPress={handleOpen}
+                activeOpacity={0.8}
+                accessible
+                accessibilityRole="imagebutton"
+                accessibilityLabel="Selected photo"
+                accessibilityHint="Tap to retake or view the photo"
               >
                 <View style={styles.imageWrapper}>
                   <Image source={{ uri: value }} style={styles.image} resizeMode="contain" />
@@ -81,6 +88,10 @@ export default function FormPhotoPicker<T extends FieldValues>({
                         },
                       ]}
                       onPress={() => removeImage(onChange)}
+                      accessible
+                      accessibilityRole="button"
+                      accessibilityLabel="Remove photo"
+                      accessibilityHint="Removes the currently selected photo"
                     >
                       <Trash2Icon color={theme.colors.text.onPrimary} size={24} />
                     </TouchableOpacity>
@@ -97,6 +108,11 @@ export default function FormPhotoPicker<T extends FieldValues>({
                   },
                 ]}
                 onPress={handleOpen}
+                activeOpacity={0.7}
+                accessible
+                accessibilityRole="button"
+                accessibilityLabel="Add photo"
+                accessibilityHint="Tap to take a photo"
               >
                 <View style={styles.placeholder}>
                   <CloudUploadIcon
@@ -129,6 +145,8 @@ export default function FormPhotoPicker<T extends FieldValues>({
             color: theme.colors.danger,
             marginTop: theme.spacing.xs,
           }}
+          accessible
+          accessibilityRole="alert"
         >
           {error}
         </Text>

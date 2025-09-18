@@ -12,7 +12,12 @@ export default function Marketplace() {
   const isSearching = searchQuery.trim().length > 0;
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+      accessible
+      accessibilityLabel="Marketplace Screen"
+      accessibilityHint="Browse cards and sellers or search for specific items"
+    >
       <View style={styles.content}>
         <SearchBar
           searchQuery={searchQuery}
@@ -26,6 +31,7 @@ export default function Marketplace() {
           }
           showClearButton
         />
+
         {isSearching ? (
           <SearchResults
             searchQuery={searchQuery}

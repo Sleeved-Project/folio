@@ -61,7 +61,6 @@ export default function AddCardButton({
   // Handle quantity increment
   const handleIncrement = useCallback(
     (amount = 1) => {
-      // Check if adding the amount would exceed the maximum
       if (quantity + amount > MAX_QUANTITY) {
         const newQuantity = MAX_QUANTITY;
         setQuantity(newQuantity);
@@ -103,7 +102,6 @@ export default function AddCardButton({
   // Long press handlers
   const handleLongPressIncrement = useCallback(() => {
     if (quantity >= MAX_QUANTITY) return;
-
     handleIncrement(LONG_PRESS_AMOUNT);
     setIsLongPressing(true);
     setCurrentOperation('increment');
@@ -114,7 +112,6 @@ export default function AddCardButton({
       handleDecrement(1);
       return;
     }
-
     handleDecrement(LONG_PRESS_AMOUNT);
     setIsLongPressing(true);
     setCurrentOperation('decrement');
@@ -132,7 +129,6 @@ export default function AddCardButton({
 
     clearLongPressTimer();
 
-    // Prevent interval if quantity is getting low
     if (currentOperation === 'decrement' && quantity <= LONG_PRESS_AMOUNT) {
       setIsLongPressing(false);
       setCurrentOperation(null);
@@ -173,33 +169,27 @@ export default function AddCardButton({
   // Render incrementer for existing items
   if (quantity > 0) {
     return (
-      <View style={[styles.container, style]}>
+      <View style={[styles.container, style]} accessible>
         <View style={styles.incrementerContainer}>
           <TouchableOpacity
             onPress={() => handleDecrement()}
             onLongPress={handleLongPressDecrement}
             onPressOut={handlePressOut}
-            style={[
-              styles.actionButton,
-              {
-                backgroundColor: theme.colors.primary,
-                borderRadius: theme.borderRadius.medium,
-              },
-            ]}
+            style={[styles.actionButton, { backgroundColor: theme.colors.primary, borderRadius: theme.borderRadius.medium }]}
             activeOpacity={0.7}
             delayLongPress={500}
+            accessibilityLabel="Decrease quantity"
+            accessibilityRole="button"
+            accessibilityState={{ disabled: quantity === 0 }}
           >
             <Minus size={ICON_SIZE} color="white" />
           </TouchableOpacity>
 
           <View
-            style={[
-              styles.quantityContainer,
-              {
-                backgroundColor: theme.colors.variants.primaryLight,
-                borderRadius: theme.borderRadius.medium,
-              },
-            ]}
+            style={[styles.quantityContainer, { backgroundColor: theme.colors.variants.primaryLight, borderRadius: theme.borderRadius.medium }]}
+            accessible
+            accessibilityRole="text"
+            accessibilityLabel={`${quantity} ${quantity === 1 ? 'card' : 'cards'} owned`}
           >
             <Text style={[styles.quantityText, { color: theme.colors.primary }]}>
               {`${quantity} ${quantity === 1 ? 'card' : 'cards'} owned`}
@@ -212,15 +202,14 @@ export default function AddCardButton({
             onPressOut={handlePressOut}
             style={[
               styles.actionButton,
-              {
-                backgroundColor: theme.colors.primary,
-                borderRadius: theme.borderRadius.medium,
-                opacity: isMaxQuantity ? 0.6 : 1,
-              },
+              { backgroundColor: theme.colors.primary, borderRadius: theme.borderRadius.medium, opacity: isMaxQuantity ? 0.6 : 1 },
             ]}
             activeOpacity={0.7}
             delayLongPress={500}
             disabled={isMaxQuantity}
+            accessibilityLabel="Increase quantity"
+            accessibilityRole="button"
+            accessibilityState={{ disabled: isMaxQuantity }}
           >
             <Plus size={ICON_SIZE} color="white" />
           </TouchableOpacity>
@@ -231,7 +220,7 @@ export default function AddCardButton({
 
   // Render add button for new items
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, style]} accessible>
       <TouchableOpacity
         onPress={() => {
           const newQuantity = quantity + 1;
@@ -239,15 +228,12 @@ export default function AddCardButton({
           setIsMaxQuantity(newQuantity >= MAX_QUANTITY);
           onQuantityChange(cardId, newQuantity);
         }}
-        style={[
-          styles.addButton,
-          {
-            backgroundColor: theme.colors.primary,
-            borderRadius: theme.borderRadius.medium,
-          },
-        ]}
+        style={[styles.addButton, { backgroundColor: theme.colors.primary, borderRadius: theme.borderRadius.medium }]}
         activeOpacity={0.7}
         disabled={isRecentlyRemoved}
+        accessibilityLabel="Add card to collection"
+        accessibilityRole="button"
+        accessibilityState={{ disabled: isRecentlyRemoved }}
       >
         <Text style={styles.addButtonText}>Add to my collection</Text>
       </TouchableOpacity>

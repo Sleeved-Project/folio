@@ -12,8 +12,18 @@ export default function Profile() {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+      accessible
+      accessibilityLabel="Profile Screen"
+      accessibilityHint="View your user profile information"
+    >
+      <View
+        style={[styles.content, { backgroundColor: theme.colors.background.primary }]}
+        accessible
+        accessibilityLabel="Profile Content"
+        accessibilityHint="Displays user profile details and settings"
+      >
         <ProfileScreen userId={user.id} isUserProfile={true} />
       </View>
     </View>

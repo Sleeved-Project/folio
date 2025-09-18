@@ -23,11 +23,7 @@ export default function SearchResults({
   activeTab,
   setActiveTab,
 }: SearchResultsProps) {
-  const {
-    data: cardsResults,
-    isLoading: isLoadingCards,
-    isError: isErrorCards,
-  } = useSearchCardAds(searchQuery);
+  const { data: cardsResults, isLoading: isLoadingCards, isError: isErrorCards } = useSearchCardAds(searchQuery);
   const {
     data: usersData,
     isLoading: isLoadingSellers,
@@ -49,14 +45,12 @@ export default function SearchResults({
         <EmptySearchState
           query={searchQuery}
           isLoading={isLoadingCards}
-          error={
-            isErrorCards
-              ? "We couldn't load the cards. Please check your connection and try again."
-              : null
-          }
+          error={isErrorCards ? "We couldn't load the cards. Please check your connection and try again." : null}
           icon={<ShoppingBag size={52} color="#000" />}
           title="Discover cards for sale"
           message="Find rare, vintage, and recent cards listed by sellers"
+          accessibilityLabel="Empty cards search state"
+          accessibilityHint="Displays when no card results are found"
         />
       );
     }
@@ -65,14 +59,12 @@ export default function SearchResults({
       <EmptySearchState
         query={searchQuery}
         isLoading={isLoadingSellers}
-        error={
-          isErrorSellers
-            ? "We couldn't load the sellers. Please check your connection and try again."
-            : null
-        }
+        error={isErrorSellers ? "We couldn't load the sellers. Please check your connection and try again." : null}
         icon={<UserSearch size={52} color="#000" />}
         title="Connect with trusted users"
         message="Find pro shops and collectors listing unique Pokémon cards"
+        accessibilityLabel="Empty sellers search state"
+        accessibilityHint="Displays when no seller results are found"
       />
     );
   }, [searchQuery, isLoadingCards, isErrorCards, isLoadingSellers, isErrorSellers, activeTab]);
@@ -80,15 +72,17 @@ export default function SearchResults({
   const cardsFlat = cardsResults?.pages?.flatMap((page) => page.data) ?? [];
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} accessible accessibilityLabel="Search results container">
       <TabSwitcher
         options={tabOptions}
         activeTabId={activeTab}
         onTabChange={setActiveTab}
         containerStyle={styles.tabSwitcherContainer}
+        accessibilityLabel="Switch tabs between cards and sellers"
+        accessibilityHint="Switch between cards and sellers results"
       />
       {isLoadingCards || (isLoadingSellers && searchQuery.trim().length > 0) ? (
-        <View style={styles.loadingBox}>
+        <View style={styles.loadingBox} accessible accessibilityLabel="Loading search results" accessibilityRole="progressbar">
           <ActivityIndicator />
         </View>
       ) : activeTab === TAB_CARDS ? (
@@ -97,7 +91,7 @@ export default function SearchResults({
           key="cardsGrid"
           keyExtractor={(item) => `card-${item.id}`}
           renderItem={({ item }) => (
-            <View style={styles.cardGridItem}>
+            <View style={styles.cardGridItem} accessible accessibilityLabel={`Card for sale: ${item.card.name}`}>
               <CardForSaleItem item={item} />
             </View>
           )}
@@ -109,6 +103,8 @@ export default function SearchResults({
           windowSize={7}
           initialNumToRender={6}
           pagingEnabled
+          accessible
+          accessibilityLabel="Cards search results list"
         />
       ) : (
         <SellersListDisplay
@@ -119,6 +115,7 @@ export default function SearchResults({
           fetchNextPage={fetchNextUsersPage}
           ListEmptyComponent={renderEmptyState}
           error={isErrorSellers ? new Error("Couldn't load sellers") : null}
+          accessibilityLabel="Sellers search results list"
         />
       )}
     </View>

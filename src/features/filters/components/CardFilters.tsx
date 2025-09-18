@@ -12,7 +12,6 @@ interface CardFiltersProps {
 
 export default function CardFilters({ toggleFilterDetail, filterType }: CardFiltersProps) {
   const theme = useTheme();
-
   const { cardFilters, cardSetFilters, filtersOptions } = useFilterContext();
 
   const filtersMapping = {
@@ -23,7 +22,7 @@ export default function CardFilters({ toggleFilterDetail, filterType }: CardFilt
   const filters = filtersMapping[filterType];
 
   return (
-    <View>
+    <View accessible accessibilityRole="toolbar" accessibilityLabel="Card filters toolbar">
       <ScrollView
         contentContainerStyle={styles.container}
         horizontal
@@ -44,6 +43,14 @@ export default function CardFilters({ toggleFilterDetail, filterType }: CardFilt
                   borderRadius: theme.borderRadius.large,
                 },
               ]}
+              accessible
+              accessibilityRole="button"
+              accessibilityLabel={`Filter ${label}`}
+              accessibilityHint={
+                filterValuesLength > 0
+                  ? `${filterValuesLength} options available, double tap to view details`
+                  : 'Double tap to view filter details'
+              }
             >
               {filterValuesLength > 0 && (
                 <>
@@ -112,7 +119,6 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     alignSelf: 'center',
   },
-
   filterSeparator: {
     borderLeftWidth: 1,
     borderColor: '#D0D0D0',

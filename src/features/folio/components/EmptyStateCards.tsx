@@ -9,23 +9,36 @@ export default function EmptyStateCards() {
   const router = useRouter();
 
   return (
-    <View style={[styles.emptyContainer, { backgroundColor: theme.colors.background.primary }]}>
-      <Package size={80} color={theme.colors.text.tertiary} strokeWidth={1.5} />
+    <View
+      style={[styles.emptyContainer, { backgroundColor: theme.colors.background.primary }]}
+      accessible
+      accessibilityRole="summary"
+      accessibilityLabel="No cards owned"
+      accessibilityHint="You currently don't own any cards, explore and add cards to your folio"
+    >
+      <Package
+        size={80}
+        color={theme.colors.text.tertiary}
+        strokeWidth={1.5}
+        accessible
+        accessibilityRole="image"
+        accessibilityLabel="Empty card package icon"
+      />
 
       <Text
-        style={[
-          styles.emptyTitle,
-          { color: theme.colors.text.primary, marginTop: theme.spacing.xl },
-        ]}
+        style={[styles.emptyTitle, { color: theme.colors.text.primary, marginTop: theme.spacing.xl }]}
+        accessible
+        accessibilityRole="header"
+        accessibilityLabel="You currently don't own any cards"
       >
         You currently don&#39;t own any cards
       </Text>
 
       <Text
-        style={[
-          styles.emptyDescription,
-          { color: theme.colors.text.secondary, marginBottom: theme.spacing.xl },
-        ]}
+        style={[styles.emptyDescription, { color: theme.colors.text.secondary, marginBottom: theme.spacing.xl }]}
+        accessible
+        accessibilityRole="text"
+        accessibilityLabel="Explore our collection and add cards to your folio"
       >
         Explore our collection and add cards to your folio
       </Text>
@@ -35,6 +48,8 @@ export default function EmptyStateCards() {
         variant="primary"
         onPress={() => router.push('/(tabs)/explorer')}
         buttonStyle={styles.button}
+        accessibilityLabel="See all cards"
+        accessibilityHint="Navigate to the card explorer to browse and add cards"
       />
     </View>
   );

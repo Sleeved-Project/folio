@@ -3,19 +3,29 @@ import { ChevronLeft } from 'lucide-react-native';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 
-export default function BackButton() {
+interface BackButtonProps {
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+}
+
+export default function BackButton({ accessibilityLabel, accessibilityHint }: BackButtonProps) {
   const theme = useTheme();
   const router = useRouter();
 
   return (
-    <TouchableOpacity style={styles.container} onPress={() => router.back()}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => router.back()}
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel ?? 'Back'}
+      accessibilityHint={accessibilityHint ?? 'Navigates back'}
+    >
       <ChevronLeft color={theme.colors.text.primary} size={24} />
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 4,
-  },
+  container: { padding: 4 },
 });

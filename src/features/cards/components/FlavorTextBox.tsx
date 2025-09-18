@@ -5,9 +5,18 @@ import { useTheme } from '../../../theme/useTheme';
 interface FlavorTextBoxProps {
   text?: string;
   containerStyle?: ViewStyle;
+  accessible?: boolean;
+  accessibilityLabel?: string;
+  accessibilityRole?: 'text';
 }
 
-export default function FlavorTextBox({ text, containerStyle }: FlavorTextBoxProps) {
+export default function FlavorTextBox({
+  text,
+  containerStyle,
+  accessible = true,
+  accessibilityLabel,
+  accessibilityRole = 'text',
+}: FlavorTextBoxProps) {
   const theme = useTheme();
 
   if (!text) return null;
@@ -22,6 +31,9 @@ export default function FlavorTextBox({ text, containerStyle }: FlavorTextBoxPro
         },
         containerStyle,
       ]}
+      accessible={accessible}
+      accessibilityRole={accessibilityRole}
+      accessibilityLabel={accessibilityLabel || text}
     >
       <Text
         style={[

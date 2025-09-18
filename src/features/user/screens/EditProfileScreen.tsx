@@ -19,7 +19,12 @@ export default function EditProfileScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+      accessible
+      accessibilityLabel="Edit Profile Screen"
+      accessibilityHint="Edit your personal information"
+    >
       <TabHeader title="Edit profile" displayBackButton={true} />
       <EditProfileForm userData={userData} />
     </SafeAreaView>

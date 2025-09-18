@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import { Animated, StyleSheet, Text, View } from 'react-native';
+import { Animated, StyleSheet, Text, View, AccessibilityInfo } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 import { ToastOptions } from './ToasterProvider';
 import { CheckCircle, AlertTriangle, Info } from 'lucide-react-native';
@@ -58,6 +58,7 @@ export default function Toast({ toast }: ToastProps) {
           useNativeDriver: true,
         }),
       ]).start();
+      AccessibilityInfo.announceForAccessibility(toast.message);
     } else if (visible) {
       Animated.parallel([
         Animated.timing(opacityAnim, {
@@ -92,13 +93,17 @@ export default function Toast({ toast }: ToastProps) {
         },
         theme.shadows.medium,
       ]}
-      accessibilityLiveRegion="polite"
+      accessible
       accessibilityRole="alert"
+      accessibilityLabel={displayedToast.message}
     >
       <View style={styles.iconWrapper}>
         <Icon color={theme.colors.text.onPrimary} size={18} />
       </View>
-      <Text style={[styles.text, { color: theme.colors.text.onPrimary }]} numberOfLines={2}>
+      <Text
+        style={[styles.text, { color: theme.colors.text.onPrimary }]}
+        numberOfLines={2}
+      >
         {displayedToast.message}
       </Text>
     </Animated.View>

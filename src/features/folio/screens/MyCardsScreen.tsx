@@ -28,14 +28,17 @@ export default function MyCardsScreen({
     error: myCardsStatsError,
     refetch: refetchMyCardsStats,
   } = useMainFolioStatistics();
-
   // We need to refetch stats when the screen is focused
   // This is useful when the user navigates back to this screen
   // and we want to ensure the data is up-to-date
   useRefetchOnFocus(refetchMyCardsStats);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      accessibilityLabel="My cards"
+      accessibilityHint="Displays all your collected cards"
+    >
       <CardListDisplay
         cards={myCardsData}
         hasNextPage={hasNextPage}
@@ -61,7 +64,5 @@ export default function MyCardsScreen({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
 });

@@ -6,7 +6,16 @@ interface InfoGridProps {
 }
 
 export default function InfoGrid({ children }: InfoGridProps) {
-  return <View style={styles.container}>{children}</View>;
+  return (
+    <View
+      style={styles.container}
+      accessible
+      accessibilityLabel="Information grid"
+      accessibilityRole="list"
+    >
+      {children}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

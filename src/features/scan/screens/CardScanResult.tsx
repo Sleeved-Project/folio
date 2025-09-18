@@ -20,7 +20,11 @@ export default function CardScanResult({
   const theme = useTheme();
 
   return (
-    <View style={styles.safeAreaView}>
+    <View
+      style={styles.safeAreaView}
+      accessible
+      accessibilityLabel="Card scan result screen"
+    >
       <LinearGradient
         colors={[
           theme.colors.primary,
@@ -31,11 +35,27 @@ export default function CardScanResult({
         locations={[0, 0.6, 1]}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
+        accessible
+        accessibilityLabel={
+          resultType === 'success'
+            ? 'Card scan successful'
+            : 'Card scan failed'
+        }
       >
         {resultType === 'success' && cards ? (
-          <CardScanSuccess cards={cards} highlightedCardId={highlightedCardId} />
+          <View
+            accessible
+            accessibilityLabel={`Scan success: ${cards.length} cards detected. Highlighted card ID: ${highlightedCardId}`}
+          >
+            <CardScanSuccess cards={cards} highlightedCardId={highlightedCardId} />
+          </View>
         ) : (
-          <CardScanFail />
+          <View
+            accessible
+            accessibilityLabel="Scan failed: No matching cards found"
+          >
+            <CardScanFail />
+          </View>
         )}
       </LinearGradient>
     </View>

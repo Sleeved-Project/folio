@@ -23,9 +23,21 @@ export default function EditFolioNameModal() {
   };
 
   return (
-    <View style={styles.overlay}>
+    <View
+      style={styles.overlay}
+      accessible
+      accessibilityViewIsModal
+      accessibilityLabel="Edit Folio Name Modal"
+      accessibilityHint="Edit the name of your folio and save or cancel"
+    >
       <View style={styles.backdrop}>
-        <Pressable style={StyleSheet.absoluteFill} onPress={handleCancel} />
+        <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={handleCancel}
+          accessible
+          accessibilityLabel="Close modal"
+          accessibilityHint="Closes the edit folio name modal"
+        />
       </View>
 
       <View
@@ -40,8 +52,21 @@ export default function EditFolioNameModal() {
         ]}
       >
         <View style={styles.header}>
-          <Text style={[styles.title, { color: theme.colors.text.primary }]}>Edit folio name</Text>
-          <TouchableOpacity onPress={handleCancel} style={styles.closeButton}>
+          <Text
+            style={[styles.title, { color: theme.colors.text.primary }]}
+            accessible
+            accessibilityRole="header"
+            accessibilityLabel="Edit folio name"
+          >
+            Edit folio name
+          </Text>
+          <TouchableOpacity
+            onPress={handleCancel}
+            style={styles.closeButton}
+            accessible
+            accessibilityLabel="Close"
+            accessibilityHint="Discard changes and close the modal"
+          >
             <X size={24} color={theme.colors.text.secondary} />
           </TouchableOpacity>
         </View>

@@ -8,8 +8,16 @@ interface BadgeLabelProps {
 
 export default function BadgeLabel({ label, variant }: BadgeLabelProps) {
   if (!label) return null;
+
   return (
-    <Text style={[styles.label, variant === 'light' ? styles.light : styles.dark]}>{label}</Text>
+    <Text
+      style={[styles.label, variant === 'light' ? styles.light : variant === 'dark' ? styles.dark : styles[variant || 'light']]}
+      accessible
+      accessibilityRole="text"
+      accessibilityLabel={label}
+    >
+      {label}
+    </Text>
   );
 }
 

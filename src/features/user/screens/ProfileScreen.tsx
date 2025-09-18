@@ -45,7 +45,14 @@ export default function ProfileScreen({ isUserProfile = false, userId }: Profile
       /> */}
 
       {/* {activeTab === 'ads' ? <UserAdList userId={userId} /> : <UserRatingsList userId={userId} />} */}
-      <TitleSection title="Ads" />
+      <TitleSection
+        title="Ads"
+        accessible
+        accessibilityRole="header"
+        accessibilityLabel="Ads section"
+        accessibilityHint="View the list of ads posted by this user"
+      />
+
       <UserAdList userId={userId} />
     </>
   );

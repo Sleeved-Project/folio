@@ -64,17 +64,27 @@ export default function CardKPIStats({
           borderRadius: theme.borderRadius.medium,
         },
       ]}
+      accessible
+      accessibilityRole="summary"
+      accessibilityLabel={`Cards: ${cardCount ?? '-'}, CardMarket: ${cardMarketValue ?? '-'} (${cardMarketTrending ?? 'equal'}), TCGPlayer: ${tcgPlayerValue ?? '-'} (${tcgPlayerTrending ?? 'equal'})`}
     >
       <View style={styles.row}>
-        <View style={styles.statItem}>
+        <View style={styles.statItem} accessible accessibilityRole="text" accessibilityLabel={`Cards: ${cardCount ?? '-'}`}>
           <Layers size={20} color={theme.colors.primary} />
           <StatValue value={cardCount} isLoading={isLoading} isError={isError} />
           <View style={styles.labelWithTrend}>
             <Text style={[styles.label, { color: theme.colors.text.secondary }]}>Cards</Text>
           </View>
         </View>
+
         <View style={styles.divider} />
-        <View style={styles.statItem}>
+
+        <View
+          style={styles.statItem}
+          accessible
+          accessibilityRole="text"
+          accessibilityLabel={`CardMarket value: ${cardMarketValue ?? '-'}, Trend: ${cardMarketTrending ?? 'equal'}`}
+        >
           <Euro size={20} color={theme.colors.primary} />
           <StatValue value={cardMarketValue} isLoading={isLoading} isError={isError} />
           <View style={styles.labelWithTrend}>
@@ -82,8 +92,15 @@ export default function CardKPIStats({
             <TrendIcon trend={cardMarketTrending} />
           </View>
         </View>
+
         <View style={styles.divider} />
-        <View style={styles.statItem}>
+
+        <View
+          style={styles.statItem}
+          accessible
+          accessibilityRole="text"
+          accessibilityLabel={`TCGPlayer value: ${tcgPlayerValue ?? '-'}, Trend: ${tcgPlayerTrending ?? 'equal'}`}
+        >
           <DollarSign size={20} color={theme.colors.primary} />
           <StatValue value={tcgPlayerValue} isLoading={isLoading} isError={isError} />
           <View style={styles.labelWithTrend}>

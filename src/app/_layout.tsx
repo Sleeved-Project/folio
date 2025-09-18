@@ -3,8 +3,8 @@ import { Stack } from 'expo-router';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '../lib/query/query-client';
 import { AuthProvider } from '../features/auth/context/AuthContext';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { LogBox, StyleSheet } from 'react-native';
+import { View, StyleSheet, LogBox } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler'; // ✅ correct
 import { useAuth } from '../features/auth/context/AuthContext';
 import { ToasterProvider } from '../components/ui/ToasterProvider';
 import { FilterProvider } from '../context/FilterContext';
@@ -41,10 +41,7 @@ function AppNavigator() {
           <Stack.Screen name="(marketplace)" />
           <Stack.Screen
             name="filter-detail"
-            options={{
-              presentation: 'modal',
-              animation: 'slide_from_bottom',
-            }}
+            options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
           />
         </Stack.Protected>
 
@@ -61,13 +58,26 @@ export default function RootLayout() {
   LogBox.ignoreAllLogs(true);
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <GestureHandlerRootView
+      style={styles.container}
+      accessible
+      accessibilityLabel="App Root"
+      accessibilityHint="Main container of the application"
+    >
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <ToasterProvider>
             <ScanProvider>
               <FilterProvider>
-                <AppNavigator />
+                {/* Container pour appliquer l'accessibilité sur la navigation */}
+                <View
+                  style={styles.container}
+                  accessible
+                  accessibilityLabel="Navigation Container"
+                  accessibilityHint="Holds all navigation stacks and screens"
+                >
+                  <AppNavigator />
+                </View>
               </FilterProvider>
             </ScanProvider>
           </ToasterProvider>

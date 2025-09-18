@@ -46,8 +46,14 @@ const SigninScreen: React.FC = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background.primary }}>
       <View style={styles.container}>
         <View style={styles.centerContent}>
-          <Image source={logoImage} style={styles.logo} />
-          <Text style={styles.title}>Sign in to Sleeved</Text>
+          <Image
+            source={logoImage}
+            style={styles.logo}
+            accessibilityLabel="Sleeved app logo"
+          />
+          <Text style={styles.title} accessibilityRole="header">
+            Sign in to Sleeved
+          </Text>
           <View style={styles.inputWrapper}>
             <FormTextInput
               control={control}
@@ -57,6 +63,7 @@ const SigninScreen: React.FC = () => {
               inputType="email"
               error={typeof errors.email?.message === 'string' ? errors.email?.message : undefined}
               returnKeyType="next"
+              accessibilityLabel="Email input field"
             />
             <FormTextInput
               control={control}
@@ -64,13 +71,18 @@ const SigninScreen: React.FC = () => {
               label="Password"
               placeholder="Enter your password"
               inputType="password"
-              error={
-                typeof errors.password?.message === 'string' ? errors.password?.message : undefined
-              }
+              error={typeof errors.password?.message === 'string' ? errors.password?.message : undefined}
               returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
+              accessibilityLabel="Password input field"
             />
-            <TouchableOpacity style={styles.forgotPassword}>
+            <TouchableOpacity
+              style={styles.forgotPassword}
+              accessibilityRole="button"
+              accessibilityLabel="Forgot password"
+              accessible
+              onPress={() => {}}
+            >
               <Text style={styles.forgotPasswordText}>Forgot password?</Text>
             </TouchableOpacity>
           </View>
@@ -81,6 +93,8 @@ const SigninScreen: React.FC = () => {
             onPress={handleSubmit(onSubmit)}
             loading={isLoading}
             disabled={isLoading}
+            accessibilityLabel="Sign in button"
+            accessible
           />
           <AuthRedirectLink type="signup" />
         </View>

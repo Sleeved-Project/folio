@@ -9,7 +9,7 @@ interface StepItemProps {
   isCompleted: boolean;
   onPress: () => void;
   disabled?: boolean;
-  style?: ViewStyle; // 👈 Ajout
+  style?: ViewStyle;
 }
 
 export default function StepItem({
@@ -23,21 +23,35 @@ export default function StepItem({
 }: StepItemProps) {
   const theme = useTheme();
 
+  const accessibilityLabel = `${index + 1}. ${step}`;
+  const accessibilityState = {
+    selected: isActive,
+    disabled: disabled,
+    checked: isCompleted,
+  };
+  const accessibilityHint = isActive
+    ? 'Current step'
+    : isCompleted
+    ? 'Step completed'
+    : 'Tap to go to this step';
+
   return (
-    <TouchableOpacity onPress={onPress} disabled={disabled}>
+    <TouchableOpacity
+      onPress={onPress}
+      disabled={disabled}
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityState={accessibilityState}
+      accessibilityHint={accessibilityHint}
+    >
       <View style={[styles.stepContainer, style]}>
         <View
           style={[
             styles.stepNumber,
-            {
-              backgroundColor: theme.colors.background.tertiary,
-            },
-            isActive && {
-              backgroundColor: theme.colors.primary,
-            },
-            isCompleted && {
-              backgroundColor: theme.colors.success,
-            },
+            { backgroundColor: theme.colors.background.tertiary },
+            isActive && { backgroundColor: theme.colors.primary },
+            isCompleted && { backgroundColor: theme.colors.success },
           ]}
         >
           <Text

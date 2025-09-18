@@ -40,6 +40,8 @@ export default function CardAvailableOffers({ title, cardId }: CardAvailableOffe
           marginTop: theme.spacing.sm,
           marginBottom: theme.spacing.lg,
         }}
+        accessible
+        accessibilityLabel="No available offers for this card"
       >
         <Text
           style={{
@@ -48,6 +50,7 @@ export default function CardAvailableOffers({ title, cardId }: CardAvailableOffe
             marginBottom: 4,
             color: theme.colors.text.primary,
           }}
+          accessibilityRole="header"
         >
           Available Offers
         </Text>
@@ -86,6 +89,8 @@ export default function CardAvailableOffers({ title, cardId }: CardAvailableOffe
         marginTop: theme.spacing.sm,
         marginBottom: theme.spacing.lg,
       }}
+      accessible
+      accessibilityLabel={`${availableOffers.length} offers available for ${title}`}
     >
       <Text
         style={[
@@ -97,10 +102,13 @@ export default function CardAvailableOffers({ title, cardId }: CardAvailableOffe
             color: theme.colors.text.primary,
           },
         ]}
+        accessibilityRole="header"
       >
         {title}
       </Text>
-      <Text style={[styles.subtitle, { color: theme.colors.text.secondary, marginBottom: 12 }]}>
+      <Text
+        style={[styles.subtitle, { color: theme.colors.text.secondary, marginBottom: 12 }]}
+      >
         {availableOffers.length} offers found
       </Text>
       {availableOffers.map((item) => (

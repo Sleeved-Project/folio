@@ -35,6 +35,9 @@ export default function CardPlaceholderGrid({
           ]}
           activeOpacity={0.7}
           onPress={onAddCard}
+          accessible
+          accessibilityRole="button"
+          accessibilityLabel={`Add card placeholder ${index + 1} of ${numPlaceholders}`}
         >
           <Plus size={40} color={theme.colors.text.tertiary} />
         </TouchableOpacity>

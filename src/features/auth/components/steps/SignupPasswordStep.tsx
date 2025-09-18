@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signupPasswordSchema, type SignupPasswordFormValues } from '../../schemas/authUserSchema';
@@ -34,16 +35,18 @@ export default function SignupPasswordStep({
       buttonDisabled={isSubmitting || isLoading}
       buttonLoading={isSubmitting || isLoading}
     >
-      <FormTextInput
-        control={control}
-        name="password"
-        label="Password"
-        placeholder="Create a secure password"
-        inputType="password"
-        error={errors.password?.message}
-        returnKeyType="next"
-        containerStyle={{ marginBottom: 24, width: '100%' }}
-      />
+      <View accessible accessibilityLabel="Password input field">
+        <FormTextInput
+          control={control}
+          name="password"
+          label="Password"
+          placeholder="Create a secure password"
+          inputType="password"
+          error={errors.password?.message}
+          returnKeyType="next"
+          containerStyle={{ marginBottom: 24, width: '100%' }}
+        />
+      </View>
     </AuthStepLayout>
   );
 }

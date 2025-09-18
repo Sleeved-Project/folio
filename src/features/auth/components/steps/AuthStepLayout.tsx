@@ -33,13 +33,27 @@ export function AuthStepLayout({
     <View style={styles.container}>
       <View style={styles.topContent}>
         {onBack && (
-          <TouchableOpacity onPress={onBack} style={styles.backButton}>
+          <TouchableOpacity
+            onPress={onBack}
+            style={styles.backButton}
+            accessible
+            accessibilityRole="button"
+            accessibilityLabel="Go back"
+          >
             <ArrowLeft size={28} color={theme.colors.text.primary} />
           </TouchableOpacity>
         )}
-        <Text style={styles.title}>{title}</Text>
-        {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
-        <View style={{ width: '100%' }}>{children}</View>
+        <Text style={styles.title} accessibilityRole="header">
+          {title}
+        </Text>
+        {subtitle && (
+          <Text style={styles.subtitle} accessibilityLabel={subtitle}>
+            {subtitle}
+          </Text>
+        )}
+        <View style={{ width: '100%' }} accessible accessibilityLabel="Step content">
+          {children}
+        </View>
       </View>
       <View style={styles.bottomContent}>
         <Button
@@ -47,6 +61,8 @@ export function AuthStepLayout({
           onPress={onButtonPress}
           disabled={buttonDisabled}
           loading={buttonLoading}
+          accessible
+          accessibilityLabel={buttonText}
         />
         {bottomContent}
       </View>

@@ -13,6 +13,7 @@ interface UsersListDisplayProps {
   ListEmptyComponent: React.ReactElement | null;
   fetchNextPage?: () => void;
   error?: Error | null;
+  accessibilityLabel?: string;
 }
 
 export default function SellersListDisplay({
@@ -23,6 +24,7 @@ export default function SellersListDisplay({
   fetchNextPage,
   isLoading,
   error,
+  accessibilityLabel = 'List of sellers',
 }: UsersListDisplayProps) {
   return (
     <FlatList
@@ -32,29 +34,45 @@ export default function SellersListDisplay({
       renderItem={({ item }) => (
         <SellerRowItem
           item={item}
-          onPress={() => {
-            router.push(`/seller/${item.id}`);
-          }}
+          onPress={() => router.push(`/seller/${item.id}`)}
         />
       )}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       contentContainerStyle={styles.listContent}
-      ListEmptyComponent={ListEmptyComponent}
+      ListEmptyComponent={
+        ListEmptyComponent ? (
+          <View accessible accessibilityRole="text" accessibilityLabel="No sellers found">
+            {ListEmptyComponent}
+          </View>
+        ) : null
+      }
       removeClippedSubviews
       windowSize={11}
       initialNumToRender={10}
       ListFooterComponent={() => {
         if (isFetchingNextPage || isLoading) {
           return (
-            <View style={styles.loaderContainer}>
+            <View
+              style={styles.loaderContainer}
+              accessible
+              accessibilityRole="progressbar"
+              accessibilityLabel="Loading sellers"
+            >
               <ActivityIndicator color={theme.colors.primary} size="small" />
-              <Text style={[styles.text, { color: theme.colors.text.secondary }]}>Loading...</Text>
+              <Text style={[styles.text, { color: theme.colors.text.secondary }]}>
+                Loading...
+              </Text>
             </View>
           );
         }
         if (error) {
           return (
-            <Text style={[styles.text, styles.errorText, { color: theme.colors.danger }]}>
+            <Text
+              style={[styles.text, styles.errorText, { color: theme.colors.danger }]}
+              accessible
+              accessibilityRole="alert"
+              accessibilityLabel="Error loading users"
+            >
               Error loading users
             </Text>
           );
@@ -66,6 +84,10 @@ export default function SellersListDisplay({
           fetchNextPage();
         }
       }}
+      onEndReachedThreshold={0.5}
+      accessible
+      accessibilityRole="list"
+      accessibilityLabel={accessibilityLabel}
     />
   );
 }

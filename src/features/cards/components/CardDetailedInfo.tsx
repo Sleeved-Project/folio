@@ -17,12 +17,8 @@ export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
   const { data: detailedData, isLoading, error } = useCardDetailedInfo(cardId);
   const theme = useTheme();
 
-  // Loading state
-  if (isLoading) {
-    return <LoadingState />;
-  }
+  if (isLoading) return <LoadingState />;
 
-  // Error state
   if (error || !detailedData) {
     return (
       <ErrorState
@@ -31,8 +27,8 @@ export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
     );
   }
 
-  const hasSubtypes = detailedData?.subtypes && detailedData.subtypes.length > 0;
-  const hasFlavorText = !!detailedData?.flavorText;
+  const hasSubtypes = Array.isArray(detailedData.subtypes) && detailedData.subtypes.length > 0;
+  const hasFlavorText = !!detailedData.flavorText;
 
   return (
     <View style={styles.container}>
@@ -44,6 +40,7 @@ export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
             icon={<User size={20} color={theme.colors.text.primary} />}
             fullWidth
             accentBorder
+            accessibilityLabel={`Artist: ${detailedData.artist.name}`}
           />
         )}
 
@@ -53,6 +50,7 @@ export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
             value={detailedData.rarity.label}
             icon={<StarIcon size={20} color={theme.colors.text.primary} />}
             accentBorder
+            accessibilityLabel={`Rarity: ${detailedData.rarity.label}`}
           />
         )}
 
@@ -62,16 +60,21 @@ export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
             value={new Date(detailedData.set.releaseDate).getFullYear().toString()}
             icon={<Calendar size={20} color={theme.colors.text.primary} />}
             accentBorder
+            accessibilityLabel={`Release year: ${new Date(detailedData.set.releaseDate).getFullYear()}`}
           />
         )}
       </InfoGrid>
 
       {hasSubtypes && (
         <View style={styles.subtypesSection}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>Subtypes</Text>
+          <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]} accessibilityRole="header">
+            Subtypes
+          </Text>
           <View style={styles.tagsContainer}>
             {detailedData.subtypes?.map((subtype, index) => (
-              <Tag key={`${subtype.id || index}`} label={subtype.label} />
+              <View key={`${subtype.id || index}`} accessible accessibilityLabel={`Subtype: ${subtype.label}`}>
+                <Tag label={subtype.label} />
+              </View>
             ))}
           </View>
         </View>
@@ -79,10 +82,12 @@ export default function CardDetailedInfo({ cardId }: CardDetailedInfoProps) {
 
       {hasFlavorText && (
         <View style={styles.flavorSection}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>
+          <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]} accessibilityRole="header">
             Description
           </Text>
-          <FlavorTextBox text={detailedData.flavorText} />
+          <View accessible accessibilityLabel={`Description: ${detailedData.flavorText}`}>
+            <FlavorTextBox text={detailedData.flavorText} />
+          </View>
         </View>
       )}
     </View>

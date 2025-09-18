@@ -8,36 +8,53 @@ export default function OrderConfirmationScreen() {
   const theme = useTheme();
 
   return (
-    <View style={styles.container}>
-      <CircleCheckBig color={theme.colors.success} size={120} />
-      <Text style={[styles.title, { color: theme.colors.text.primary }]}>Order Confirmed!</Text>
+    <View
+      style={styles.container}
+      accessible
+      accessibilityRole="alert" // annonce la confirmation de commande
+      accessibilityLabel="Order confirmation screen"
+    >
+      <CircleCheckBig
+        color={theme.colors.success}
+        size={120}
+        accessible
+        accessibilityRole="image"
+        accessibilityLabel="Order confirmed checkmark"
+      />
+
+      <Text
+        style={[styles.title, { color: theme.colors.text.primary }]}
+        accessible
+        accessibilityRole="header"
+      >
+        Order Confirmed!
+      </Text>
+
       <Text
         style={[
           styles.text,
-          {
-            color: theme.colors.text.secondary,
-            fontWeight: theme.typography.fontWeights.semiBold,
-          },
+          { color: theme.colors.text.secondary, fontWeight: theme.typography.fontWeights.semiBold },
         ]}
+        accessible
+        accessibilityRole="text"
       >
         Thank you for your purchase.
       </Text>
+
       <Text
-        style={[
-          styles.text,
-          {
-            color: theme.colors.text.secondary,
-          },
-        ]}
+        style={[styles.text, { color: theme.colors.text.secondary }]}
+        accessible
+        accessibilityRole="text"
       >
         Your order is being processed and you will receive a confirmation email shortly.
       </Text>
+
       <Button
         title="Back to Home"
-        onPress={() => {
-          router.push('/');
-        }}
+        onPress={() => router.push('/')}
         buttonStyle={styles.button}
+        accessibilityLabel="Back to Home"
+        accessibilityHint="Navigates back to the Marketplace home screen"
       />
     </View>
   );

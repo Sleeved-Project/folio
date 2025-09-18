@@ -14,28 +14,53 @@ export default function MyFoliosScreen() {
 
   if (isLoading) {
     return (
-      <View style={styles.container}>
+      <View
+        style={styles.container}
+        accessible
+        accessibilityLabel="Loading Folios"
+        accessibilityHint="Displays a loading indicator while fetching folios"
+      >
         <LoadingState />
       </View>
     );
   }
 
   if (!isLoading && error) {
-    return <ErrorState />;
+    return (
+      <View
+        style={styles.container}
+        accessible
+        accessibilityLabel="Error"
+        accessibilityHint="An error occurred while fetching folios"
+      >
+        <ErrorState />
+      </View>
+    );
   }
 
   if (!foliosListData || foliosListData.length === 0) {
-    return <CreateFirstFolioCta />;
+    return (
+      <View
+        style={styles.container}
+        accessible
+        accessibilityLabel="No Folios"
+        accessibilityHint="Prompt to create the first folio"
+      >
+        <CreateFirstFolioCta />
+      </View>
+    );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+      accessible
+      accessibilityLabel="My Folios Screen"
+      accessibilityHint="View your folios and create new ones"
+    >
       <FoliosList
         foliosData={foliosListData}
-        onFolioPress={(id) => {
-          /* TODO: navigation */
-          console.log('Folio pressed:', id);
-        }}
+        onFolioPress={(id) => console.log('Folio pressed:', id)}
         onCreatePress={() => router.push('(folios)/create-folio')}
       />
     </View>

@@ -6,8 +6,18 @@ export default function Explorer() {
   const theme = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+      accessible
+      accessibilityLabel="Explorer Screen"
+      accessibilityHint="Browse and discover cards"
+    >
+      <View
+        style={[styles.content, { backgroundColor: theme.colors.background.primary }]}
+        accessible
+        accessibilityLabel="Cards list container"
+        accessibilityHint="Displays the list of cards and card sets"
+      >
         <CardsList isFiltersVisible={true} />
       </View>
     </View>

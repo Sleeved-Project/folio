@@ -23,13 +23,8 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
   const [loading, setLoading] = useState(false);
   const [paymentSheetReady, setPaymentSheetReady] = useState(false);
 
-  const handleSeeCardDetail = (cardId: string) => {
-    router.push(`/card/${cardId}`);
-  };
-
-  const handleSeller = (sellerId: string) => {
-    router.push(`/seller/${sellerId}`);
-  };
+  const handleSeeCardDetail = (cardId: string) => router.push(`/card/${cardId}`);
+  const handleSeller = (sellerId: string) => router.push(`/seller/${sellerId}`);
 
   if (isLoading) return <LoadingState />;
   if (error || !ad) return <ErrorState message="Failed to load ad details." />;
@@ -38,7 +33,6 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
     try {
       setLoading(true);
       const { paymentIntent, ephemeralKey, customer } = await fetchPaymentSheetParams();
-
       const { error } = await initPaymentSheet({
         merchantDisplayName: 'Sleeved',
         customerId: customer,
@@ -46,10 +40,7 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
         paymentIntentClientSecret: paymentIntent,
         returnURL: `folio://ad/${ad.id}`,
       });
-
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
       setPaymentSheetReady(true);
     } catch (err: unknown) {
       throw new Error((err as Error).message);
@@ -60,45 +51,37 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
 
   const openPaymentSheet = async () => {
     try {
-      if (!paymentSheetReady) {
-        await initializePaymentSheet();
-      }
-
+      if (!paymentSheetReady) await initializePaymentSheet();
       const { error } = await presentPaymentSheet();
-
       if (error) {
         if (error.code === 'Canceled') {
-          // Cancel payment intent + update ad status to "available" if the user cancels
           setPaymentSheetReady(false);
           await cancelPaymentSheet();
           return;
         }
-        throw new Error(
-          error.message || 'Stripe Payment Sheet must be initialized before presenting'
-        );
+        throw new Error(error.message || 'Stripe Payment Sheet must be initialized before presenting');
       }
-
       setLoading(false);
       router.push('/order-confirmation');
     } catch (err: unknown) {
       setLoading(false);
-      const message =
-        err instanceof Error ? err.message : 'An unknown error occurred while processing payment';
+      const message = err instanceof Error ? err.message : 'An unknown error occurred while processing payment';
       Alert.alert('Payment Error', message);
     }
   };
 
   return (
     <>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
-        <AdHeader
-          imageRecto={ad.rectoImageUrl}
-          imageVerso={ad.versoImageUrl}
-          title={ad.card.name}
-        />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.container}
+      >
+        <AdHeader imageRecto={ad.rectoImageUrl} imageVerso={ad.versoImageUrl} title={ad.card.name} />
         <AdSellerCard seller={ad.seller} onPress={handleSeller} />
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.text.black }]}>
+          <Text
+            style={[styles.sectionTitle, { color: theme.colors.text.black }]}
+          >
             {ad.card.name}
           </Text>
           <Text
@@ -113,10 +96,6 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
         </View>
 
         {ad.certificate && <CertificationBadge certification={ad.certificate} />}
-
-        {/* <View style={styles.section}>
-          <CardAvailableOffers cardId={ad.id} title="Other selling" />
-        </View> */}
       </ScrollView>
 
       <AdActionBar
@@ -131,16 +110,7 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingBottom: 100,
-  },
-  section: {
-    marginHorizontal: 16,
-    gap: 4,
-    marginTop: 16,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-  },
+  container: { paddingBottom: 100 },
+  section: { marginHorizontal: 16, gap: 4, marginTop: 16 },
+  sectionTitle: { fontSize: 20, fontWeight: '600' },
 });

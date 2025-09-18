@@ -61,15 +61,38 @@ export default function SetDetail({ setId }: { setId: string }) {
           gap: theme.spacing.md,
         },
       ]}
+      accessible
+      accessibilityRole="summary"
+      accessibilityLabel={`Set details for ${set?.name || 'this set'}`}
     >
-      <View style={[styles.setHeader]}>
+      <View
+        style={[styles.setHeader]}
+        accessible
+        accessibilityRole="header"
+        accessibilityLabel={`Set ${set?.name || ''}, released in ${set?.releaseDate || ''}`}
+      >
         <View>
-          <Text style={{ fontSize: 24, fontWeight: 'bold', color: theme.colors.text.primary }}>
+          <Text
+            style={{ fontSize: 24, fontWeight: 'bold', color: theme.colors.text.primary }}
+            accessible
+            accessibilityRole="text"
+          >
             {set.name}
           </Text>
-          <Text style={{ color: theme.colors.text.secondary }}>Edited in {set.releaseDate}</Text>
+          <Text
+            style={{ color: theme.colors.text.secondary }}
+            accessible
+            accessibilityRole="text"
+          >
+            Edited in {set.releaseDate}
+          </Text>
         </View>
-        <View style={[styles.setLogoContainer, { gap: theme.spacing.md }]}>
+        <View
+          style={[styles.setLogoContainer, { gap: theme.spacing.md }]}
+          accessible
+          accessibilityRole="image"
+          accessibilityLabel={`Progress ${set.totalPercentage || 0} percent and symbol of the set`}
+        >
           <CircularProgressBar
             size={theme.spacing.xl}
             strokeWidth={8}
@@ -102,8 +125,13 @@ export default function SetDetail({ setId }: { setId: string }) {
         searchQuery={cardName}
         setSearchQuery={(newName: string) => setCardName(newName)}
         searchPlaceholder="Search by Pokemon"
+        accessibilityLabel="Search cards by Pokemon name"
+        accessibilityHint="Enter the name of a Pokemon to filter cards in this set"
       />
-      <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.SET} />
+      <CardFilters
+        toggleFilterDetail={toggleFilterDetail}
+        filterType={FilterTypeEnum.SET}
+      />
       <CardListDisplay
         cards={cards}
         hasNextPage={hasNextCardsPage}

@@ -29,7 +29,11 @@ export default function GridBackground({
   const lineColor = lightTheme ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.07)';
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      accessible={false} // Indique aux lecteurs d’écran que c’est décoratif
+      importantForAccessibility="no-hide-descendants"
+    >
       <Svg height="100%" width="100%" style={styles.svg}>
         <Defs>
           <LinearGradient id="backgroundGradient" x1="0" y1="0" x2="0" y2="1">

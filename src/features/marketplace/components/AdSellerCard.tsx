@@ -13,21 +13,27 @@ export default function AdSellerCard({ seller, onPress }: AdSellerCardProps) {
   const theme = useTheme();
 
   return (
-    <Pressable onPress={() => onPress?.(seller.id)} style={styles.container}>
-      <ProfilePicture username={seller.username} uri={seller.avatarUrl} size="small" />
+    <Pressable
+      onPress={() => onPress?.(seller.id)}
+      style={styles.container}
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel={`Seller ${seller.username}`}
+      accessibilityHint="Tap to view seller details"
+    >
+      <View accessible accessibilityLabel={`${seller.username}'s profile picture`}>
+        <ProfilePicture username={seller.username} uri={seller.avatarUrl} size="small" />
+      </View>
+
       <View style={styles.info}>
-        <Text
-          style={{
-            color: theme.colors.text.primary,
-            fontSize: theme.typography.fontSizes.md,
-            fontWeight: theme.typography.fontWeights.bold,
-            paddingLeft: 10,
-          }}
-        >
+        <Text style={{ color: theme.colors.text.primary, fontSize: theme.typography.fontSizes.md, fontWeight: theme.typography.fontWeights.bold, paddingLeft: 10 }} accessible accessibilityRole="text" accessibilityLabel={`Username: ${seller.username}`}>
           {seller.username}
         </Text>
+
         {seller.rating && seller.ratingCount && (
-          <StarRating rating={seller.rating} count={seller.ratingCount} />
+          <View accessible accessibilityRole="text" accessibilityLabel={`Rating: ${seller.rating} out of 5 from ${seller.ratingCount} reviews`}>
+            <StarRating rating={seller.rating} count={seller.ratingCount} />
+          </View>
         )}
       </View>
     </Pressable>
@@ -35,21 +41,6 @@ export default function AdSellerCard({ seller, onPress }: AdSellerCardProps) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderBottomColor: '#BEBEBE',
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 24,
-    marginRight: 12,
-  },
-  info: {
-    flex: 1,
-  },
+  container: { flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, paddingVertical: 12, paddingHorizontal: 16, borderBottomColor: '#BEBEBE' },
+  info: { flex: 1 },
 });

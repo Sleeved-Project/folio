@@ -28,10 +28,17 @@ export default function SetsList({
   const GAP = 8;
   const NUM_COLUMNS = 2;
 
-  const displaySetList = ({ item }: { item: FormattedSet }) => <SetListDisplay set={item} />;
+  const displaySetList = ({ item }: { item: FormattedSet }) => (
+    <SetListDisplay set={item} />
+  );
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+      accessible
+      accessibilityRole="list"
+      accessibilityLabel={`List of ${sets.length} sets`}
+    >
       <FlatList
         data={sets}
         keyExtractor={(card, index) => `${card.id}-${index}`}
@@ -48,7 +55,13 @@ export default function SetsList({
         ListFooterComponent={() => {
           if (isFetchingNextPage || isLoading) {
             return (
-              <View style={styles.loaderContainer}>
+              <View
+                style={styles.loaderContainer}
+                accessible
+                accessibilityRole="text"
+                accessibilityLabel="Loading sets"
+                accessibilityHint="Sets are being loaded, please wait"
+              >
                 <ActivityIndicator color={theme.colors.primary} size="small" />
                 <Text style={[styles.text, { color: theme.colors.text.secondary }]}>
                   Loading...
@@ -58,7 +71,12 @@ export default function SetsList({
           }
           if (error) {
             return (
-              <Text style={[styles.text, styles.errorText, { color: theme.colors.danger }]}>
+              <Text
+                style={[styles.text, styles.errorText, { color: theme.colors.danger }]}
+                accessible
+                accessibilityRole="alert"
+                accessibilityLabel="Error loading sets"
+              >
                 Error loading sets
               </Text>
             );
@@ -74,6 +92,9 @@ export default function SetsList({
                 styles.text,
                 { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
               ]}
+              accessible
+              accessibilityRole="text"
+              accessibilityLabel="No sets available"
             >
               No sets available
             </Text>

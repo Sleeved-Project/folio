@@ -14,11 +14,10 @@ export default function FilterOption({
   isChecked,
 }: FilterOptionProps) {
   const theme = useTheme();
+
   return (
     <TouchableOpacity
-      onPress={() => {
-        updateFiltersCallback(option.id);
-      }}
+      onPress={() => updateFiltersCallback(option.id)}
       style={[
         styles.container,
         {
@@ -28,9 +27,13 @@ export default function FilterOption({
           marginBottom: theme.spacing.sm,
         },
       ]}
+      accessible
+      accessibilityRole="checkbox"
+      accessibilityState={{ checked: isChecked }}
+      accessibilityLabel={`Filter option: ${option.value}`}
+      accessibilityHint={`Tap to ${isChecked ? 'deselect' : 'select'} this filter`}
     >
       <Text
-        key={option.value}
         style={{
           color: theme.colors.text.primary,
           fontSize: theme.typography.fontSizes.md,
@@ -49,9 +52,7 @@ export default function FilterOption({
           },
         ]}
       >
-        {isChecked ? (
-          <Check color={theme.colors.background.primary} width={18} height={18} />
-        ) : null}
+        {isChecked && <Check color={theme.colors.background.primary} width={18} height={18} />}
       </View>
     </TouchableOpacity>
   );

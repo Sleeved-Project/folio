@@ -54,9 +54,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
     if (activeTab !== 'sets') {
       const selected = filtersOptions[label];
       if (!selected) return;
-      setSelectedFilterOption?.({
-        [label]: selected,
-      });
+      setSelectedFilterOption?.({ [label]: selected });
       router.push({
         pathname: '/filter-detail',
         params: {
@@ -70,24 +68,31 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
     <View
       style={[
         styles.container,
-        {
-          backgroundColor: theme.colors.background.primary,
-          gap: theme.spacing.md,
-        },
+        { backgroundColor: theme.colors.background.primary, gap: theme.spacing.md },
       ]}
+      accessible
+      accessibilityLabel="Cards and sets list screen"
+      accessibilityHint="Switch between cards and sets, search and apply filters"
     >
       <TabSwitcher
         options={tabOptions}
         activeTabId={activeTab}
         onTabChange={(tabId) => setActiveTab(tabId)}
+        accessibilityLabel="Tab switcher"
+        accessibilityHint="Switch between card sets and all cards"
       />
       <SearchBar
         searchQuery={cardName}
         setSearchQuery={(newName: string) => setCardName(newName)}
         searchPlaceholder={activeTab === 'cards' ? 'Search by Pokemon' : 'Search by set'}
+        accessibilityLabel="Search bar"
+        accessibilityHint="Type text to search for cards or sets"
       />
       {isFiltersVisible && activeTab !== 'sets' && (
-        <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.CARD} />
+        <CardFilters
+          filterType={FilterTypeEnum.CARD}
+          toggleFilterDetail={toggleFilterDetail}
+        />
       )}
       {activeTab === 'sets' ? (
         <SetsList
@@ -113,7 +118,5 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
 });

@@ -16,6 +16,11 @@ interface ProfileInformationProps {
   rating: number | null;
   ratingCount: number | null;
   isUserProfile?: boolean;
+
+  // Props d’accessibilité
+  accessible?: boolean;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 }
 
 export default function ProfileInformation({
@@ -26,6 +31,9 @@ export default function ProfileInformation({
   // rating,
   // ratingCount,
   isUserProfile = false,
+  accessible,
+  accessibilityLabel,
+  accessibilityHint,
 }: ProfileInformationProps) {
   const theme = useTheme();
   const router = useRouter();
@@ -49,8 +57,20 @@ export default function ProfileInformation({
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      <ProfilePicture username={username} uri={profilePictureUrl} size="large" />
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+      accessible={accessible}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
+    >
+      <ProfilePicture
+        username={username}
+        uri={profilePictureUrl}
+        size="large"
+        accessible
+        accessibilityLabel={`${firstname ?? ''} ${lastname ?? ''} profile picture`}
+      />
+
       {firstname && lastname && (
         <Text
           style={[
@@ -61,19 +81,25 @@ export default function ProfileInformation({
               fontWeight: theme.typography.fontWeights.bold,
             },
           ]}
+          accessible
+          accessibilityRole="text"
         >
           {`${firstname} ${lastname}`}
         </Text>
       )}
+
       <Text
         style={{
           color: theme.colors.text.secondary,
           fontSize: theme.typography.fontSizes.md,
           fontWeight: theme.typography.fontWeights.medium,
         }}
+        accessible
+        accessibilityRole="text"
       >
         @{username}
       </Text>
+
       {/* {rating && ratingCount && (
         <StarRating style={styles.ratingContainer} rating={rating} count={ratingCount} />
       )} */}
@@ -92,6 +118,9 @@ export default function ProfileInformation({
             title="Edit Profile"
             leftIcon={<Edit color="white" size={16} />}
             onPress={() => router.push('/(profile)/edit-profile')}
+            accessibilityRole="button"
+            accessibilityLabel="Edit Profile"
+            accessibilityHint="Navigate to edit your profile information"
           />
 
           <Button
@@ -99,6 +128,9 @@ export default function ProfileInformation({
             title="Logout"
             onPress={handleLogout}
             leftIcon={<LogOut color="white" size={16} />}
+            accessibilityRole="button"
+            accessibilityLabel="Logout"
+            accessibilityHint="Log out of your account"
           />
         </View>
       )}

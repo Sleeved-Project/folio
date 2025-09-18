@@ -15,20 +15,31 @@ export default function CardMetaInfo({ number, set }: CardMetaInfoProps) {
 
   return (
     <>
-      <View style={styles.metaContainer}>
+      <View
+        style={styles.metaContainer}
+        accessible
+        accessibilityRole="text"
+        accessibilityLabel={`Set: ${set.name}, Card number: ${number}`}
+      >
         <View style={styles.leftContainer}>
           <View style={styles.setInfo}>
             <Image
               source={{ uri: set.imageSymbol }}
               style={styles.setSymbol}
               resizeMode="contain"
+              accessible
+              accessibilityLabel={`Set symbol for ${set.name}`}
             />
-            <Text style={[styles.setName, { color: theme.colors.text.secondary }]}>{set.name}</Text>
+            <Text style={[styles.setName, { color: theme.colors.text.secondary }]}>
+              {set.name}
+            </Text>
           </View>
         </View>
 
         <View>
-          <Text style={[styles.cardNumber, { color: theme.colors.text.primary }]}>#{number}</Text>
+          <Text style={[styles.cardNumber, { color: theme.colors.text.primary }]}>
+            #{number}
+          </Text>
         </View>
       </View>
 

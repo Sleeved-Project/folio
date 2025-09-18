@@ -1,25 +1,21 @@
 import React from 'react';
+import { StyleSheet, View, AccessibilityInfo } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ReviewStep from '../steps/ReviewStep';
 import { Stepper } from '../../../components/ui/stepper';
 import { steps } from '../reducer/useSellFormReducer';
-import { StyleSheet } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
+import { SellFormProvider, useSellForm } from '../context/SellFormContext';
 import PhotoStep from '../steps/PhotoStep';
 import CardInformationStep from '../steps/CardInformationStep';
 import PriceStep from '../steps/PriceStep';
-import { SellFormProvider, useSellForm } from '../context/SellFormContext';
 import GradeStep from '../steps/GradeStep';
+import ReviewStep from '../steps/ReviewStep';
 import { SellFormStepEnum } from '../types';
 import { useNavigation } from 'expo-router';
 import { useScanContext } from '../../scan/context/ScanContext';
 
 type BeforeRemoveEvent = {
-  data?: {
-    action?: {
-      type?: string;
-    };
-  };
+  data?: { action?: { type?: string } };
 };
 
 function SellFormContent() {
@@ -28,24 +24,16 @@ function SellFormContent() {
   const { stepIndex, dispatch } = useSellForm();
   const { clearScanData } = useScanContext();
 
-  const handleStepPress = (index: number) => {
-    if (index < stepIndex) {
-      dispatch({ type: 'GO_TO_STEP', payload: index });
-    }
-  };
-
-  // Clear scan data when navigating back from the sell form
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (e: BeforeRemoveEvent) => {
-      const actionType = e?.data?.action?.type;
-      // only clear on 'POP' (back), not on 'NAVIGATE' to a child screen (like scanner)
-      if (actionType === 'POP') {
-        clearScanData();
-      }
+      if (e?.data?.action?.type === 'POP') clearScanData();
     });
-
     return unsubscribe;
   }, [navigation, clearScanData]);
+
+  const handleStepPress = (index: number) => {
+    if (index < stepIndex) dispatch({ type: 'GO_TO_STEP', payload: index });
+  };
 
   const renderStep = () => {
     switch (stepIndex) {
@@ -64,10 +52,25 @@ function SellFormContent() {
     }
   };
 
+  React.useEffect(() => {
+    const currentStepLabel = steps[stepIndex];
+    AccessibilityInfo.announceForAccessibility(`Step ${stepIndex + 1}: ${currentStepLabel}`);
+  }, [stepIndex]);
+
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      <Stepper currentStep={stepIndex} steps={steps} onStepPress={handleStepPress} />
-      {renderStep()}
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+    >
+      <View
+        accessible
+        accessibilityRole="header"
+        accessibilityLabel={`Sell form, step ${stepIndex + 1} of ${steps.length}`}
+      >
+        <Stepper currentStep={stepIndex} steps={steps} onStepPress={handleStepPress} />
+      </View>
+      <View accessible accessibilityLabel={`Step content: ${steps[stepIndex]}`}>
+        {renderStep()}
+      </View>
     </SafeAreaView>
   );
 }

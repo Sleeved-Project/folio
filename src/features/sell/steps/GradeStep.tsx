@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import StepLayout from '../../../components/ui/multistepsform/StepLayout';
 import StepHeader from '../../../components/ui/multistepsform/StepHeader';
 import { useSellForm } from '../context/SellFormContext';
@@ -11,9 +12,7 @@ export default function GradeStep() {
   const handleCertificationGenerated = (certification: Certification) => {
     dispatch({
       type: 'UPDATE_DATA',
-      payload: {
-        certification,
-      },
+      payload: { certification },
     });
   };
 
@@ -27,16 +26,29 @@ export default function GradeStep() {
 
   return (
     <StepLayout onNext={onNext} onPrev={onPrev} showPrevButton={true}>
-      <StepHeader
-        title="Earn the sleeved certification"
-        description="Certify your card’s condition to gain credibility and attract more buyers."
-        infoField="3 certifications are included with the free plan."
-      />
+      <View
+        accessible
+        accessibilityRole="header"
+        accessibilityLabel="Certification step"
+      >
+        <StepHeader
+          title="Earn the sleeved certification"
+          description="Certify your card’s condition to gain credibility and attract more buyers."
+          infoField="3 certifications are included with the free plan."
+        />
+      </View>
 
-      <CertificationGenerator
-        onCertificationGenerated={handleCertificationGenerated}
-        existingCertification={formData.certification}
-      />
+      <View
+        accessible
+        accessibilityRole="none"
+        accessibilityLabel="Certification generator"
+        accessibilityHint="Contains controls to generate or view certification for the card"
+      >
+        <CertificationGenerator
+          onCertificationGenerated={handleCertificationGenerated}
+          existingCertification={formData.certification}
+        />
+      </View>
     </StepLayout>
   );
 }

@@ -13,20 +13,14 @@ function FolioItemStat({ label, value }: FolioItemStatProps) {
   const theme = useTheme();
 
   return (
-    <View style={styles.statItem}>
+    <View style={styles.statItem} accessible accessibilityRole="text" accessibilityLabel={`${label}: ${value}`}>
       <Text
-        style={[
-          styles.statLabel,
-          { color: theme.colors.text.tertiary, fontSize: theme.typography.fontSizes.xs },
-        ]}
+        style={[styles.statLabel, { color: theme.colors.text.tertiary, fontSize: theme.typography.fontSizes.xs }]}
       >
         {label}
       </Text>
       <Text
-        style={[
-          styles.statValue,
-          { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
-        ]}
+        style={[styles.statValue, { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md }]}
       >
         {value}
       </Text>
@@ -55,18 +49,27 @@ export default function FolioItem({ folio, onPress }: FolioItemProps) {
         },
       ]}
       onPress={() => onPress && onPress(folio.id)}
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel={`Folio ${folio.name}`}
+      accessibilityHint="Tap to view folio details and statistics"
     >
-      <View style={[styles.iconContainer, { borderRadius: theme.borderRadius.small }]}>
+      <View
+        style={[styles.iconContainer, { borderRadius: theme.borderRadius.small }]}
+        accessible
+        accessibilityRole="image"
+        accessibilityLabel={`Folio icon for ${folio.name}`}
+      >
         <FolioIcon iconPath={folio.image} size={80} />
       </View>
 
       <View style={styles.contentContainer}>
         <Text
-          style={[
-            styles.folioName,
-            { color: theme.colors.text.primary, fontSize: theme.typography.fontSizes.lg },
-          ]}
+          style={[styles.folioName, { color: theme.colors.text.primary, fontSize: theme.typography.fontSizes.lg }]}
           numberOfLines={1}
+          accessible
+          accessibilityRole="text"
+          accessibilityLabel={`Folio name: ${folio.name}`}
         >
           {folio.name}
         </Text>

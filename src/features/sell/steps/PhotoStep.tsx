@@ -1,4 +1,3 @@
-// ...existing code...
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { StepPhotoFormData, stepPhotoSchema } from '../schemas/sellFormSchema';
@@ -9,6 +8,7 @@ import FormPhotoPicker from '../../../components/ui/inputs/FormPhotoPicker';
 import { useSellForm } from '../context/SellFormContext';
 import { useScanContext } from '../../../features/scan/context/ScanContext';
 import { useRouter } from 'expo-router';
+import { View } from 'react-native';
 
 export default function PhotoStep() {
   const { dispatch, formData: defaultValues } = useSellForm();
@@ -51,33 +51,39 @@ export default function PhotoStep() {
 
   return (
     <StepLayout onNext={handleSubmit(onSubmit)}>
-      <StepHeader
-        title="Highlight your card"
-        description="Crisp photos of both sides help present your card in the best possible light."
-        infoField="* Required fields"
-      />
+      <View accessible accessibilityRole="header" accessibilityLabel="Photo step of the sell form">
+        <StepHeader
+          title="Highlight your card"
+          description="Crisp photos of both sides help present your card in the best possible light."
+          infoField="* Required fields"
+        />
+      </View>
 
-      <FormPhotoPicker
-        control={control}
-        name="rectoImage"
-        label="Front Side"
-        placeholder="Tap to take front side photo"
-        error={errors.rectoImage?.message}
-        isRequired
-        mode="identify-front-side"
-        onOpenScanner={openScanner}
-      />
+      <View accessible accessibilityLabel="Front side photo section" accessibilityHint="Contains front side photo picker">
+        <FormPhotoPicker
+          control={control}
+          name="rectoImage"
+          label="Front Side"
+          placeholder="Tap to take front side photo"
+          error={errors.rectoImage?.message}
+          isRequired
+          mode="identify-front-side"
+          onOpenScanner={openScanner}
+        />
+      </View>
 
-      <FormPhotoPicker
-        control={control}
-        name="versoImage"
-        label="Back Side"
-        placeholder="Tap to take back side photo"
-        error={errors.versoImage?.message}
-        isRequired
-        mode="identify-back-side"
-        onOpenScanner={openScanner}
-      />
+      <View accessible accessibilityLabel="Back side photo section" accessibilityHint="Contains back side photo picker">
+        <FormPhotoPicker
+          control={control}
+          name="versoImage"
+          label="Back Side"
+          placeholder="Tap to take back side photo"
+          error={errors.versoImage?.message}
+          isRequired
+          mode="identify-back-side"
+          onOpenScanner={openScanner}
+        />
+      </View>
     </StepLayout>
   );
 }

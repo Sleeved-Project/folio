@@ -24,7 +24,8 @@ export default function CreateFolioScreen() {
   const handleSave = useCallback(() => {
     createFolio.mutate(
       {
-        imageUrl: 'https://res.cloudinary.com/dlgw148r2/image/upload/v1752003117/icon-1_qrqwwg.png',
+        imageUrl:
+          'https://res.cloudinary.com/dlgw148r2/image/upload/v1752003117/icon-1_qrqwwg.png',
         name,
         cards: [],
       },
@@ -37,8 +38,13 @@ export default function CreateFolioScreen() {
   }, [createFolio, name, handleClose]);
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      <View style={styles.header}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+      accessible
+      accessibilityLabel="Create Folio Screen"
+      accessibilityHint="Create a new folio with a name and cards"
+    >
+      <View style={styles.header} accessible accessibilityLabel="Folio Name and Icon" accessibilityHint="View and edit the folio name">
         <FolioIcon size={80} />
         <View style={styles.nameInputContainer}>
           <FolioNameDisplay
@@ -51,22 +57,34 @@ export default function CreateFolioScreen() {
           />
         </View>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.content}>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.content}
+        accessible
+        accessibilityLabel="Card Placeholder Grid"
+        accessibilityHint="Displays a preview of cards in the folio"
+      >
         <CardPlaceholderGrid />
       </ScrollView>
-      <View style={[styles.buttonsContainer, { backgroundColor: theme.colors.background.primary }]}>
+
+      <View style={[styles.buttonsContainer, { backgroundColor: theme.colors.background.primary }]} accessible accessibilityLabel="Folio Action Buttons" accessibilityHint="Cancel or save the folio">
         <View style={styles.buttonRow}>
           <Button
             title="Cancel"
             variant="outline"
             onPress={handleClose}
             buttonStyle={[styles.button, styles.cancelButton]}
+            accessibilityLabel="Cancel"
+            accessibilityHint="Discard the folio and go back"
           />
           <Button
             title="Save"
             variant="primary"
             onPress={handleSave}
             buttonStyle={[styles.button, styles.saveButton]}
+            accessibilityLabel="Save"
+            accessibilityHint="Save the folio with the current name and cards"
           />
         </View>
       </View>
@@ -75,43 +93,14 @@ export default function CreateFolioScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    gap: 16,
-  },
-  nameInputContainer: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 16,
-  },
-  subtitle: {
-    fontSize: 16,
-    marginBottom: 32,
-  },
-  buttonsContainer: {
-    padding: 16,
-    paddingTop: 24,
-    borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  button: {
-    flex: 1,
-  },
-  cancelButton: {
-    marginRight: 6,
-  },
-  saveButton: {
-    marginLeft: 6,
-  },
+  container: { flex: 1 },
+  header: { flexDirection: 'row', alignItems: 'center', padding: 16, gap: 16 },
+  nameInputContainer: { flex: 1 },
+  content: { flex: 1, paddingHorizontal: 16 },
+  subtitle: { fontSize: 16, marginBottom: 32 },
+  buttonsContainer: { padding: 16, paddingTop: 24, borderTopWidth: 1, borderTopColor: '#f0f0f0' },
+  buttonRow: { flexDirection: 'row', gap: 12 },
+  button: { flex: 1 },
+  cancelButton: { marginRight: 6 },
+  saveButton: { marginLeft: 6 },
 });

@@ -33,27 +33,24 @@ function FormSelectInput<T extends FieldValues>({
   const [showModal, setShowModal] = useState(false);
 
   const optionsMap = useMemo(() => {
-    return options.reduce(
-      (acc, option) => {
-        acc[option.value] = option.label;
-        return acc;
-      },
-      {} as Record<string, string>
-    );
+    return options.reduce((acc, option) => {
+      acc[option.value] = option.label;
+      return acc;
+    }, {} as Record<string, string>);
   }, [options]);
 
   return (
     <View style={{ marginBottom: theme.spacing.md }}>
       <Text
-        style={[
-          {
-            fontSize: theme.typography.fontSizes.md,
-            fontWeight: theme.typography.fontWeights.medium,
-            color: theme.colors.text.primary,
-            marginBottom: theme.spacing.sm,
-            paddingLeft: theme.spacing.xs,
-          },
-        ]}
+        style={{
+          fontSize: theme.typography.fontSizes.md,
+          fontWeight: theme.typography.fontWeights.medium,
+          color: theme.colors.text.primary,
+          marginBottom: theme.spacing.sm,
+          paddingLeft: theme.spacing.xs,
+        }}
+        accessible
+        accessibilityRole="header"
       >
         {label}
         {isRequired && <Text style={{ color: theme.colors.danger }}> *</Text>}
@@ -77,6 +74,10 @@ function FormSelectInput<T extends FieldValues>({
               ]}
               onPress={() => setShowModal(true)}
               activeOpacity={0.7}
+              accessible
+              accessibilityRole="button"
+              accessibilityLabel={`${label} selector`}
+              accessibilityHint={`Tap to select ${label.toLowerCase()}`}
             >
               <Text
                 style={[
@@ -86,6 +87,7 @@ function FormSelectInput<T extends FieldValues>({
                     fontSize: theme.typography.fontSizes.md,
                   },
                 ]}
+                accessible={false} // Le Text est décrit par le bouton parent
               >
                 {optionsMap[value] || placeholder}
               </Text>
@@ -112,6 +114,8 @@ function FormSelectInput<T extends FieldValues>({
             marginLeft: theme.spacing.xs,
             fontSize: theme.typography.fontSizes.sm,
           }}
+          accessible
+          accessibilityRole="alert"
         >
           {error}
         </Text>

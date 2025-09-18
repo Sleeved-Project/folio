@@ -1,5 +1,4 @@
-import { View } from 'react-native';
-import { Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import ProfilePicture from '../../user/components/profile/ProfilePicture';
 
@@ -21,10 +20,29 @@ export default function TopSellerItem({
   const theme = useTheme();
 
   return (
-    <View key={id} style={styles.container}>
-      <ProfilePicture username={username} uri={profilePictureUrl} />
-      <Text style={[styles.name, { color: theme.colors.text.primary }]}>@{username}</Text>
-      <Text style={[styles.sales, { color: theme.colors.text.secondary }]}>
+    <View
+      key={id}
+      style={styles.container}
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel={`Top seller ${username}`}
+      accessibilityHint={`Rated ${rate ?? 'N/A'}, with ${sales} sales`}
+    >
+      <ProfilePicture username={username} uri={profilePictureUrl} size="medium" />
+      <Text
+        style={[styles.name, { color: theme.colors.text.primary }]}
+        accessible
+        accessibilityRole="text"
+        accessibilityLabel={`Username: ${username}`}
+      >
+        @{username}
+      </Text>
+      <Text
+        style={[styles.sales, { color: theme.colors.text.secondary }]}
+        accessible
+        accessibilityRole="text"
+        accessibilityLabel={`Rating: ${rate ?? 'N/A'}, Sales: ${sales}`}
+      >
         {rate ?? 'N/A'} - {sales} sales
       </Text>
     </View>

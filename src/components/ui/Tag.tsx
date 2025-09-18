@@ -18,6 +18,10 @@ export default function Tag({ label }: TagProps) {
           borderColor: theme.colors.border.light,
         },
       ]}
+      accessible
+      accessibilityRole="text"
+      accessibilityLabel={label}
+      accessibilityHint={`Tag: ${label}`}
     >
       <Text style={[styles.tagText, { color: theme.colors.text.secondary }]}>{label}</Text>
     </View>

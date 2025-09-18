@@ -25,6 +25,10 @@ export default function SetListDisplay({ set }: SetListDisplayProps) {
         onPress={() => {
           router.push({ pathname: `/set/${set.id}` });
         }}
+        accessible
+        accessibilityRole="button"
+        accessibilityLabel={`Open set ${set.name}`}
+        accessibilityHint="Navigates to the details of this set"
       >
         <View
           style={[
@@ -37,6 +41,9 @@ export default function SetListDisplay({ set }: SetListDisplayProps) {
               ...theme.shadows.small,
             },
           ]}
+          accessible
+          accessibilityRole="image"
+          accessibilityLabel={`Set logo of ${set.name}`}
         >
           <Image
             source={{ uri: set.imageLogo }}
@@ -49,7 +56,12 @@ export default function SetListDisplay({ set }: SetListDisplayProps) {
               },
             ]}
           />
-          <View style={styles.symbolBadge}>
+          <View
+            style={styles.symbolBadge}
+            accessible
+            accessibilityRole="image"
+            accessibilityLabel={`Symbol of ${set.name}`}
+          >
             <Image
               source={{ uri: set.imageSymbol }}
               resizeMethod="resize"
@@ -61,8 +73,21 @@ export default function SetListDisplay({ set }: SetListDisplayProps) {
               }}
             />
           </View>
-          <View style={styles.occurenceBadge}>
-            {set.nbOwned > 0 && <Text style={styles.badgeText}>{set.nbOwned}</Text>}
+          <View
+            style={styles.occurenceBadge}
+            accessible
+            accessibilityRole="summary"
+            accessibilityLabel={`You own ${set.nbOwned} cards from this set. Progress ${set.totalPercentage}%`}
+          >
+            {set.nbOwned > 0 && (
+              <Text
+                style={styles.badgeText}
+                accessible
+                accessibilityLabel={`Owned cards: ${set.nbOwned}`}
+              >
+                {set.nbOwned}
+              </Text>
+            )}
             <CircularProgressBar
               size={24}
               strokeWidth={6}

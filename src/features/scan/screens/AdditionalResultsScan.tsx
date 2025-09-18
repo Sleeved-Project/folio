@@ -17,9 +17,15 @@ export default function AdditionalResultsScan({ cards }: AdditionalResultsScanPr
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
       edges={['top', 'left', 'right']}
+      accessible
+      accessibilityLabel="Additional scan results"
+      accessibilityHint="Displays other cards that matched the scan"
     >
       <View style={styles.backButtonContainer}>
-        <BackButton />
+        <BackButton
+          accessibilityLabel="Go back"
+          accessibilityHint="Returns to the previous screen"
+        />
         <View style={styles.headerTitleContainer}>
           <Text
             style={[
@@ -30,12 +36,19 @@ export default function AdditionalResultsScan({ cards }: AdditionalResultsScanPr
                 fontWeight: theme.typography.fontWeights.semiBold,
               },
             ]}
+            accessible
+            accessibilityRole="header"
+            accessibilityLabel="Other results"
           >
             Other results
           </Text>
         </View>
       </View>
-      <View style={styles.listContainer}>
+      <View
+        style={styles.listContainer}
+        accessible
+        accessibilityLabel={`List of ${cards.length} scanned cards`}
+      >
         <CardListDisplay cards={cards} listOrigin={'scan'} />
       </View>
     </SafeAreaView>

@@ -8,6 +8,9 @@ interface DisclaimerBoxProps {
   type?: 'info' | 'warning' | 'success';
   containerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
+  accessible?: boolean;
+  accessibilityLabel?: string;
+  accessibilityRole?: 'text' | 'alert';
 }
 
 export default function DisclaimerBox({
@@ -16,6 +19,9 @@ export default function DisclaimerBox({
   icon,
   containerStyle,
   textStyle,
+  accessible,
+  accessibilityLabel,
+  accessibilityRole = 'text',
 }: DisclaimerBoxProps) {
   const theme = useTheme();
 
@@ -42,6 +48,9 @@ export default function DisclaimerBox({
         },
         containerStyle,
       ]}
+      accessible={accessible}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityRole={accessibilityRole}
     >
       {icon && <View style={styles.icon}>{icon}</View>}
       <Text style={[styles.text, { color: theme.colors.text.tertiary }, textStyle]}>{text}</Text>

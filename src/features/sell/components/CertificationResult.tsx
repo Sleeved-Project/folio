@@ -15,14 +15,15 @@ export default function CertificationResult({ certification }: CertificationResu
   const theme = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      accessible
+      accessibilityLabel="Certification details"
+    >
       <View
-        style={[
-          styles.rowContainer,
-          {
-            marginBottom: theme.spacing.md,
-          },
-        ]}
+        style={[styles.rowContainer, { marginBottom: theme.spacing.md }]}
+        accessible
+        accessibilityLabel={`Overall rating ${certification.globalRate}, label ${certification.label}`}
       >
         <Text
           style={{
@@ -32,14 +33,19 @@ export default function CertificationResult({ certification }: CertificationResu
             backgroundColor: theme.colors.background.tertiary,
             borderRadius: theme.borderRadius.round,
           }}
+          accessible
+          accessibilityLabel={`Global rating: ${certification.globalRate}`}
         >
           {certification.globalRate}
         </Text>
+
         <Text
           style={{
             fontSize: theme.typography.fontSizes.lg,
             fontWeight: theme.typography.fontWeights.semiBold,
           }}
+          accessible
+          accessibilityLabel={`Certification label: ${certification.label}`}
         >
           {certification.label}
         </Text>
@@ -53,6 +59,7 @@ export default function CertificationResult({ certification }: CertificationResu
             icon={<HashIcon size={20} color={theme.colors.text.primary} />}
             fullWidth
             accentBorder
+            accessibilityLabel={`Certification ID: ${certification.id}`}
           />
         )}
         {certification.certifiedAt && (
@@ -62,6 +69,7 @@ export default function CertificationResult({ certification }: CertificationResu
             icon={<CalendarCheckIcon size={20} color={theme.colors.text.primary} />}
             fullWidth
             accentBorder
+            accessibilityLabel={`Certification date: ${certification.certifiedAt}`}
           />
         )}
         {certification.centeringRate && (
@@ -70,6 +78,7 @@ export default function CertificationResult({ certification }: CertificationResu
             value={certification.centeringRate}
             icon={<BadgeCheckIcon size={20} color={theme.colors.text.primary} />}
             accentBorder
+            accessibilityLabel={`Centering rate: ${certification.centeringRate}`}
           />
         )}
         {certification.cornerRate && (
@@ -78,6 +87,7 @@ export default function CertificationResult({ certification }: CertificationResu
             value={certification.cornerRate}
             icon={<BadgeCheckIcon size={20} color={theme.colors.text.primary} />}
             accentBorder
+            accessibilityLabel={`Corner rate: ${certification.cornerRate}`}
           />
         )}
         {certification.edgeRate && (
@@ -86,6 +96,7 @@ export default function CertificationResult({ certification }: CertificationResu
             value={certification.edgeRate}
             icon={<BadgeCheckIcon size={20} color={theme.colors.text.primary} />}
             accentBorder
+            accessibilityLabel={`Edge rate: ${certification.edgeRate}`}
           />
         )}
         {certification.surfaceRate && (
@@ -94,27 +105,29 @@ export default function CertificationResult({ certification }: CertificationResu
             value={certification.surfaceRate}
             icon={<BadgeCheckIcon size={20} color={theme.colors.text.primary} />}
             accentBorder
+            accessibilityLabel={`Surface rate: ${certification.surfaceRate}`}
           />
         )}
       </InfoGrid>
 
       {certification.description && (
-        <FlavorTextBox text={certification.description} containerStyle={styles.descriptionBox} />
+        <FlavorTextBox
+          text={certification.description}
+          containerStyle={styles.descriptionBox}
+          accessible
+          accessibilityLabel={`Certification description: ${certification.description}`}
+        />
       )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-  },
+  container: { width: '100%' },
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  descriptionBox: {
-    marginTop: 0,
-  },
+  descriptionBox: { marginTop: 0 },
 });

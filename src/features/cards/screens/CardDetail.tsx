@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { useCardDetail } from '../hooks/queries/useCardsQuery';
 import { useCardFolioDelete } from '../../folio/hooks/mutations/useCardFolioDelete';
 import { useCardFolioUpdate } from '../../folio/hooks/mutations/useCardFolioUpdate';
@@ -11,12 +11,10 @@ import CardImageSection from '../components/CardImageSection';
 import { TabSwitcher, TabOption } from '../../../components/ui/TabSwitcher';
 import AnimatedDrawer from '../components/AnimatedDrawer';
 import { useDrawerAnimation } from '../hooks/useDrawerAnimation';
-import { ScrollView } from 'react-native-gesture-handler';
 import { useTheme } from '../../../theme/useTheme';
 import AddCardButton from '../components/AddCardButton';
 import { useCardFolioCollect } from '../../folio/hooks/mutations/useCardFolioCollect';
 import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
-// import CardAvailableOffers from '../components/CardAvailableOffers';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type TabType = 'details' | 'prices';
@@ -37,7 +35,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
     isLoading: isLoadingBasic,
     error: basicError,
     refetch: refetchCardDetail,
-  } = useCardDetail(cardId as string);
+  } = useCardDetail(cardId);
 
   const { toggleDrawer, gestureHandler, drawerAnimatedStyle, cardImageAnimatedStyle } =
     useDrawerAnimation();
@@ -46,7 +44,6 @@ export default function CardDetail({ cardId }: { cardId: string }) {
     setPreviousCardQuantity(basicCardData?.occurrence ?? 0);
   }, [cardId, basicCardData?.occurrence]);
 
-  // Reset scroll position when cardId changes
   useEffect(() => {
     scrollRef.current?.scrollTo({ y: 0, animated: false });
   }, [cardId]);
@@ -67,14 +64,10 @@ export default function CardDetail({ cardId }: { cardId: string }) {
           deleteCardFolio({ cardId });
           break;
         case quantity === 1 && previousCardQuantity === 0:
-          // POST only when transitioning from 0 to 1
           collectCard({ cardId });
           break;
         case quantity >= 1:
-          // PATCH for all other quantity changes
           updateCardFolio({ cardId, occurrence: quantity });
-          break;
-        default:
           break;
       }
 
@@ -83,24 +76,27 @@ export default function CardDetail({ cardId }: { cardId: string }) {
     [deleteCardFolio, collectCard, updateCardFolio, previousCardQuantity]
   );
 
-  if (isLoadingBasic) {
-    return <LoadingState />;
-  }
-
-  if (basicError || !basicCardData) {
+  if (isLoadingBasic) return <LoadingState />;
+  if (basicError || !basicCardData)
     return (
       <ErrorState
         message={basicError instanceof Error ? basicError.message : 'Failed to load card'}
       />
     );
-  }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}
+      accessible
+      accessibilityLabel={`Card Detail for card ${basicCardData.number}`}
+      accessibilityRole="summary"
+    >
       <CardImageSection
         imageUrl={basicCardData.imageLarge}
         cardAnimatedStyle={cardImageAnimatedStyle}
         onCardPress={toggleDrawer}
+        accessibilityLabel="Card image"
+        accessibilityHint="Double tap to open card drawer"
       />
 
       <AnimatedDrawer
@@ -113,12 +109,14 @@ export default function CardDetail({ cardId }: { cardId: string }) {
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
           style={[styles.detailContent, { paddingBottom: insets.bottom }]}
+          importantForAccessibility="yes"
         >
           <AddCardButton
             cardId={cardId}
             onQuantityChange={handleCollectionChange}
             initialQuantity={basicCardData.occurrence}
           />
+
           <TabSwitcher
             options={tabOptions}
             activeTabId={activeTab}
@@ -129,10 +127,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
           {activeTab === 'details' ? (
             <CardDetailedInfo cardId={cardId} />
           ) : (
-            <>
-              <CardPricesInfo cardId={cardId} />
-              {/* <CardAvailableOffers cardId={cardId} title="Available Offers" /> */}
-            </>
+            <CardPricesInfo cardId={cardId} />
           )}
         </ScrollView>
       </AnimatedDrawer>

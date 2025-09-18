@@ -9,6 +9,8 @@ interface SearchBarProps {
   setSearchQuery: (query: string) => void;
   searchPlaceholder?: string;
   showClearButton?: boolean;
+  accessibilityLabel?: string;
+  accessibilityHint?: string; 
 }
 
 export default function SearchBar({
@@ -16,6 +18,8 @@ export default function SearchBar({
   setSearchQuery,
   searchPlaceholder = 'name',
   showClearButton = true,
+  accessibilityLabel,
+  accessibilityHint,
 }: SearchBarProps) {
   const [inputValue, setInputValue] = useState(searchQuery);
   const theme = useTheme();
@@ -34,9 +38,11 @@ export default function SearchBar({
   }, [inputValue, debouncedSetSearchQuery]);
 
   useEffect(() => {
+    // Update the input value if the searchQuery changes externally
     setInputValue(searchQuery);
   }, [searchQuery]);
 
+  // Clear the input and reset the search query
   const handleClear = () => {
     setInputValue('');
     setSearchQuery('');
@@ -59,8 +65,15 @@ export default function SearchBar({
           height: 44,
         },
       ]}
+      accessible
+      accessibilityRole="search"
+      accessibilityLabel={accessibilityLabel || `Search bar: ${placeholderText}`}
+      accessibilityHint={accessibilityHint || 'Type your search query here'}
     >
-      <Search size={20} color={theme.colors.text.secondary} style={styles.searchIcon} />
+      {/* Search icon */}
+      <Search size={20} color={theme.colors.text.secondary} style={styles.searchIcon} accessible={false} />
+
+      {/* Input field */}
       <TextInput
         style={[
           styles.input,
@@ -75,9 +88,21 @@ export default function SearchBar({
         placeholderTextColor={theme.colors.text.secondary}
         returnKeyType="search"
         clearButtonMode="never"
+        accessible
+        accessibilityLabel={`Search input: ${placeholderText}`}
+        accessibilityHint="Enter text to search"
       />
+
+      {/* Clear button */}
       {showClearButton && inputValue.length > 0 && (
-        <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
+        <TouchableOpacity
+          onPress={handleClear}
+          style={styles.clearButton}
+          accessible
+          accessibilityRole="button"
+          accessibilityLabel="Clear search"
+          accessibilityHint="Clears the search input"
+        >
           <X size={18} color={theme.colors.text.secondary} />
         </TouchableOpacity>
       )}

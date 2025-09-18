@@ -38,6 +38,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const theme = useTheme();
 
+  // Détermine le style du bouton selon le variant
   const getButtonStyles = () => {
     switch (variant) {
       case 'secondary':
@@ -66,6 +67,7 @@ const Button: React.FC<ButtonProps> = ({
     }
   };
 
+  // Détermine la couleur du texte selon le variant
   const getTextStyles = () => {
     switch (variant) {
       case 'outline':
@@ -81,9 +83,9 @@ const Button: React.FC<ButtonProps> = ({
     }
   };
 
+  // Détermine la couleur du loader selon le variant
   const getLoadingColor = () => {
     if (loadingColor) return loadingColor;
-
     switch (variant) {
       case 'outline':
       case 'ghost':
@@ -97,23 +99,26 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <TouchableOpacity
-      style={[
-        styles.button,
-        getButtonStyles(),
-        (disabled || loading) && styles.disabledOpaque,
-        buttonStyle,
-      ]}
+      style={[styles.button, getButtonStyles(), (disabled || loading) && styles.disabledOpaque, buttonStyle]}
       disabled={disabled || loading}
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel={title}
+      accessibilityHint={
+        disabled
+          ? 'This button is disabled'
+          : loading
+          ? 'Loading, please wait'
+          : `Tap to ${title}`
+      }
       {...rest}
     >
       {loading ? (
         <ActivityIndicator color={getLoadingColor()} size="small" />
       ) : (
-        <View style={[styles.content]}>
+        <View style={styles.content}>
           {leftIcon && (
-            <View style={[styles.iconContainer, { marginRight: theme.spacing.md }]}>
-              {leftIcon}
-            </View>
+            <View style={[styles.iconContainer, { marginRight: theme.spacing.md }]}>{leftIcon}</View>
           )}
           <Text style={[styles.text, getTextStyles(), textStyle]}>{title}</Text>
         </View>

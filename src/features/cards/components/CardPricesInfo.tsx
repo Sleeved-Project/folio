@@ -14,20 +14,30 @@ interface CardPricesInfoProps {
 export default function CardPricesInfo({ cardId }: CardPricesInfoProps) {
   const { data: priceData, isLoading, error } = useCardPrices(cardId);
 
-  // Loading state
   if (isLoading) {
     return (
-      <View style={styles.placeholderContainer}>
+      <View
+        style={styles.placeholderContainer}
+        accessible
+        accessibilityRole="text"
+        accessibilityLabel="Loading price information"
+      >
         <Loader size={24} color="#999" />
         <Text style={styles.placeholderText}>Loading price information...</Text>
       </View>
     );
   }
 
-  // Error state
   if (error || !priceData) {
     return (
-      <View style={styles.placeholderContainer}>
+      <View
+        style={styles.placeholderContainer}
+        accessible
+        accessibilityRole="alert"
+        accessibilityLabel={`Error loading price information: ${
+          error instanceof Error ? error.message : 'Unknown error'
+        }`}
+      >
         <DollarSign size={24} color="#999" />
         <Text style={styles.placeholderText}>
           {error instanceof Error ? error.message : 'Unable to load price information at this time'}
@@ -36,10 +46,14 @@ export default function CardPricesInfo({ cardId }: CardPricesInfoProps) {
     );
   }
 
-  // No price data available
   if (!priceData.hasData) {
     return (
-      <View style={styles.placeholderContainer}>
+      <View
+        style={styles.placeholderContainer}
+        accessible
+        accessibilityRole="text"
+        accessibilityLabel="No price information available for this card"
+      >
         <DollarSign size={24} color="#999" />
         <Text style={styles.placeholderText}>No price information available for this card</Text>
       </View>
@@ -51,13 +65,19 @@ export default function CardPricesInfo({ cardId }: CardPricesInfoProps) {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+      accessible
+      accessibilityRole="list"
+      accessibilityLabel={`Price information for card ${cardId}, ${priceData.markets.length} markets`}
+    >
       {priceData.markets.map((market, marketIndex) => (
         <Accordion
           key={`market-${marketIndex}`}
           title={market.name}
           initiallyOpen
-          rightElement={<ExternalLink url={market.url} onPress={handleExternalLinkPress} />}
+          accessibilityLabel={`Market: ${market.name}, ${market.prices.length} price entries`} 
         >
           <View style={styles.priceList}>
             {market.prices.map((price, priceIndex) => (
@@ -68,13 +88,23 @@ export default function CardPricesInfo({ cardId }: CardPricesInfoProps) {
                 currency={price.currency}
                 isLast={priceIndex === market.prices.length - 1}
               />
+
             ))}
           </View>
+          <ExternalLink
+            url={market.url}
+            onPress={handleExternalLinkPress}
+            accessibilityLabel={`Open external link for ${market.name}`}
+          />
+
         </Accordion>
       ))}
       <DisclaimerBox
         text="Prices are for informational purposes only and may vary. Last updated today."
         containerStyle={{ marginBottom: 12 }}
+        accessible
+        accessibilityRole="text"
+        accessibilityLabel="Disclaimer: Prices are for informational purposes only and may vary. Last updated today."
       />
     </ScrollView>
   );

@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signupUsernameSchema, type SignupUsernameFormValues } from '../../schemas/authUserSchema';
@@ -51,14 +52,16 @@ export default function SignupUsernameStep({
       buttonDisabled={isSubmitting || isPending}
       buttonLoading={isSubmitting || isPending}
     >
-      <FormTextInput
-        control={control}
-        name="username"
-        placeholder="Enter your username"
-        error={usernameError || errors.username?.message}
-        returnKeyType="done"
-        containerStyle={{ marginBottom: 24, width: '100%' }}
-      />
+      <View accessible accessibilityLabel="Username input field">
+        <FormTextInput
+          control={control}
+          name="username"
+          placeholder="Enter your username"
+          error={usernameError || errors.username?.message}
+          returnKeyType="done"
+          containerStyle={{ marginBottom: 24, width: '100%' }}
+        />
+      </View>
     </AuthStepLayout>
   );
 }

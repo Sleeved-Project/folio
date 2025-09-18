@@ -24,6 +24,10 @@ export default function FolioIcon({ iconPath, size = 60 }: FolioIconProps) {
           borderColor: theme.colors.border.light,
         },
       ]}
+      accessible
+      accessibilityRole="image"
+      accessibilityLabel={`Folio icon`}
+      accessibilityHint="Represents the folio visually"
     >
       <Image
         source={iconPath ? { uri: iconPath } : defaultFolioIcon}

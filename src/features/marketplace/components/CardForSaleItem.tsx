@@ -20,7 +20,14 @@ export default function CardForSaleItem({ item }: AdItemProps) {
   const CARD_HEIGHT = CARD_WIDTH * 1.36;
 
   return (
-    <Pressable key={item.id} onPress={() => router.push(`/ad/${item.id}`)}>
+    <Pressable
+      key={item.id}
+      onPress={() => router.push(`/ad/${item.id}`)}
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel={`Card ${item.card?.name}, ${item.finish.label} finish, condition ${item.condition.label}, sold by ${item.seller.username}, price ${item.originalPrice} dollars`}
+      accessibilityHint="Tap to see card details"
+    >
       <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
         <View style={{ position: 'relative' }}>
           {imageError ? (
@@ -32,6 +39,9 @@ export default function CardForSaleItem({ item }: AdItemProps) {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
+              accessible
+              accessibilityRole="image"
+              accessibilityLabel="No image available"
             >
               <Text
                 style={{ color: theme.colors.text.secondary, textAlign: 'center', padding: 16 }}
@@ -48,6 +58,9 @@ export default function CardForSaleItem({ item }: AdItemProps) {
                 height: CARD_HEIGHT,
                 borderRadius: theme.borderRadius.medium,
               }}
+              accessible
+              accessibilityRole="image"
+              accessibilityLabel={`${item.card?.name} recto image`}
             />
           )}
 
@@ -57,6 +70,9 @@ export default function CardForSaleItem({ item }: AdItemProps) {
               bottom: 12,
               right: 12,
             }}
+            accessible
+            accessibilityRole="text"
+            accessibilityLabel={`Condition: ${item.condition.label}`}
           >
             <BadgeLabel label={item.condition.label} variant="light" />
           </View>
@@ -69,13 +85,28 @@ export default function CardForSaleItem({ item }: AdItemProps) {
             fontWeight: theme.typography.fontWeights.bold,
             marginTop: 8,
           }}
+          accessible
+          accessibilityRole="text"
+          accessibilityLabel={`Card name: ${item.card?.name}, finish: ${item.finish.label}`}
         >
           {item.card?.name} ({item.finish.label})
         </Text>
 
-        <Text style={[{ color: theme.colors.text.secondary }]}>{item.seller.username}</Text>
+        <Text
+          style={[{ color: theme.colors.text.secondary }]}
+          accessible
+          accessibilityRole="text"
+          accessibilityLabel={`Seller: ${item.seller.username}`}
+        >
+          {item.seller.username}
+        </Text>
 
-        <Text style={{ fontWeight: theme.typography.fontWeights.bold, paddingTop: 2 }}>
+        <Text
+          style={{ fontWeight: theme.typography.fontWeights.bold, paddingTop: 2 }}
+          accessible
+          accessibilityRole="text"
+          accessibilityLabel={`Price: ${item.originalPrice} dollars`}
+        >
           ${item.originalPrice}
         </Text>
       </View>

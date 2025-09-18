@@ -1,11 +1,14 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View, ViewProps } from 'react-native';
 import { useMemo } from 'react';
 import { useTheme } from '../../../../theme/useTheme';
 
-interface ProfilePictureProps {
+interface ProfilePictureProps extends ViewProps {
   username: string;
   uri: string | null;
   size?: 'small' | 'medium' | 'large';
+  accessible?: boolean;
+  accessibilityLabel?: string;
+  accessibilityRole?: 'image' | 'text' | 'button';
 }
 
 const sizeMap = {
@@ -14,13 +17,25 @@ const sizeMap = {
   large: 100,
 };
 
-export default function ProfilePicture({ username, uri, size = 'medium' }: ProfilePictureProps) {
+export default function ProfilePicture({
+  username,
+  uri,
+  size = 'medium',
+  accessible = true,
+  accessibilityLabel,
+  accessibilityRole = 'image',
+  ...rest
+}: ProfilePictureProps) {
   const theme = useTheme();
+
   const initials = useMemo(() => {
     return `${username[0] ?? ''}${username[1] ?? ''}`.toUpperCase();
   }, [username]);
 
   const dimension = sizeMap[size];
+
+  const generatedAccessibilityLabel =
+    accessibilityLabel || `${username}'s profile picture`;
 
   return (
     <View
@@ -34,15 +49,17 @@ export default function ProfilePicture({ username, uri, size = 'medium' }: Profi
           borderColor: theme.colors.border.light,
         },
       ]}
+      accessible={accessible}
+      accessibilityLabel={generatedAccessibilityLabel}
+      accessibilityRole={accessibilityRole}
+      {...rest}
     >
       {uri ? (
         <Image
           source={{ uri }}
-          style={[
-            styles.image,
-            { width: dimension, height: dimension, borderRadius: dimension / 2 },
-          ]}
+          style={[styles.image, { width: dimension, height: dimension, borderRadius: dimension / 2 }]}
           resizeMode="cover"
+          accessible={false}
         />
       ) : (
         <View
@@ -54,13 +71,12 @@ export default function ProfilePicture({ username, uri, size = 'medium' }: Profi
           ]}
         >
           <Text
-            style={[
-              {
-                color: theme.colors.text.black,
-                fontSize: dimension / 2.5, // Ajuste la taille des initiales
-                fontWeight: theme.typography.fontWeights.bold,
-              },
-            ]}
+            style={{
+              color: theme.colors.text.black,
+              fontSize: dimension / 2.5,
+              fontWeight: theme.typography.fontWeights.bold,
+            }}
+            accessible={false}
           >
             {initials}
           </Text>

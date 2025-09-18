@@ -11,15 +11,36 @@ export default function CardIdentifyResultPage() {
 
   if (!scanCardData) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}>
-        <Text style={{ color: theme.colors.text.primary }}>No scan data available</Text>
-        <Button title="Back to scan" onPress={() => router.push('/scan?mode=identify')} />
+      <View
+        style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}
+        accessible
+        accessibilityRole="alert"
+        accessibilityLabel="No scan data available"
+        accessibilityHint="Return to the scan screen to try scanning a card again"
+      >
+        <Text
+          style={{ color: theme.colors.text.primary }}
+          accessible
+          accessibilityRole="text"
+        >
+          No scan data available
+        </Text>
+        <Button
+          title="Back to scan"
+          onPress={() => router.push('/scan?mode=identify')}
+          accessibilityLabel="Back to scan"
+        />
       </View>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}
+      accessible
+      accessibilityLabel="Scan card results"
+      accessibilityHint="Displays the scanned card information and potential matching results"
+    >
       <CardIdentifyResult
         croppedImage={scanCardData.frontCardCroppedImage || ''}
         name={scanCardData.name || ''}

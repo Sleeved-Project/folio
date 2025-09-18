@@ -19,6 +19,12 @@ export default function StepHeader({ title, description, infoField }: StepHeader
           marginBottom: theme.spacing.lg,
         },
       ]}
+      accessible
+      accessibilityRole="summary"
+      accessibilityLabel={`${title}${description ? `, ${description}` : ''}${
+        infoField ? `, ${infoField}` : ''
+      }`}
+      accessibilityHint="Step header providing title, description, and additional information if available"
     >
       <Text
         style={[
@@ -29,6 +35,8 @@ export default function StepHeader({ title, description, infoField }: StepHeader
             marginBottom: theme.spacing.md,
           },
         ]}
+        accessible
+        accessibilityRole="header"
       >
         {title}
       </Text>
@@ -42,6 +50,7 @@ export default function StepHeader({ title, description, infoField }: StepHeader
               marginBottom: theme.spacing.md,
             },
           ]}
+          accessible
         >
           {description}
         </Text>
@@ -55,6 +64,7 @@ export default function StepHeader({ title, description, infoField }: StepHeader
               color: theme.colors.danger,
             },
           ]}
+          accessible
         >
           {infoField}
         </Text>

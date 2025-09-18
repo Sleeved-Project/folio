@@ -17,9 +17,7 @@ export default function CardInformationStep() {
   const { data: conditions, isLoading: conditionsLoading } = useCardConditions();
   const { data: finishes, isLoading: finishesLoading } = useCardFinishes();
 
-  const isLoading = useMemo(() => {
-    return conditionsLoading || finishesLoading;
-  }, [conditionsLoading, finishesLoading]);
+  const isLoading = useMemo(() => conditionsLoading || finishesLoading, [conditionsLoading, finishesLoading]);
 
   const {
     control,
@@ -44,14 +42,20 @@ export default function CardInformationStep() {
 
   return (
     <StepLayout onNext={handleSubmit(onSubmit)} onPrev={onPrev} showPrevButton={true}>
-      <StepHeader
-        title="Card informations"
-        description="Specify your card’s condition and finish: key details collectors are looking for!"
-        infoField="* Required fields"
-      />
+      <View accessible accessibilityRole="header" accessibilityLabel="Card information step">
+        <StepHeader
+          title="Card informations"
+          description="Specify your card’s condition and finish: key details collectors are looking for!"
+          infoField="* Required fields"
+        />
+      </View>
 
       {isLoading ? (
-        <View style={{ alignItems: 'center', marginTop: 40 }}>
+        <View
+          style={{ alignItems: 'center', marginTop: 40 }}
+          accessibilityRole="alert"
+          accessibilityLabel="Loading card conditions and finishes"
+        >
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
       ) : (

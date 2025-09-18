@@ -1,37 +1,18 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { Alert, SafeAreaView, KeyboardAvoidingView, Platform, View } from 'react-native';
+import { SafeAreaView, KeyboardAvoidingView, Platform, View, Text, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { getErrorMessage } from '../../../lib/errors/errors-utils';
+import { useTheme } from '../../../theme/useTheme';
 
 import SignupEmailStep from '../components/steps/SignupEmailStep';
 import SignupUsernameStep from '../components/steps/SignupUsernameStep';
 import SignupPasswordStep from '../components/steps/SignupPasswordStep';
-import { useTheme } from '../../../theme/useTheme';
 
-type EmailStepProps = {
-  onContinue: (email: string) => void;
-  defaultValue: string;
-};
-
-type UsernameStepProps = {
-  onContinue: (username: string) => void;
-  onBack: () => void;
-  defaultValue: string;
-};
-
-type PasswordStepProps = {
-  onSubmit: ({ password }: { password: string }) => Promise<void>;
-  onBack: () => void;
-  isLoading?: boolean;
-};
-
-type StepProps = EmailStepProps | UsernameStepProps | PasswordStepProps;
-
-type StepConfig = {
+type StepConfig<T> = {
   key: string;
-  component: React.ComponentType<StepProps>;
-  getProps: () => StepProps;
+  component: React.ComponentType<T>;
+  props: T;
 };
 
 const SignupScreen: React.FC = () => {
@@ -40,35 +21,27 @@ const SignupScreen: React.FC = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   const theme = useTheme();
   const router = useRouter();
 
-  const nextStep = useCallback(() => {
-    setStepIndex((i) => Math.min(i + 1, steps.length - 1));
-  }, []);
+  // Passe à l'étape suivante
+  const nextStep = useCallback(() => setStepIndex((i) => Math.min(i + 1, 2)), []);
+  // Retour à l'étape précédente
+  const prevStep = useCallback(() => setStepIndex((i) => Math.max(i - 1, 0)), []);
 
-  const prevStep = useCallback(() => {
-    setStepIndex((i) => Math.max(i - 1, 0));
-  }, []);
+  const handleEmailContinue = useCallback((email: string) => {
+    // @TODO: Validate email uniqueness with API call
+    setEmail(email);
+    nextStep();
+  }, [nextStep]);
 
-  const handleEmailContinue = useCallback(
-    (email: string) => {
-      // @TODO: Validate email uniqueness with API call
-      setEmail(email);
-      nextStep();
-    },
-    [nextStep]
-  );
-
-  const handleUsernameContinue = useCallback(
-    (username: string) => {
-      // @TODO: Validate username uniqueness with API call
-      setUsername(username);
-      nextStep();
-    },
-    [nextStep]
-  );
+  const handleUsernameContinue = useCallback((username: string) => {
+    // @TODO: Validate username uniqueness with API call
+    setUsername(username);
+    nextStep();
+  }, [nextStep]);
 
   const handlePasswordSubmit = useCallback(
     async ({ password }: { password: string }) => {
@@ -82,7 +55,8 @@ const SignupScreen: React.FC = () => {
           });
         }
       } catch (err) {
-        Alert.alert('Signup Failed', getErrorMessage(err));
+        const message = getErrorMessage(err);
+        setAlertMessage(message);
       } finally {
         setLoading(false);
       }
@@ -90,48 +64,40 @@ const SignupScreen: React.FC = () => {
     [signup, email, username, router]
   );
 
-  const steps: StepConfig[] = useMemo(
+  const steps: StepConfig<any>[] = useMemo(
     () => [
       {
         key: 'email',
-        component: SignupEmailStep as React.ComponentType<StepProps>,
-        getProps: (): EmailStepProps => ({
+        component: SignupEmailStep,
+        props: {
           onContinue: handleEmailContinue,
           defaultValue: email,
-        }),
+        },
       },
       {
         key: 'username',
-        component: SignupUsernameStep as React.ComponentType<StepProps>,
-        getProps: (): UsernameStepProps => ({
+        component: SignupUsernameStep,
+        props: {
           onContinue: handleUsernameContinue,
           onBack: prevStep,
           defaultValue: username,
-        }),
+        },
       },
       {
         key: 'password',
-        component: SignupPasswordStep as React.ComponentType<StepProps>,
-        getProps: (): PasswordStepProps => ({
+        component: SignupPasswordStep,
+        props: {
           onSubmit: handlePasswordSubmit,
           onBack: prevStep,
           isLoading,
-        }),
+        },
       },
     ],
-    [
-      email,
-      username,
-      isLoading,
-      handleEmailContinue,
-      handleUsernameContinue,
-      handlePasswordSubmit,
-      prevStep,
-    ]
+    [email, username, isLoading, handleEmailContinue, handleUsernameContinue, handlePasswordSubmit, prevStep]
   );
 
   const StepComponent = steps[stepIndex].component;
-  const stepProps = steps[stepIndex].getProps();
+  const stepProps = steps[stepIndex].props;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background.primary }}>
@@ -140,7 +106,16 @@ const SignupScreen: React.FC = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <View style={{ flex: 1 }}>
-          <StepComponent {...stepProps} />
+          <StepComponent {...(stepProps as any)} />
+          {/* Texte invisible pour alertes */}
+          {alertMessage ? (
+            <Text
+              style={{ position: 'absolute', height: 0, width: 0 }}
+              accessibilityLiveRegion="polite"
+            >
+              {alertMessage}
+            </Text>
+          ) : null}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

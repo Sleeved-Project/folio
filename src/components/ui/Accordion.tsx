@@ -11,7 +11,6 @@ import {
 import { ChevronDown, ChevronUp } from 'lucide-react-native';
 import { useTheme } from '../../theme/useTheme';
 
-// Enable LayoutAnimation on Android
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
 }
@@ -21,6 +20,7 @@ interface AccordionProps {
   children: React.ReactNode;
   initiallyOpen?: boolean;
   rightElement?: React.ReactNode;
+  accessibilityLabel?: string;
 }
 
 export default function Accordion({
@@ -28,6 +28,7 @@ export default function Accordion({
   children,
   initiallyOpen = false,
   rightElement,
+  accessibilityLabel,
 }: AccordionProps) {
   const [isOpen, setIsOpen] = useState(initiallyOpen);
   const theme = useTheme();
@@ -52,6 +53,10 @@ export default function Accordion({
         style={styles.headerContainer}
         onPress={toggleAccordion}
         activeOpacity={0.7}
+        accessible
+        accessibilityRole="button"
+        accessibilityState={{ expanded: isOpen }}
+        accessibilityLabel={accessibilityLabel || title}
       >
         <View style={styles.titleContainer}>
           <Text style={[styles.title, { color: theme.colors.text.primary }]}>{title}</Text>
@@ -61,14 +66,11 @@ export default function Accordion({
             <ChevronDown size={20} color={theme.colors.text.secondary} />
           )}
         </View>
-
         {rightElement && <View style={styles.rightElement}>{rightElement}</View>}
       </TouchableOpacity>
 
       {isOpen && (
-        <View style={[styles.content, { borderTopColor: theme.colors.border.light }]}>
-          {children}
-        </View>
+        <View style={[styles.content, { borderTopColor: theme.colors.border.light }]}>{children}</View>
       )}
     </View>
   );

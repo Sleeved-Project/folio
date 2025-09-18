@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import StepLayout from '../../../components/ui/multistepsform/StepLayout';
 import StepHeader from '../../../components/ui/multistepsform/StepHeader';
 import { useTheme } from '../../../theme/useTheme';
@@ -58,44 +59,78 @@ export default function ReviewStep() {
       isPrevDisabled={isPending}
       isNextDisabled={isPending}
     >
-      <StepHeader
-        title="Ready to go?"
-        description="Make sure everything looks good before publishing. A clean listing builds trust."
-      />
-      <ReviewSectionLayout title="Card photos" isEditable hasSeparator onEdit={() => onEditStep(0)}>
-        <ReviewItem label="Recto" imageUri={formData.rectoImage} />
-        <ReviewItem label="Verso" imageUri={formData.versoImage} />
-      </ReviewSectionLayout>
-      <ReviewSectionLayout
-        title="Card informations"
-        isEditable
-        hasSeparator
-        onEdit={() => onEditStep(1)}
-        containerStyle={{ marginTop: theme.spacing.lg }}
+      <View accessible accessibilityRole="header" accessibilityLabel="Review your listing before publishing">
+        <StepHeader
+          title="Ready to go?"
+          description="Make sure everything looks good before publishing. A clean listing builds trust."
+        />
+      </View>
+
+      <View
+        accessible
+        accessibilityRole="summary"
+        accessibilityLabel="Card photos section"
+        accessibilityHint="Review the front and back images of your card"
       >
-        <ReviewItem label="Card’s condition" textValue={formData.condition} />
-        <ReviewItem label="Card’s finish" textValue={formData.finish} />
-      </ReviewSectionLayout>
-      <ReviewSectionLayout
-        title="Card price"
-        isEditable
-        hasSeparator
-        onEdit={() => onEditStep(2)}
-        containerStyle={{ marginTop: theme.spacing.lg }}
+        <ReviewSectionLayout title="Card photos" isEditable hasSeparator onEdit={() => onEditStep(0)}>
+          <ReviewItem label="Recto" imageUri={formData.rectoImage} />
+          <ReviewItem label="Verso" imageUri={formData.versoImage} />
+        </ReviewSectionLayout>
+      </View>
+
+      <View
+        accessible
+        accessibilityRole="summary"
+        accessibilityLabel="Card informations section"
+        accessibilityHint="Review the condition and finish of your card"
       >
-        <ReviewItem label="Your price" textValue={`${formData.price} €`} />
-      </ReviewSectionLayout>
-      {formData.certification && (
+        <ReviewSectionLayout
+          title="Card informations"
+          isEditable
+          hasSeparator
+          onEdit={() => onEditStep(1)}
+          containerStyle={{ marginTop: theme.spacing.lg }}
+        >
+          <ReviewItem label="Card’s condition" textValue={formData.condition} />
+          <ReviewItem label="Card’s finish" textValue={formData.finish} />
+        </ReviewSectionLayout>
+      </View>
+
+      <View
+        accessible
+        accessibilityRole="summary"
+        accessibilityLabel="Card price section"
+        accessibilityHint="Review the price you have set for your card"
+      >
         <ReviewSectionLayout
           title="Card Certification"
           isEditable
-          onEdit={() => onEditStep(3)}
+          hasSeparator
+          onEdit={() => onEditStep(2)}
           containerStyle={{ marginTop: theme.spacing.lg }}
         >
-          <ReviewItem label="Grade number" textValue={formData.certification.id} />
-          <ReviewItem label="Global rate" textValue={formData.certification.globalRate} />
-          <ReviewItem label="Grade label" textValue={formData.certification.label} />
+          <ReviewItem label="Your price" textValue={`${formData.price} €`} />
         </ReviewSectionLayout>
+      </View>
+
+      {formData.certification && (
+        <View
+          accessible
+          accessibilityRole="summary"
+          accessibilityLabel="Card certification section"
+          accessibilityHint="Review the certification details of your card"
+        >
+          <ReviewSectionLayout
+            title="Card Certification"
+            isEditable
+            onEdit={() => onEditStep(3)}
+            containerStyle={{ marginTop: theme.spacing.lg }}
+          >
+            <ReviewItem label="Grade number" textValue={formData.certification.id} />
+            <ReviewItem label="Global rate" textValue={formData.certification.globalRate} />
+            <ReviewItem label="Grade label" textValue={formData.certification.label} />
+          </ReviewSectionLayout>
+        </View>
       )}
     </StepLayout>
   );

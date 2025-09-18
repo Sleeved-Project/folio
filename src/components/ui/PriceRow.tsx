@@ -20,12 +20,15 @@ export default function PriceRow({ type, value, currency = 'USD', isLast = false
         { borderBottomColor: theme.colors.border.light },
         isLast && styles.lastRow,
       ]}
+      accessible
+      accessibilityRole="text"
+      accessibilityLabel={`${type}: ${value} ${currency}`}
     >
       <View style={styles.typeContainer}>
         {currency === 'EUR' ? (
-          <Euro size={16} color={theme.colors.success} />
+          <Euro size={16} color={theme.colors.success} accessible={false} />
         ) : (
-          <DollarSign size={16} color={theme.colors.success} />
+          <DollarSign size={16} color={theme.colors.success} accessible={false} />
         )}
         <Text style={[styles.type, { color: theme.colors.text.primary }]}>{type}</Text>
       </View>

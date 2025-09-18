@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { StepPriceFormData, stepPriceSchema } from '../schemas/sellFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -34,24 +35,40 @@ export default function PriceStep() {
 
   return (
     <StepLayout onNext={handleSubmit(onSubmit)} onPrev={onPrev} showPrevButton={true}>
-      <StepHeader
-        title="Set your price"
-        description="Choose a fair price to attract buyers while giving your card the value it deserves."
-        infoField="* Required fields"
-      />
+      <View accessible accessibilityRole="header" accessibilityLabel="Set your price step">
+        <StepHeader
+          title="Set your price"
+          description="Choose a fair price to attract buyers while giving your card the value it deserves."
+          infoField="* Required fields"
+        />
+      </View>
 
-      <PriceEstimation />
+      <View
+        accessible
+        accessibilityRole="summary"
+        accessibilityLabel="Price estimation section"
+        accessibilityHint="Shows the suggested price based on market data"
+      >
+        <PriceEstimation />
+      </View>
 
-      <FormTextInput
-        control={control}
-        name="price"
-        isRequired
-        label="Card's price"
-        placeholder="0.00"
-        inputType="numeric"
-        rightIcon={<EuroIcon size={22} color={theme.colors.text.secondary} />}
-        error={errors.price?.message}
-      />
+      <View
+        accessible
+        accessibilityRole="adjustable"
+        accessibilityLabel="Price input field"
+        accessibilityHint="Enter the price you want to set for your card"
+      >
+        <FormTextInput
+          control={control}
+          name="price"
+          isRequired
+          label="Card's price"
+          placeholder="0.00"
+          inputType="numeric"
+          rightIcon={<EuroIcon size={22} color={theme.colors.text.secondary} />}
+          error={errors.price?.message}
+        />
+      </View>
     </StepLayout>
   );
 }

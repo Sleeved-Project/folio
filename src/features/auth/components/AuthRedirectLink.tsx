@@ -20,7 +20,13 @@ const AuthRedirectLink: React.FC<AuthRedirectLinkProps> = ({ type, containerStyl
   };
 
   return (
-    <TouchableOpacity style={[styles.container, containerStyle]} onPress={handlePress}>
+    <TouchableOpacity
+      style={[styles.container, containerStyle]}
+      onPress={handlePress}
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel={type === 'signup' ? 'Sign up link' : 'Sign in link'}
+    >
       <Text style={[styles.text, { color: theme.colors.text.secondary }]}>
         {type === 'signup' ? "Don't have an account? " : 'Already have an account? '}
         <Text style={[styles.boldText, { color: theme.colors.primary }]}>

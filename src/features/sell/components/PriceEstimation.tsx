@@ -10,7 +10,10 @@ export default function PriceEstimation() {
   const { data: estimatedPrice, isLoading, error } = useEstimatedPrice(formData);
 
   return (
-    <View>
+    <View
+      accessible
+      accessibilityLabel="Price estimation section"
+    >
       <Text
         style={[
           {
@@ -19,13 +22,21 @@ export default function PriceEstimation() {
             marginBottom: theme.spacing.md,
           },
         ]}
+        accessible
+        accessibilityRole="text"
+        accessibilityLabel="Information: Based on recent sales and your card’s condition, this price helps you stay competitive and improve your chances of a quick sale"
       >
         Based on recent sales and your card’s condition, this price helps you stay competitive and
         improve your chances of a quick sale
       </Text>
 
       {isLoading && (
-        <View style={styles.container}>
+        <View
+          style={styles.container}
+          accessible
+          accessibilityRole="alert"
+          accessibilityLabel="Price calculation in progress"
+        >
           <ActivityIndicator size="large" color={theme.colors.primary} />
           <Text
             style={[
@@ -36,6 +47,9 @@ export default function PriceEstimation() {
                 textAlign: 'center',
               },
             ]}
+            accessible
+            accessibilityRole="text"
+            accessibilityLabel="Calculating price"
           >
             Calculating price...
           </Text>
@@ -52,6 +66,9 @@ export default function PriceEstimation() {
               marginBottom: theme.spacing.md,
             },
           ]}
+          accessible
+          accessibilityRole="alert"
+          accessibilityLabel="Price unavailable due to an error"
         >
           Price unavailable
         </Text>
@@ -68,6 +85,9 @@ export default function PriceEstimation() {
               marginBottom: theme.spacing.md,
             },
           ]}
+          accessible
+          accessibilityRole="text"
+          accessibilityLabel={`Estimated price: ${estimatedPrice}`}
         >
           {estimatedPrice}
         </Text>

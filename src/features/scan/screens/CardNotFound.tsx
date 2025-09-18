@@ -15,7 +15,15 @@ export default function CardNotFound({ visible, setIsVisible }: CardNotFoundProp
   const theme = useTheme();
 
   return (
-    <Modal visible={visible} transparent={false} animationType="fade">
+    <Modal
+      visible={visible}
+      transparent={false}
+      animationType="fade"
+      accessible
+      accessibilityViewIsModal
+      accessibilityLabel="Card not found modal"
+      accessibilityHint="Informs that no matching card was found and allows scanning again"
+    >
       <SafeAreaView style={styles.safeAreaView}>
         <LinearGradient
           colors={['black', theme.colors.background.primary]}
@@ -25,9 +33,16 @@ export default function CardNotFound({ visible, setIsVisible }: CardNotFoundProp
           <Image
             source={cardVerso}
             style={[styles.image, { borderRadius: theme.borderRadius.medium }]}
+            accessible
+            accessibilityLabel="Card back image"
           />
-          <View style={styles.actionContainer}>
-            <Text style={[styles.text, { color: theme.colors.text.primary }]}>
+          <View style={styles.actionContainer} accessible accessibilityLabel="No card match found message">
+            <Text
+              style={[styles.text, { color: theme.colors.text.primary }]}
+              accessible
+              accessibilityRole="alert"
+              accessibilityLabel="Oops, no card match found!"
+            >
               Oops no card match found!
             </Text>
             <Button
@@ -36,6 +51,8 @@ export default function CardNotFound({ visible, setIsVisible }: CardNotFoundProp
               onPress={() => setIsVisible(false)}
               buttonStyle={styles.actionButton}
               textStyle={{ color: theme.colors.text.primary }}
+              accessibilityLabel="Scan again"
+              accessibilityHint="Closes this modal and allows you to scan the card again"
             />
           </View>
         </LinearGradient>

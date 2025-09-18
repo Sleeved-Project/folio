@@ -8,9 +8,10 @@ interface ExternalLinkProps {
   label?: string;
   onPress?: (url: string) => void;
   color?: string;
+  accessibilityLabel?: string;
 }
 
-export default function ExternalLink({ url, label = 'View', onPress, color }: ExternalLinkProps) {
+export default function ExternalLink({ url, label = 'View', onPress, color, accessibilityLabel }: ExternalLinkProps) {
   const theme = useTheme();
   const linkColor = color || theme.colors.primary;
 
@@ -21,7 +22,13 @@ export default function ExternalLink({ url, label = 'View', onPress, color }: Ex
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={handlePress}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={handlePress}
+      accessible
+      accessibilityRole="link"
+      accessibilityLabel={accessibilityLabel || label}
+    >
       <ExternalLinkIcon size={16} color={linkColor} />
       <Text style={[styles.label, { color: linkColor }]}>{label}</Text>
     </TouchableOpacity>

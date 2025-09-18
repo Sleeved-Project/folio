@@ -23,7 +23,13 @@ export default function ReviewSectionLayout({
   const theme = useTheme();
 
   return (
-    <View style={[containerStyle]}>
+    <View
+      style={[containerStyle]}
+      accessible
+      accessibilityRole="summary"
+      accessibilityLabel={title}
+      accessibilityHint={isEditable ? 'This section can be edited' : undefined}
+    >
       <View style={[{ marginBottom: theme.spacing.md }, styles.headerRow]}>
         <Text
           style={{
@@ -31,16 +37,25 @@ export default function ReviewSectionLayout({
             fontWeight: theme.typography.fontWeights.semiBold,
             color: theme.colors.text.primary,
           }}
+          accessible
+          accessibilityRole="header"
         >
           {title}
         </Text>
         {isEditable && (
-          <TouchableOpacity onPress={onEdit}>
+          <TouchableOpacity
+            onPress={onEdit}
+            accessible
+            accessibilityRole="button"
+            accessibilityLabel={`Edit ${title}`}
+            accessibilityHint={`Tap to edit the ${title} section`}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <PencilIcon color={theme.colors.text.primary} size={20} />
           </TouchableOpacity>
         )}
       </View>
-      <View>{children}</View>
+      <View accessible>{children}</View>
       {hasSeparator && (
         <View
           style={{
@@ -48,6 +63,7 @@ export default function ReviewSectionLayout({
             backgroundColor: theme.colors.border.light,
             marginTop: theme.spacing.md,
           }}
+          accessibilityRole="none"
         />
       )}
     </View>

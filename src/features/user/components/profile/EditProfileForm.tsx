@@ -57,6 +57,9 @@ export default function EditProfileForm({ userData }: EditProfileFormProps) {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={{ flex: 1 }}
+        accessible
+        accessibilityLabel="Edit Profile Form"
+        accessibilityHint="Edit your personal information and save changes"
       >
         <ScrollView style={styles.container}>
           <Text
@@ -68,6 +71,8 @@ export default function EditProfileForm({ userData }: EditProfileFormProps) {
                 fontWeight: theme.typography.fontWeights.medium,
               },
             ]}
+            accessible
+            accessibilityRole="header"
           >
             Personal Informations
           </Text>
@@ -122,12 +127,18 @@ export default function EditProfileForm({ userData }: EditProfileFormProps) {
             variant="outline"
             onPress={() => router.back()}
             buttonStyle={[styles.button]}
+            accessibilityRole="button"
+            accessibilityLabel="Cancel"
+            accessibilityHint="Discard changes and go back"
           />
           <Button
             title="Save Changes"
             onPress={handleSubmit(onSubmit)}
             disabled={!isDirty || isPending}
             buttonStyle={[styles.button]}
+            accessibilityRole="button"
+            accessibilityLabel="Save Changes"
+            accessibilityHint="Save your edited profile information"
           />
         </View>
       </View>
@@ -136,16 +147,9 @@ export default function EditProfileForm({ userData }: EditProfileFormProps) {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  sectionTitle: {
-    paddingBottom: 16,
-  },
+  root: { flex: 1 },
+  container: { flex: 1, padding: 16 },
+  sectionTitle: { paddingBottom: 16 },
   buttonsContainer: {
     position: 'absolute',
     bottom: 0,
@@ -161,14 +165,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 5,
   },
-  buttonRow: {
-    flexDirection: 'row',
-    gap: 12,
-    alignItems: 'stretch',
-  },
-  button: {
-    flex: 1,
-    flexBasis: 0,
-    minWidth: 0,
-  },
+  buttonRow: { flexDirection: 'row', gap: 12, alignItems: 'stretch' },
+  button: { flex: 1, flexBasis: 0, minWidth: 0 },
 });

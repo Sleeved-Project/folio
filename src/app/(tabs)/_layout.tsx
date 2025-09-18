@@ -56,8 +56,12 @@ export default function TabLayout() {
             return (
               <TouchableOpacity
                 onPress={() => router.push('/(scan)/scan')}
-                style={[styles.scanButtonContainer]}
+                style={styles.scanButtonContainer}
                 activeOpacity={0.85}
+                accessible
+                accessibilityRole="button"
+                accessibilityLabel="Scan a card"
+                accessibilityHint="Opens the card scanner to scan a new card"
               >
                 <View
                   style={[
@@ -110,7 +114,6 @@ export default function TabLayout() {
           headerTitle: () => <TabHeader title="Card details" displayBackButton={true} />,
         }}
       />
-
       <Tabs.Screen
         name="set/[setId]"
         options={{

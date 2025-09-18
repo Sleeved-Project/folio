@@ -21,11 +21,24 @@ export default function CardAvailableOfferItem({
 }: CardAvailableOfferItemProps) {
   const theme = useTheme();
 
+  const accessibilityLabel = `${title}, sold by ${seller}, priced at $${price}, condition: ${condition}`;
+
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}
+      accessible
+      accessibilityLabel={accessibilityLabel}
+      accessibilityRole="summary"
+    >
       <View style={styles.imageContainer}>
         {pictureUrl ? (
-          <Image source={{ uri: pictureUrl }} style={styles.image} />
+          <Image
+            source={{ uri: pictureUrl }}
+            style={styles.image}
+            accessible
+            accessibilityRole="image"
+            accessibilityLabel={`Image of ${title}`}
+          />
         ) : (
           <View
             style={[
@@ -37,6 +50,9 @@ export default function CardAvailableOfferItem({
                 borderRadius: theme.borderRadius.small,
               },
             ]}
+            accessible
+            accessibilityRole="image"
+            accessibilityLabel="No image available"
           >
             <CameraOff color={theme.colors.text.secondary} />
           </View>

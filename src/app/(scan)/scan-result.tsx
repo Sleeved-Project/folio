@@ -10,7 +10,12 @@ export default function ScanResult() {
   const parsedCards = cards ? JSON.parse(cards as string) : [];
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}
+      accessible
+      accessibilityLabel="Scan results screen"
+      accessibilityHint="Displays the results of the card scan, highlighting matched cards"
+    >
       <CardScanResult
         resultType={resultType as 'success' | 'fail'}
         cards={parsedCards}

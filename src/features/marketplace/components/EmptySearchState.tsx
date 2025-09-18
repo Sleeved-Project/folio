@@ -9,6 +9,8 @@ interface EmptySearchStateProps {
   icon: React.ReactNode;
   title: string;
   message: string;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 }
 
 export function EmptySearchState({
@@ -18,40 +20,28 @@ export function EmptySearchState({
   icon,
   title,
   message,
+  accessibilityLabel,
+  accessibilityHint,
 }: EmptySearchStateProps) {
   const theme = useTheme();
 
-  if (isLoading) {
-    return (
-      <View style={styles.container}>
-        {icon}
-        <Text
-          style={[
-            styles.text,
-            {
-              color: theme.colors.text.primary,
-              fontSize: theme.typography.fontSizes.lg,
-              fontWeight: theme.typography.fontWeights.bold,
-            },
-          ]}
-        >
-          {title}
-        </Text>
-        <Text
-          style={[
-            styles.text,
-            { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
-          ]}
-        >
-          {error ? String(error) : query.trim() ? message : message}
-        </Text>
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.container}>
-      {icon}
+    <View
+      style={styles.container}
+      accessible
+      accessibilityRole="alert"
+      accessibilityLabel={accessibilityLabel ?? (error ? `Error: ${error}` : title)}
+      accessibilityHint={accessibilityHint ?? (error ? 'An error occurred during search' : message)}
+    >
+      {icon && (
+        <View
+          accessible
+          accessibilityRole="image"
+          accessibilityLabel="Search illustration"
+        >
+          {icon}
+        </View>
+      )}
       <View style={styles.content}>
         <Text
           style={[
@@ -62,6 +52,9 @@ export function EmptySearchState({
               fontWeight: theme.typography.fontWeights.bold,
             },
           ]}
+          accessible
+          accessibilityRole="header"
+          accessibilityLabel={title}
         >
           {title}
         </Text>
@@ -70,6 +63,9 @@ export function EmptySearchState({
             styles.text,
             { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
           ]}
+          accessible
+          accessibilityRole="text"
+          accessibilityLabel={error ? String(error) : message}
         >
           {error ? String(error) : query.trim() ? message : message}
         </Text>

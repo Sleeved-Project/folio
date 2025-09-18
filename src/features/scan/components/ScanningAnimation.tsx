@@ -19,23 +19,28 @@ const SCANLINE_HEIGHT = 3;
 export default function ScanningAnimation() {
   const [measuredHeight, setMeasuredHeight] = useState(0);
 
-  // core animated values
   const scanA = useSharedValue(0);
   const scanB = useSharedValue(1);
-  const shimmerX = useSharedValue(-1); // -1..1 sweeping
+  const shimmerX = useSharedValue(-1);
   const pulse = useSharedValue(1);
   const flicker = useSharedValue(0); // small occasional flicker
 
-  // start continuous animations once we know the container height
   useEffect(() => {
     if (!measuredHeight) return;
     const maxY = Math.max(0, measuredHeight - SCANLINE_HEIGHT);
 
-    // layered opposing scanlines for depth
-    scanA.value = withRepeat(withTiming(maxY, { duration: 1400, easing: Easing.linear }), -1, true);
-    scanB.value = withRepeat(withTiming(0, { duration: 1600, easing: Easing.linear }), -1, true);
+    scanA.value = withRepeat(
+      withTiming(maxY, { duration: 1400, easing: Easing.linear }),
+      -1,
+      true
+    );
 
-    // shimmer sweeper: sweep then jump back
+    scanB.value = withRepeat(
+      withTiming(0, { duration: 1600, easing: Easing.linear }),
+      -1,
+      true
+    );
+
     shimmerX.value = withRepeat(
       withSequence(
         withTiming(1.2, { duration: 900, easing: Easing.out(Easing.quad) }),
@@ -45,7 +50,6 @@ export default function ScanningAnimation() {
       false
     );
 
-    // breathing vignette
     pulse.value = withRepeat(
       withSequence(
         withTiming(1.04, { duration: 900, easing: Easing.out(Easing.ease) }),
@@ -55,10 +59,9 @@ export default function ScanningAnimation() {
       true
     );
 
-    // subtle random flicker (kick flicker value every 1.8s)
     flicker.value = withRepeat(
       withSequence(
-        withTiming(1, { duration: 120 }),
+        withTiming(0.08, { duration: 120 }),
         withDelay(1600, withTiming(0, { duration: 1 }))
       ),
       -1,
@@ -66,7 +69,6 @@ export default function ScanningAnimation() {
     );
   }, [measuredHeight]);
 
-  // animated styles
   const scanAStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: scanA.value }],
     opacity: interpolate(scanA.value, [0, measuredHeight / 2, measuredHeight], [0.18, 1, 0.18]),
@@ -91,17 +93,20 @@ export default function ScanningAnimation() {
     opacity: interpolate(pulse.value, [1, 1.04], [0.92, 1]),
   }));
 
+  const flickerStyle = useAnimatedStyle(() => ({
+    opacity: flicker.value,
+  }));
+
   return (
     <View
       style={styles.container}
       onLayout={(e) => setMeasuredHeight(e.nativeEvent.layout.height)}
-      accessible
-      accessibilityLabel="Scanning animation"
     >
-      {/* breathing vignette */}
-      <Animated.View style={[StyleSheet.absoluteFill, styles.vignette, vignetteStyle]} />
+      <Animated.View
+        pointerEvents="none"
+        style={[StyleSheet.absoluteFill, styles.vignette, vignetteStyle, flickerStyle]}
+      />
 
-      {/* shimmer sweep */}
       <Animated.View pointerEvents="none" style={[styles.shimmerWrapper, shimmerStyle]}>
         <LinearGradient
           colors={['rgba(255,255,255,0)', 'rgba(255,255,255,0.16)', 'rgba(255,255,255,0)']}
@@ -111,8 +116,7 @@ export default function ScanningAnimation() {
         />
       </Animated.View>
 
-      {/* layered scanlines */}
-      <Animated.View style={[styles.scanlineContainer, scanAStyle]}>
+      <Animated.View pointerEvents="none" style={[styles.scanlineContainer, scanAStyle]}>
         <LinearGradient
           colors={['rgba(0,210,255,0)', 'rgba(0,210,255,0.96)', 'rgba(0,210,255,0)']}
           start={{ x: 0, y: 0.5 }}
@@ -121,7 +125,7 @@ export default function ScanningAnimation() {
         />
       </Animated.View>
 
-      <Animated.View style={[styles.scanlineContainer, scanBStyle]}>
+      <Animated.View pointerEvents="none" style={[styles.scanlineContainer, scanBStyle]}>
         <LinearGradient
           colors={['rgba(0,120,255,0)', 'rgba(0,120,255,0.9)', 'rgba(0,120,255,0)']}
           start={{ x: 1, y: 0.5 }}
@@ -130,8 +134,13 @@ export default function ScanningAnimation() {
         />
       </Animated.View>
 
-      {/* static global text */}
-      <View style={styles.textContainer}>
+      <View
+        style={styles.textContainer}
+        accessible
+        accessibilityRole="text"
+        accessibilityLabel="Scanning in progress. Analyzing surface. This won’t take long."
+        accessibilityLiveRegion="polite"
+      >
         <Text style={styles.title}>Scanning — please wait</Text>
         <Text style={styles.subtitle}>Analyzing surface. This won’t take long.</Text>
       </View>

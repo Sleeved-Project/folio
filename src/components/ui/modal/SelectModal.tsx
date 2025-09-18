@@ -35,6 +35,8 @@ export default function SelectModal({
       animationOut="slideOutDown"
       useNativeDriver
       statusBarTranslucent
+      accessibilityViewIsModal
+      accessible
     >
       <View
         style={[
@@ -46,6 +48,9 @@ export default function SelectModal({
             padding: theme.spacing.md,
           },
         ]}
+        accessible
+        accessibilityLabel="Select option modal"
+        accessibilityHint={`Choose an option from the list of ${options.length} items`}
       >
         <View
           style={[
@@ -58,19 +63,28 @@ export default function SelectModal({
           ]}
         />
 
-        <View style={[styles.modalHeader, { marginBottom: theme.spacing.md }]}>
+        <View
+          style={[styles.modalHeader, { marginBottom: theme.spacing.md }]}
+          accessible
+          accessibilityRole="header"
+        >
           <Text
             style={{
               color: theme.colors.text.primary,
               fontSize: theme.typography.fontSizes.lg,
               fontWeight: theme.typography.fontWeights.semiBold,
             }}
+            accessibilityRole="header"
           >
             {title}
           </Text>
           <TouchableOpacity
             onPress={onClose}
             hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
+            accessible
+            accessibilityRole="button"
+            accessibilityLabel="Close modal"
+            accessibilityHint="Closes the options selection modal"
           >
             <X size={20} color={theme.colors.text.primary} />
           </TouchableOpacity>
@@ -100,6 +114,15 @@ export default function SelectModal({
                   onClose();
                 }}
                 activeOpacity={0.7}
+                accessible
+                accessibilityRole="button"
+                accessibilityLabel={item.label}
+                accessibilityHint={
+                  isSelected
+                    ? `${item.label} is currently selected`
+                    : `Select ${item.label}`
+                }
+                accessibilityState={{ selected: isSelected }}
               >
                 <Text
                   style={[
@@ -121,6 +144,8 @@ export default function SelectModal({
           }}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: theme.spacing.md }}
+          accessible
+          accessibilityLabel="Options list"
         />
       </View>
     </Modal>

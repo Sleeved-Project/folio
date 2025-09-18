@@ -20,20 +20,55 @@ export default function CameraPermissionFallback({ onRequestPermission, descript
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+      accessible
+      accessibilityRole="alert"
+      accessibilityLabel="Camera permission required screen"
+    >
       <View style={styles.content}>
-        <View style={styles.iconBox}>
+        <View
+          style={styles.iconBox}
+          accessible
+          accessibilityRole="image"
+          accessibilityLabel="Camera access required icon"
+        >
           <CameraOff color={theme.colors.text.tertiary} size={48} />
         </View>
-        <Text style={[styles.title, { color: theme.colors.text.primary }]}>Camera required</Text>
-        <Text style={[styles.description, { color: theme.colors.text.tertiary }]}>
+
+        <Text
+          style={[styles.title, { color: theme.colors.text.primary }]}
+          accessible
+          accessibilityRole="header"
+        >
+          Camera required
+        </Text>
+
+        <Text
+          style={[styles.description, { color: theme.colors.text.tertiary }]}
+          accessible
+          accessibilityRole="text"
+        >
           {description ?? 'This feature needs access to your camera to take photos of the card.'}
         </Text>
 
         <View style={styles.buttons}>
-          <Button title="Grant permission" onPress={onRequestPermission} />
+          <Button
+            title="Grant permission"
+            onPress={async () => {
+              await onRequestPermission(); // force Promise<void>
+            }}
+            accessibilityLabel="Grant camera permission"
+            accessibilityHint="Press to grant camera access"
+          />
           <View style={{ height: 12 }} />
-          <Button title="Open Settings" variant="outline" onPress={openSettings} />
+          <Button
+            title="Open Settings"
+            variant="outline"
+            onPress={openSettings}
+            accessibilityLabel="Open device settings"
+            accessibilityHint="Press to open the settings app to grant camera access manually"
+          />
         </View>
       </View>
     </SafeAreaView>

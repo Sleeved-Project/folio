@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import CountryFlag from 'react-native-country-flag';
 import { COUNTRIES_LIST, Country } from '../../lib/utils/countries';
 
@@ -14,5 +15,14 @@ export default function CountryFlagDisplay({ countryCode, size = 12 }: CountryFl
     return null;
   }
 
-  return <CountryFlag isoCode={country.code} size={size} />;
+  return (
+    <View
+      accessible
+      accessibilityRole="image"
+      accessibilityLabel={country.name}
+      accessibilityHint={`Flag of ${country.name}`}
+    >
+      <CountryFlag isoCode={country.code} size={size} />
+    </View>
+  );
 }

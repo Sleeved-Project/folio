@@ -24,6 +24,10 @@ export default function CreateFolioButton({ onPress }: CreateFolioButtonProps) {
       ]}
       onPress={onPress}
       activeOpacity={0.7}
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel="Create new folio"
+      accessibilityHint="Tap to create a new folio"
     >
       <View style={styles.iconContainer}>
         <FolderPlus size={40} color={theme.colors.text.secondary} />

@@ -6,7 +6,6 @@ import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
 
 export default function MarketplaceHome() {
   const { data: hasStripeAccount, refetch: refetchHasStripeAccount } = useHasStripeAccount();
-
   useRefetchOnFocus(refetchHasStripeAccount);
 
   const navigateToStripeSetup = () => {
@@ -18,14 +17,17 @@ export default function MarketplaceHome() {
   };
 
   return (
-    <View style={styles.container}>
-      <CardsForSale onSellPress={navigateToStripeSetup} />
+    <View
+      style={styles.container}
+      accessible
+      accessibilityRole="header"
+      accessibilityLabel="Marketplace home screen"
+    >
+      <CardsForSale onSellPress={navigateToStripeSetup} containerStyle={{ flex: 1 }} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
 });

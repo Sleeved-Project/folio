@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View, AccessibilityInfo } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import StepItem from './StepItem';
 import StepSeparator from './StepSeparator';
@@ -21,17 +21,25 @@ export default function Stepper({
   separatorWidth = 64,
   separatorMarginHorizontal = 32,
 }: StepperProps) {
+  // Calculate the total width of one item plus separator and margins
   const ITEM_WITH_TOTAL_SEPARATOR_WIDTH =
     itemWidth + separatorWidth + separatorMarginHorizontal * 2;
+
   const theme = useTheme();
   const flatListRef = useRef<FlatList>(null);
 
+  // Scroll to the current step when it changes
   useEffect(() => {
     flatListRef.current?.scrollToIndex({
       index: currentStep,
       animated: true,
       viewPosition: 0,
     });
+
+    // Accessibility: announce the current step
+    AccessibilityInfo.announceForAccessibility(
+      `Step ${currentStep + 1}: ${steps[currentStep]}`
+    );
   }, [currentStep]);
 
   return (
@@ -71,6 +79,7 @@ export default function Stepper({
     />
   );
 }
+
 const styles = StyleSheet.create({
   flatList: {
     flexGrow: 0,

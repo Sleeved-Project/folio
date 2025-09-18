@@ -9,19 +9,22 @@ interface CardImageSectionProps {
   imageUrl: string;
   cardAnimatedStyle?: object;
   onCardPress?: () => void;
+  accessible?: boolean;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 }
 
-// Get screen dimensions
 const { WIDTH: SCREEN_WIDTH, HEIGHT: SCREEN_HEIGHT } = SCREEN_DIMENSIONS;
 
 export default function CardImageSection({
   imageUrl,
   cardAnimatedStyle,
   onCardPress,
+  accessible = true,
+  accessibilityLabel = 'Card image',
+  accessibilityHint = 'Double tap to view card details',
 }: CardImageSectionProps) {
-  // Calculate card dimensions based on screen size - adaptive sizing
-  const cardWidth = SCREEN_WIDTH * 0.58; // 58% of screen width
-  // Calculate height based on card aspect ratio
+  const cardWidth = SCREEN_WIDTH * 0.58;
   const cardHeight = cardWidth / CARD_ASPECT_RATIO;
 
   return (
@@ -29,8 +32,13 @@ export default function CardImageSection({
       <GridBackground lightTheme={true} density="low" />
       <CardGlowEffect imageUrl={imageUrl} intensity={0.6} scale={1.4} />
 
-      {/* Card positioned with absolute */}
-      <TouchableWithoutFeedback onPress={onCardPress}>
+      <TouchableWithoutFeedback
+        onPress={onCardPress}
+        accessible={accessible}
+        accessibilityRole="imagebutton"
+        accessibilityLabel={accessibilityLabel}
+        accessibilityHint={accessibilityHint}
+      >
         <Animated.View
           style={[
             styles.cardImageWrapper,
@@ -43,7 +51,13 @@ export default function CardImageSection({
             cardAnimatedStyle,
           ]}
         >
-          <Image source={{ uri: imageUrl }} style={styles.cardImage} resizeMode="contain" />
+          <Image
+            source={{ uri: imageUrl }}
+            style={styles.cardImage}
+            resizeMode="contain"
+            accessible={accessible}
+            accessibilityLabel={accessibilityLabel}
+          />
         </Animated.View>
       </TouchableWithoutFeedback>
     </View>

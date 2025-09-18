@@ -26,6 +26,9 @@ export default function FolioNameDisplay({ value, onEditPress }: FolioNameDispla
         ]}
         onPress={onEditPress}
         activeOpacity={0.7}
+        accessible
+        accessibilityLabel="Folio Name"
+        accessibilityHint="Tap to edit the folio name"
       >
         <Text style={[styles.nameText, { color: theme.colors.text.primary }]} numberOfLines={1}>
           {value || 'Untitled'}
@@ -38,28 +41,9 @@ export default function FolioNameDisplay({ value, onEditPress }: FolioNameDispla
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 8,
-  },
-  displayContainer: {
-    height: 48,
-    paddingHorizontal: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderWidth: 1,
-  },
-  nameText: {
-    fontSize: 16,
-    fontWeight: '600',
-    flex: 1,
-  },
-  editIcon: {
-    marginLeft: 12,
-  },
+  container: { flex: 1 },
+  label: { fontSize: 14, fontWeight: '500', marginBottom: 8 },
+  displayContainer: { height: 48, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: 1 },
+  nameText: { fontSize: 16, fontWeight: '600', flex: 1 },
+  editIcon: { marginLeft: 12 },
 });

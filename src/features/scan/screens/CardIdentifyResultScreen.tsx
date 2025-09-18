@@ -35,16 +35,9 @@ export default function CardIdentifyResult({
 
   // Start animations
   useEffect(() => {
-    // Title animation
     titleOpacity.value = withDelay(100, withTiming(1, { duration: 600 }));
-
-    // Left card animation
     leftCardOpacity.value = withDelay(300, withTiming(1, { duration: 500 }));
-
-    // Right card animation - starts after left card
     rightCardOpacity.value = withDelay(600, withTiming(1, { duration: 500 }));
-
-    // Buttons animation (at the end)
     buttonsOpacity.value = withDelay(800, withTiming(1, { duration: 400 }));
   }, []);
 
@@ -55,20 +48,12 @@ export default function CardIdentifyResult({
 
   const leftCardStyle = useAnimatedStyle(() => ({
     opacity: leftCardOpacity.value,
-    transform: [
-      {
-        translateX: interpolate(leftCardOpacity.value, [0, 1], [-50, 0]),
-      },
-    ],
+    transform: [{ translateX: interpolate(leftCardOpacity.value, [0, 1], [-50, 0]) }],
   }));
 
   const rightCardStyle = useAnimatedStyle(() => ({
     opacity: rightCardOpacity.value,
-    transform: [
-      {
-        translateX: interpolate(rightCardOpacity.value, [0, 1], [50, 0]),
-      },
-    ],
+    transform: [{ translateX: interpolate(rightCardOpacity.value, [0, 1], [50, 0]) }],
   }));
 
   const buttonsStyle = useAnimatedStyle(() => ({
@@ -77,8 +62,6 @@ export default function CardIdentifyResult({
   }));
 
   const handleConfirm = () => {
-    // Tricks to go back directly to the original sell-form
-    // since scan-identify now replaces scan in the stack
     setTimeout(() => {
       router.back();
       router.back();
@@ -91,13 +74,9 @@ export default function CardIdentifyResult({
   };
 
   return (
-    <View style={styles.safeAreaView}>
+    <View style={styles.safeAreaView} accessible accessibilityLabel="Card identification result screen">
       <LinearGradient
-        colors={[
-          theme.colors.primary,
-          theme.colors.background.secondary,
-          theme.colors.background.primary,
-        ]}
+        colors={[theme.colors.primary, theme.colors.background.secondary, theme.colors.background.primary]}
         style={styles.container}
         locations={[0, 0.5, 1]}
         start={{ x: 0.5, y: 0 }}
@@ -105,56 +84,60 @@ export default function CardIdentifyResult({
       >
         {/* Back Button */}
         <View style={styles.backButtonContainer}>
-          <BackButton />
+          <BackButton
+            accessibilityLabel="Go back"
+            accessibilityHint="Returns to the previous screen"
+          />
         </View>
 
         {/* Card Name */}
-        <Animated.Text style={[styles.cardName, { color: theme.colors.text.primary }, titleStyle]}>
+        <Animated.Text
+          style={[styles.cardName, { color: theme.colors.text.primary }, titleStyle]}
+          accessible
+          accessibilityRole="header"
+          accessibilityLabel={`Card identified as ${name}`}
+        >
           {name}
         </Animated.Text>
 
         {/* Cards Comparison - Side by Side */}
-        <View style={styles.cardsContainer}>
+        <View style={styles.cardsContainer} accessible accessibilityLabel="Card comparison section">
           {/* Your Photo Card */}
-          <Animated.View style={[styles.cardWrapper, leftCardStyle]}>
+          <Animated.View style={[styles.cardWrapper, leftCardStyle]} accessible accessibilityLabel="Your photo" accessibilityHint="This is the photo you took of your card">
             <View style={[styles.cardImageContainer, { borderRadius: theme.borderRadius.medium }]}>
               <Image
                 source={{ uri: croppedImage }}
                 style={[styles.cardImage, { borderRadius: theme.borderRadius.medium }]}
                 resizeMode="contain"
+                accessible
+                accessibilityLabel="Your card photo"
               />
             </View>
-
-            <Text style={[styles.cardLabel, { color: theme.colors.text.secondary }]}>
-              Your Photo
-            </Text>
+            <Text style={[styles.cardLabel, { color: theme.colors.text.secondary }]}>Your Photo</Text>
           </Animated.View>
 
           {/* Official Card */}
-          <Animated.View style={[styles.cardWrapper, rightCardStyle]}>
+          <Animated.View style={[styles.cardWrapper, rightCardStyle]} accessible accessibilityLabel="Official card" accessibilityHint={potentialMatchedCard ? "Official card image for comparison" : "No official card image available"}>
             <View style={[styles.cardImageContainer, { borderRadius: theme.borderRadius.medium }]}>
               {potentialMatchedCard ? (
                 <Image
                   source={{ uri: potentialMatchedCard }}
                   style={[styles.cardImage, { borderRadius: theme.borderRadius.medium }]}
                   resizeMode="contain"
+                  accessible
+                  accessibilityLabel="Official card image"
                 />
               ) : (
                 <View
-                  style={[
-                    styles.cardImage,
-                    styles.placeholder,
-                    { borderRadius: theme.borderRadius.medium },
-                  ]}
+                  style={[styles.cardImage, styles.placeholder, { borderRadius: theme.borderRadius.medium }]}
+                  accessible
+                  accessibilityLabel="No official card image available"
                 >
                   <Text style={{ color: theme.colors.text.tertiary }}>No official image</Text>
                 </View>
               )}
             </View>
-
-            <Text style={[styles.cardLabel, { color: theme.colors.text.secondary }]}>
-              Official Card
-            </Text>
+            <Text style={[styles.cardLabel, { color: theme.colors.text.secondary }]}>Official Card</Text>
           </Animated.View>
         </View>
 
@@ -165,12 +148,16 @@ export default function CardIdentifyResult({
             variant="primary"
             onPress={handleConfirm}
             buttonStyle={styles.confirmButton}
+            accessibilityLabel="Confirm this is my card"
+            accessibilityHint="Confirms the identified card and goes back to the sell form"
           />
           <Button
             title="Retry scan"
             variant="outline"
             onPress={handleRetry}
             buttonStyle={styles.retryButton}
+            accessibilityLabel="Retry scan"
+            accessibilityHint="Resets the scan and allows you to scan the card again"
           />
         </Animated.View>
       </LinearGradient>

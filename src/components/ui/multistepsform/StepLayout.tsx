@@ -33,11 +33,17 @@ export default function StepLayout({
       style={styles.container}
       behavior="padding"
       keyboardVerticalOffset={Platform.OS === 'ios' ? -56 : -56}
+      accessible
+      accessibilityLabel="Step layout container"
+      accessibilityHint="Contains the content and navigation buttons for this step"
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: theme.spacing.xl }}
         keyboardShouldPersistTaps="handled"
+        accessible
+        accessibilityLabel="Step content scroll area"
+        accessibilityHint="Scroll through the content of this step"
       >
         {children}
       </ScrollView>
@@ -47,6 +53,10 @@ export default function StepLayout({
           { marginTop: theme.spacing.md, backgroundColor: theme.colors.background.primary },
           styles.buttonRow,
         ]}
+        accessible
+        accessibilityRole="toolbar"
+        accessibilityLabel="Step navigation buttons"
+        accessibilityHint="Navigate to the previous or next step"
       >
         {showPrevButton && (
           <Button
@@ -54,6 +64,10 @@ export default function StepLayout({
             onPress={onPrev}
             disabled={isPrevDisabled}
             buttonStyle={styles.button}
+            accessible
+            accessibilityRole="button"
+            accessibilityLabel={prevButtonText}
+            accessibilityState={{ disabled: isPrevDisabled }}
           />
         )}
         {showNextButton && (
@@ -62,6 +76,10 @@ export default function StepLayout({
             onPress={onNext}
             disabled={isNextDisabled}
             buttonStyle={styles.button}
+            accessible
+            accessibilityRole="button"
+            accessibilityLabel={nextButtonText}
+            accessibilityState={{ disabled: isNextDisabled }}
           />
         )}
       </View>

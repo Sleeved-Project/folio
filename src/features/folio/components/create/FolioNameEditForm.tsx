@@ -44,9 +44,20 @@ export default function FolioNameEditForm({
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      accessible
+      accessibilityLabel="Edit Folio Name Form"
+      accessibilityHint="Enter a name for your folio and save or cancel"
+    >
       <View style={styles.inputContainer}>
-        <Text style={[styles.label, { color: theme.colors.text.secondary }]}>Folio name</Text>
+        <Text
+          style={[styles.label, { color: theme.colors.text.secondary }]}
+          accessible
+          accessibilityRole="header"
+        >
+          Folio name
+        </Text>
 
         <Controller
           control={control}
@@ -73,12 +84,20 @@ export default function FolioNameEditForm({
               returnKeyType="done"
               onSubmitEditing={handleSubmit(onSubmit)}
               selectTextOnFocus
+              accessible
+              accessibilityLabel="Folio name input"
+              accessibilityHint="Enter the name of your folio, maximum 30 characters"
             />
           )}
         />
 
         <View style={styles.counterContainer}>
-          <Text style={[styles.counter, { color: theme.colors.text.tertiary }]}>
+          <Text
+            style={[styles.counter, { color: theme.colors.text.tertiary }]}
+            accessible
+            accessibilityRole="text"
+            accessibilityLabel={`Character count: ${currentName?.length || 0} of 30`}
+          >
             {currentName?.length || 0}/30
           </Text>
         </View>
@@ -90,6 +109,8 @@ export default function FolioNameEditForm({
           variant="outline"
           onPress={onCancel}
           buttonStyle={[styles.button, styles.cancelButton]}
+          accessibilityLabel="Cancel"
+          accessibilityHint="Discard changes and go back"
         />
         <Button
           title="Save"
@@ -97,6 +118,8 @@ export default function FolioNameEditForm({
           onPress={handleSubmit(onSubmit)}
           buttonStyle={[styles.button, styles.saveButton]}
           disabled={!isValid || !currentName?.trim()}
+          accessibilityLabel="Save"
+          accessibilityHint="Save the folio with the current name"
         />
       </View>
     </View>

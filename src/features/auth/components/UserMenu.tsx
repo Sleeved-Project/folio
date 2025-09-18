@@ -41,12 +41,24 @@ export default function UserMenu() {
   return (
     <View style={styles.container}>
       {menuVisible && (
-        <TouchableWithoutFeedback onPress={() => setMenuVisible(false)}>
+        <TouchableWithoutFeedback
+          onPress={() => setMenuVisible(false)}
+          accessible
+          accessibilityLabel="Close user menu"
+          accessibilityRole="button"
+        >
           <View style={styles.overlay} />
         </TouchableWithoutFeedback>
       )}
 
-      <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)} style={styles.iconButton}>
+      <TouchableOpacity
+        onPress={() => setMenuVisible(!menuVisible)}
+        style={styles.iconButton}
+        accessible
+        accessibilityLabel="Open user menu"
+        accessibilityRole="button"
+        accessibilityState={{ expanded: menuVisible }}
+      >
         <AccountSvg width={24} height={24} fill={theme.colors.text.primary} />
       </TouchableOpacity>
 
@@ -63,15 +75,29 @@ export default function UserMenu() {
               elevation: theme.shadows.medium.elevation,
             },
           ]}
+          accessible
+          accessibilityLabel="User menu"
         >
-          <TouchableOpacity style={styles.menuItem} onPress={() => setMenuVisible(false)}>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => setMenuVisible(false)}
+            accessible
+            accessibilityRole="button"
+            accessibilityLabel="Open settings"
+          >
             <Settings size={18} color={theme.colors.text.primary} />
             <Text style={[styles.menuItemText, { color: theme.colors.text.primary }]}>
               Settings
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.menuItem, styles.logoutItem]} onPress={handleLogout}>
+          <TouchableOpacity
+            style={[styles.menuItem, styles.logoutItem]}
+            onPress={handleLogout}
+            accessible
+            accessibilityRole="button"
+            accessibilityLabel="Logout"
+          >
             <LogOut size={18} color={theme.colors.danger} />
             <Text style={[styles.menuItemText, styles.logoutText, { color: theme.colors.danger }]}>
               Logout

@@ -13,6 +13,7 @@ interface VerificationCodeInputProps {
   onCodeFilled?: (code: string) => void;
   keyboardType?: KeyboardTypeOptions;
   autoFocus?: boolean;
+  accessibilityLabel?: string;
 }
 
 const VerificationCodeInput: React.FC<VerificationCodeInputProps> = ({
@@ -20,6 +21,7 @@ const VerificationCodeInput: React.FC<VerificationCodeInputProps> = ({
   onCodeFilled,
   keyboardType = 'numeric',
   autoFocus = true,
+  accessibilityLabel,
 }) => {
   // Store each character of the code
   const [code, setCode] = useState<string[]>(Array(length).fill(''));
@@ -60,11 +62,9 @@ const VerificationCodeInput: React.FC<VerificationCodeInputProps> = ({
     }
 
     // Check if code is complete
-    if (!text.includes(' ')) {
-      const filledCode = newCode.join('');
-      if (filledCode.length === length) {
-        onCodeFilled?.(filledCode);
-      }
+    const filledCode = newCode.join('');
+    if (filledCode.length === length) {
+      onCodeFilled?.(filledCode);
     }
   };
 
@@ -76,7 +76,7 @@ const VerificationCodeInput: React.FC<VerificationCodeInputProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} accessible accessibilityLabel={accessibilityLabel}>
       {Array(length)
         .fill(0)
         .map((_, index) => (

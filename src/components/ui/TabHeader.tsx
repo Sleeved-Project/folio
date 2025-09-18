@@ -1,3 +1,4 @@
+// TabHeader.tsx
 import { Text, StyleSheet, View } from 'react-native';
 import BackButton from './BackButton';
 import { useTheme } from '../../theme/useTheme';
@@ -11,7 +12,12 @@ export default function TabHeader({ title, displayBackButton }: TabHeaderProps) 
   const theme = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      accessible
+      accessibilityRole="header"
+      accessibilityLabel={title ?? 'Screen header'}
+    >
       <View style={styles.side}>{displayBackButton && <BackButton />}</View>
       {title && (
         <Text
@@ -24,6 +30,9 @@ export default function TabHeader({ title, displayBackButton }: TabHeaderProps) 
               fontSize: theme.typography.fontSizes.lg,
             },
           ]}
+          accessible
+          accessibilityRole="text"
+          accessibilityLabel={title}
         >
           {title}
         </Text>

@@ -24,6 +24,8 @@ interface TabSwitcherProps<T extends string> {
   activeTabStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   activeTextStyle?: StyleProp<TextStyle>;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 }
 
 export function TabSwitcher<T extends string>({
@@ -35,6 +37,8 @@ export function TabSwitcher<T extends string>({
   activeTabStyle,
   textStyle,
   activeTextStyle,
+  accessibilityLabel,
+  accessibilityHint,
 }: TabSwitcherProps<T>) {
   const theme = useTheme();
 
@@ -42,12 +46,13 @@ export function TabSwitcher<T extends string>({
     <View
       style={[
         styles.container,
-        {
-          backgroundColor: theme.colors.background.tertiary,
-          borderColor: theme.colors.border.light,
-        },
-        containerStyle,
+        { backgroundColor: theme.colors.background.tertiary, borderColor: theme.colors.border.light },
+        containerStyle
       ]}
+      accessible
+      accessibilityRole="tablist"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
     >
       {options.map((option, index) => (
         <TouchableOpacity
@@ -60,14 +65,16 @@ export function TabSwitcher<T extends string>({
             tabStyle,
             activeTabId === option.id && [
               styles.activeTab,
-              {
-                backgroundColor: theme.colors.background.primary,
-                ...theme.shadows.small,
-              },
+              { backgroundColor: theme.colors.background.primary, ...theme.shadows.small },
+              activeTabStyle,
             ],
-            activeTabId === option.id && activeTabStyle,
           ]}
           onPress={() => onTabChange(option.id)}
+          accessible
+          accessibilityRole="tab"
+          accessibilityState={{ selected: activeTabId === option.id }}
+          accessibilityLabel={option.label}
+          accessibilityHint={activeTabId === option.id ? 'Selected tab' : 'Tap to select this tab'}
         >
           <Text
             style={[
@@ -77,8 +84,8 @@ export function TabSwitcher<T extends string>({
               activeTabId === option.id && [
                 styles.activeTabText,
                 { color: theme.colors.text.primary },
+                activeTextStyle,
               ],
-              activeTabId === option.id && activeTextStyle,
             ]}
           >
             {option.label}

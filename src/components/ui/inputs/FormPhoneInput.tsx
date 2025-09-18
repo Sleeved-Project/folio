@@ -54,6 +54,7 @@ const FormPhoneInput = <T extends FieldValues>({
 
   const onChangeRef = useRef<((value: string) => void) | undefined>(undefined);
 
+  // Handle country selection and update the phone number with dial code
   const handleSelectCountry = useCallback(
     (country: Country, onChange?: (value: string) => void) => {
       setSelectedCountry(country);
@@ -74,11 +75,10 @@ const FormPhoneInput = <T extends FieldValues>({
         return fullNumber.slice(country.dial_code.length);
       }
     }
-
     return fullNumber;
   }, []);
 
-  //  Format the phone number to remove any non-digit characters
+  // Format the phone number to remove any non-digit characters
   const formatPhoneNumber = (value: string) => {
     return value.replace(/[^\d\s+]/g, '');
   };
@@ -114,7 +114,11 @@ const FormPhoneInput = <T extends FieldValues>({
   return (
     <View style={[styles.container, containerStyle]} ref={containerRef}>
       {label && (
-        <Text style={[styles.label, { color: theme.colors.text.primary }]}>
+        <Text
+          style={[styles.label, { color: theme.colors.text.primary }]}
+          accessible
+          accessibilityRole="header"
+        >
           {label}
           {isRequired && <Text style={{ color: theme.colors.danger }}>*</Text>}
         </Text>
@@ -160,6 +164,10 @@ const FormPhoneInput = <T extends FieldValues>({
                 ]}
                 onPress={() => openCountrySelector(onChange)}
                 activeOpacity={0.7}
+                accessible
+                accessibilityRole="button"
+                accessibilityLabel={`Selected country: ${selectedCountry.name}`}
+                accessibilityHint="Opens country selection list"
               >
                 <Text style={styles.flag}>{selectedCountry.flag}</Text>
                 <Text style={[styles.dialCode, { color: theme.colors.text.primary }]}>
@@ -190,9 +198,8 @@ const FormPhoneInput = <T extends FieldValues>({
                   placeholderTextColor={theme.colors.text.tertiary}
                   value={phoneNumberWithoutDialCode}
                   onChangeText={(text) => {
-                    if (text.length > MAX_PHONE_LENGTH) {
-                      return;
-                    }
+                    // Limit the phone number length
+                    if (text.length > MAX_PHONE_LENGTH) return;
 
                     const formattedText = formatPhoneNumber(text);
                     setPhoneNumberWithoutDialCode(formattedText);
@@ -203,15 +210,14 @@ const FormPhoneInput = <T extends FieldValues>({
                     setIsFocused(false);
                     onBlur();
                   }}
-                  onFocus={() => {
-                    setIsFocused(true);
-                  }}
+                  onFocus={() => setIsFocused(true)}
                   keyboardType="number-pad"
                   returnKeyType={returnKeyType}
-                  onSubmitEditing={() => {
-                    onSubmitEditing?.();
-                  }}
+                  onSubmitEditing={() => onSubmitEditing?.()}
                   maxLength={MAX_PHONE_LENGTH}
+                  accessible
+                  accessibilityLabel="Phone number input"
+                  accessibilityHint="Enter your phone number without country code"
                 />
               </View>
             </View>
@@ -219,7 +225,15 @@ const FormPhoneInput = <T extends FieldValues>({
         }}
       />
 
-      {error && <Text style={[styles.errorText, { color: theme.colors.danger }]}>{error}</Text>}
+      {error && (
+        <Text
+          style={[styles.errorText, { color: theme.colors.danger }]}
+          accessible
+          accessibilityRole="alert"
+        >
+          {error}
+        </Text>
+      )}
 
       {Platform.OS !== 'ios' && (
         <Modal
@@ -232,6 +246,8 @@ const FormPhoneInput = <T extends FieldValues>({
           animationOut="slideOutDown"
           useNativeDriver
           statusBarTranslucent
+          accessible
+          accessibilityViewIsModal
         >
           <View
             style={[
@@ -245,13 +261,20 @@ const FormPhoneInput = <T extends FieldValues>({
           >
             <View style={styles.modalHandle} />
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: theme.colors.text.primary }]}>
+              <Text
+                style={[styles.modalTitle, { color: theme.colors.text.primary }]}
+                accessible
+                accessibilityRole="header"
+              >
                 Select Country
               </Text>
               <TouchableOpacity
                 style={styles.closeButton}
                 onPress={() => setShowCountryModal(false)}
                 hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }}
+                accessible
+                accessibilityRole="button"
+                accessibilityLabel="Close country selection"
               >
                 <X size={20} color={theme.colors.text.primary} />
               </TouchableOpacity>
@@ -276,6 +299,9 @@ const FormPhoneInput = <T extends FieldValues>({
                     }
                   }}
                   activeOpacity={0.7}
+                  accessible
+                  accessibilityRole="button"
+                  accessibilityLabel={`Select ${item.name} with dial code ${item.dial_code}`}
                 >
                   <Text style={styles.countryFlag}>{item.flag}</Text>
                   <Text style={[styles.countryName, { color: theme.colors.text.primary }]}>
@@ -289,6 +315,7 @@ const FormPhoneInput = <T extends FieldValues>({
               initialNumToRender={15}
               maxToRenderPerBatch={20}
               windowSize={10}
+              accessible
             />
           </View>
         </Modal>

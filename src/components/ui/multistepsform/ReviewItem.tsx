@@ -12,7 +12,19 @@ export default function ReviewItem({ label, textValue, imageUri }: ReviewItemPro
   const theme = useTheme();
 
   return (
-    <View style={{ marginBottom: theme.spacing.md }}>
+    <View
+      style={{ marginBottom: theme.spacing.md }}
+      accessible
+      accessibilityRole="summary"
+      accessibilityLabel={label}
+      accessibilityHint={
+        imageUri
+          ? 'Displays an image associated with this review'
+          : textValue
+          ? `Displays the review text: ${textValue}`
+          : 'No review content'
+      }
+    >
       {label && (
         <Text
           style={{
@@ -20,6 +32,7 @@ export default function ReviewItem({ label, textValue, imageUri }: ReviewItemPro
             fontWeight: theme.typography.fontWeights.medium,
             color: theme.colors.text.tertiary,
           }}
+          accessibilityRole="header"
         >
           {label}
         </Text>
@@ -28,6 +41,9 @@ export default function ReviewItem({ label, textValue, imageUri }: ReviewItemPro
         <Image
           source={{ uri: imageUri }}
           style={[styles.image, { borderRadius: theme.borderRadius.medium }]}
+          accessible
+          accessibilityRole="image"
+          accessibilityLabel={label}
         />
       ) : (
         textValue && (
@@ -37,6 +53,8 @@ export default function ReviewItem({ label, textValue, imageUri }: ReviewItemPro
               fontWeight: theme.typography.fontWeights.semiBold,
               color: theme.colors.text.primary,
             }}
+            accessible
+            accessibilityRole="text"
           >
             {textValue}
           </Text>

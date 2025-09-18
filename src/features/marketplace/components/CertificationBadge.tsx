@@ -12,13 +12,10 @@ export default function CertificationBadge({ certification }: CertificationBadge
 
   return (
     <View
-      style={[
-        styles.badge,
-        {
-          backgroundColor: theme.colors.background.secondary,
-          borderColor: theme.colors.border.black,
-        },
-      ]}
+      style={[styles.badge, { backgroundColor: theme.colors.background.secondary, borderColor: theme.colors.border.black }]}
+      accessible
+      accessibilityRole="summary"
+      accessibilityLabel={`Certification badge. Certified by Sleeved. Grade: ${certification.globalRating}`}
     >
       {/* {certification.authority.logo ? (
         <Image source={logo_SLV} style={styles.image} />
@@ -27,12 +24,12 @@ export default function CertificationBadge({ certification }: CertificationBadge
           <CreativeCommons color={theme.colors.text.secondary} size={18} />
         </View>
       )} */}
-      <Image source={logo_SLVIcon} style={styles.image} />
+      <Image source={logo_SLVIcon} style={styles.image} accessible accessibilityRole="image" accessibilityLabel="Sleeved logo" />
       <View style={{ flex: 1 }}>
-        <Text style={[styles.authority, { color: theme.colors.text.primary }]}>
+        <Text style={[styles.authority, { color: theme.colors.text.primary }]} accessible accessibilityRole="text" accessibilityLabel={`Certified by Sleeved`}>
           Certified by : Sleeved
         </Text>
-        <Text style={[styles.grade, { color: theme.colors.text.secondary }]}>
+        <Text style={[styles.grade, { color: theme.colors.text.secondary }]} accessible accessibilityRole="text" accessibilityLabel={`Grade ${certification.globalRating}`}>
           Grade : {certification.globalRating}
         </Text>
       </View>
@@ -41,32 +38,8 @@ export default function CertificationBadge({ certification }: CertificationBadge
 }
 
 const styles = StyleSheet.create({
-  image: {
-    width: 40,
-    height: 40,
-    resizeMode: 'contain',
-    marginRight: 12,
-    backgroundColor: '#F0F0F0',
-    borderRadius: 4,
-    overflow: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  badge: {
-    marginHorizontal: 16,
-    marginTop: 16,
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    maxWidth: 275,
-  },
-  authority: {
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  grade: {
-    fontSize: 16,
-  },
+  image: { width: 40, height: 40, resizeMode: 'contain', marginRight: 12, backgroundColor: '#F0F0F0', borderRadius: 4, overflow: 'hidden', justifyContent: 'center', alignItems: 'center' },
+  badge: { marginHorizontal: 16, marginTop: 16, padding: 12, borderRadius: 8, borderWidth: 1, flexDirection: 'row', justifyContent: 'space-between', maxWidth: 275 },
+  authority: { fontWeight: '600', fontSize: 16 },
+  grade: { fontSize: 16 },
 });

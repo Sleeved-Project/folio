@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback, useRef } from 'react';
+import { AccessibilityInfo } from 'react-native';
 import Toast from './Toast';
 
 type ToastType = 'success' | 'error' | 'info';
@@ -27,6 +28,10 @@ export function ToasterProvider({ children }: { children: ReactNode }) {
 
   const showToast = useCallback((options: ToastOptions) => {
     setToast(options);
+    if (options.message) {
+      const prefix = options.type ? `${options.type} notification: ` : '';
+      AccessibilityInfo.announceForAccessibility(prefix + options.message);
+    }
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       setToast(null);
@@ -34,7 +39,6 @@ export function ToasterProvider({ children }: { children: ReactNode }) {
     }, options.duration ?? 2500);
   }, []);
 
-  // Clean up timer on unmount
   React.useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);

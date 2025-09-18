@@ -21,7 +21,7 @@ export default function CardGridLayout({
   const CARD_HEIGHT = CARD_WIDTH * 1.36;
 
   return (
-    <View style={[styles.grid, style]}>
+    <View style={[styles.grid, style]} accessibilityRole="list">
       {Array.from({ length: itemCount }).map((_, i) => (
         <View
           key={i}
@@ -30,6 +30,8 @@ export default function CardGridLayout({
             marginHorizontal: gap / 2,
             marginBottom: gap * 2,
           }}
+          accessibilityRole="adjustable"
+          accessibilityLabel={`Card ${i + 1} of ${itemCount}`}
         >
           {renderItem({ index: i, width: CARD_WIDTH, height: CARD_HEIGHT })}
         </View>

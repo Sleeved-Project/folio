@@ -23,24 +23,66 @@ export default function StripeSetupScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={styles.container}
+      accessible
+      accessibilityRole="summary"
+      accessibilityLabel="Stripe setup screen"
+    >
       <View style={styles.header}>
-        <View style={styles.logoContainer}>
-          <Image source={SleevedLogo} style={styles.logo} />
-          <ArrowRightLeft size={30} color={theme.colors.text.primary} />
-          <Image source={StripeLogo} style={styles.logo} />
+        <View
+          style={styles.logoContainer}
+          accessible
+          accessibilityRole="image"
+          accessibilityLabel="Connect Sleeved account to Stripe"
+        >
+          <Image
+            source={SleevedLogo}
+            style={styles.logo}
+            accessible
+            accessibilityRole="image"
+            accessibilityLabel="Sleeved logo"
+          />
+          <ArrowRightLeft
+            size={30}
+            color={theme.colors.text.primary}
+            accessible
+            accessibilityRole="image"
+            accessibilityLabel="Connection arrow"
+          />
+          <Image
+            source={StripeLogo}
+            style={styles.logo}
+            accessible
+            accessibilityRole="image"
+            accessibilityLabel="Stripe logo"
+          />
         </View>
-        <Text style={styles.description}>
+
+        <Text
+          style={styles.description}
+          accessible
+          accessibilityRole="text"
+        >
           Connect your sleeved account with{' '}
-          <Text style={{ fontWeight: theme.typography.fontWeights.bold }}>stripe</Text> to start
-          getting paid.
+          <Text
+            style={{ fontWeight: theme.typography.fontWeights.bold }}
+            accessible
+            accessibilityRole="text"
+          >
+            Stripe
+          </Text>{' '}
+          to start getting paid.
         </Text>
       </View>
+
       <Button
         title="Connect with Stripe"
         onPress={createStripeAccount}
         buttonStyle={styles.button}
         loading={isPending}
+        accessibilityLabel="Connect with Stripe"
+        accessibilityHint="Opens Stripe to link your account and enable payments"
       />
     </SafeAreaView>
   );
