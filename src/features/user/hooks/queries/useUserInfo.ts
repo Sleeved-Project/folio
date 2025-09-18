@@ -27,7 +27,9 @@ export function useUserProfile(userId?: string) {
       const response = await httpClient.get<UserProfileData>(uri);
       return response;
     },
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
+    refetchOnMount: 'always',
+    retry: false,
   });
 }
 

@@ -6,6 +6,7 @@ import { useUserAds } from '../../hooks/queries/useUserInfo';
 import TitleSection from '../../../../components/ui/TitleSection';
 import { useTheme } from '../../../../theme/useTheme';
 import { Ad } from '../../../marketplace/types';
+import { useRefetchOnFocus } from '../../../../hooks/useRefetchOnFocus';
 
 interface UserAdListProps {
   userId: string;
@@ -13,7 +14,10 @@ interface UserAdListProps {
 }
 
 export default function UserAdList({ userId, contentContainerStyle }: UserAdListProps) {
-  const { data: ads, isLoading, error } = useUserAds(userId);
+  const { data: ads, isLoading, error, refetch: refetchUserAds } = useUserAds(userId);
+
+  useRefetchOnFocus(refetchUserAds);
+
   const adsListFlat = ads?.pages.flatMap((page) => page.data) ?? ([] as Ad[]);
   const theme = useTheme();
 
