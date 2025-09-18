@@ -6,6 +6,7 @@ import ProfilePicture from './ProfilePicture';
 import { Edit, LogOut } from 'lucide-react-native';
 import { Button } from '../../../../components/ui';
 import { useAuth } from '../../../auth/context/AuthContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface ProfileInformationProps {
   firstname: string | null;
@@ -15,6 +16,7 @@ interface ProfileInformationProps {
   rating: number | null;
   ratingCount: number | null;
   isUserProfile?: boolean;
+  style?: object;
 }
 
 export default function ProfileInformation({
@@ -25,9 +27,12 @@ export default function ProfileInformation({
   // rating,
   // ratingCount,
   isUserProfile = false,
+  style,
 }: ProfileInformationProps) {
   const theme = useTheme();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
+
   const { logout } = useAuth();
 
   const handleLogout = async () => {
@@ -59,6 +64,7 @@ export default function ProfileInformation({
           borderColor: theme.colors.border.light,
           marginBottom: theme.spacing.md,
         },
+        style,
       ]}
     >
       {isUserProfile && (
@@ -69,8 +75,8 @@ export default function ProfileInformation({
           onPress={handleLogout}
           buttonStyle={{
             position: 'absolute',
-            top: theme.spacing.xs,
-            right: theme.spacing.xs,
+            top: theme.spacing.xs + insets.top,
+            right: theme.spacing.md,
             height: 36,
             paddingHorizontal: 12,
           }}
@@ -91,6 +97,7 @@ export default function ProfileInformation({
               fontSize: theme.typography.fontSizes.lg,
               fontWeight: theme.typography.fontWeights.bold,
             },
+            style,
           ]}
         >
           {`${firstname} ${lastname}`}
@@ -137,9 +144,5 @@ const styles = StyleSheet.create({
   },
   username: {
     marginBottom: 8,
-  },
-  logoutButton: {
-    position: 'absolute',
-    zIndex: 5,
   },
 });

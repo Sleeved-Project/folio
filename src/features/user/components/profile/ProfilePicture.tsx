@@ -31,7 +31,8 @@ export default function ProfilePicture({ username, uri, size = 'medium' }: Profi
           height: dimension,
           borderRadius: dimension / 2,
           backgroundColor: theme.colors.background.secondary,
-          borderColor: theme.colors.border.light,
+          borderWidth: 3,
+          borderColor: theme.colors.primary,
         },
       ]}
     >
@@ -49,15 +50,15 @@ export default function ProfilePicture({ username, uri, size = 'medium' }: Profi
           style={[
             styles.placeholder,
             {
-              backgroundColor: theme.colors.background.secondary,
+              backgroundColor: theme.colors.variants.primaryLight,
             },
           ]}
         >
           <Text
             style={[
               {
-                color: theme.colors.text.black,
-                fontSize: dimension / 2.5, // Ajuste la taille des initiales
+                color: theme.colors.primaryForeground,
+                fontSize: dimension / 2.5,
                 fontWeight: theme.typography.fontWeights.bold,
               },
             ]}
@@ -73,7 +74,6 @@ export default function ProfilePicture({ username, uri, size = 'medium' }: Profi
 const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
-    borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
