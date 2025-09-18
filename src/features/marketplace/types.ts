@@ -160,3 +160,31 @@ export interface Address {
 export interface AddressResponse {
   address: Address;
 }
+export interface Order {
+  id: string;
+  sellerUsername: string;
+  condition: Condition;
+  finish: Finish;
+  card: {
+    name: string;
+    rectoImageUrl: string;
+  };
+  originalPrice: string;
+  status: { id: string; label: string };
+  createdAt: string;
+}
+
+export interface OrdersListResponse {
+  data: Order[];
+  meta: {
+    currentPage: number;
+    firstPage: number;
+    firstPageUrl: string;
+    lastPage: number;
+    lastPageUrl: string;
+    nextPageUrl: string | null;
+    perPage: number;
+    previousPageUrl: string | null;
+    total: number;
+  };
+}

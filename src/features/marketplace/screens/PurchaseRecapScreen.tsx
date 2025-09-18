@@ -15,6 +15,7 @@ import { useCancelPaymentSheet } from '../../payment/hooks/mutations/useCancelPa
 import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
 import { useCheckout } from '../hooks/queries/useCheckout';
 import { useDeliveryAddress } from '../hooks/queries/useDeliveryAddress';
+import { useCreateOrder } from '../hooks/mutations/useCreateOrder';
 
 export default function PurchaseRecapScreen({ adId }: { adId: string }) {
   const theme = useTheme();
@@ -22,6 +23,7 @@ export default function PurchaseRecapScreen({ adId }: { adId: string }) {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const { mutateAsync: fetchPaymentSheetParams } = useFetchPaymentSheet(adId);
   const { mutateAsync: cancelPaymentSheet } = useCancelPaymentSheet(adId);
+  const { mutateAsync: createOrder } = useCreateOrder(adId);
   const { data: checkout, isLoading, error } = useCheckout(adId);
   const { data: buyerAddressData } = useDeliveryAddress();
   const [paymentSheetReady, setPaymentSheetReady] = useState(false);
@@ -76,6 +78,8 @@ export default function PurchaseRecapScreen({ adId }: { adId: string }) {
       }
 
       setLoading(false);
+      // Create order in our system
+      await createOrder();
       router.push('/order-confirmation');
     } catch (err: unknown) {
       setLoading(false);

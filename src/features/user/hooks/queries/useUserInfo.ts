@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
-import { AdsListResponse } from '../../../marketplace/types';
+import { AdsListResponse, OrdersListResponse } from '../../../marketplace/types';
+import { mapOrderData } from '../../mappers/orderMapper';
 
 export interface UserProfileData {
   id: string;
@@ -16,6 +17,7 @@ export const userProfileKeys = {
   all: ['userProfile'] as const,
   details: (userId: string) => [...userProfileKeys.all, userId] as const,
   userAds: (userId: string) => [...userProfileKeys.all, 'ads', userId] as const,
+  userOrders: (userId: string) => [...userProfileKeys.all, 'orders', userId] as const,
 };
 
 export function useUserProfile(userId?: string) {
@@ -44,6 +46,35 @@ export function useUserAds(userId: string) {
         `/users/${userId}/ads?${params.toString()}`
       );
       return response;
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.data.length === 0) return undefined;
+      return allPages.length + 1;
+    },
+    initialPageParam: 1,
+    staleTime: 5 * 60 * 1000,
+    retry: false,
+  });
+}
+
+export function useUserOrders(userId: string) {
+  return useInfiniteQuery<OrdersListResponse>({
+    queryKey: userProfileKeys.userOrders(userId),
+    queryFn: async ({ pageParam = 1 }) => {
+      const params = new URLSearchParams({
+        page: String(pageParam),
+        limit: '20',
+      });
+
+      const response = await httpClient.get<OrdersListResponse>(
+        `/users/${userId}/orders?${params.toString()}`
+      );
+      const formattedData = response.data.map((order) => mapOrderData(order));
+      const formattedResponse: OrdersListResponse = {
+        ...response,
+        data: formattedData,
+      };
+      return formattedResponse;
     },
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.data.length === 0) return undefined;
