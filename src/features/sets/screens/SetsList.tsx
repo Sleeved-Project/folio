@@ -31,68 +31,60 @@ export default function SetsList({
   const displaySetList = ({ item }: { item: FormattedSet }) => <SetListDisplay set={item} />;
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      <FlatList
-        data={sets}
-        keyExtractor={(card, index) => `${card.id}-${index}`}
-        renderItem={displaySetList}
-        numColumns={NUM_COLUMNS}
-        columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
-        ListHeaderComponent={ListHeaderComponent}
-        onEndReached={() => {
-          if (hasNextPage && !isFetchingNextPage && fetchNextPage) {
-            fetchNextPage();
-          }
-        }}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={() => {
-          if (isFetchingNextPage || isLoading) {
-            return (
-              <View style={styles.loaderContainer}>
-                <ActivityIndicator color={theme.colors.primary} size="small" />
-                <Text style={[styles.text, { color: theme.colors.text.secondary }]}>
-                  Loading...
-                </Text>
-              </View>
-            );
-          }
-          if (error) {
-            return (
-              <Text style={[styles.text, styles.errorText, { color: theme.colors.danger }]}>
-                Error loading sets
-              </Text>
-            );
-          }
-          return null;
-        }}
-        ListEmptyComponent={() => {
-          if (isFetchingNextPage || isLoading) return null;
-
+    <FlatList
+      data={sets}
+      keyExtractor={(card, index) => `${card.id}-${index}`}
+      renderItem={displaySetList}
+      numColumns={NUM_COLUMNS}
+      columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
+      ListHeaderComponent={ListHeaderComponent}
+      onEndReached={() => {
+        if (hasNextPage && !isFetchingNextPage && fetchNextPage) {
+          fetchNextPage();
+        }
+      }}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={() => {
+        if (isFetchingNextPage || isLoading) {
           return (
-            <Text
-              style={[
-                styles.text,
-                { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
-              ]}
-            >
-              No sets available
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator color={theme.colors.primary} size="small" />
+              <Text style={[styles.text, { color: theme.colors.text.secondary }]}>Loading...</Text>
+            </View>
+          );
+        }
+        if (error) {
+          return (
+            <Text style={[styles.text, styles.errorText, { color: theme.colors.danger }]}>
+              Error loading sets
             </Text>
           );
-        }}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContent}
-      />
-    </View>
+        }
+        return null;
+      }}
+      ListEmptyComponent={() => {
+        if (isFetchingNextPage || isLoading) return null;
+
+        return (
+          <Text
+            style={[
+              styles.text,
+              { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
+            ]}
+          >
+            No sets available
+          </Text>
+        );
+      }}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: theme.spacing.lg }}
+    />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  listContent: {
-    paddingTop: 16,
-    paddingBottom: 32,
   },
   text: {
     textAlign: 'center',

@@ -49,7 +49,7 @@ function FormSelectInput<T extends FieldValues>({
           {
             fontSize: theme.typography.fontSizes.md,
             fontWeight: theme.typography.fontWeights.medium,
-            color: theme.colors.text.primary,
+            color: theme.colors.primaryForeground,
             marginBottom: theme.spacing.sm,
             paddingLeft: theme.spacing.xs,
           },
@@ -82,7 +82,7 @@ function FormSelectInput<T extends FieldValues>({
                 style={[
                   styles.selectText,
                   {
-                    color: value ? theme.colors.text.primary : theme.colors.text.tertiary,
+                    color: value ? theme.colors.primaryForeground : theme.colors.text.tertiary,
                     fontSize: theme.typography.fontSizes.md,
                   },
                 ]}

@@ -47,7 +47,9 @@ export default function SignupEmailStep({
     <View style={styles.container}>
       <View style={styles.centerContent}>
         <Image source={logoImage} style={styles.logo} />
-        <Text style={styles.title}>Get started with Sleeved</Text>
+        <Text style={[styles.title, { color: theme.colors.primaryForeground }]}>
+          Get started with Sleeved
+        </Text>
         <View style={styles.inputWrapper}>
           <FormTextInput
             control={control}

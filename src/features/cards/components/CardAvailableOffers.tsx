@@ -41,7 +41,6 @@ export default function CardAvailableOffers({ title, cardId }: CardAvailableOffe
     <View
       style={{
         marginTop: theme.spacing.sm,
-        marginBottom: theme.spacing.lg,
       }}
     >
       <TitleSection title={title} />

@@ -31,13 +31,13 @@ export default function InfoItem({
         styles.container,
         fullWidth ? styles.fullWidth : styles.halfWidth,
         {
-          backgroundColor: theme.colors.background.tertiary,
+          backgroundColor: theme.colors.background.secondary,
           borderRadius: theme.borderRadius.medium,
         },
         accentBorder && {
           borderWidth: 1,
           borderColor: theme.colors.border.medium,
-          backgroundColor: theme.colors.background.primary,
+          backgroundColor: theme.colors.background.secondary,
         },
       ]}
     >

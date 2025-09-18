@@ -1,9 +1,8 @@
-import { StyleSheet, View } from 'react-native';
-import { useTheme } from '../../theme/useTheme';
 import MyCardsScreen from '../../features/folio/screens/MyCardsScreen';
 import { useAllMyCards } from '../../features/folio/hooks/queries/useAllMyCards';
 import { LoadingState } from '../../components/ui/StatusIndicators';
 import EmptyStateCards from '../../features/folio/components/EmptyStateCards';
+import ScreenContainer from '../../components/ui/ScreenContainer';
 
 // type FolioTabType = 'cards' | 'folios';
 
@@ -13,7 +12,6 @@ import EmptyStateCards from '../../features/folio/components/EmptyStateCards';
 // ];
 
 export default function Folio() {
-  const theme = useTheme();
   // const [activeTab, setActiveTab] = useState<FolioTabType>('cards');
   const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useAllMyCards();
@@ -29,9 +27,8 @@ export default function Folio() {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-      <View style={[styles.content, { backgroundColor: theme.colors.background.primary }]}>
-        {/* <TabSwitcher
+    <ScreenContainer title="My collection">
+      {/* <TabSwitcher
           options={tabOptions}
           activeTabId={activeTab}
           onTabChange={(tabId) => setActiveTab(tabId)}
@@ -49,29 +46,14 @@ export default function Folio() {
         ) : (
           <MyFoliosScreen />
         )} */}
-        <MyCardsScreen
-          myCardsData={myCardsDataFlatMap}
-          fetchNextPage={fetchNextPage}
-          hasNextPage={hasNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-          isLoading={isLoading}
-          error={error}
-        />
-      </View>
-    </View>
+      <MyCardsScreen
+        myCardsData={myCardsDataFlatMap}
+        fetchNextPage={fetchNextPage}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        isLoading={isLoading}
+        error={error}
+      />
+    </ScreenContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-  },
-  tabSwitcher: {
-    marginBottom: 0,
-  },
-});

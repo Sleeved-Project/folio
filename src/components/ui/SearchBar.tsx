@@ -47,26 +47,27 @@ export default function SearchBar({
       style={[
         styles.container,
         {
-          backgroundColor: theme.colors.background.tertiary,
+          backgroundColor: theme.colors.background.secondary,
+          borderRadius: theme.borderRadius.large,
+          marginBottom: theme.spacing.sm,
+          height: 48,
           shadowColor: theme.shadows.small.shadowColor,
           shadowOffset: theme.shadows.small.shadowOffset,
           shadowOpacity: theme.shadows.small.shadowOpacity,
           shadowRadius: theme.shadows.small.shadowRadius,
           elevation: theme.shadows.small.elevation,
-          borderRadius: theme.borderRadius.round,
-          marginTop: theme.spacing.sm,
-          marginBottom: theme.spacing.lg,
-          height: 44,
         },
       ]}
     >
-      <Search size={20} color={theme.colors.text.secondary} style={styles.searchIcon} />
+      <Search size={22} color={theme.colors.primary} style={styles.searchIcon} />
       <TextInput
         style={[
           styles.input,
           {
             color: theme.colors.text.primary,
             fontSize: theme.typography.fontSizes.md,
+            fontWeight: theme.typography.fontWeights.medium,
+            backgroundColor: 'transparent',
           },
         ]}
         value={inputValue}
@@ -78,7 +79,7 @@ export default function SearchBar({
       />
       {showClearButton && inputValue.length > 0 && (
         <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
-          <X size={18} color={theme.colors.text.secondary} />
+          <X size={18} color={theme.colors.primaryForeground} />
         </TouchableOpacity>
       )}
     </View>
@@ -89,20 +90,21 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 8,
     paddingHorizontal: 16,
     position: 'relative',
   },
   searchIcon: {
-    marginRight: 12,
+    marginRight: 10,
   },
   input: {
     flex: 1,
-    height: 24,
+    height: 28,
     padding: 0,
   },
   clearButton: {
-    padding: 4,
+    padding: 6,
     marginLeft: 8,
+    borderRadius: 8,
   },
 });

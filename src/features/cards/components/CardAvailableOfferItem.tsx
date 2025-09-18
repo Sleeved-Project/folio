@@ -21,7 +21,14 @@ export default function CardAvailableOfferItem({
     <TouchableOpacity
       key={id}
       onPress={() => router.push(`/ad/${id}`)}
-      style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.colors.background.secondary,
+          borderColor: theme.colors.border.light,
+          borderWidth: 1,
+        },
+      ]}
     >
       <View style={styles.imageContainer}>
         {rectoImageUrl ? (

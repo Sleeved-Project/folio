@@ -1,4 +1,3 @@
-import { View, StyleSheet } from 'react-native';
 import CardsForSale from '../components/CardsForSale';
 import { router } from 'expo-router';
 import { useHasStripeAccount } from '../hooks/useHasStripeAccount';
@@ -17,15 +16,5 @@ export default function MarketplaceHome() {
     }
   };
 
-  return (
-    <View style={styles.container}>
-      <CardsForSale onSellPress={navigateToStripeSetup} />
-    </View>
-  );
+  return <CardsForSale onSellPress={navigateToStripeSetup} />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

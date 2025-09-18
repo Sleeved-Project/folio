@@ -37,92 +37,112 @@ export function TabSwitcher<T extends string>({
   activeTextStyle,
 }: TabSwitcherProps<T>) {
   const theme = useTheme();
+  const styles = getStyles(theme);
 
   return (
     <View
       style={[
         styles.container,
         {
-          backgroundColor: theme.colors.background.tertiary,
+          backgroundColor: theme.colors.background.secondary,
           borderColor: theme.colors.border.light,
         },
         containerStyle,
       ]}
+      accessible
+      accessibilityRole="tablist"
     >
-      {options.map((option, index) => (
-        <TouchableOpacity
-          key={option.id}
-          style={[
-            styles.tab,
-            index === 0 && styles.firstTab,
-            index === options.length - 1 && styles.lastTab,
-            { borderRightColor: theme.colors.border.light },
-            tabStyle,
-            activeTabId === option.id && [
-              styles.activeTab,
-              {
-                backgroundColor: theme.colors.background.primary,
-                ...theme.shadows.small,
-              },
-            ],
-            activeTabId === option.id && activeTabStyle,
-          ]}
-          onPress={() => onTabChange(option.id)}
-        >
-          <Text
+      {options.map((option, index) => {
+        const isActive = option.id === activeTabId;
+
+        return (
+          <TouchableOpacity
+            key={option.id}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: isActive }}
+            activeOpacity={0.8}
+            onPress={() => onTabChange(option.id)}
             style={[
-              styles.tabText,
-              { color: theme.colors.text.secondary },
-              textStyle,
-              activeTabId === option.id && [
-                styles.activeTabText,
-                { color: theme.colors.text.primary },
+              styles.tab,
+              index === 0 && styles.firstTab,
+              index === options.length - 1 && styles.lastTab,
+              tabStyle,
+              isActive && [
+                styles.activeTab,
+                {
+                  backgroundColor: theme.colors.variants.primaryLight,
+                  borderColor: theme.colors.primary,
+                  ...theme.shadows.small,
+                },
+                activeTabStyle,
               ],
-              activeTabId === option.id && activeTextStyle,
+              !isActive && {
+                backgroundColor: theme.colors.background.secondary,
+                borderColor: theme.colors.border.light,
+              },
             ]}
           >
-            {option.label}
-          </Text>
-        </TouchableOpacity>
-      ))}
+            <Text
+              style={[
+                styles.tabText,
+                {
+                  color: isActive ? theme.colors.primaryForeground : theme.colors.text.secondary,
+                },
+                textStyle,
+                isActive && [
+                  {
+                    color: theme.colors.primaryForeground,
+                  },
+                  activeTextStyle,
+                ],
+              ]}
+            >
+              {option.label}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    borderRadius: 8,
-    marginBottom: 16,
-    height: 40,
-    borderWidth: 1,
-    padding: 2,
-  },
-  tab: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 8,
-    borderRightWidth: 1,
-  },
-  firstTab: {
-    borderTopLeftRadius: 6,
-    borderBottomLeftRadius: 6,
-  },
-  lastTab: {
-    borderRightWidth: 0,
-    borderTopRightRadius: 6,
-    borderBottomRightRadius: 6,
-  },
-  activeTab: {
-    borderRadius: 6,
-    borderWidth: 0,
-  },
-  tabText: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  activeTabText: {
-    fontWeight: '700',
-  },
-});
+const getStyles = (theme: ReturnType<typeof useTheme>) =>
+  StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      borderRadius: theme.borderRadius.medium,
+      marginBottom: theme.spacing.md,
+      height: 40,
+      borderWidth: 1,
+      padding: 2,
+      overflow: 'hidden',
+    },
+    tab: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingVertical: Math.max(6, theme.spacing.xs),
+      borderRightWidth: 1,
+      borderRightColor: theme.colors.border.light,
+    },
+    firstTab: {
+      borderTopLeftRadius: theme.borderRadius.medium,
+      borderBottomLeftRadius: theme.borderRadius.medium,
+    },
+    lastTab: {
+      borderRightWidth: 0,
+      borderTopRightRadius: theme.borderRadius.medium,
+      borderBottomRightRadius: theme.borderRadius.medium,
+    },
+    activeTab: {
+      borderWidth: 0,
+      borderRadius: theme.borderRadius.medium,
+      shadowColor: theme.shadows.small.shadowColor,
+    },
+    tabText: {
+      fontSize: theme.typography.fontSizes.md,
+      fontWeight: theme.typography.fontWeights.medium as TextStyle['fontWeight'],
+    },
+  });
+
+export default TabSwitcher;

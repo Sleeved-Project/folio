@@ -42,7 +42,7 @@ export default function Accordion({
       style={[
         styles.container,
         {
-          backgroundColor: theme.colors.background.primary,
+          backgroundColor: theme.colors.background.secondary,
           borderColor: theme.colors.border.light,
           borderRadius: theme.borderRadius.medium,
         },
@@ -54,7 +54,7 @@ export default function Accordion({
         activeOpacity={0.7}
       >
         <View style={styles.titleContainer}>
-          <Text style={[styles.title, { color: theme.colors.text.primary }]}>{title}</Text>
+          <Text style={[styles.title, { color: theme.colors.primaryForeground }]}>{title}</Text>
           {isOpen ? (
             <ChevronUp size={20} color={theme.colors.text.secondary} />
           ) : (

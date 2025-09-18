@@ -1,9 +1,11 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { LoadingScreen } from '../../../../components/ui/LoadingScreen';
-import { ErrorState } from '../../../../components/ui/StatusIndicators';
+import React from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { ErrorState, LoadingState } from '../../../../components/ui/StatusIndicators';
 import CardForSaleItem from '../../../marketplace/components/CardForSaleItem';
 import { useUserAds } from '../../hooks/queries/useUserInfo';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import TitleSection from '../../../../components/ui/TitleSection';
+import { useTheme } from '../../../../theme/useTheme';
+import { Ad } from '../../../marketplace/types';
 
 interface UserAdListProps {
   userId: string;
@@ -11,31 +13,36 @@ interface UserAdListProps {
 
 export default function UserAdList({ userId }: UserAdListProps) {
   const { data: ads, isLoading, error } = useUserAds(userId);
-  const adsListFlat = ads?.pages.flatMap((page) => page.data) ?? [];
-  const insets = useSafeAreaInsets();
+  const adsListFlat = ads?.pages.flatMap((page) => page.data) ?? ([] as Ad[]);
+  const theme = useTheme();
 
-  if (isLoading) return <LoadingScreen />;
+  if (isLoading) return <LoadingState />;
   if (error) return <ErrorState message={error.message} />;
 
   const GAP = 8;
 
+  const renderItem = ({ item }: { item: Ad }) => (
+    <View style={styles.cardWrapper}>
+      <CardForSaleItem item={item} />
+    </View>
+  );
+
   return (
-    <ScrollView style={{ paddingBottom: insets.bottom }} showsVerticalScrollIndicator={false}>
-      <View
-        style={{
-          gap: GAP,
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-        }}
-      >
-        {adsListFlat?.map((item) => (
-          <View key={item.id} style={styles.cardWrapper}>
-            <CardForSaleItem item={item} />
-          </View>
-        ))}
-      </View>
-    </ScrollView>
+    <FlatList<Ad>
+      data={adsListFlat}
+      keyExtractor={(item) => item.id}
+      renderItem={renderItem}
+      numColumns={2}
+      columnWrapperStyle={{ justifyContent: 'space-between', marginBottom: GAP }}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        paddingBottom: theme.spacing.lg,
+      }}
+      ListHeaderComponent={() => (
+        <TitleSection title="Ads" style={{ marginBottom: theme.spacing.md }} />
+      )}
+      removeClippedSubviews
+    />
   );
 }
 
