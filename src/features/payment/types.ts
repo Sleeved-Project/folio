@@ -8,6 +8,10 @@ export interface CreatePaymentSheetResponse {
   customer: string;
 }
 
+export interface CancelPaymentSheetResponse {
+  hasBeenCancelled: boolean;
+}
+
 export interface FetchPublishableKeyResponse {
   publishableKey: string;
 }

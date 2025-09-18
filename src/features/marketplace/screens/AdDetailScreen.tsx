@@ -9,7 +9,9 @@ import AdHeader from '../components/AdHeader';
 import AdSellerCard from '../components/AdSellerCard';
 import { useAdDetail } from '../hooks/queries/useAdDetail';
 import { useFetchPaymentSheet } from '../../payment/hooks/mutations/useFetchPaymentSheet';
+import { useCancelPaymentSheet } from '../../payment/hooks/mutations/useCancelPaymentSheet';
 import { AdStatusEnum } from '../types';
+import CertificationBadge from '../components/CertificationBadge';
 
 export default function AdDetailScreen({ adId }: { adId: string }) {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -17,6 +19,7 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
   const { data: ad, isLoading, error } = useAdDetail(adId);
 
   const { mutateAsync: fetchPaymentSheetParams } = useFetchPaymentSheet(adId);
+  const { mutateAsync: cancelPaymentSheet } = useCancelPaymentSheet(adId);
   const [loading, setLoading] = useState(false);
   const [paymentSheetReady, setPaymentSheetReady] = useState(false);
 
@@ -64,6 +67,12 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
       const { error } = await presentPaymentSheet();
 
       if (error) {
+        if (error.code === 'Canceled') {
+          // Cancel payment intent + update ad status to "available" if the user cancels
+          setPaymentSheetReady(false);
+          await cancelPaymentSheet();
+          return;
+        }
         throw new Error(
           error.message || 'Stripe Payment Sheet must be initialized before presenting'
         );
@@ -87,9 +96,7 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
           imageVerso={ad.versoImageUrl}
           title={ad.card.name}
         />
-
         <AdSellerCard seller={ad.seller} onPress={handleSeller} />
-
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: theme.colors.text.black }]}>
             {ad.card.name}
@@ -105,10 +112,7 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
           </Text>
         </View>
 
-        {/* {ad.certificate &&
-          ad.certificate?.map((cert, index) => (
-            <CertificationBadge key={index} certification={cert} />
-          ))} */}
+        {ad.certificate && <CertificationBadge certification={ad.certificate} />}
 
         {/* <View style={styles.section}>
           <CardAvailableOffers cardId={ad.id} title="Other selling" />

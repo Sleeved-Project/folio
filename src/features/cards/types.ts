@@ -1,3 +1,6 @@
+import { LabelItem } from '../../types';
+import { Certification } from '../marketplace/types';
+
 export interface Card {
   id: string;
   imageSmall: string;
@@ -92,3 +95,36 @@ export interface CardPricesData {
   cardMarketReporting?: CardMarketReporting;
   tcgPlayerReporting?: TcgPlayerReporting;
 }
+
+export interface CardAvailableOffer {
+  id: string;
+  certificate: Certification | null;
+  seller: CardSeller;
+  originalPrice: string;
+  rectoImageUrl: string | null;
+  condition: CardCondition;
+  finish: CardFinish;
+}
+
+export interface CardAvailableOffersResponse {
+  data: CardAvailableOffer[];
+  meta: {
+    currentPage: number;
+    firstPage: number;
+    firstPageUrl: string;
+    lastPage: number;
+    lastPageUrl: string;
+    nextPageUrl: string | null;
+    perPage: number;
+    previousPageUrl: string | null;
+    total: number;
+  };
+}
+
+export interface CardSeller {
+  id: string;
+  username: string;
+}
+
+export type CardCondition = LabelItem;
+export type CardFinish = LabelItem;
