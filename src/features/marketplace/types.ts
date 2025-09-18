@@ -75,13 +75,13 @@ export interface CheckoutCertificate {
 export interface CheckoutSeller {
   id: string;
   username: string;
-  avatarUrl?: string;
+  profilePictureUrl?: string;
 }
 
 export interface CheckoutPrice {
-  shippingCost: string;
-  serviceCost: string;
-  totalCost: string;
+  shippingCosts: string;
+  serviceCosts: string;
+  totalCosts: string;
 }
 
 export interface AdCard {
@@ -139,19 +139,24 @@ export enum AdStatusEnum {
 }
 
 export interface UpdateBuyerAddressParams {
-  address: string;
+  road: string;
   additionalInfo?: string;
   city: string;
-  zipCode: string;
+  zipcode: string;
   country: string;
-  countryCode: string;
+  countrycode: string;
 }
 
 export interface Address {
-  address: string;
+  id: string;
+  road: string;
   additionalInfo: string;
   city: string;
-  zipCode: string;
+  zipcode: string;
   country: string;
-  countryCode: string;
+  countrycode: string;
+}
+
+export interface AddressResponse {
+  address: Address;
 }

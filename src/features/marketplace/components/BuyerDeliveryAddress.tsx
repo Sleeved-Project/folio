@@ -3,23 +3,26 @@ import { Button, FormTextInput } from '../../../components/ui';
 import { useForm } from 'react-hook-form';
 import { BuyerAddressFormValues, buyerAddress } from '../schemas/sellerAddressSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useBuyerDeliveryAddress } from '../hooks/mutations/useBuyerDeliveryAddress';
 import FilledInput from '../../../components/ui/FilledInput';
 import { theme } from '../../../theme/theme';
-import { useCreateBuyerAddress } from '../hooks/queries/useCreateBuyerAddress';
 import { useToaster } from '../../../components/ui/ToasterProvider';
+import { useCreateBuyerAddress } from '../hooks/mutations/useCreateBuyerAddress';
+import { queryClient } from '../../../lib/query/query-client';
+import { Address } from '../types';
 
 interface BuyerDeliveryAddressProps {
   isModifying: boolean;
-  buyerAddressId: string;
+  buyerAddressData?: Address;
+  setIsModifying?: () => void;
 }
 
 export default function BuyerDeliveryAddress({
-  buyerAddressId,
   isModifying,
+  buyerAddressData,
+  setIsModifying,
 }: BuyerDeliveryAddressProps) {
-  const { mutate: updateDeliveryAddress, isPending } = useBuyerDeliveryAddress();
-  const { data: buyerAddressData } = useCreateBuyerAddress(buyerAddressId);
+  const { mutateAsync: updateDeliveryAddress, isPending } = useCreateBuyerAddress();
+
   const { showToast } = useToaster();
 
   const {
@@ -29,19 +32,27 @@ export default function BuyerDeliveryAddress({
   } = useForm<BuyerAddressFormValues>({
     resolver: zodResolver(buyerAddress),
     defaultValues: {
-      address: buyerAddressData?.address || '',
-      additionalInfo: buyerAddressData?.additionalInfo || '',
-      city: buyerAddressData?.city || '',
-      zipCode: buyerAddressData?.zipCode || '',
-      country: buyerAddressData?.country || '',
-      countryCode: buyerAddressData?.countryCode || '',
+      road: '',
+      additionalInfo: '',
+      city: '',
+      zipcode: '',
+      country: '',
+      countrycode: '',
     },
     mode: 'onChange',
   });
 
   const onSubmit = async (data: BuyerAddressFormValues) => {
     try {
-      updateDeliveryAddress(data);
+      const response = await updateDeliveryAddress(data);
+
+      if (response) {
+        queryClient.invalidateQueries({ queryKey: ['address'] });
+        showToast({ message: response.message, type: 'success' });
+        if (setIsModifying) {
+          setIsModifying();
+        }
+      }
     } catch {
       showToast({ message: 'Updating the address failed.', type: 'error' });
     }
@@ -52,24 +63,22 @@ export default function BuyerDeliveryAddress({
       <View style={styles.formContainer}>
         {!isModifying && buyerAddressData ? (
           <View style={{ gap: theme.spacing.sm }}>
-            <FilledInput label="Address" value={buyerAddressData.address} />
+            <FilledInput label="Address" value={buyerAddressData.road} />
             <FilledInput label="Additional Info" value={buyerAddressData.additionalInfo} />
             <FilledInput label="City" value={buyerAddressData.city} />
-            <FilledInput label="Zip Code" value={buyerAddressData.zipCode} />
+            <FilledInput label="Zip Code" value={buyerAddressData.zipcode} />
             <FilledInput label="Country" value={buyerAddressData.country} />
-            <FilledInput label="Country Code" value={buyerAddressData.countryCode} />
+            <FilledInput label="Country Code" value={buyerAddressData.countrycode} />
           </View>
         ) : (
           <>
             <FormTextInput
               control={control}
-              name="address"
-              label="Address"
+              name="road"
+              label="Road"
               placeholder="Enter your address"
               inputType="text"
-              error={
-                typeof errors.address?.message === 'string' ? errors.address?.message : undefined
-              }
+              error={typeof errors.road?.message === 'string' ? errors.road?.message : undefined}
               returnKeyType="next"
             />
             <FormTextInput
@@ -96,12 +105,12 @@ export default function BuyerDeliveryAddress({
             />
             <FormTextInput
               control={control}
-              name="zipCode"
+              name="zipcode"
               label="Zip Code"
               placeholder="Enter your zip code"
               inputType="text"
               error={
-                typeof errors.zipCode?.message === 'string' ? errors.zipCode?.message : undefined
+                typeof errors.zipcode?.message === 'string' ? errors.zipcode?.message : undefined
               }
               returnKeyType="next"
             />
@@ -118,13 +127,13 @@ export default function BuyerDeliveryAddress({
             />
             <FormTextInput
               control={control}
-              name="countryCode"
+              name="countrycode"
               label="Country Code"
               placeholder="Enter your country code"
               inputType="text"
               error={
-                typeof errors.countryCode?.message === 'string'
-                  ? errors.countryCode?.message
+                typeof errors.countrycode?.message === 'string'
+                  ? errors.countrycode?.message
                   : undefined
               }
               returnKeyType="done"

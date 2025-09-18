@@ -2,23 +2,23 @@ import { useMutation } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
 import { UpdateBuyerAddressParams } from '../../types';
 
-export const useBuyerDeliveryAddress = () => {
+export const useCreateBuyerAddress = () => {
   return useMutation({
     mutationFn: async ({
-      address,
+      road,
       additionalInfo,
       city,
-      zipCode,
+      zipcode,
       country,
-      countryCode,
+      countrycode,
     }: UpdateBuyerAddressParams) => {
-      const response = await httpClient.post<boolean>(`/me/address`, {
-        address,
+      const response = await httpClient.post<{ message: string }>(`/addresses`, {
+        road,
         additionalInfo,
         city,
-        zipCode,
+        zipcode,
         country,
-        countryCode,
+        countrycode,
       });
       return response;
     },

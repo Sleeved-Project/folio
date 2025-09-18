@@ -12,7 +12,11 @@ export default function PurchaseRecapSellerCard({ seller }: PurchaseRecapSellerC
 
   return (
     <View style={styles.container}>
-      <ProfilePicture username={seller.username} uri={seller.avatarUrl || ''} size="small" />
+      <ProfilePicture
+        username={seller.username}
+        uri={seller.profilePictureUrl || ''}
+        size="small"
+      />
       <View style={styles.infoContainer}>
         <Text
           style={{
