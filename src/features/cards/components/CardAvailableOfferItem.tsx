@@ -98,7 +98,7 @@ export default function CardAvailableOfferItem({
               },
             ]}
           >
-            ${originalPrice}
+            {originalPrice}
           </Text>
           <BadgeLabel label={condition.label} variant="dark" />
         </View>

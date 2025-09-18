@@ -6,6 +6,7 @@ import { useUserProfile } from '../hooks/queries/useUserInfo';
 import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
 import { View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import UserOrderList from '../components/profile/UserOrderList';
 
 const tabOptions: TabOption<'ads' | 'orders'>[] = [
@@ -20,6 +21,7 @@ interface ProfileScreenProps {
 
 export default function ProfileScreen({ isUserProfile = false, userId }: ProfileScreenProps) {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<'ads' | 'orders'>('ads');
   const { data: userData, isLoading, error } = useUserProfile(isUserProfile ? undefined : userId);
 
@@ -27,7 +29,7 @@ export default function ProfileScreen({ isUserProfile = false, userId }: Profile
   if (error || !userData) return <ErrorState message={error?.message} />;
 
   return (
-    <View style={{ paddingTop: theme.spacing.lg, flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <ProfileInformation
         firstname={userData.firstname}
         lastname={userData.lastname}
@@ -36,16 +38,25 @@ export default function ProfileScreen({ isUserProfile = false, userId }: Profile
         rating={5}
         ratingCount={25}
         isUserProfile={isUserProfile}
+        style={{
+          ...(isUserProfile ? { paddingTop: insets.top + theme.spacing.md } : {}),
+        }}
       />
-
-      <TabSwitcher
-        options={tabOptions}
-        activeTabId={activeTab}
-        onTabChange={setActiveTab}
-        containerStyle={{ marginVertical: 16 }}
-      />
-
-      {activeTab === 'ads' ? <UserAdList userId={userId} /> : <UserOrderList userId={userId} />}
+      <View style={{ flex: 1, paddingHorizontal: theme.spacing.md }}>
+        {isUserProfile && (
+          <TabSwitcher
+            options={tabOptions}
+            activeTabId={activeTab}
+            onTabChange={setActiveTab}
+            containerStyle={{ marginVertical: 16 }}
+          />
+        )}
+        {activeTab === 'ads' ? (
+          <UserAdList userId={userId} shouldShowTitle={!isUserProfile} />
+        ) : (
+          <UserOrderList userId={userId} />
+        )}
+      </View>
     </View>
   );
 }

@@ -39,7 +39,7 @@ export default function OrderItem({ item }: OrderItemProps) {
               Sold on : <Text style={{ fontWeight: '500' }}>{item.createdAt}</Text>
             </Text>
             <View style={[styles.status, { backgroundColor: theme.colors.background.primary }]}>
-              <Text style={{}}>{item.status.label}</Text>
+              <Text>{item.status.label}</Text>
             </View>
           </View>
         </View>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   statusContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
   status: {
     marginTop: 8,
