@@ -63,25 +63,23 @@ export default function ProfileInformation({
       ]}
     >
       {isUserProfile && (
-        <TouchableOpacity
+        <Button
+          title="Logout"
+          variant="danger"
+          vertical
+          leftIcon={<LogOut size={16} />}
           onPress={handleLogout}
-          accessibilityLabel="Logout"
-          style={[
-            styles.logoutButton,
-            {
-              top: theme.spacing.xs,
-              right: theme.spacing.xs,
-              borderRadius: theme.borderRadius.medium,
-              backgroundColor: theme.colors.background.primary,
-              padding: theme.spacing.xs,
-              justifyContent: 'center',
-              alignItems: 'center',
-            },
-          ]}
-        >
-          <LogOut color={theme.colors.danger} size={16} />
-          <Text style={{ color: theme.colors.primaryForeground }}>Logout</Text>
-        </TouchableOpacity>
+          buttonStyle={{
+            position: 'absolute',
+            top: theme.spacing.xs,
+            right: theme.spacing.xs,
+            height: 36,
+            paddingHorizontal: 12,
+          }}
+          textStyle={{
+            fontSize: theme.typography.fontSizes.sm,
+          }}
+        />
       )}
 
       <ProfilePicture username={username} uri={profilePictureUrl} size="large" />
