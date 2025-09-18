@@ -1,31 +1,31 @@
-import { CameraOff } from 'lucide-react-native';
+import { router } from 'expo-router';
+import { CameraOff, CircleStopIcon } from 'lucide-react-native';
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import BadgeLabel from '../../../components/ui/BadgeLabel';
 import { useTheme } from '../../../theme/useTheme';
-
-interface CardAvailableOfferItemProps {
-  title: string;
-  seller: string;
-  price: string;
-  pictureUrl: string | null;
-  condition: string;
-}
+import { CardAvailableOffer } from '../types';
 
 export default function CardAvailableOfferItem({
-  title,
+  id,
+  certificate,
   seller,
-  price,
-  pictureUrl,
+  originalPrice,
+  rectoImageUrl,
   condition,
-}: CardAvailableOfferItemProps) {
+  finish,
+}: CardAvailableOffer) {
   const theme = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}>
+    <TouchableOpacity
+      key={id}
+      onPress={() => router.push(`/ad/${id}`)}
+      style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}
+    >
       <View style={styles.imageContainer}>
-        {pictureUrl ? (
-          <Image source={{ uri: pictureUrl }} style={styles.image} />
+        {rectoImageUrl ? (
+          <Image source={{ uri: rectoImageUrl }} style={styles.image} />
         ) : (
           <View
             style={[
@@ -43,20 +43,44 @@ export default function CardAvailableOfferItem({
         )}
       </View>
       <View style={styles.infoContainer}>
-        <Text
-          style={[
-            {
-              color: theme.colors.text.black,
-              fontWeight: theme.typography.fontWeights.bold,
-              fontSize: theme.typography.fontSizes.md,
-            },
-          ]}
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+          }}
         >
-          {title}
-        </Text>
-        <Text style={[styles.seller, { color: theme.colors.text.secondary }]}>
-          Sale by <Text style={{ fontWeight: 'bold' }}>{seller}</Text>
-        </Text>
+          <View>
+            <Text
+              style={[
+                {
+                  color: theme.colors.text.black,
+                  fontWeight: theme.typography.fontWeights.bold,
+                  fontSize: theme.typography.fontSizes.md,
+                },
+              ]}
+            >
+              Finish : {finish.label}
+            </Text>
+            <Text style={[styles.seller, { color: theme.colors.text.secondary }]}>
+              Sale by <Text style={{ fontWeight: 'bold' }}>{seller.username}</Text>
+            </Text>
+          </View>
+          {certificate && (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text
+                style={{
+                  fontSize: theme.typography.fontSizes.md,
+                  color: theme.colors.text.black,
+                  fontWeight: theme.typography.fontWeights.bold,
+                }}
+              >
+                {certificate.globalRating}
+              </Text>
+              <CircleStopIcon style={{ marginLeft: 5 }} size={24} color={theme.colors.text.black} />
+            </View>
+          )}
+        </View>
         <View style={styles.offerBottom}>
           <Text
             style={[
@@ -67,12 +91,12 @@ export default function CardAvailableOfferItem({
               },
             ]}
           >
-            ${price}
+            ${originalPrice}
           </Text>
-          <BadgeLabel label={condition} variant="dark" />
+          <BadgeLabel label={condition.label} variant="dark" />
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -85,8 +109,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageContainer: {
-    width: 72,
-    height: 72,
+    width: 60,
+    height: 80,
     marginRight: 16,
     borderRadius: 8,
     overflow: 'hidden',
