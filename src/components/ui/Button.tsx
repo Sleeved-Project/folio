@@ -143,7 +143,7 @@ const Button: React.FC<ButtonProps> = ({
       style={[
         styles.button,
         {
-          borderRadius: 14,
+          borderRadius: theme.borderRadius.medium,
           borderWidth: config.border === 'transparent' ? 0 : 2,
           borderColor: config.border,
           backgroundColor:
@@ -153,7 +153,7 @@ const Button: React.FC<ButtonProps> = ({
           shadowOpacity: variant === 'outline' || variant === 'ghost' ? 0.02 : 0.18,
           shadowRadius: variant === 'outline' || variant === 'ghost' ? 6 : 18,
           elevation: variant === 'outline' || variant === 'ghost' ? 1 : 6,
-          width: fullWidth ? '100%' : undefined, // apply full width if prop is true
+          width: fullWidth ? '100%' : undefined,
         },
         (disabled || loading) && styles.disabledOpaque,
         buttonStyle,
@@ -194,7 +194,7 @@ const Button: React.FC<ButtonProps> = ({
                 color: config.foreground,
                 fontSize: theme.typography.fontSizes.md,
                 fontWeight: theme.typography.fontWeights.bold,
-                textAlign: 'center', // ensure text is centered
+                textAlign: 'center',
                 textShadowColor:
                   variant !== 'secondary' && config.glow !== 'transparent'
                     ? `${config.glow}33`

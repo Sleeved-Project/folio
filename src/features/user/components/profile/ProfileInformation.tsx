@@ -1,6 +1,5 @@
-// ...existing code...
 import { useRouter } from 'expo-router';
-import { Alert, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../../../theme/useTheme';
 import ProfilePicture from './ProfilePicture';
 // import StarRating from './StarRating';
@@ -141,8 +140,6 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     position: 'absolute',
-    // top/right/size set inline with theme
     zIndex: 5,
   },
 });
-// ...existing code...
