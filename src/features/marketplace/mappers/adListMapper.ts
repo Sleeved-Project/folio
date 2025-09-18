@@ -1,9 +1,9 @@
 import { Ad, AdsListResponse } from '../types';
 
-export const mapAdList = (data: AdsListResponse): AdsListResponse => {
+export const mapAdList = (response: AdsListResponse): AdsListResponse => {
   return {
-    ...data,
-    data: data.data.map((ad: Ad) => ({
+    ...response,
+    data: response.data.map((ad: Ad) => ({
       ...ad,
       originalPrice: ad.originalPrice + '€',
     })),
