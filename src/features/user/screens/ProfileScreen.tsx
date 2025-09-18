@@ -7,6 +7,7 @@ import { useUserProfile } from '../hooks/queries/useUserInfo';
 import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
 import { View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 // import { User } from 'lucide-react-native';
 
 // const tabOptions: TabOption<'ads' | 'ratings'>[] = [
@@ -21,6 +22,7 @@ interface ProfileScreenProps {
 
 export default function ProfileScreen({ isUserProfile = false, userId }: ProfileScreenProps) {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
   // const [activeTab, setActiveTab] = useState<'ads' | 'ratings'>('ads');
   const { data: userData, isLoading, error } = useUserProfile(isUserProfile ? undefined : userId);
 
@@ -28,7 +30,7 @@ export default function ProfileScreen({ isUserProfile = false, userId }: Profile
   if (error || !userData) return <ErrorState message={error?.message} />;
 
   return (
-    <View style={{ paddingTop: theme.spacing.lg, flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <ProfileInformation
         firstname={userData.firstname}
         lastname={userData.lastname}
@@ -37,6 +39,9 @@ export default function ProfileScreen({ isUserProfile = false, userId }: Profile
         rating={5}
         ratingCount={25}
         isUserProfile={isUserProfile}
+        style={{
+          ...(isUserProfile ? { paddingTop: insets.top + theme.spacing.md } : {}),
+        }}
       />
 
       {/* <TabSwitcher
@@ -47,7 +52,13 @@ export default function ProfileScreen({ isUserProfile = false, userId }: Profile
       /> */}
 
       {/* {activeTab === 'ads' ? <UserAdList userId={userId} /> : <UserRatingsList userId={userId} />} */}
-      <UserAdList userId={userId} />
+      <UserAdList
+        userId={userId}
+        contentContainerStyle={{
+          paddingHorizontal: theme.spacing.md,
+          paddingBottom: theme.spacing.lg,
+        }}
+      />
     </View>
   );
 }
