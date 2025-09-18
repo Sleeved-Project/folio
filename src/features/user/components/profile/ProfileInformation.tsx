@@ -66,7 +66,6 @@ export default function ProfileInformation({
         <Button
           title="Logout"
           variant="danger"
-          vertical
           leftIcon={<LogOut size={16} />}
           onPress={handleLogout}
           buttonStyle={{
