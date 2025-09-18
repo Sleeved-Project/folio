@@ -76,6 +76,9 @@ export default function SearchBar({
         placeholderTextColor={theme.colors.text.secondary}
         returnKeyType="search"
         clearButtonMode="never"
+        autoCorrect={false}
+        autoCapitalize="none"
+        autoComplete="off"
       />
       {showClearButton && inputValue.length > 0 && (
         <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
