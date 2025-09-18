@@ -76,7 +76,7 @@ export default function CardForSaleItem({ item }: AdItemProps) {
         <Text style={[{ color: theme.colors.text.secondary }]}>{item.seller.username}</Text>
 
         <Text style={{ fontWeight: theme.typography.fontWeights.bold, paddingTop: 2 }}>
-          ${item.originalPrice}
+          {item.originalPrice}
         </Text>
       </View>
     </Pressable>
