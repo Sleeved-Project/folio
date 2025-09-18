@@ -2,6 +2,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
 import { cardKeys } from './useCardsQuery';
 import { CardAvailableOffersResponse } from '../../types';
+import { cardAvailableOffersMapper } from '../../mappers/cardAvailableOffersMapper';
 
 export const cardAvailableOffersKeys = {
   ads: (cardId: string) => [...cardKeys.all, 'ads', cardId] as const,
@@ -21,7 +22,7 @@ export function useCardAvailableOffers(cardId: string) {
       const response = await httpClient.get<CardAvailableOffersResponse>(
         `/cards/${cardId}/ads?${queryString}`
       );
-      return response;
+      return cardAvailableOffersMapper(response);
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
