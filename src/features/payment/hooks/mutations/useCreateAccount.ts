@@ -6,7 +6,7 @@ export const useCreateAccount = () => {
   return useMutation({
     mutationFn: async () => {
       const response = await httpClient.get<CreateAccountResponse>(`/payment/account`);
-      return response.linkingUrl;
+      return response.redirectLinkUrl;
     },
   });
 };

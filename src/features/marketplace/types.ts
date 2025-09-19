@@ -1,8 +1,8 @@
 import { ImageSourcePropType } from 'react-native';
 import { LabelItem } from '../../types';
 
-export interface HasStripeAccountResponse {
-  hasStripeAccount: boolean;
+export interface HasValidStripeAccountResponse {
+  hasValidStripeAccount: boolean;
 }
 
 export interface Seller {
