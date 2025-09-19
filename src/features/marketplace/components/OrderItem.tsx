@@ -1,8 +1,9 @@
 import { router } from 'expo-router';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import { Order } from '../types';
 import { ChevronRight } from 'lucide-react-native';
+import OrderCardItem from './OrderCardItem';
 
 interface OrderItemProps {
   item: Order;
@@ -22,26 +23,7 @@ export default function OrderItem({ item }: OrderItemProps) {
       }}
     >
       <View style={[styles.container, { padding: theme.spacing.sm }]}>
-        <Image source={{ uri: item.card.rectoImageUrl }} style={styles.image} resizeMode="cover" />
-        <View style={{ flex: 1 }}>
-          <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-            {item.card.name} ({item.finish.label}) · ${item.originalPrice}
-          </Text>
-          <Text style={{ color: '#555', marginVertical: theme.spacing.xs }}>
-            Sold by : <Text style={{ color: theme.colors.text.tertiary }}>@{item.seller.name}</Text>
-          </Text>
-          <Text style={{ color: '#555', marginVertical: theme.spacing.xs }}>
-            Condition: <Text style={{ fontWeight: '500' }}>{item.condition.label}</Text>
-          </Text>
-          <View>
-            <Text style={{ color: '#555', marginVertical: theme.spacing.xs }}>
-              Sold on : <Text style={{ fontWeight: '500' }}>{item.createdAt}</Text>
-            </Text>
-          </View>
-          <View style={[styles.status, { backgroundColor: theme.colors.background.primary }]}>
-            <Text>{item.status.label}</Text>
-          </View>
-        </View>
+        <OrderCardItem item={item} />
         <View>
           <ChevronRight size={24} color={theme.colors.text.primary} />
         </View>

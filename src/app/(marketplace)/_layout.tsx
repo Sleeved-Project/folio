@@ -13,6 +13,13 @@ export default function MarketplaceLayout() {
         }}
       />
       <Stack.Screen
+        name="order/[orderId]"
+        options={{
+          title: 'Order Details',
+          headerBackTitle: 'Back',
+        }}
+      />
+      <Stack.Screen
         name="order-confirmation"
         options={{
           headerShown: false,

@@ -162,7 +162,7 @@ export interface AddressResponse {
 }
 export interface Order {
   id: string;
-  seller: { name: string };
+  seller: { id: string; username: string; profilePictureUrl?: string };
   condition: Condition;
   finish: Finish;
   card: {
@@ -172,6 +172,19 @@ export interface Order {
   originalPrice: string;
   status: { id: string; label: string };
   createdAt: string;
+}
+
+export interface OrderDetail extends Omit<Order, 'totalPrice'> {
+  totalPrice: string;
+  updatedAt: string;
+  deliveryAddress: {
+    road: string;
+    city: string;
+    zipcode: string;
+    country: string;
+    countrycode: string;
+    additionalInfo?: string;
+  };
 }
 
 export interface OrdersListResponse {
