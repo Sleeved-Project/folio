@@ -28,19 +28,18 @@ export default function OrderItem({ item }: OrderItemProps) {
             {item.card.name} ({item.finish.label}) · ${item.originalPrice}
           </Text>
           <Text style={{ color: '#555', marginVertical: theme.spacing.xs }}>
-            Sold to :{' '}
-            <Text style={{ color: theme.colors.text.tertiary }}>@{item.sellerUsername}</Text>
+            Sold by : <Text style={{ color: theme.colors.text.tertiary }}>@{item.seller.name}</Text>
           </Text>
           <Text style={{ color: '#555', marginVertical: theme.spacing.xs }}>
             Condition: <Text style={{ fontWeight: '500' }}>{item.condition.label}</Text>
           </Text>
-          <View style={styles.statusContainer}>
+          <View>
             <Text style={{ color: '#555', marginVertical: theme.spacing.xs }}>
               Sold on : <Text style={{ fontWeight: '500' }}>{item.createdAt}</Text>
             </Text>
-            <View style={[styles.status, { backgroundColor: theme.colors.background.primary }]}>
-              <Text>{item.status.label}</Text>
-            </View>
+          </View>
+          <View style={[styles.status, { backgroundColor: theme.colors.background.primary }]}>
+            <Text>{item.status.label}</Text>
           </View>
         </View>
         <View>
@@ -89,13 +88,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
   },
-  statusContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-  },
   status: {
-    marginTop: 8,
+    alignSelf: 'flex-start',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,

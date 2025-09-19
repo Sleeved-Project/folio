@@ -162,7 +162,7 @@ export interface AddressResponse {
 }
 export interface Order {
   id: string;
-  sellerUsername: string;
+  seller: { name: string };
   condition: Condition;
   finish: Finish;
   card: {

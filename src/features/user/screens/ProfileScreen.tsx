@@ -54,7 +54,7 @@ export default function ProfileScreen({ isUserProfile = false, userId }: Profile
         {activeTab === 'ads' ? (
           <UserAdList userId={userId} shouldShowTitle={!isUserProfile} />
         ) : (
-          <UserOrderList userId={userId} />
+          <UserOrderList />
         )}
       </View>
     </View>

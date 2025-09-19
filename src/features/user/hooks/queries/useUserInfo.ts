@@ -57,18 +57,16 @@ export function useUserAds(userId: string) {
   });
 }
 
-export function useUserOrders(userId: string) {
+export function useUserOrders() {
   return useInfiniteQuery<OrdersListResponse>({
-    queryKey: userProfileKeys.userOrders(userId),
+    queryKey: userProfileKeys.userOrders('orders'),
     queryFn: async ({ pageParam = 1 }) => {
       const params = new URLSearchParams({
         page: String(pageParam),
         limit: '20',
       });
 
-      const response = await httpClient.get<OrdersListResponse>(
-        `/users/${userId}/orders?${params.toString()}`
-      );
+      const response = await httpClient.get<OrdersListResponse>(`/me/orders?${params.toString()}`);
       const formattedData = response.data.map((order) => mapOrderData(order));
       const formattedResponse: OrdersListResponse = {
         ...response,
