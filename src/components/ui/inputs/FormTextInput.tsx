@@ -112,7 +112,7 @@ const FormTextInput = <T extends FieldValues>({
               multiline={multiline}
               numberOfLines={multiline ? numberOfLines : 1}
               textAlignVertical={multiline ? 'top' : 'center'}
-              editable={!disabled}
+              editable={disabled ? false : true}
             />
 
             {hasRightIcon && (
