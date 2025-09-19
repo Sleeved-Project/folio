@@ -10,7 +10,7 @@ export const theme = {
     dangerForeground: '#FFFFFF',
     success: '#16A34A',
     successForeground: '#FFFFFF',
-    info: '#0891B2',
+    info: '#7fb7b4',
     infoForeground: '#FFFFFF',
     warning: '#F59E0B',
     warningForeground: '#18181B',

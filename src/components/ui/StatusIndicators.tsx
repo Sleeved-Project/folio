@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { useTheme } from '../../theme/useTheme';
 import { CircleAlertIcon } from 'lucide-react-native';
+import React from 'react';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { useTheme } from '../../theme/useTheme';
 
 interface ErrorStateProps {
   message?: string;
@@ -37,6 +37,28 @@ export function ErrorState({ message = 'An error occurred' }: ErrorStateProps) {
     </View>
   );
 }
+
+export const InfoState = ({ message, icon }: { message: string; icon: React.ReactNode }) => {
+  const theme = useTheme();
+
+  return (
+    <View
+      style={[
+        styles.centerContainer,
+        {
+          backgroundColor: theme.colors.background.secondary,
+          borderRadius: theme.borderRadius.medium,
+          borderColor: theme.colors.info,
+          borderWidth: 1,
+          gap: theme.spacing.sm,
+        },
+      ]}
+    >
+      {icon}
+      <Text style={[styles.errorText, { color: theme.colors.info }]}>{message}</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   centerContainer: {
