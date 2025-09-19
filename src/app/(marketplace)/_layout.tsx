@@ -20,6 +20,15 @@ export default function MarketplaceLayout() {
         }}
       />
       <Stack.Screen
+        name="purchase-recap/[adId]"
+        options={{
+          title: 'Checkout',
+          headerBackTitle: 'Back',
+          headerTintColor: theme.colors.primaryForeground,
+          // headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="seller/[sellerId]"
         options={{
           title: 'Seller profile',

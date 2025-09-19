@@ -1,27 +1,17 @@
-import { useStripe } from '@stripe/stripe-react-native';
 import { router } from 'expo-router';
-import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
 import { useTheme } from '../../../theme/useTheme';
 import AdActionBar from '../components/AdActionBar';
 import AdHeader from '../components/AdHeader';
 import AdSellerCard from '../components/AdSellerCard';
 import { useAdDetail } from '../hooks/queries/useAdDetail';
-import { useFetchPaymentSheet } from '../../payment/hooks/mutations/useFetchPaymentSheet';
-import { useCancelPaymentSheet } from '../../payment/hooks/mutations/useCancelPaymentSheet';
-import { AdStatusEnum } from '../types';
 import CertificationBadge from '../components/CertificationBadge';
+import { AdStatusEnum } from '../types';
 
 export default function AdDetailScreen({ adId }: { adId: string }) {
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const theme = useTheme();
   const { data: ad, isLoading, error } = useAdDetail(adId);
-
-  const { mutateAsync: fetchPaymentSheetParams } = useFetchPaymentSheet(adId);
-  const { mutateAsync: cancelPaymentSheet } = useCancelPaymentSheet(adId);
-  const [loading, setLoading] = useState(false);
-  const [paymentSheetReady, setPaymentSheetReady] = useState(false);
 
   const handleSeeCardDetail = (cardId: string) => {
     router.push(`/card/${cardId}`);
@@ -31,62 +21,12 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
     router.push(`/seller/${sellerId}`);
   };
 
+  const handleBuy = () => {
+    router.push(`/purchase-recap/${adId}`);
+  };
+
   if (isLoading) return <LoadingState />;
   if (error || !ad) return <ErrorState message="Failed to load ad details." />;
-
-  const initializePaymentSheet = async () => {
-    try {
-      setLoading(true);
-      const { paymentIntent, ephemeralKey, customer } = await fetchPaymentSheetParams();
-
-      const { error } = await initPaymentSheet({
-        merchantDisplayName: 'Sleeved',
-        customerId: customer,
-        customerEphemeralKeySecret: ephemeralKey,
-        paymentIntentClientSecret: paymentIntent,
-        returnURL: `folio://ad/${ad.id}`,
-      });
-
-      if (error) {
-        throw error;
-      }
-      setPaymentSheetReady(true);
-    } catch (err: unknown) {
-      throw new Error((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const openPaymentSheet = async () => {
-    try {
-      if (!paymentSheetReady) {
-        await initializePaymentSheet();
-      }
-
-      const { error } = await presentPaymentSheet();
-
-      if (error) {
-        if (error.code === 'Canceled') {
-          // Cancel payment intent + update ad status to "available" if the user cancels
-          setPaymentSheetReady(false);
-          await cancelPaymentSheet();
-          return;
-        }
-        throw new Error(
-          error.message || 'Stripe Payment Sheet must be initialized before presenting'
-        );
-      }
-
-      setLoading(false);
-      router.push('/order-confirmation');
-    } catch (err: unknown) {
-      setLoading(false);
-      const message =
-        err instanceof Error ? err.message : 'An unknown error occurred while processing payment';
-      Alert.alert('Payment Error', message);
-    }
-  };
 
   return (
     <>
@@ -122,8 +62,7 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
       <AdActionBar
         ad={ad}
         onSeeCardDetail={handleSeeCardDetail}
-        onBuy={openPaymentSheet}
-        isLoading={loading}
+        onBuy={handleBuy}
         canBuy={ad.status.label === AdStatusEnum.PUBLISHED}
       />
     </>

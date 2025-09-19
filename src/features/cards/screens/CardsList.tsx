@@ -1,9 +1,7 @@
-import { StyleSheet, View } from 'react-native';
 import { useCards } from '../hooks/queries/useCardsQuery';
 import { useState } from 'react';
 import SearchBar from '../../../components/ui/SearchBar';
 import CardListDisplay from '../components/CardListDisplay';
-import { useTheme } from '../../../theme/useTheme';
 import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
 import CardFilters from '../../filters/components/CardFilters';
 import { useSets } from '../../sets/hooks/queries/useSetsQuery';
@@ -22,7 +20,6 @@ interface CardsListProps {
 export default function CardsList({ isFiltersVisible = false }: CardsListProps) {
   const [cardName, setCardName] = useState<string>('');
   const [activeTab, setActiveTab] = useState<TabType>('sets');
-  const theme = useTheme();
   const { cardFilters, filtersOptions, setSelectedFilterOption } = useFilterContext();
 
   const {
@@ -67,14 +64,7 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: theme.colors.background.primary,
-        },
-      ]}
-    >
+    <>
       <TabSwitcher
         options={tabOptions}
         activeTabId={activeTab}
@@ -88,33 +78,25 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
       {isFiltersVisible && activeTab !== 'sets' && (
         <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.CARD} />
       )}
-      <View style={{ marginTop: theme.spacing.xl, flex: 1 }}>
-        {activeTab === 'sets' ? (
-          <SetsList
-            sets={sets}
-            hasNextPage={hasNextSetsPage}
-            isFetchingNextPage={isFetchingNextSetsPage}
-            isLoading={isSetsLoading}
-            fetchNextPage={fetchNextSetsPage}
-            error={setsError}
-          />
-        ) : (
-          <CardListDisplay
-            cards={cards}
-            hasNextPage={hasNextCardsPage}
-            isFetchingNextPage={isFetchingNextCardsPage}
-            isLoading={isCardsLoading}
-            fetchNextPage={fetchNextCardsPage}
-            error={cardsError}
-          />
-        )}
-      </View>
-    </View>
+      {activeTab === 'sets' ? (
+        <SetsList
+          sets={sets}
+          hasNextPage={hasNextSetsPage}
+          isFetchingNextPage={isFetchingNextSetsPage}
+          isLoading={isSetsLoading}
+          fetchNextPage={fetchNextSetsPage}
+          error={setsError}
+        />
+      ) : (
+        <CardListDisplay
+          cards={cards}
+          hasNextPage={hasNextCardsPage}
+          isFetchingNextPage={isFetchingNextCardsPage}
+          isLoading={isCardsLoading}
+          fetchNextPage={fetchNextCardsPage}
+          error={cardsError}
+        />
+      )}
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

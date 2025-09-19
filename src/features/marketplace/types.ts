@@ -45,6 +45,45 @@ export interface Ad {
   updatedAt: string;
 }
 
+export interface Checkout {
+  id: string;
+  ad: CheckoutAd;
+  prices: CheckoutPrice;
+}
+export interface CheckoutAd {
+  id: string;
+  originalPrice: string;
+  condition: Condition;
+  rectoImageUrl: string;
+  finish: Finish;
+  card: {
+    name: string;
+  };
+  status: { id: string; label: string };
+  deliveryAddress: {
+    id: string;
+  };
+  certificate?: Certification;
+  seller: CheckoutSeller;
+}
+export interface CheckoutCertificate {
+  grade: {
+    label: string;
+  };
+  global_rating: string;
+}
+export interface CheckoutSeller {
+  id: string;
+  username: string;
+  profilePictureUrl?: string;
+}
+
+export interface CheckoutPrice {
+  shippingCosts: string;
+  serviceCosts: string;
+  totalCosts: string;
+}
+
 export interface AdCard {
   id: string;
   name: string;
@@ -97,4 +136,55 @@ export enum AdStatusEnum {
   SOLD = 'Sold',
   ARCHIVED = 'Archived',
   DRAFT = 'Draft',
+}
+
+export interface UpdateBuyerAddressParams {
+  road: string;
+  additionalInfo?: string;
+  city: string;
+  zipcode: string;
+  country: string;
+  countrycode: string;
+}
+
+export interface Address {
+  id: string;
+  road: string;
+  additionalInfo: string;
+  city: string;
+  zipcode: string;
+  country: string;
+  countrycode: string;
+}
+
+export interface AddressResponse {
+  address: Address;
+}
+export interface Order {
+  id: string;
+  seller: { name: string };
+  condition: Condition;
+  finish: Finish;
+  card: {
+    name: string;
+    rectoImageUrl: string;
+  };
+  originalPrice: string;
+  status: { id: string; label: string };
+  createdAt: string;
+}
+
+export interface OrdersListResponse {
+  data: Order[];
+  meta: {
+    currentPage: number;
+    firstPage: number;
+    firstPageUrl: string;
+    lastPage: number;
+    lastPageUrl: string;
+    nextPageUrl: string | null;
+    perPage: number;
+    previousPageUrl: string | null;
+    total: number;
+  };
 }
