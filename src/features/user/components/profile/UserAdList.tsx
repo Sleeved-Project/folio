@@ -1,11 +1,12 @@
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { ErrorState, LoadingState } from '../../../../components/ui/StatusIndicators';
-import CardForSaleItem from '../../../marketplace/components/CardForSaleItem';
-import { useUserAds } from '../../hooks/queries/useUserInfo';
+import { ErrorState, InfoState, LoadingState } from '../../../../components/ui/StatusIndicators';
 import TitleSection from '../../../../components/ui/TitleSection';
 import { useTheme } from '../../../../theme/useTheme';
+import CardForSaleItem from '../../../marketplace/components/CardForSaleItem';
 import { Ad } from '../../../marketplace/types';
+import { useUserAds } from '../../hooks/queries/useUserInfo';
+import { Info } from 'lucide-react-native';
 import { useRefetchOnFocus } from '../../../../hooks/useRefetchOnFocus';
 
 interface UserAdListProps {
@@ -50,6 +51,9 @@ export default function UserAdList({
         shouldShowTitle && <TitleSection title="Ads" style={{ marginBottom: theme.spacing.md }} />
       }
       removeClippedSubviews
+      ListEmptyComponent={
+        <InfoState message="No ads available." icon={<Info color={theme.colors.info} />} />
+      }
     />
   );
 }

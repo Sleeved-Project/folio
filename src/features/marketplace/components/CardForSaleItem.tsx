@@ -1,9 +1,10 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Image, Pressable, Text, useWindowDimensions, View } from 'react-native';
+import { Image, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import BadgeLabel from '../../../components/ui/BadgeLabel';
 import { useTheme } from '../../../theme/useTheme';
 import { Ad } from '../types';
+import AdStatusBanner from '../../user/components/profile/AdStatusBanner';
 
 interface AdItemProps {
   item: Ad;
@@ -20,9 +21,10 @@ export default function CardForSaleItem({ item }: AdItemProps) {
   const CARD_HEIGHT = CARD_WIDTH * 1.36;
 
   return (
-    <Pressable key={item.id} onPress={() => router.push(`/ad/${item.id}`)}>
+    <TouchableOpacity key={item.id} onPress={() => router.push(`/ad/${item.id}`)}>
       <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
         <View style={{ position: 'relative' }}>
+          {item.status.label == 'Sold' && <AdStatusBanner status={item.status} />}
           {imageError ? (
             <View
               style={{
@@ -43,11 +45,13 @@ export default function CardForSaleItem({ item }: AdItemProps) {
             <Image
               source={{ uri: item.rectoImageUrl }}
               onError={() => setImageError(true)}
-              style={{
-                width: CARD_WIDTH,
-                height: CARD_HEIGHT,
-                borderRadius: theme.borderRadius.medium,
-              }}
+              style={[
+                {
+                  width: CARD_WIDTH,
+                  height: CARD_HEIGHT,
+                  borderRadius: theme.borderRadius.medium,
+                },
+              ]}
             />
           )}
 
@@ -79,6 +83,6 @@ export default function CardForSaleItem({ item }: AdItemProps) {
           {item.originalPrice}
         </Text>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 }

@@ -2,6 +2,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
 import { AdsListResponse, OrdersListResponse } from '../../../marketplace/types';
 import { mapOrderData } from '../../mappers/orderMapper';
+import { mapAdList } from '../../../marketplace/mappers/adListMapper';
 
 export interface UserProfileData {
   id: string;
@@ -47,7 +48,7 @@ export function useUserAds(userId: string) {
       const response = await httpClient.get<AdsListResponse>(
         `/users/${userId}/ads?${params.toString()}`
       );
-      return response;
+      return mapAdList(response);
     },
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.data.length === 0) return undefined;
