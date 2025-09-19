@@ -6,7 +6,7 @@ import { Button } from '../../../components/ui';
 import { useTheme } from '../../../theme/useTheme';
 import BackButton from '../../../components/ui/BackButton';
 import { useScanContext } from '../context/ScanContext';
-import { useHasStripeAccount } from '../../marketplace/hooks/useHasStripeAccount';
+import { useHasValidStripeAccount } from '../../marketplace/hooks/useHasValidStripeAccount';
 
 interface CardScanSuccessProps {
   cards: Card[];
@@ -15,7 +15,7 @@ interface CardScanSuccessProps {
 
 export default function CardScanSuccess({ cards, highlightedCardId }: CardScanSuccessProps) {
   const { setScanCardData } = useScanContext();
-  const { data: hasStripeAccount } = useHasStripeAccount();
+  const { data: hasValidStripeAccount } = useHasValidStripeAccount();
 
   const router = useRouter();
   const theme = useTheme();
@@ -27,7 +27,7 @@ export default function CardScanSuccess({ cards, highlightedCardId }: CardScanSu
       frontCardCroppedImage: highlightedCard.extractedTempImageUrl,
     });
 
-    if (!hasStripeAccount) {
+    if (!hasValidStripeAccount) {
       return router.push('/stripe-setup');
     }
     return router.push('/sell-form');

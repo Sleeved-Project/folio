@@ -1,15 +1,16 @@
 import CardsForSale from '../components/CardsForSale';
 import { router } from 'expo-router';
-import { useHasStripeAccount } from '../hooks/useHasStripeAccount';
+import { useHasValidStripeAccount } from '../hooks/useHasValidStripeAccount';
 import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
 
 export default function MarketplaceHome() {
-  const { data: hasStripeAccount, refetch: refetchHasStripeAccount } = useHasStripeAccount();
+  const { data: hasValidStripeAccount, refetch: refetchHasValidStripeAccount } =
+    useHasValidStripeAccount();
 
-  useRefetchOnFocus(refetchHasStripeAccount);
+  useRefetchOnFocus(refetchHasValidStripeAccount);
 
   const navigateToStripeSetup = () => {
-    if (!hasStripeAccount) {
+    if (!hasValidStripeAccount) {
       router.push('/stripe-setup');
     } else {
       router.push('/sell-form');
