@@ -8,9 +8,11 @@ import AdSellerCard from '../components/AdSellerCard';
 import { useAdDetail } from '../hooks/queries/useAdDetail';
 import CertificationBadge from '../components/CertificationBadge';
 import { AdStatusEnum } from '../types';
+import { useAuth } from '../../auth/context/AuthContext';
 
 export default function AdDetailScreen({ adId }: { adId: string }) {
   const theme = useTheme();
+  const { user } = useAuth();
   const { data: ad, isLoading, error } = useAdDetail(adId);
 
   const handleSeeCardDetail = (cardId: string) => {
@@ -63,7 +65,7 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
         ad={ad}
         onSeeCardDetail={handleSeeCardDetail}
         onBuy={handleBuy}
-        canBuy={ad.status.label === AdStatusEnum.PUBLISHED}
+        canBuy={Boolean(ad.status.label === AdStatusEnum.PUBLISHED && user?.id !== ad.seller.id)}
       />
     </>
   );
