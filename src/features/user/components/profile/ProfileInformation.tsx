@@ -62,7 +62,6 @@ export default function ProfileInformation({
           padding: theme.spacing.md,
           ...theme.shadows.small,
           borderColor: theme.colors.border.light,
-          marginBottom: theme.spacing.md,
         },
         style,
       ]}
@@ -88,7 +87,7 @@ export default function ProfileInformation({
 
       <ProfilePicture username={username} uri={profilePictureUrl} size="large" />
 
-      {firstname && lastname ? (
+      {firstname && lastname && (
         <Text
           style={[
             styles.name,
@@ -97,12 +96,11 @@ export default function ProfileInformation({
               fontSize: theme.typography.fontSizes.lg,
               fontWeight: theme.typography.fontWeights.bold,
             },
-            style,
           ]}
         >
           {`${firstname} ${lastname}`}
         </Text>
-      ) : null}
+      )}
 
       <Text
         style={[
@@ -132,7 +130,6 @@ export default function ProfileInformation({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     justifyContent: 'center',
     alignItems: 'center',
     gap: 8,
