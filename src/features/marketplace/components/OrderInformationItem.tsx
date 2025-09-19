@@ -11,8 +11,12 @@ export default function OrderInformationItem({ item }: OrderInformationItemProps
 
   return (
     <View style={[styles.container, { padding: theme.spacing.sm }]}>
-      <View style={styles.lineContainer}>
-        <Text style={{ fontSize: theme.typography.fontSizes.md }}>Order number </Text>
+      <View style={[styles.lineContainer, { flexDirection: theme.flex.column }]}>
+        <Text
+          style={{ fontSize: theme.typography.fontSizes.md, color: theme.colors.text.secondary }}
+        >
+          Order number
+        </Text>
         <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
           {item.id}
         </Text>
@@ -27,9 +31,13 @@ export default function OrderInformationItem({ item }: OrderInformationItemProps
         ]}
       />
       <View style={styles.lineContainer}>
-        <Text style={{ fontSize: theme.typography.fontSizes.md }}>Price </Text>
+        <Text
+          style={{ fontSize: theme.typography.fontSizes.md, color: theme.colors.text.secondary }}
+        >
+          Price
+        </Text>
         <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-          {item.totalPrice}
+          {item.prices.totalCosts}
         </Text>
       </View>
       <View
@@ -42,7 +50,11 @@ export default function OrderInformationItem({ item }: OrderInformationItemProps
         ]}
       />
       <View style={styles.lineContainer}>
-        <Text style={{ fontSize: theme.typography.fontSizes.md }}>Date</Text>
+        <Text
+          style={{ fontSize: theme.typography.fontSizes.md, color: theme.colors.text.secondary }}
+        >
+          Date
+        </Text>
         <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
           {item.createdAt}
         </Text>
@@ -57,16 +69,20 @@ export default function OrderInformationItem({ item }: OrderInformationItemProps
         ]}
       />
       <View style={styles.lineContainer}>
-        <Text style={{ fontSize: theme.typography.fontSizes.md }}>Delivery address </Text>
+        <Text
+          style={{ fontSize: theme.typography.fontSizes.md, color: theme.colors.text.secondary }}
+        >
+          Delivery address
+        </Text>
         <View style={styles.addressContainer}>
           <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-            {item.deliveryAddress.road}
+            {item.addresses.delivery.road}
           </Text>
           <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-            {item.deliveryAddress.zipcode} {item.deliveryAddress.city}
+            {item.addresses.delivery.zipcode} {item.addresses.delivery.city}
           </Text>
           <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-            {item.deliveryAddress.country}
+            {item.addresses.delivery.country}
           </Text>
         </View>
       </View>

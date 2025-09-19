@@ -23,10 +23,17 @@ export default function OrderItem({ item }: OrderItemProps) {
       }}
     >
       <View style={[styles.container, { padding: theme.spacing.sm }]}>
-        <OrderCardItem item={item} />
-        <View>
-          <ChevronRight size={24} color={theme.colors.text.primary} />
-        </View>
+        <OrderCardItem
+          rectoImageUrl={item.card.rectoImageUrl}
+          originalPrice={item.originalPrice}
+          condition={item.condition}
+          finish={item.finish}
+          card={item.card}
+          seller={item.seller}
+          status={item.status}
+          createdAt={item.createdAt}
+        />
+        <ChevronRight size={24} color={theme.colors.text.primary} />
       </View>
     </Pressable>
   );

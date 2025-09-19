@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import { OrderDetail } from '../types';
 
 interface OrderStatusItemProps {
-  item: OrderDetail;
+  updatedAt: string;
+  status: { label: string };
 }
 
-export default function OrderStatusItem({ item }: OrderStatusItemProps) {
+export default function OrderStatusItem({ updatedAt, status }: OrderStatusItemProps) {
   const theme = useTheme();
 
   return (
@@ -18,7 +18,7 @@ export default function OrderStatusItem({ item }: OrderStatusItemProps) {
           alignSelf: theme.flex.alignment.start,
         }}
       >
-        Last update : {item.updatedAt}
+        Last update : {updatedAt}
       </Text>
       <View
         style={[
@@ -30,9 +30,13 @@ export default function OrderStatusItem({ item }: OrderStatusItemProps) {
         ]}
       />
       <View style={styles.lineContainer}>
-        <Text style={{ fontSize: theme.typography.fontSizes.md }}>{item.status.label} </Text>
+        <Text
+          style={{ fontSize: theme.typography.fontSizes.md, color: theme.colors.text.secondary }}
+        >
+          {status.label}
+        </Text>
         <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-          {item.updatedAt}
+          {updatedAt}
         </Text>
       </View>
       <View

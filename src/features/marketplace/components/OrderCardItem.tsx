@@ -1,35 +1,49 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import { Order } from '../types';
 
 interface OrderCardItemProps {
-  item: Order;
+  rectoImageUrl: string;
+  originalPrice: string;
+  condition: { label: string };
+  finish: { label: string };
+  card: { name: string };
+  seller: { username: string };
+  status: { label: string };
+  createdAt: string;
 }
 
-export default function OrderCardItem({ item }: OrderCardItemProps) {
+export default function OrderCardItem({
+  rectoImageUrl,
+  originalPrice,
+  condition,
+  finish,
+  card,
+  seller,
+  status,
+  createdAt,
+}: OrderCardItemProps) {
   const theme = useTheme();
 
   return (
     <View style={[styles.container, { padding: theme.spacing.sm }]}>
-      <Image source={{ uri: item.card.rectoImageUrl }} style={styles.image} resizeMode="cover" />
+      <Image source={{ uri: rectoImageUrl }} style={styles.image} resizeMode="cover" />
       <View style={{ flex: 1 }}>
         <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-          {item.card.name} ({item.finish.label}) · ${item.originalPrice}
+          {card.name} ({finish.label}) · ${originalPrice}
         </Text>
         <Text style={{ color: '#555', marginVertical: theme.spacing.xs }}>
-          Sold by :{' '}
-          <Text style={{ color: theme.colors.text.tertiary }}>@{item.seller.username}</Text>
+          Sold by : <Text style={{ color: theme.colors.text.tertiary }}>@{seller.username}</Text>
         </Text>
         <Text style={{ color: '#555', marginVertical: theme.spacing.xs }}>
-          Condition: <Text style={{ fontWeight: '500' }}>{item.condition.label}</Text>
+          Condition: <Text style={{ fontWeight: '500' }}>{condition.label}</Text>
         </Text>
         <View>
           <Text style={{ color: '#555', marginVertical: theme.spacing.xs }}>
-            Sold on : <Text style={{ fontWeight: '500' }}>{item.createdAt}</Text>
+            Sold on : <Text style={{ fontWeight: '500' }}>{createdAt}</Text>
           </Text>
         </View>
         <View style={[styles.status, { backgroundColor: theme.colors.background.primary }]}>
-          <Text>{item.status.label}</Text>
+          <Text>{status.label}</Text>
         </View>
       </View>
     </View>
@@ -38,6 +52,7 @@ export default function OrderCardItem({ item }: OrderCardItemProps) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-between',

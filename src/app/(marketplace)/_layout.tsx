@@ -10,6 +10,7 @@ export default function MarketplaceLayout() {
         options={{
           title: 'Ad Details',
           headerBackTitle: 'Back',
+          headerTintColor: theme.colors.primaryForeground,
         }}
       />
       <Stack.Screen
@@ -17,6 +18,7 @@ export default function MarketplaceLayout() {
         options={{
           title: 'Order Details',
           headerBackTitle: 'Back',
+          headerTintColor: theme.colors.primaryForeground,
         }}
       />
       <Stack.Screen

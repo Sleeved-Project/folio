@@ -174,17 +174,38 @@ export interface Order {
   createdAt: string;
 }
 
-export interface OrderDetail extends Omit<Order, 'totalPrice'> {
-  totalPrice: string;
-  updatedAt: string;
-  deliveryAddress: {
-    road: string;
-    city: string;
-    zipcode: string;
-    country: string;
-    countrycode: string;
-    additionalInfo?: string;
+export interface OrderDetail
+  extends Omit<Order, 'totalPrice' | 'finish' | 'condition' | 'originalPrice' | 'card'> {
+  ad: {
+    rectoImageUrl: string;
+    originalPrice: string;
+    finish: { label: string };
+    condition: { label: string };
   };
+  card: { name: string };
+  certificate?: CheckoutCertificate;
+  updatedAt: string;
+  addresses: {
+    delivery: {
+      id: string;
+      road: string;
+      city: string;
+      zipcode: string;
+      country: string;
+      countrycode: string;
+      additionalInfo?: string;
+    };
+    billing: {
+      id: string;
+      road: string;
+      city: string;
+      zipcode: string;
+      country: string;
+      countrycode: string;
+      additionalInfo?: string;
+    };
+  };
+  prices: { totalCosts: string };
 }
 
 export interface OrdersListResponse {
