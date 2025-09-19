@@ -11,13 +11,11 @@ import { Address } from '../types';
 interface BuyerDeliveryAddressProps {
   isModifying: boolean;
   buyerAddressData?: Address;
-  setIsModifying?: () => void;
 }
 
 export default function BuyerDeliveryAddress({
   isModifying,
   buyerAddressData,
-  setIsModifying,
 }: BuyerDeliveryAddressProps) {
   const { mutateAsync: updateDeliveryAddress, isPending } = useCreateBuyerAddress();
 
@@ -47,9 +45,6 @@ export default function BuyerDeliveryAddress({
       if (response) {
         queryClient.invalidateQueries({ queryKey: ['address'] });
         showToast({ message: response.message, type: 'success' });
-        if (setIsModifying) {
-          setIsModifying();
-        }
       }
     } catch {
       showToast({ message: 'Updating the address failed.', type: 'error' });
@@ -67,7 +62,7 @@ export default function BuyerDeliveryAddress({
           inputType="text"
           error={typeof errors.road?.message === 'string' ? errors.road?.message : undefined}
           returnKeyType="next"
-          disabled={!isModifying && buyerAddressData?.road !== undefined}
+          disabled={!isModifying}
         />
         <FormTextInput
           control={control}
@@ -81,7 +76,7 @@ export default function BuyerDeliveryAddress({
               : undefined
           }
           returnKeyType="next"
-          disabled={!isModifying && buyerAddressData?.road !== undefined}
+          disabled={!isModifying}
         />
         <FormTextInput
           control={control}
@@ -91,7 +86,7 @@ export default function BuyerDeliveryAddress({
           inputType="text"
           error={typeof errors.city?.message === 'string' ? errors.city?.message : undefined}
           returnKeyType="next"
-          disabled={!isModifying && buyerAddressData?.road !== undefined}
+          disabled={!isModifying}
         />
         <FormTextInput
           control={control}
@@ -101,7 +96,7 @@ export default function BuyerDeliveryAddress({
           inputType="text"
           error={typeof errors.zipcode?.message === 'string' ? errors.zipcode?.message : undefined}
           returnKeyType="next"
-          disabled={!isModifying && buyerAddressData?.road !== undefined}
+          disabled={!isModifying}
         />
         <FormTextInput
           control={control}
@@ -111,7 +106,7 @@ export default function BuyerDeliveryAddress({
           inputType="text"
           error={typeof errors.country?.message === 'string' ? errors.country?.message : undefined}
           returnKeyType="next"
-          disabled={!isModifying && buyerAddressData?.road !== undefined}
+          disabled={!isModifying}
         />
         <FormTextInput
           control={control}
@@ -125,7 +120,7 @@ export default function BuyerDeliveryAddress({
               : undefined
           }
           returnKeyType="done"
-          disabled={!isModifying && buyerAddressData?.road !== undefined}
+          disabled={!isModifying}
         />
         {isModifying && (
           <Button
