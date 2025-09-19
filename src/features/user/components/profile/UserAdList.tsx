@@ -7,6 +7,7 @@ import CardForSaleItem from '../../../marketplace/components/CardForSaleItem';
 import { Ad } from '../../../marketplace/types';
 import { useUserAds } from '../../hooks/queries/useUserInfo';
 import { Info } from 'lucide-react-native';
+import { useRefetchOnFocus } from '../../../../hooks/useRefetchOnFocus';
 
 interface UserAdListProps {
   userId: string;
@@ -19,7 +20,10 @@ export default function UserAdList({
   shouldShowTitle,
   contentContainerStyle,
 }: UserAdListProps) {
-  const { data: ads, isLoading, error } = useUserAds(userId);
+  const { data: ads, isLoading, error, refetch: refetchUserAds } = useUserAds(userId);
+
+  useRefetchOnFocus(refetchUserAds);
+
   const adsListFlat = ads?.pages.flatMap((page) => page.data) ?? ([] as Ad[]);
   const theme = useTheme();
 

@@ -6,6 +6,7 @@ import TitleSection from '../../../components/ui/TitleSection';
 import { useTheme } from '../../../theme/useTheme';
 import { useCardAvailableOffers } from '../hooks/queries/useCardAvailableOffers';
 import CardAvailableOfferItem from './CardAvailableOfferItem';
+import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
 
 interface CardAvailableOffersProps {
   title: string;
@@ -14,8 +15,17 @@ interface CardAvailableOffersProps {
 
 export default function CardAvailableOffers({ title, cardId }: CardAvailableOffersProps) {
   const theme = useTheme();
-  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useCardAvailableOffers(cardId);
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch: refetchCardAvailableOffers,
+  } = useCardAvailableOffers(cardId);
+
+  useRefetchOnFocus(refetchCardAvailableOffers);
 
   const availableOffers = useMemo(() => {
     return data?.pages.flatMap((page) => page.data) || [];

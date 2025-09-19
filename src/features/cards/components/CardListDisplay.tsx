@@ -120,7 +120,9 @@ export default function CardListDisplay({
       renderItem={displayCardsList}
       numColumns={NUM_COLUMNS}
       columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
-      ListHeaderComponent={ListHeaderComponent}
+      ListHeaderComponent={
+        <View style={{ marginTop: theme.spacing.xl }}>{ListHeaderComponent}</View>
+      }
       contentContainerStyle={{
         paddingBottom: theme.spacing.lg,
       }}
