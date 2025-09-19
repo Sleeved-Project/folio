@@ -26,7 +26,6 @@ export default function PurchaseRecapScreen({ adId }: { adId: string }) {
   const { data: buyerAddressData } = useDeliveryAddress();
   const [paymentSheetReady, setPaymentSheetReady] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isModifying, setIsModifying] = useState(buyerAddressData === null);
 
   if (isLoading) return <LoadingState />;
   if (error || !checkout) return <ErrorState message="Failed to load checkout." />;
@@ -105,9 +104,8 @@ export default function PurchaseRecapScreen({ adId }: { adId: string }) {
       </Accordion>
       <Accordion title={'Delivery Address'} initiallyOpen shouldTakeFullWidth>
         <BuyerDeliveryAddress
-          isModifying={isModifying}
+          isModifying={buyerAddressData === null ? true : false}
           buyerAddressData={buyerAddressData}
-          setIsModifying={() => setIsModifying(false)}
         />
       </Accordion>
       <Accordion title={'Total'} initiallyOpen shouldTakeFullWidth>
