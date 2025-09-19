@@ -51,7 +51,7 @@ export default function SetDetail({ setId }: { setId: string }) {
   };
 
   return (
-    <View style={{ marginBottom: theme.spacing.xl }}>
+    <View style={{ flex: 1 }}>
       <View style={[styles.setHeader, { marginVertical: theme.spacing.md }]}>
         <View style={{ gap: theme.spacing.xs, marginBottom: theme.spacing.md }}>
           <Text
@@ -83,27 +83,29 @@ export default function SetDetail({ setId }: { setId: string }) {
           />
         </View>
       </View>
-      <CardKPIStats
-        cardCount={set?.total}
-        cardMarketValue={set?.statistics?.cardMarketPrice?.toString()}
-        cardMarketTrending={set?.statistics?.cardMarketTrending}
-        tcgPlayerValue={set?.statistics?.tcgPlayerPrice?.toString()}
-        tcgPlayerTrending={set?.statistics?.tcgPlayerTrending}
-        isLoading={isLoadingBasic}
-        isError={!!basicError}
-      />
       <SearchBar
         searchQuery={cardName}
         setSearchQuery={(newName: string) => setCardName(newName)}
         searchPlaceholder="Search by Pokemon"
       />
       <CardFilters toggleFilterDetail={toggleFilterDetail} filterType={FilterTypeEnum.SET} />
-      <View style={{ marginTop: theme.spacing.xl }}>
+      <View style={{ flex: 1 }}>
         <CardListDisplay
           cards={cards}
           hasNextPage={hasNextCardsPage}
           isFetchingNextPage={isFetchingNextCardsPage}
           fetchNextPage={fetchNextCardsPage}
+          ListHeaderComponent={
+            <CardKPIStats
+              cardCount={set?.total}
+              cardMarketValue={set?.statistics?.cardMarketPrice?.toString()}
+              cardMarketTrending={set?.statistics?.cardMarketTrending}
+              tcgPlayerValue={set?.statistics?.tcgPlayerPrice?.toString()}
+              tcgPlayerTrending={set?.statistics?.tcgPlayerTrending}
+              isLoading={isLoadingBasic}
+              isError={!!basicError}
+            />
+          }
           isLoading={isCardsLoading}
           error={cardsError}
         />
