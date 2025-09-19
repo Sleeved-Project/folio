@@ -11,7 +11,6 @@ interface SetsListProps {
   isLoading?: boolean;
   fetchNextPage?: () => void;
   error?: Error | null;
-  ListHeaderComponent?: React.ReactElement | null;
 }
 
 export default function SetsList({
@@ -21,7 +20,6 @@ export default function SetsList({
   isLoading,
   fetchNextPage,
   error,
-  ListHeaderComponent = null,
 }: SetsListProps) {
   const theme = useTheme();
 
@@ -37,7 +35,7 @@ export default function SetsList({
       renderItem={displaySetList}
       numColumns={NUM_COLUMNS}
       columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
-      ListHeaderComponent={ListHeaderComponent}
+      ListHeaderComponent={<View style={{ marginTop: theme.spacing.xl }} />}
       onEndReached={() => {
         if (hasNextPage && !isFetchingNextPage && fetchNextPage) {
           fetchNextPage();
