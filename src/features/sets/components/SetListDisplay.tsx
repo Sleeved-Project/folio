@@ -89,11 +89,9 @@ export default function SetListDisplay({ set }: SetListDisplayProps) {
               </Text>
             )}
             <CircularProgressBar
-              size={24}
-              strokeWidth={6}
-              progressPercent={set.totalPercentage}
-              bgColor={'grey'}
-              pgColor={'black'}
+              size={Math.round(24)}
+              strokeWidth={Math.round(6)}
+              progressPercent={Math.round(set.totalPercentage)}
             />
           </View>
         </View>
