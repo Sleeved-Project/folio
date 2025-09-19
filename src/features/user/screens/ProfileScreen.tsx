@@ -1,19 +1,18 @@
-// import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
+import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
 import ProfileInformation from '../components/profile/ProfileInformation';
-// import { useState } from 'react';
+import { useState } from 'react';
 import UserAdList from '../components/profile/UserAdList';
-// import UserRatingsList from '../components/profile/UserRatingsList';
 import { useUserProfile } from '../hooks/queries/useUserInfo';
 import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
 import { View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-// import { User } from 'lucide-react-native';
+import UserOrderList from '../components/profile/UserOrderList';
 
-// const tabOptions: TabOption<'ads' | 'ratings'>[] = [
-//   { id: 'ads', label: 'Ads' },
-//   { id: 'ratings', label: 'Ratings' },
-// ];
+const tabOptions: TabOption<'ads' | 'orders'>[] = [
+  { id: 'ads', label: 'Ads' },
+  { id: 'orders', label: 'Orders' },
+];
 
 interface ProfileScreenProps {
   isUserProfile?: boolean;
@@ -23,7 +22,7 @@ interface ProfileScreenProps {
 export default function ProfileScreen({ isUserProfile = false, userId }: ProfileScreenProps) {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
-  // const [activeTab, setActiveTab] = useState<'ads' | 'ratings'>('ads');
+  const [activeTab, setActiveTab] = useState<'ads' | 'orders'>('ads');
   const { data: userData, isLoading, error } = useUserProfile(isUserProfile ? undefined : userId);
 
   if (isLoading) return <LoadingState />;
@@ -43,22 +42,21 @@ export default function ProfileScreen({ isUserProfile = false, userId }: Profile
           ...(isUserProfile ? { paddingTop: insets.top + theme.spacing.md } : {}),
         }}
       />
-
-      {/* <TabSwitcher
-        options={tabOptions}
-        activeTabId={activeTab}
-        onTabChange={setActiveTab}
-        containerStyle={{ marginVertical: 16 }}
-      /> */}
-
-      {/* {activeTab === 'ads' ? <UserAdList userId={userId} /> : <UserRatingsList userId={userId} />} */}
-      <UserAdList
-        userId={userId}
-        contentContainerStyle={{
-          paddingHorizontal: theme.spacing.md,
-          paddingBottom: theme.spacing.lg,
-        }}
-      />
+      <View style={{ flex: 1, paddingHorizontal: theme.spacing.md }}>
+        {isUserProfile && (
+          <TabSwitcher
+            options={tabOptions}
+            activeTabId={activeTab}
+            onTabChange={setActiveTab}
+            containerStyle={{ marginVertical: 16 }}
+          />
+        )}
+        {activeTab === 'ads' ? (
+          <UserAdList userId={userId} shouldShowTitle={!isUserProfile} />
+        ) : (
+          <UserOrderList />
+        )}
+      </View>
     </View>
   );
 }

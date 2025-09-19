@@ -9,10 +9,15 @@ import { Ad } from '../../../marketplace/types';
 
 interface UserAdListProps {
   userId: string;
+  shouldShowTitle: boolean;
   contentContainerStyle?: object;
 }
 
-export default function UserAdList({ userId, contentContainerStyle }: UserAdListProps) {
+export default function UserAdList({
+  userId,
+  shouldShowTitle,
+  contentContainerStyle,
+}: UserAdListProps) {
   const { data: ads, isLoading, error } = useUserAds(userId);
   const adsListFlat = ads?.pages.flatMap((page) => page.data) ?? ([] as Ad[]);
   const theme = useTheme();
@@ -37,9 +42,9 @@ export default function UserAdList({ userId, contentContainerStyle }: UserAdList
       columnWrapperStyle={{ justifyContent: 'space-between', marginBottom: GAP }}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={contentContainerStyle}
-      ListHeaderComponent={() => (
-        <TitleSection title="Ads" style={{ marginBottom: theme.spacing.md }} />
-      )}
+      ListHeaderComponent={() =>
+        shouldShowTitle && <TitleSection title="Ads" style={{ marginBottom: theme.spacing.md }} />
+      }
       removeClippedSubviews
     />
   );

@@ -27,6 +27,7 @@ type FormTextInputProps<T extends FieldValues> = {
   multiline?: boolean;
   numberOfLines?: number;
   rightIcon?: React.ReactNode;
+  disabled?: boolean;
 };
 
 const FormTextInput = <T extends FieldValues>({
@@ -44,6 +45,7 @@ const FormTextInput = <T extends FieldValues>({
   multiline = false,
   numberOfLines = 4,
   rightIcon,
+  disabled = false,
 }: FormTextInputProps<T>) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -110,6 +112,7 @@ const FormTextInput = <T extends FieldValues>({
               multiline={multiline}
               numberOfLines={multiline ? numberOfLines : 1}
               textAlignVertical={multiline ? 'top' : 'center'}
+              editable={!disabled}
             />
 
             {hasRightIcon && (

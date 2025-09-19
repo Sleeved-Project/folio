@@ -8,10 +8,10 @@ export default function PriceCheckout({ price }: { price: CheckoutPrice }) {
   return (
     <View style={styles.container}>
       <Text style={{ color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md }}>
-        Shipping cost: ${price.shippingCosts}
+        Shipping cost - {price.shippingCosts}
       </Text>
       <Text style={{ color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md }}>
-        Service cost: ${price.serviceCosts}
+        Service cost - {price.serviceCosts}
       </Text>
       <Text
         style={{
@@ -20,7 +20,7 @@ export default function PriceCheckout({ price }: { price: CheckoutPrice }) {
           fontWeight: theme.typography.fontWeights.bold,
         }}
       >
-        Total cost: ${price.totalCosts}
+        Total cost - {price.totalCosts}
       </Text>
     </View>
   );
