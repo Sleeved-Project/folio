@@ -1,8 +1,6 @@
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-// import OrderItem from '../components/OrderItem';
-// import { useOrderDetail } from '../hooks/queries/useOrderDetail';
-// import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
-import { OrderDetail } from '../types';
+import { useOrderDetail } from '../hooks/queries/useOrderDetail';
+import { ErrorState, LoadingState } from '../../../components/ui/StatusIndicators';
 import OrderCardItem from '../components/OrderCardItem';
 import { useTheme } from '../../../theme/useTheme';
 import OrderInformationItem from '../components/OrderInformationItem';
@@ -13,52 +11,11 @@ import { router } from 'expo-router';
 
 export default function OrderDetailScreen({ orderId }: { orderId: string }) {
   const theme = useTheme();
-  // const { data: order, isLoading, error } = useOrderDetail(orderId);
+  const { data: order, isLoading, error } = useOrderDetail(orderId);
 
-  // if (isLoading) return <LoadingState />;
-  // if (error) return <ErrorState message={error.message} />;
-  // if (!order) return <ErrorState message="Order not found." />;
-  const order: OrderDetail = {
-    id: orderId,
-    ad: {
-      originalPrice: '10',
-      condition: { label: 'Near Mint' },
-      finish: { label: 'Holo' },
-      rectoImageUrl: 'https://images.pokemontcg.io/base2/31_hires.png',
-    },
-    seller: {
-      id: 'seller1',
-      username: 'CardSeller',
-      profilePictureUrl: 'https://example.com/profile.jpg',
-    },
-    card: {
-      name: 'Pikachu',
-    },
-    prices: { totalCosts: '15€' },
-    status: { label: 'completed', id: 'completed' },
-    addresses: {
-      delivery: {
-        id: 'addr1',
-        road: '123 Main St',
-        city: 'Anytown',
-        zipcode: '12345',
-        country: 'USA',
-        countrycode: 'US',
-        additionalInfo: 'Leave at front door',
-      },
-      billing: {
-        id: 'addr2',
-        road: '456 Elm St',
-        city: 'Othertown',
-        zipcode: '67890',
-        country: 'USA',
-        countrycode: 'US',
-        additionalInfo: '',
-      },
-    },
-    createdAt: 'Jan 1, 2023',
-    updatedAt: 'Jan 2, 2023',
-  };
+  if (isLoading) return <LoadingState />;
+  if (error) return <ErrorState message={error.message} />;
+  if (!order) return <ErrorState message="Order not found." />;
 
   return (
     <>
@@ -78,8 +35,8 @@ export default function OrderDetailScreen({ orderId }: { orderId: string }) {
               originalPrice={order.ad.originalPrice}
               condition={order.ad.condition}
               finish={order.ad.finish}
-              card={order.card}
-              seller={order.seller}
+              card={order.ad.card}
+              seller={order.ad.seller}
               status={order.status}
               createdAt={order.createdAt}
             />
@@ -88,14 +45,19 @@ export default function OrderDetailScreen({ orderId }: { orderId: string }) {
             <OrderStatusItem updatedAt={order.updatedAt} status={order.status} />
           </Accordion>
           <Accordion title={'Order information'} initiallyOpen shouldTakeFullWidth>
-            <OrderInformationItem item={order} />
+            <OrderInformationItem
+              orderId={order.id}
+              totalCosts={order.prices.totalCosts}
+              createdAt={order.createdAt}
+              addresses={order.addresses.delivery}
+            />
           </Accordion>
           <Accordion title={'Seller'} initiallyOpen shouldTakeFullWidth>
             <TouchableOpacity
-              key={order.seller.id}
-              onPress={() => router.push(`/profile/${order.seller.id}`)}
+              key={order.ad.seller.id}
+              onPress={() => router.push(`/seller/${order.ad.seller.id}`)}
             >
-              <PurchaseRecapSellerCard seller={order.seller} />
+              <PurchaseRecapSellerCard seller={order.ad.seller} />
             </TouchableOpacity>
           </Accordion>
         </View>

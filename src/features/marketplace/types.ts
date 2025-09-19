@@ -175,14 +175,15 @@ export interface Order {
 }
 
 export interface OrderDetail
-  extends Omit<Order, 'totalPrice' | 'finish' | 'condition' | 'originalPrice' | 'card'> {
+  extends Omit<Order, 'totalPrice' | 'finish' | 'condition' | 'originalPrice' | 'card' | 'seller'> {
   ad: {
     rectoImageUrl: string;
     originalPrice: string;
     finish: { label: string };
     condition: { label: string };
+    seller: { id: string; username: string; profilePictureUrl?: string };
+    card: { name: string };
   };
-  card: { name: string };
   certificate?: CheckoutCertificate;
   updatedAt: string;
   addresses: {

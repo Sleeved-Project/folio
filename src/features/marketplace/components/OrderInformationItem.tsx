@@ -1,12 +1,20 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../../theme/useTheme';
-import { OrderDetail } from '../types';
+import { Address } from '../types';
 
 interface OrderInformationItemProps {
-  item: OrderDetail;
+  orderId: string;
+  totalCosts: string;
+  createdAt: string;
+  addresses: Partial<Address>;
 }
 
-export default function OrderInformationItem({ item }: OrderInformationItemProps) {
+export default function OrderInformationItem({
+  orderId,
+  totalCosts,
+  createdAt,
+  addresses,
+}: OrderInformationItemProps) {
   const theme = useTheme();
 
   return (
@@ -18,7 +26,7 @@ export default function OrderInformationItem({ item }: OrderInformationItemProps
           Order number
         </Text>
         <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-          {item.id}
+          {orderId}
         </Text>
       </View>
       <View
@@ -37,7 +45,7 @@ export default function OrderInformationItem({ item }: OrderInformationItemProps
           Price
         </Text>
         <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-          {item.prices.totalCosts}
+          {totalCosts}
         </Text>
       </View>
       <View
@@ -56,7 +64,7 @@ export default function OrderInformationItem({ item }: OrderInformationItemProps
           Date
         </Text>
         <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-          {item.createdAt}
+          {createdAt}
         </Text>
       </View>
       <View
@@ -76,13 +84,13 @@ export default function OrderInformationItem({ item }: OrderInformationItemProps
         </Text>
         <View style={styles.addressContainer}>
           <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-            {item.addresses.delivery.road}
+            {addresses.road}
           </Text>
           <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-            {item.addresses.delivery.zipcode} {item.addresses.delivery.city}
+            {addresses.zipcode} {addresses.city}
           </Text>
           <Text style={{ fontWeight: '600', fontSize: theme.typography.fontSizes.md }}>
-            {item.addresses.delivery.country}
+            {addresses.country}
           </Text>
         </View>
       </View>
