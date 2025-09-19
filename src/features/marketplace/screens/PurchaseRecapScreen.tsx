@@ -26,7 +26,7 @@ export default function PurchaseRecapScreen({ adId }: { adId: string }) {
   const { data: buyerAddressData } = useDeliveryAddress();
   const [paymentSheetReady, setPaymentSheetReady] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isModifying, setIsModifying] = useState(false);
+  const [isModifying, setIsModifying] = useState(buyerAddressData === null);
 
   if (isLoading) return <LoadingState />;
   if (error || !checkout) return <ErrorState message="Failed to load checkout." />;
