@@ -1,5 +1,5 @@
 export interface CreateAccountResponse {
-  linkingUrl: string;
+  redirectLinkUrl: string;
 }
 
 export interface CreatePaymentSheetResponse {
