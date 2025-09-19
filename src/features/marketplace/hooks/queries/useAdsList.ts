@@ -1,6 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { httpClient } from '../../../../lib/client/http-client';
 import { AdsListResponse } from '../../types';
+import { mapAdList } from '../../mappers/adListMapper';
 
 export const adsKeys = {
   all: ['ads'] as const,
@@ -19,7 +20,7 @@ export const useAdsList = () => {
 
       const queryString = params.toString().replace(/%2C/g, ',');
       const response = await httpClient.get<AdsListResponse>(`/ads?${queryString}`);
-      return response;
+      return mapAdList(response);
     },
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.data.length === 0) return undefined;

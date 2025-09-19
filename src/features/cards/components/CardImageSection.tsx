@@ -46,7 +46,7 @@ export default function CardImageSection({
               width: cardWidth,
               height: cardHeight,
               left: (SCREEN_WIDTH - cardWidth) / 2,
-              top: SCREEN_HEIGHT / 2 - cardHeight * 1.27,
+              top: SCREEN_HEIGHT / 1.8 - cardHeight * 1.27,
             },
             cardAnimatedStyle,
           ]}

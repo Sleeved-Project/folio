@@ -1,11 +1,12 @@
 import { useLocalSearchParams } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { ErrorState } from '../../../components/ui/StatusIndicators';
 import ProfileScreen from '../../../features/user/screens/ProfileScreen';
-import { theme } from '../../../theme/theme';
+import { useTheme } from '../../../theme/useTheme';
 
 export default function SellerProfile() {
   const { sellerId } = useLocalSearchParams();
+  const theme = useTheme();
 
   if (!sellerId) {
     return <ErrorState message="Missing seller ID" />;
@@ -15,30 +16,12 @@ export default function SellerProfile() {
 
   return (
     <View
-      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+      style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
       accessible
       accessibilityLabel="Seller Profile Screen"
       accessibilityHint="Displays the profile information and ads of the selected seller"
     >
-      <View
-        style={[styles.content, { backgroundColor: theme.colors.background.primary }]}
-      >
-        <ProfileScreen
-          userId={sellerIdStr}
-          isUserProfile={false}
-        />
-      </View>
+      <ProfileScreen userId={sellerIdStr} isUserProfile={false} />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-  },
-});

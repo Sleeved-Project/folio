@@ -1,21 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { useCardDetail } from '../hooks/queries/useCardsQuery';
-import { useCardFolioDelete } from '../../folio/hooks/mutations/useCardFolioDelete';
-import { useCardFolioUpdate } from '../../folio/hooks/mutations/useCardFolioUpdate';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LoadingState, ErrorState } from '../../../components/ui/StatusIndicators';
+import { TabSwitcher, TabOption } from '../../../components/ui/TabSwitcher';
+import { useTheme } from '../../../theme/useTheme';
+import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
+
+import CardImageSection from '../components/CardImageSection';
+import AnimatedDrawer from '../components/AnimatedDrawer';
+import AddCardButton from '../components/AddCardButton';
 import CardMetaInfo from '../components/CardMetaInfo';
 import CardDetailedInfo from '../components/CardDetailedInfo';
 import CardPricesInfo from '../components/CardPricesInfo';
-import CardImageSection from '../components/CardImageSection';
-import { TabSwitcher, TabOption } from '../../../components/ui/TabSwitcher';
-import AnimatedDrawer from '../components/AnimatedDrawer';
+import CardAvailableOffers from '../components/CardAvailableOffers';
+
+import { useCardDetail } from '../hooks/queries/useCardsQuery';
 import { useDrawerAnimation } from '../hooks/useDrawerAnimation';
-import { useTheme } from '../../../theme/useTheme';
-import AddCardButton from '../components/AddCardButton';
+import { useCardFolioDelete } from '../../folio/hooks/mutations/useCardFolioDelete';
 import { useCardFolioCollect } from '../../folio/hooks/mutations/useCardFolioCollect';
-import { useRefetchOnFocus } from '../../../hooks/useRefetchOnFocus';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useCardFolioUpdate } from '../../folio/hooks/mutations/useCardFolioUpdate';
 
 type TabType = 'details' | 'prices';
 
@@ -30,6 +33,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
   const { mutate: deleteCardFolio } = useCardFolioDelete();
   const { mutate: collectCard } = useCardFolioCollect();
   const { mutate: updateCardFolio } = useCardFolioUpdate();
+
   const {
     data: basicCardData,
     isLoading: isLoadingBasic,
@@ -55,21 +59,13 @@ export default function CardDetail({ cardId }: { cardId: string }) {
     { id: 'details', label: 'Details' },
   ];
 
-  const handleCollectionChange = React.useCallback(
+  const handleCollectionChange = useCallback(
     (cardId: string, quantity?: number) => {
       if (quantity === undefined) return;
 
-      switch (true) {
-        case quantity === 0:
-          deleteCardFolio({ cardId });
-          break;
-        case quantity === 1 && previousCardQuantity === 0:
-          collectCard({ cardId });
-          break;
-        case quantity >= 1:
-          updateCardFolio({ cardId, occurrence: quantity });
-          break;
-      }
+      if (quantity === 0) deleteCardFolio({ cardId });
+      else if (quantity === 1 && previousCardQuantity === 0) collectCard({ cardId });
+      else if (quantity >= 1) updateCardFolio({ cardId, occurrence: quantity });
 
       setPreviousCardQuantity(quantity);
     },
@@ -78,11 +74,7 @@ export default function CardDetail({ cardId }: { cardId: string }) {
 
   if (isLoadingBasic) return <LoadingState />;
   if (basicError || !basicCardData)
-    return (
-      <ErrorState
-        message={basicError instanceof Error ? basicError.message : 'Failed to load card'}
-      />
-    );
+    return <ErrorState message={basicError instanceof Error ? basicError.message : 'Failed to load card'} />;
 
   return (
     <View
@@ -124,11 +116,16 @@ export default function CardDetail({ cardId }: { cardId: string }) {
             containerStyle={{ marginTop: 8 }}
           />
 
-          {activeTab === 'details' ? (
-            <CardDetailedInfo cardId={cardId} />
-          ) : (
-            <CardPricesInfo cardId={cardId} />
-          )}
+          <View style={{ marginBottom: theme.spacing.xl }}>
+            {activeTab === 'details' ? (
+              <CardDetailedInfo cardId={cardId} />
+            ) : (
+              <>
+                <CardPricesInfo cardId={cardId} />
+                <CardAvailableOffers cardId={cardId} title="Available Offers" />
+              </>
+            )}
+          </View>
         </ScrollView>
       </AnimatedDrawer>
     </View>
@@ -136,10 +133,6 @@ export default function CardDetail({ cardId }: { cardId: string }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  detailContent: {
-    paddingVertical: 16,
-  },
+  container: { flex: 1 },
+  detailContent: { paddingVertical: 16 },
 });

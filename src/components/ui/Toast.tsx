@@ -103,6 +103,8 @@ export default function Toast({ toast }: ToastProps) {
       <Text
         style={[styles.text, { color: theme.colors.text.onPrimary }]}
         numberOfLines={2}
+        accessible
+        accessibilityLabel={displayedToast.message}
       >
         {displayedToast.message}
       </Text>

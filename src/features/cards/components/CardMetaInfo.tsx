@@ -30,20 +30,20 @@ export default function CardMetaInfo({ number, set }: CardMetaInfoProps) {
               accessible
               accessibilityLabel={`Set symbol for ${set.name}`}
             />
-            <Text style={[styles.setName, { color: theme.colors.text.secondary }]}>
+            <Text style={[styles.setName, { color: theme.colors.primaryForeground }]}>
               {set.name}
             </Text>
           </View>
         </View>
 
         <View>
-          <Text style={[styles.cardNumber, { color: theme.colors.text.primary }]}>
+          <Text style={[styles.cardNumber, { color: theme.colors.primaryForeground }]}>
             #{number}
           </Text>
         </View>
       </View>
 
-      <View style={[styles.divider, { backgroundColor: theme.colors.border.light }]} />
+      <View style={[styles.divider, { backgroundColor: theme.colors.border.medium }]} />
     </>
   );
 }

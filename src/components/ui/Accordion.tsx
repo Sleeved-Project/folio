@@ -19,6 +19,7 @@ interface AccordionProps {
   title: string;
   children: React.ReactNode;
   initiallyOpen?: boolean;
+  shouldTakeFullWidth?: boolean;
   rightElement?: React.ReactNode;
   accessibilityLabel?: string;
 }
@@ -27,6 +28,7 @@ export default function Accordion({
   title,
   children,
   initiallyOpen = false,
+  shouldTakeFullWidth = false,
   rightElement,
   accessibilityLabel,
 }: AccordionProps) {
@@ -43,9 +45,10 @@ export default function Accordion({
       style={[
         styles.container,
         {
-          backgroundColor: theme.colors.background.primary,
+          backgroundColor: theme.colors.background.secondary,
           borderColor: theme.colors.border.light,
           borderRadius: theme.borderRadius.medium,
+          width: shouldTakeFullWidth ? '100%' : 'auto',
         },
       ]}
     >
@@ -59,7 +62,7 @@ export default function Accordion({
         accessibilityLabel={accessibilityLabel || title}
       >
         <View style={styles.titleContainer}>
-          <Text style={[styles.title, { color: theme.colors.text.primary }]}>{title}</Text>
+          <Text style={[styles.title, { color: theme.colors.primaryForeground }]}>{title}</Text>
           {isOpen ? (
             <ChevronUp size={20} color={theme.colors.text.secondary} />
           ) : (

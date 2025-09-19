@@ -1,17 +1,18 @@
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useCards } from '../hooks/queries/useCardsQuery';
-import { useState } from 'react';
-import SearchBar from '../../../components/ui/SearchBar';
-import CardListDisplay from '../components/CardListDisplay';
-import { useTheme } from '../../../theme/useTheme';
-import { TabOption, TabSwitcher } from '../../../components/ui/TabSwitcher';
-import CardFilters from '../../filters/components/CardFilters';
-import { useSets } from '../../sets/hooks/queries/useSetsQuery';
-import SetsList from '../../sets/screens/SetsList';
-import { FormattedSet } from '../../sets/types';
 import { router } from 'expo-router';
+import { useTheme } from '../../../theme/useTheme';
+import { TabSwitcher, TabOption } from '../../../components/ui/TabSwitcher';
+import SearchBar from '../../../components/ui/SearchBar';
+
+import { useCards } from '../hooks/queries/useCardsQuery';
+import { useSets } from '../../sets/hooks/queries/useSetsQuery';
+import CardListDisplay from '../components/CardListDisplay';
+import SetsList from '../../sets/screens/SetsList';
+import CardFilters from '../../filters/components/CardFilters';
 import { useFilterContext } from '../../../context/FilterContext';
 import { FilterTypeEnum } from '../../filters/types';
+import { FormattedSet } from '../../sets/types';
 
 type TabType = 'sets' | 'cards';
 
@@ -45,31 +46,28 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
 
   const cards = cardsData?.pages.flatMap((page) => page.data) ?? [];
   const sets: FormattedSet[] = setsData?.pages.flatMap((page) => page.data) ?? [];
+
   const tabOptions: TabOption<TabType>[] = [
     { id: 'sets', label: 'Card Sets' },
     { id: 'cards', label: 'All Cards' },
   ];
 
   const toggleFilterDetail = (label: string) => {
-    if (activeTab !== 'sets') {
-      const selected = filtersOptions[label];
-      if (!selected) return;
-      setSelectedFilterOption?.({ [label]: selected });
-      router.push({
-        pathname: '/filter-detail',
-        params: {
-          filterType: activeTab === 'cards' ? FilterTypeEnum.CARD : FilterTypeEnum.SET,
-        },
-      });
-    }
+    const selected = filtersOptions[label];
+    if (!selected) return;
+
+    setSelectedFilterOption?.({ [label]: selected });
+    router.push({
+      pathname: '/filter-detail',
+      params: {
+        filterType: activeTab === 'cards' ? FilterTypeEnum.CARD : FilterTypeEnum.SET,
+      },
+    });
   };
 
   return (
     <View
-      style={[
-        styles.container,
-        { backgroundColor: theme.colors.background.primary, gap: theme.spacing.md },
-      ]}
+      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
       accessible
       accessibilityLabel="Cards and sets list screen"
       accessibilityHint="Switch between cards and sets, search and apply filters"
@@ -81,42 +79,49 @@ export default function CardsList({ isFiltersVisible = false }: CardsListProps) 
         accessibilityLabel="Tab switcher"
         accessibilityHint="Switch between card sets and all cards"
       />
+
       <SearchBar
         searchQuery={cardName}
-        setSearchQuery={(newName: string) => setCardName(newName)}
+        setSearchQuery={setCardName}
         searchPlaceholder={activeTab === 'cards' ? 'Search by Pokemon' : 'Search by set'}
         accessibilityLabel="Search bar"
         accessibilityHint="Type text to search for cards or sets"
       />
-      {isFiltersVisible && activeTab !== 'sets' && (
+
+      {isFiltersVisible && activeTab === 'cards' && (
         <CardFilters
           filterType={FilterTypeEnum.CARD}
           toggleFilterDetail={toggleFilterDetail}
         />
       )}
-      {activeTab === 'sets' ? (
-        <SetsList
-          sets={sets}
-          hasNextPage={hasNextSetsPage}
-          isFetchingNextPage={isFetchingNextSetsPage}
-          isLoading={isSetsLoading}
-          fetchNextPage={fetchNextSetsPage}
-          error={setsError}
-        />
-      ) : (
-        <CardListDisplay
-          cards={cards}
-          hasNextPage={hasNextCardsPage}
-          isFetchingNextPage={isFetchingNextCardsPage}
-          isLoading={isCardsLoading}
-          fetchNextPage={fetchNextCardsPage}
-          error={cardsError}
-        />
-      )}
+
+      <View style={{ marginTop: theme.spacing.xl, flex: 1 }}>
+        {activeTab === 'sets' ? (
+          <SetsList
+            sets={sets}
+            hasNextPage={hasNextSetsPage}
+            isFetchingNextPage={isFetchingNextSetsPage}
+            isLoading={isSetsLoading}
+            fetchNextPage={fetchNextSetsPage}
+            error={setsError}
+          />
+        ) : (
+          <CardListDisplay
+            cards={cards}
+            hasNextPage={hasNextCardsPage}
+            isFetchingNextPage={isFetchingNextCardsPage}
+            isLoading={isCardsLoading}
+            fetchNextPage={fetchNextCardsPage}
+            error={cardsError}
+          />
+        )}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: {
+    flex: 1,
+  },
 });

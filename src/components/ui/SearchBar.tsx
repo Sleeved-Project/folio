@@ -25,7 +25,7 @@ export default function SearchBar({
   const theme = useTheme();
   const placeholderText = `${searchPlaceholder}`;
 
-  // We are debouncing the query to avoid too many updates, it will only be sent after 1 second of inactivity
+  // Debounced query update
   const debouncedSetSearchQuery = useRef(
     debounce((query: string) => setSearchQuery(query), 1000)
   ).current;
@@ -38,11 +38,9 @@ export default function SearchBar({
   }, [inputValue, debouncedSetSearchQuery]);
 
   useEffect(() => {
-    // Update the input value if the searchQuery changes externally
     setInputValue(searchQuery);
   }, [searchQuery]);
 
-  // Clear the input and reset the search query
   const handleClear = () => {
     setInputValue('');
     setSearchQuery('');
@@ -53,16 +51,15 @@ export default function SearchBar({
       style={[
         styles.container,
         {
-          backgroundColor: theme.colors.background.tertiary,
+          backgroundColor: theme.colors.background.secondary,
+          borderRadius: theme.borderRadius.large,
+          marginBottom: theme.spacing.sm,
+          height: 48,
           shadowColor: theme.shadows.small.shadowColor,
           shadowOffset: theme.shadows.small.shadowOffset,
           shadowOpacity: theme.shadows.small.shadowOpacity,
           shadowRadius: theme.shadows.small.shadowRadius,
           elevation: theme.shadows.small.elevation,
-          borderRadius: theme.borderRadius.round,
-          marginTop: theme.spacing.sm,
-          marginBottom: theme.spacing.lg,
-          height: 44,
         },
       ]}
       accessible
@@ -80,6 +77,8 @@ export default function SearchBar({
           {
             color: theme.colors.text.primary,
             fontSize: theme.typography.fontSizes.md,
+            fontWeight: theme.typography.fontWeights.medium,
+            backgroundColor: 'transparent',
           },
         ]}
         value={inputValue}
@@ -88,6 +87,9 @@ export default function SearchBar({
         placeholderTextColor={theme.colors.text.secondary}
         returnKeyType="search"
         clearButtonMode="never"
+        autoCorrect={false}
+        autoCapitalize="none"
+        autoComplete="off"
         accessible
         accessibilityLabel={`Search input: ${placeholderText}`}
         accessibilityHint="Enter text to search"
@@ -114,20 +116,21 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 8,
     paddingHorizontal: 16,
     position: 'relative',
   },
   searchIcon: {
-    marginRight: 12,
+    marginRight: 10,
   },
   input: {
     flex: 1,
-    height: 24,
+    height: 28,
     padding: 0,
   },
   clearButton: {
-    padding: 4,
+    padding: 6,
     marginLeft: 8,
+    borderRadius: 8,
   },
 });

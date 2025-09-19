@@ -43,9 +43,7 @@ export default function CardForSaleItem({ item }: AdItemProps) {
               accessibilityRole="image"
               accessibilityLabel="No image available"
             >
-              <Text
-                style={{ color: theme.colors.text.secondary, textAlign: 'center', padding: 16 }}
-              >
+              <Text style={{ color: theme.colors.text.secondary, textAlign: 'center', padding: 16 }}>
                 No image
               </Text>
             </View>
@@ -93,7 +91,7 @@ export default function CardForSaleItem({ item }: AdItemProps) {
         </Text>
 
         <Text
-          style={[{ color: theme.colors.text.secondary }]}
+          style={{ color: theme.colors.text.secondary }}
           accessible
           accessibilityRole="text"
           accessibilityLabel={`Seller: ${item.seller.username}`}

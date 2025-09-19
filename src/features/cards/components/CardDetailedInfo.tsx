@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   flavorSection: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 16,

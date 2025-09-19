@@ -70,7 +70,7 @@ export default function SelectModal({
         >
           <Text
             style={{
-              color: theme.colors.text.primary,
+              color: theme.colors.primaryForeground,
               fontSize: theme.typography.fontSizes.lg,
               fontWeight: theme.typography.fontWeights.semiBold,
             }}
@@ -86,7 +86,7 @@ export default function SelectModal({
             accessibilityLabel="Close modal"
             accessibilityHint="Closes the options selection modal"
           >
-            <X size={20} color={theme.colors.text.primary} />
+            <X size={20} color={theme.colors.primaryForeground} />
           </TouchableOpacity>
         </View>
 
@@ -128,7 +128,9 @@ export default function SelectModal({
                   style={[
                     styles.optionText,
                     {
-                      color: isSelected ? theme.colors.primary : theme.colors.text.primary,
+                      color: isSelected
+                        ? theme.colors.primaryForeground
+                        : theme.colors.text.primary,
                       fontSize: theme.typography.fontSizes.md,
                       fontWeight: isSelected
                         ? theme.typography.fontWeights.semiBold
@@ -138,7 +140,9 @@ export default function SelectModal({
                 >
                   {item.label}
                 </Text>
-                {isSelected && <Check size={24} color={theme.colors.primary} strokeWidth={2} />}
+                {isSelected && (
+                  <Check size={24} color={theme.colors.primaryForeground} strokeWidth={2} />
+                )}
               </TouchableOpacity>
             );
           }}

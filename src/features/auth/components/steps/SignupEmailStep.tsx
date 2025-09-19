@@ -43,9 +43,15 @@ export default function SignupEmailStep({ onContinue, defaultValue }: SignupEmai
         <Image
           source={logoImage}
           style={styles.logo}
+          accessible
+          accessibilityRole="image"
           accessibilityLabel="Sleeved app logo"
         />
-        <Text style={styles.title} accessibilityRole="header">
+        <Text
+          style={[styles.title, { color: theme.colors.primaryForeground }]}
+          accessible
+          accessibilityRole="header"
+        >
           Get started with Sleeved
         </Text>
         <View style={styles.inputWrapper}>
@@ -59,6 +65,7 @@ export default function SignupEmailStep({ onContinue, defaultValue }: SignupEmai
             returnKeyType="done"
             containerStyle={{ marginBottom: theme.spacing.lg, width: '100%' }}
             accessibilityLabel="Email input field"
+            accessibilityHint="Enter your email address to continue signup"
           />
         </View>
       </View>
@@ -69,6 +76,7 @@ export default function SignupEmailStep({ onContinue, defaultValue }: SignupEmai
           disabled={isSubmitting || isPending}
           loading={isSubmitting || isPending}
           accessibilityLabel="Continue button"
+          accessibilityHint="Proceed to the next step"
         />
         <AuthRedirectLink type="signin" />
       </View>
@@ -97,7 +105,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: theme.typography.fontSizes.xxl,
     fontWeight: theme.typography.fontWeights.bold,
-    color: theme.colors.text.primary,
     marginBottom: theme.spacing.xxl,
     textAlign: 'center',
   },

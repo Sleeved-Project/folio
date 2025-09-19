@@ -46,7 +46,8 @@ export default function ProfilePicture({
           height: dimension,
           borderRadius: dimension / 2,
           backgroundColor: theme.colors.background.secondary,
-          borderColor: theme.colors.border.light,
+          borderWidth: 3,
+          borderColor: theme.colors.primary,
         },
       ]}
       accessible={accessible}
@@ -65,14 +66,12 @@ export default function ProfilePicture({
         <View
           style={[
             styles.placeholder,
-            {
-              backgroundColor: theme.colors.background.secondary,
-            },
+            { backgroundColor: theme.colors.variants.primaryLight },
           ]}
         >
           <Text
             style={{
-              color: theme.colors.text.black,
+              color: theme.colors.primaryForeground,
               fontSize: dimension / 2.5,
               fontWeight: theme.typography.fontWeights.bold,
             }}
@@ -89,7 +88,6 @@ export default function ProfilePicture({
 const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
-    borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },

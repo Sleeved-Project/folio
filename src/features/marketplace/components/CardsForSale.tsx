@@ -51,16 +51,14 @@ const CardsForSaleHeader = ({ onSellPress }: { onSellPress?: () => void }) => {
         <View style={{ marginBottom: theme.spacing.md }}>
           <Button
             title="Sell a card"
+            variant="gradient"
             onPress={onSellPress}
             accessibilityLabel="Sell a card"
             accessibilityHint="Tap to list a new card for sale"
           />
         </View>
       )}
-      <TitleSection
-        title="Cards for sale"
-        style={{ marginBottom: theme.spacing.md }}
-      />
+      <TitleSection title="Cards for sale" style={{ marginBottom: theme.spacing.md }} />
     </>
   );
 };
@@ -80,18 +78,13 @@ const CardsForSaleFooter = ({
     return (
       <View style={styles.loaderContainer} accessibilityLiveRegion="polite">
         <ActivityIndicator color={theme.colors.primary} size="small" />
-        <Text style={[styles.text, { color: theme.colors.text.secondary }]}>
-          Loading...
-        </Text>
+        <Text style={[styles.text, { color: theme.colors.text.secondary }]}>Loading...</Text>
       </View>
     );
   }
   if (error) {
     return (
-      <Text
-        style={[styles.text, styles.errorText, { color: theme.colors.danger }]}
-        accessibilityRole="alert"
-      >
+      <Text style={[styles.text, styles.errorText, { color: theme.colors.danger }]} accessibilityRole="alert">
         Error loading cards
       </Text>
     );
@@ -112,10 +105,7 @@ const EmptyCardsMessage = ({
 
   return (
     <Text
-      style={[
-        styles.text,
-        { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
-      ]}
+      style={[styles.text, { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md }]}
       accessibilityRole="text"
     >
       No cards available for sale
@@ -126,8 +116,7 @@ const EmptyCardsMessage = ({
 export default function CardsForSale({ onSellPress, containerStyle }: CardsForSaleProps) {
   const theme = useTheme();
   const width = useWindowDimensions().width - 32;
-  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
-    useAdsList();
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useAdsList();
   const [refreshing, setRefreshing] = useState(false);
 
   const GAP = 8;
@@ -143,73 +132,44 @@ export default function CardsForSale({ onSellPress, containerStyle }: CardsForSa
   }, [refetch]);
 
   if (isLoading && !refreshing) return <LoadingState />;
-  if (error)
-    return <ErrorState message={error instanceof Error ? error.message : 'Failed to load ads'} />;
+  if (error) return <ErrorState message={error instanceof Error ? error.message : 'Failed to load ads'} />;
 
   return (
-    <View
-      style={[styles.container, { backgroundColor: theme.colors.background.primary }, containerStyle]}
-    >
-      <FlatList
-        data={items}
-        keyExtractor={(item, index) => `${item.id}-${index}`}
-        renderItem={({ item }) => (
-          <CardForSaleItemRenderer item={item} cardWidth={CARD_WIDTH} gap={GAP} />
-        )}
-        numColumns={NUM_COLUMNS}
-        columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
-        ListHeaderComponent={<CardsForSaleHeader onSellPress={onSellPress} />}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContent}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor={theme.colors.primary}
-            colors={[theme.colors.primary]}
-            progressBackgroundColor={theme.colors.background.tertiary}
-            title="Refreshing cards..."
-            titleColor={theme.colors.text.secondary}
-          />
+    <FlatList
+      data={items}
+      keyExtractor={(item, index) => `${item.id}-${index}`}
+      renderItem={({ item }) => <CardForSaleItemRenderer item={item} cardWidth={CARD_WIDTH} gap={GAP} />}
+      numColumns={NUM_COLUMNS}
+      columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
+      ListHeaderComponent={<CardsForSaleHeader onSellPress={onSellPress} />}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ marginTop: theme.spacing.md, paddingBottom: theme.spacing.lg }}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          tintColor={theme.colors.primary}
+          colors={[theme.colors.primary]}
+          progressBackgroundColor={theme.colors.background.tertiary}
+          title="Refreshing cards..."
+          titleColor={theme.colors.text.secondary}
+        />
+      }
+      onEndReached={() => {
+        if (hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
         }
-        onEndReached={() => {
-          if (hasNextPage && !isFetchingNextPage) {
-            fetchNextPage();
-          }
-        }}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={
-          <CardsForSaleFooter
-            isFetchingNextPage={isFetchingNextPage}
-            isLoading={isLoading}
-            error={error}
-          />
-        }
-        ListEmptyComponent={
-          <EmptyCardsMessage isFetchingNextPage={isFetchingNextPage} isLoading={isLoading} />
-        }
-      />
-    </View>
+      }}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={<CardsForSaleFooter isFetchingNextPage={isFetchingNextPage} isLoading={isLoading} error={error} />}
+      ListEmptyComponent={<EmptyCardsMessage isFetchingNextPage={isFetchingNextPage} isLoading={isLoading} />}
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  listContent: {
-    paddingTop: 16,
-    paddingBottom: 32,
-  },
-  text: {
-    textAlign: 'center',
-    padding: 16,
-  },
-  errorText: {
-    fontWeight: '500',
-  },
-  loaderContainer: {
-    padding: 16,
-    alignItems: 'center',
-  },
+  container: { flex: 1 },
+  text: { textAlign: 'center', padding: 16 },
+  errorText: { fontWeight: '500' },
+  loaderContainer: { padding: 16, alignItems: 'center' },
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Svg, Circle } from 'react-native-svg';
+import { useTheme } from '../../../theme/useTheme';
 
 interface CircularProgressBarProps {
   size: number;
@@ -17,6 +18,7 @@ const CircularProgressBar = ({
   bgColor,
   pgColor,
 }: CircularProgressBarProps) => {
+  const theme = useTheme();
   const radius = (size - strokeWidth) / 2;
   const circum = radius * 2 * Math.PI;
   const svgProgress = 100 - progressPercent;
@@ -30,7 +32,7 @@ const CircularProgressBar = ({
     >
       <Svg width={size} height={size}>
         <Circle
-          stroke={bgColor ? bgColor : '#f2f2f2'}
+          stroke={bgColor ? bgColor : theme.colors.primaryForeground}
           fill="none"
           cx={size / 2}
           cy={size / 2}
@@ -38,7 +40,7 @@ const CircularProgressBar = ({
           {...{ strokeWidth }}
         />
         <Circle
-          stroke={pgColor ? pgColor : '#3b5998'}
+          stroke={pgColor ? pgColor : theme.colors.primary}
           fill="none"
           cx={size / 2}
           cy={size / 2}

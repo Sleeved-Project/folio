@@ -118,7 +118,7 @@ export default function ScanningAnimation() {
 
       <Animated.View pointerEvents="none" style={[styles.scanlineContainer, scanAStyle]}>
         <LinearGradient
-          colors={['rgba(0,210,255,0)', 'rgba(0,210,255,0.96)', 'rgba(0,210,255,0)']}
+          colors={['rgba(255, 230, 0, 0)', 'rgba(255, 217, 0, 0.96)', 'rgba(255, 234, 0, 0)']}
           start={{ x: 0, y: 0.5 }}
           end={{ x: 1, y: 0.5 }}
           style={styles.scanlineGlow}
@@ -156,12 +156,12 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.06)',
-    backgroundColor: 'rgba(3,8,28,0.5)',
+    backgroundColor: 'rgba(28, 25, 3, 0.5)',
   },
   vignette: {
     backgroundColor: 'transparent',
     borderRadius: 16,
-    shadowColor: '#00d4ff',
+    shadowColor: '#fbff00ff',
     shadowRadius: 36,
     shadowOpacity: 0.06,
   },
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     width: '120%',
     height: SCANLINE_HEIGHT,
     alignSelf: 'center',
-    shadowColor: '#00d4ff',
+    shadowColor: '#fbff00ff',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.96,
     shadowRadius: 14,

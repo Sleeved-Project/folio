@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, AccessibilityInfo } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
+import { CircleAlertIcon } from 'lucide-react-native';
 
 interface ErrorStateProps {
   message?: string;
@@ -31,11 +32,20 @@ export function ErrorState({ message = 'An error occurred' }: ErrorStateProps) {
 
   return (
     <View
-      style={[styles.centerContainer, { backgroundColor: theme.colors.background.secondary }]}
+      style={[
+        styles.centerContainer,
+        {
+          backgroundColor: theme.colors.background.secondary,
+          borderRadius: theme.borderRadius.medium,
+          borderColor: theme.colors.danger,
+          borderWidth: 1,
+        },
+      ]}
       accessible
       accessibilityRole="alert"
       accessibilityLabel={message}
     >
+      <CircleAlertIcon color={theme.colors.danger} style={{ marginBottom: theme.spacing.sm }} />
       <Text style={[styles.errorText, { color: theme.colors.danger }]}>{message}</Text>
     </View>
   );

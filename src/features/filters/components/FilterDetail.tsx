@@ -9,6 +9,7 @@ import { Filters, FilterTypeEnum } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SearchBar from '../../../components/ui/SearchBar';
 import { router } from 'expo-router';
+import { Button } from '../../../components/ui';
 
 interface FilterDetailProps {
   filterType: FilterTypeEnum;
@@ -17,6 +18,7 @@ interface FilterDetailProps {
 export default function FilterDetail({ filterType }: FilterDetailProps) {
   const theme = useTheme();
   const [allFiltersChecked, setAllFiltersChecked] = useState(false);
+
   const {
     selectedFilterOption,
     cardFilters,
@@ -42,7 +44,8 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
   const [tempFilters, setTempFilters] = useState<Filters>(filters);
 
   useEffect(() => {
-    const currentFiltersValueLength = filters?.find((filter) => filter.label === label)?.values.length;
+    const currentFiltersValueLength =
+      filters?.find((filter) => filter.label === label)?.values.length ?? 0;
     setAllFiltersChecked(currentFiltersValueLength === values.length);
   }, [filters]);
 
@@ -79,7 +82,10 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
       }
     } else {
       const updatedFilters = [...currentFilters];
-      updatedFilters[existingIndex] = { ...existingFilter, values: [...existingFilter.values, newFilter] };
+      updatedFilters[existingIndex] = {
+        ...existingFilter,
+        values: [...existingFilter.values, newFilter],
+      };
       setTempFilters(updatedFilters);
     }
   };
@@ -87,29 +93,66 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
   const displayFilterOptions = (item: { id: number; value: string }) => (
     <FilterOption
       option={item}
-      isChecked={tempFilters?.some((filter) => filter.label === label && filter.values.includes(item.id)) ?? false}
+      isChecked={
+        tempFilters?.some((filter) => filter.label === label && filter.values.includes(item.id)) ??
+        false
+      }
       updateFiltersCallback={updateFilters}
     />
   );
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background.primary }}>
-      <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]} accessible accessibilityLabel={`Filter detail screen for ${label}`}>
+      <View
+        style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+        accessible
+        accessibilityLabel={`Filter detail screen for ${label}`}
+      >
         <View style={styles.labelContainer}>
-          <BackButton accessibilityLabel="Go back" accessibilityHint="Navigates back to previous screen" />
-          <Text style={[styles.filterLabel, { color: theme.colors.text.primary, fontSize: theme.typography.fontSizes.lg, fontWeight: theme.typography.fontWeights.bold }]} accessible>
+          <BackButton
+            accessibilityLabel="Go back"
+            accessibilityHint="Navigates back to previous screen"
+          />
+          <Text
+            style={[
+              styles.filterLabel,
+              {
+                color: theme.colors.text.primary,
+                fontSize: theme.typography.fontSizes.lg,
+                fontWeight: theme.typography.fontWeights.bold,
+              },
+            ]}
+            accessible
+          >
             {label}
           </Text>
           <TouchableOpacity
             onPress={handleToggleAllFilters}
-            style={[styles.checkBoxContainer, { borderColor: theme.colors.border.black, borderRadius: theme.borderRadius.small, backgroundColor: allFiltersChecked ? theme.colors.text.black : theme.colors.background.primary }]}
+            style={[
+              styles.checkBoxContainer,
+              {
+                borderColor: theme.colors.border.black,
+                borderRadius: theme.borderRadius.small,
+                backgroundColor: allFiltersChecked
+                  ? theme.colors.text.black
+                  : theme.colors.background.primary,
+              },
+            ]}
             accessible
             accessibilityRole="checkbox"
             accessibilityState={{ checked: allFiltersChecked }}
             accessibilityLabel={`Select all ${label}`}
             accessibilityHint="Toggles all filters on or off"
           >
-            {allFiltersChecked ? <Check color={theme.colors.background.primary} width={18} height={18} /> : <Minus color={theme.colors.text.primary} width={18} height={18} />}
+            {allFiltersChecked ? (
+              <Check
+                color={theme.colors.background.primary}
+                width={18}
+                height={18}
+              />
+            ) : (
+              <Minus color={theme.colors.text.primary} width={18} height={18} />
+            )}
           </TouchableOpacity>
         </View>
 
@@ -131,27 +174,21 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
           style={{ marginTop: 16 }}
           showsVerticalScrollIndicator={false}
           onEndReached={() => {
-            if (label === 'artists' && hasNextPage && !isFetchingNextPage && fetchNextPage) fetchNextPage();
+            if (label === 'artists' && hasNextPage && !isFetchingNextPage && fetchNextPage)
+              fetchNextPage();
           }}
           onEndReachedThreshold={0.5}
           accessible
           accessibilityLabel={`${label} filter options list`}
         />
 
-        <TouchableOpacity
+        <Button
           onPress={() => {
             setFilters?.(tempFilters ?? []);
             router.back();
           }}
-          style={[styles.addButton, { backgroundColor: theme.colors.primary, borderRadius: theme.borderRadius.medium }]}
-          activeOpacity={0.7}
-          accessible
-          accessibilityRole="button"
-          accessibilityLabel="Apply filters"
-          accessibilityHint="Applies the selected filters and returns to the previous screen"
-        >
-          <Text style={styles.addButtonText}>Apply Filters</Text>
-        </TouchableOpacity>
+          title="Apply filters"
+        />
       </View>
     </SafeAreaView>
   );
@@ -159,9 +196,29 @@ export default function FilterDetail({ filterType }: FilterDetailProps) {
 
 const styles = StyleSheet.create({
   container: { padding: 24, flex: 1, gap: 8, position: 'relative' },
-  labelContainer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingRight: 16 },
-  checkBoxContainer: { alignItems: 'center', justifyContent: 'center', borderWidth: 2, width: 24, height: 24 },
-  filterLabel: { textTransform: 'capitalize' },
-  addButton: { position: 'absolute', bottom: 10, alignSelf: 'center', width: '100%', alignItems: 'center', justifyContent: 'center', height: 48 },
-  addButtonText: { color: 'white', fontWeight: '600', fontSize: 16 },
+  labelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: 16,
+  },
+  checkBoxContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    width: 24,
+    height: 24,
+  },
+  filterLabel: {
+    textTransform: 'capitalize',
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 10,
+  },
+  addButtonText: {
+    color: 'white',
+    fontWeight: '600',
+    fontSize: 16,
+  },
 });

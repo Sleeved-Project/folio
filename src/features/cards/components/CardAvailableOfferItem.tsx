@@ -1,55 +1,45 @@
-import { CameraOff } from 'lucide-react-native';
+import { router } from 'expo-router';
+import { CameraOff, CircleStopIcon } from 'lucide-react-native';
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import BadgeLabel from '../../../components/ui/BadgeLabel';
 import { useTheme } from '../../../theme/useTheme';
-
-interface CardAvailableOfferItemProps {
-  title: string;
-  seller: string;
-  price: string;
-  pictureUrl: string | null;
-  condition: string;
-}
+import { CardAvailableOffer } from '../types';
 
 export default function CardAvailableOfferItem({
-  title,
+  id,
+  certificate,
   seller,
-  price,
-  pictureUrl,
+  originalPrice,
+  rectoImageUrl,
   condition,
-}: CardAvailableOfferItemProps) {
+  finish,
+}: CardAvailableOffer) {
   const theme = useTheme();
 
-  const accessibilityLabel = `${title}, sold by ${seller}, priced at $${price}, condition: ${condition}`;
+  const accessibilityLabel = `Finish: ${finish.label}, sold by ${seller.username}, price: $${originalPrice}, condition: ${condition.label}`;
 
   return (
-    <View
+    <TouchableOpacity
+      key={id}
+      onPress={() => router.push(`/ad/${id}`)}
       style={[styles.container, { backgroundColor: theme.colors.background.secondary }]}
       accessible
+      accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
-      accessibilityRole="summary"
     >
       <View style={styles.imageContainer}>
-        {pictureUrl ? (
+        {rectoImageUrl ? (
           <Image
-            source={{ uri: pictureUrl }}
+            source={{ uri: rectoImageUrl }}
             style={styles.image}
             accessible
             accessibilityRole="image"
-            accessibilityLabel={`Image of ${title}`}
+            accessibilityLabel={`Image of finish ${finish.label}`}
           />
         ) : (
           <View
-            style={[
-              styles.emptyImage,
-              {
-                width: '100%',
-                height: '100%',
-                backgroundColor: theme.colors.border.light,
-                borderRadius: theme.borderRadius.small,
-              },
-            ]}
+            style={[styles.emptyImage, { backgroundColor: theme.colors.border.light, borderRadius: theme.borderRadius.small }]}
             accessible
             accessibilityRole="image"
             accessibilityLabel="No image available"
@@ -58,37 +48,35 @@ export default function CardAvailableOfferItem({
           </View>
         )}
       </View>
+
       <View style={styles.infoContainer}>
-        <Text
-          style={[
-            {
-              color: theme.colors.text.black,
-              fontWeight: theme.typography.fontWeights.bold,
-              fontSize: theme.typography.fontSizes.md,
-            },
-          ]}
-        >
-          {title}
-        </Text>
-        <Text style={[styles.seller, { color: theme.colors.text.secondary }]}>
-          Sale by <Text style={{ fontWeight: 'bold' }}>{seller}</Text>
-        </Text>
+        <View style={styles.topRow}>
+          <View>
+            <Text style={[styles.finishText, { color: theme.colors.text.black }]}>
+              Finish: {finish.label}
+            </Text>
+            <Text style={[styles.sellerText, { color: theme.colors.text.secondary }]}>
+              Sale by <Text style={{ fontWeight: 'bold' }}>{seller.username}</Text>
+            </Text>
+          </View>
+          {certificate && (
+            <View style={styles.certificateContainer}>
+              <Text style={[styles.certificateText, { color: theme.colors.text.black }]}>
+                {certificate.globalRating}
+              </Text>
+              <CircleStopIcon style={{ marginLeft: 5 }} size={24} color={theme.colors.text.black} />
+            </View>
+          )}
+        </View>
+
         <View style={styles.offerBottom}>
-          <Text
-            style={[
-              {
-                color: theme.colors.text.black,
-                fontWeight: theme.typography.fontWeights.bold,
-                fontSize: theme.typography.fontSizes.lg,
-              },
-            ]}
-          >
-            ${price}
+          <Text style={[styles.priceText, { color: theme.colors.text.black }]}>
+            ${originalPrice}
           </Text>
-          <BadgeLabel label={condition} variant="dark" />
+          <BadgeLabel label={condition.label} variant="dark" />
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -101,14 +89,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageContainer: {
-    width: 72,
-    height: 72,
+    width: 60,
+    height: 80,
     marginRight: 16,
     borderRadius: 8,
     overflow: 'hidden',
   },
   emptyImage: {
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
@@ -121,14 +108,35 @@ const styles = StyleSheet.create({
   infoContainer: {
     flex: 1,
   },
-  seller: {
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  finishText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  sellerText: {
     fontSize: 14,
     marginTop: 4,
+  },
+  certificateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  certificateText: {
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   offerBottom: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     marginTop: 8,
+  },
+  priceText: {
+    fontWeight: 'bold',
+    fontSize: 18,
   },
 });

@@ -49,12 +49,10 @@ export default function SetListDisplay({ set }: SetListDisplayProps) {
             source={{ uri: set.imageLogo }}
             resizeMethod="resize"
             resizeMode="contain"
-            style={[
-              {
-                width: 100,
-                height: 100,
-              },
-            ]}
+            style={{
+              width: 100,
+              height: 100,
+            }}
           />
           <View
             style={styles.symbolBadge}

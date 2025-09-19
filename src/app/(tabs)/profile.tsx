@@ -1,11 +1,11 @@
-import { StyleSheet, View } from 'react-native';
 import { useAuth } from '../../features/auth/context/AuthContext';
 import ProfileScreen from '../../features/user/screens/ProfileScreen';
+import { View, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 
 export default function Profile() {
-  const theme = useTheme();
   const { user } = useAuth();
+  const theme = useTheme();
 
   if (!user) {
     return null;

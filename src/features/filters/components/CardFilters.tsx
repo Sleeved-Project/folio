@@ -30,17 +30,30 @@ export default function CardFilters({ toggleFilterDetail, filterType }: CardFilt
       >
         {Object.entries(filtersOptions).map(([label], index) => {
           const filterValuesLength = filters?.find((f) => f.label === label)?.values?.length || 0;
+          const isActive = filterValuesLength > 0;
 
           return (
             <TouchableOpacity
               key={`${index}-${label}`}
               onPress={() => toggleFilterDetail(label)}
+              activeOpacity={0.8}
               style={[
                 styles.filterContainer,
                 {
-                  padding: theme.spacing.sm,
-                  backgroundColor: theme.colors.background.tertiary,
+                  paddingVertical: theme.spacing.xs + 4,
+                  paddingHorizontal: theme.spacing.md,
+                  backgroundColor: theme.colors.background.secondary,
                   borderRadius: theme.borderRadius.large,
+                  borderWidth: 2,
+                  borderColor: isActive ? theme.colors.primary : theme.colors.border.light,
+                  marginRight: theme.spacing.sm,
+                  shadowColor: theme.shadows.small.shadowColor,
+                  shadowOffset: theme.shadows.small.shadowOffset,
+                  shadowOpacity: theme.shadows.small.shadowOpacity,
+                  shadowRadius: theme.shadows.small.shadowRadius,
+                  elevation: isActive
+                    ? theme.shadows.medium.elevation
+                    : theme.shadows.small.elevation,
                 },
               ]}
               accessible
@@ -52,20 +65,22 @@ export default function CardFilters({ toggleFilterDetail, filterType }: CardFilt
                   : 'Double tap to view filter details'
               }
             >
-              {filterValuesLength > 0 && (
+              {isActive && (
                 <>
                   <View
                     style={[
                       styles.filterNumber,
                       {
-                        backgroundColor: theme.colors.secondary,
+                        backgroundColor: theme.colors.variants.primaryLight,
                         borderRadius: theme.borderRadius.round,
+                        borderWidth: 1,
+                        borderColor: theme.colors.primary,
                       },
                     ]}
                   >
                     <Text
                       style={{
-                        color: theme.colors.background.primary,
+                        color: theme.colors.primaryForeground,
                         fontSize: theme.typography.fontSizes.sm,
                         fontWeight: theme.typography.fontWeights.bold,
                       }}
@@ -73,7 +88,13 @@ export default function CardFilters({ toggleFilterDetail, filterType }: CardFilt
                       {filterValuesLength}
                     </Text>
                   </View>
-                  <View style={styles.filterSeparator} />
+
+                  <View
+                    style={[
+                      styles.filterSeparator,
+                      { borderLeftColor: theme.colors.primary, height: 20, marginHorizontal: 8 },
+                    ]}
+                  />
                 </>
               )}
 
@@ -81,14 +102,20 @@ export default function CardFilters({ toggleFilterDetail, filterType }: CardFilt
                 style={[
                   styles.filterLabel,
                   {
-                    color: theme.colors.text.tertiary,
+                    color: isActive ? theme.colors.primaryForeground : theme.colors.text.secondary,
                     fontSize: theme.typography.fontSizes.md,
+                    fontWeight: isActive
+                      ? theme.typography.fontWeights.semiBold
+                      : theme.typography.fontWeights.medium,
                   },
                 ]}
               >
                 {label}
               </Text>
-              <ChevronDown color={theme.colors.text.tertiary} />
+
+              <View style={styles.chevron}>
+                <ChevronDown color={theme.colors.primary} size={18} />
+              </View>
             </TouchableOpacity>
           );
         })}
@@ -101,31 +128,27 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 8,
+    paddingVertical: 6,
   },
   filterContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 8,
   },
   filterNumber: {
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 25,
-    height: 25,
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-    alignSelf: 'center',
+    minWidth: 20,
+    height: 20,
+    paddingHorizontal: 6,
   },
   filterSeparator: {
     borderLeftWidth: 1,
-    borderColor: '#D0D0D0',
-    paddingLeft: 8,
-    height: 25,
   },
   filterLabel: {
     textTransform: 'capitalize',
+  },
+  chevron: {
+    marginLeft: 8,
+    alignSelf: 'center',
   },
 });

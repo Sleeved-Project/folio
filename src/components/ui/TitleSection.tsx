@@ -22,7 +22,7 @@ export default function TitleSection({
     <Text
       style={[
         {
-          color: theme.colors.text.black,
+          color: theme.colors.primaryForeground,
           fontWeight: theme.typography.fontWeights.bold,
           fontSize: theme.typography.fontSizes.xl,
           marginTop: theme.spacing.md,

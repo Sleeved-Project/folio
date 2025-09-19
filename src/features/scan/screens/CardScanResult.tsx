@@ -27,7 +27,7 @@ export default function CardScanResult({
     >
       <LinearGradient
         colors={[
-          theme.colors.primary,
+          theme.colors.variants.primaryLight,
           theme.colors.background.secondary,
           theme.colors.background.primary,
         ]}

@@ -28,92 +28,77 @@ export default function SetsList({
   const GAP = 8;
   const NUM_COLUMNS = 2;
 
-  const displaySetList = ({ item }: { item: FormattedSet }) => (
-    <SetListDisplay set={item} />
-  );
+  const displaySetList = ({ item }: { item: FormattedSet }) => <SetListDisplay set={item} />;
 
   return (
-    <View
-      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+    <FlatList
+      data={sets}
+      keyExtractor={(card, index) => `${card.id}-${index}`}
+      renderItem={displaySetList}
+      numColumns={NUM_COLUMNS}
+      columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
+      ListHeaderComponent={ListHeaderComponent}
+      onEndReached={() => {
+        if (hasNextPage && !isFetchingNextPage && fetchNextPage) {
+          fetchNextPage();
+        }
+      }}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={() => {
+        if (isFetchingNextPage || isLoading) {
+          return (
+            <View
+              style={styles.loaderContainer}
+              accessible
+              accessibilityRole="text"
+              accessibilityLabel="Loading sets"
+              accessibilityHint="Sets are being loaded, please wait"
+            >
+              <ActivityIndicator color={theme.colors.primary} size="small" />
+              <Text style={[styles.text, { color: theme.colors.text.secondary }]}>Loading...</Text>
+            </View>
+          );
+        }
+        if (error) {
+          return (
+            <Text
+              style={[styles.text, styles.errorText, { color: theme.colors.danger }]}
+              accessible
+              accessibilityRole="alert"
+              accessibilityLabel="Error loading sets"
+            >
+              Error loading sets
+            </Text>
+          );
+        }
+        return null;
+      }}
+      ListEmptyComponent={() => {
+        if (isFetchingNextPage || isLoading) return null;
+
+        return (
+          <Text
+            style={[styles.text, { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md }]}
+            accessible
+            accessibilityRole="text"
+            accessibilityLabel="No sets available"
+          >
+            No sets available
+          </Text>
+        );
+      }}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: theme.spacing.lg }}
       accessible
       accessibilityRole="list"
       accessibilityLabel={`List of ${sets.length} sets`}
-    >
-      <FlatList
-        data={sets}
-        keyExtractor={(card, index) => `${card.id}-${index}`}
-        renderItem={displaySetList}
-        numColumns={NUM_COLUMNS}
-        columnWrapperStyle={{ marginBottom: GAP * 2, justifyContent: 'space-between' }}
-        ListHeaderComponent={ListHeaderComponent}
-        onEndReached={() => {
-          if (hasNextPage && !isFetchingNextPage && fetchNextPage) {
-            fetchNextPage();
-          }
-        }}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={() => {
-          if (isFetchingNextPage || isLoading) {
-            return (
-              <View
-                style={styles.loaderContainer}
-                accessible
-                accessibilityRole="text"
-                accessibilityLabel="Loading sets"
-                accessibilityHint="Sets are being loaded, please wait"
-              >
-                <ActivityIndicator color={theme.colors.primary} size="small" />
-                <Text style={[styles.text, { color: theme.colors.text.secondary }]}>
-                  Loading...
-                </Text>
-              </View>
-            );
-          }
-          if (error) {
-            return (
-              <Text
-                style={[styles.text, styles.errorText, { color: theme.colors.danger }]}
-                accessible
-                accessibilityRole="alert"
-                accessibilityLabel="Error loading sets"
-              >
-                Error loading sets
-              </Text>
-            );
-          }
-          return null;
-        }}
-        ListEmptyComponent={() => {
-          if (isFetchingNextPage || isLoading) return null;
-
-          return (
-            <Text
-              style={[
-                styles.text,
-                { color: theme.colors.text.secondary, fontSize: theme.typography.fontSizes.md },
-              ]}
-              accessible
-              accessibilityRole="text"
-              accessibilityLabel="No sets available"
-            >
-              No sets available
-            </Text>
-          );
-        }}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContent}
-      />
-    </View>
+    />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  listContent: {
-    paddingTop: 16,
-    paddingBottom: 32,
   },
   text: {
     textAlign: 'center',
@@ -125,13 +110,5 @@ const styles = StyleSheet.create({
   loaderContainer: {
     padding: 16,
     alignItems: 'center',
-  },
-  occurenceContainer: {
-    position: 'relative',
-  },
-  occurenceBadge: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
   },
 });

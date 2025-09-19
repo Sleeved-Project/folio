@@ -13,7 +13,7 @@ interface ExternalLinkProps {
 
 export default function ExternalLink({ url, label = 'View', onPress, color, accessibilityLabel }: ExternalLinkProps) {
   const theme = useTheme();
-  const linkColor = color || theme.colors.primary;
+  const linkColor = color || theme.colors.primaryForeground;
 
   const handlePress = () => {
     if (onPress) {

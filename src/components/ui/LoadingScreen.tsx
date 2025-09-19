@@ -1,12 +1,15 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet, Image, Text, Platform } from 'react-native';
 import appIcon from '../../../assets/logo.png';
+import { useTheme } from '../../theme/useTheme';
 
 interface LoadingScreenProps {
   showLogo?: boolean;
 }
 
 export const LoadingScreen: React.FC<LoadingScreenProps> = ({ showLogo = true }) => {
+  const theme = useTheme();
+
   return (
     <View
       style={styles.container}
@@ -23,7 +26,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ showLogo = true })
           accessibilityLabel="Logo de l'application"
         />
       )}
-      <ActivityIndicator size="large" color="#000" style={styles.spinner} />
+      <ActivityIndicator size="large" color={theme.colors.primary} style={styles.spinner} />
       <Text style={styles.hiddenText}>Chargement…</Text>
     </View>
   );

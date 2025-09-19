@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   Keyboard,
   SafeAreaView,
   Image,
@@ -38,7 +37,7 @@ const SigninScreen: React.FC = () => {
     try {
       await signin(data.email, data.password);
     } catch (err: unknown) {
-      Alert.alert('Sign In Failed', getErrorMessage(err));
+      alert(getErrorMessage(err));
     }
   };
 
@@ -49,9 +48,15 @@ const SigninScreen: React.FC = () => {
           <Image
             source={logoImage}
             style={styles.logo}
+            accessible
+            accessibilityRole="image"
             accessibilityLabel="Sleeved app logo"
           />
-          <Text style={styles.title} accessibilityRole="header">
+          <Text
+            style={[styles.title, { color: theme.colors.primaryForeground }]}
+            accessible
+            accessibilityRole="header"
+          >
             Sign in to Sleeved
           </Text>
           <View style={styles.inputWrapper}>
@@ -64,6 +69,7 @@ const SigninScreen: React.FC = () => {
               error={typeof errors.email?.message === 'string' ? errors.email?.message : undefined}
               returnKeyType="next"
               accessibilityLabel="Email input field"
+              accessibilityHint="Enter your email address to sign in"
             />
             <FormTextInput
               control={control}
@@ -75,15 +81,19 @@ const SigninScreen: React.FC = () => {
               returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
               accessibilityLabel="Password input field"
+              accessibilityHint="Enter your password to sign in"
             />
             <TouchableOpacity
               style={styles.forgotPassword}
+              accessible
               accessibilityRole="button"
               accessibilityLabel="Forgot password"
-              accessible
+              accessibilityHint="Tap to reset your password"
               onPress={() => {}}
             >
-              <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+              <Text style={[styles.forgotPasswordText, { color: theme.colors.secondary }]}>
+                Forgot password?
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -94,7 +104,7 @@ const SigninScreen: React.FC = () => {
             loading={isLoading}
             disabled={isLoading}
             accessibilityLabel="Sign in button"
-            accessible
+            accessibilityHint="Press to sign in to your account"
           />
           <AuthRedirectLink type="signup" />
         </View>
@@ -124,7 +134,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: theme.typography.fontSizes.xxl,
     fontWeight: theme.typography.fontWeights.bold,
-    color: theme.colors.text.primary,
     marginBottom: theme.spacing.xxl,
     textAlign: 'center',
   },
@@ -137,7 +146,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   forgotPasswordText: {
-    color: '#2196F3',
     fontSize: 14,
     fontWeight: '500',
   },

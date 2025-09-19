@@ -73,24 +73,28 @@ export default function CardIdentifyResult({
     router.back();
   };
 
+  const { width } = Dimensions.get('window');
+  const cardWidth = Math.min(width * 0.42, 160);
+  const cardHeight = cardWidth * 1.4;
+  const cardStyle = { width: cardWidth, height: cardHeight, borderRadius: theme.borderRadius.medium };
+
   return (
     <View style={styles.safeAreaView} accessible accessibilityLabel="Card identification result screen">
       <LinearGradient
-        colors={[theme.colors.primary, theme.colors.background.secondary, theme.colors.background.primary]}
+        colors={[
+          theme.colors.variants.primaryLight,
+          theme.colors.background.secondary,
+          theme.colors.background.primary,
+        ]}
         style={styles.container}
         locations={[0, 0.5, 1]}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
       >
-        {/* Back Button */}
         <View style={styles.backButtonContainer}>
-          <BackButton
-            accessibilityLabel="Go back"
-            accessibilityHint="Returns to the previous screen"
-          />
+          <BackButton accessibilityLabel="Go back" accessibilityHint="Returns to the previous screen" />
         </View>
 
-        {/* Card Name */}
         <Animated.Text
           style={[styles.cardName, { color: theme.colors.text.primary }, titleStyle]}
           accessible
@@ -100,14 +104,12 @@ export default function CardIdentifyResult({
           {name}
         </Animated.Text>
 
-        {/* Cards Comparison - Side by Side */}
         <View style={styles.cardsContainer} accessible accessibilityLabel="Card comparison section">
-          {/* Your Photo Card */}
           <Animated.View style={[styles.cardWrapper, leftCardStyle]} accessible accessibilityLabel="Your photo" accessibilityHint="This is the photo you took of your card">
             <View style={[styles.cardImageContainer, { borderRadius: theme.borderRadius.medium }]}>
               <Image
                 source={{ uri: croppedImage }}
-                style={[styles.cardImage, { borderRadius: theme.borderRadius.medium }]}
+                style={cardStyle}
                 resizeMode="contain"
                 accessible
                 accessibilityLabel="Your card photo"
@@ -116,23 +118,23 @@ export default function CardIdentifyResult({
             <Text style={[styles.cardLabel, { color: theme.colors.text.secondary }]}>Your Photo</Text>
           </Animated.View>
 
-          {/* Official Card */}
-          <Animated.View style={[styles.cardWrapper, rightCardStyle]} accessible accessibilityLabel="Official card" accessibilityHint={potentialMatchedCard ? "Official card image for comparison" : "No official card image available"}>
+          <Animated.View
+            style={[styles.cardWrapper, rightCardStyle]}
+            accessible
+            accessibilityLabel="Official card"
+            accessibilityHint={potentialMatchedCard ? "Official card image for comparison" : "No official card image available"}
+          >
             <View style={[styles.cardImageContainer, { borderRadius: theme.borderRadius.medium }]}>
               {potentialMatchedCard ? (
                 <Image
                   source={{ uri: potentialMatchedCard }}
-                  style={[styles.cardImage, { borderRadius: theme.borderRadius.medium }]}
+                  style={cardStyle}
                   resizeMode="contain"
                   accessible
                   accessibilityLabel="Official card image"
                 />
               ) : (
-                <View
-                  style={[styles.cardImage, styles.placeholder, { borderRadius: theme.borderRadius.medium }]}
-                  accessible
-                  accessibilityLabel="No official card image available"
-                >
+                <View style={[cardStyle, styles.placeholder]} accessible accessibilityLabel="No official card image available">
                   <Text style={{ color: theme.colors.text.tertiary }}>No official image</Text>
                 </View>
               )}
@@ -141,7 +143,6 @@ export default function CardIdentifyResult({
           </Animated.View>
         </View>
 
-        {/* Action Buttons */}
         <Animated.View style={[styles.actionContainer, buttonsStyle]}>
           <Button
             title="This is my card"
@@ -153,7 +154,7 @@ export default function CardIdentifyResult({
           />
           <Button
             title="Retry scan"
-            variant="outline"
+            variant="secondary"
             onPress={handleRetry}
             buttonStyle={styles.retryButton}
             accessibilityLabel="Retry scan"
@@ -165,78 +166,17 @@ export default function CardIdentifyResult({
   );
 }
 
-const { width } = Dimensions.get('window');
-const cardWidth = Math.min(width * 0.42, 160);
-const cardHeight = cardWidth * 1.4;
-
 const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 40,
-  },
-  backButtonContainer: {
-    position: 'absolute',
-    top: 60,
-    left: 16,
-    zIndex: 10,
-  },
-  cardName: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 50,
-    paddingHorizontal: 20,
-  },
-  cardsContainer: {
-    flex: 1,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-  },
-  cardWrapper: {
-    alignItems: 'center',
-    padding: 8,
-    maxWidth: cardWidth,
-  },
-  cardImageContainer: {
-    width: cardWidth,
-    height: cardHeight,
-    position: 'relative',
-    overflow: 'hidden',
-    elevation: 10,
-  },
-  cardImage: {
-    width: '100%',
-    height: '100%',
-  },
-  placeholder: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-  },
-  cardLabel: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginTop: 12,
-    textAlign: 'center',
-  },
-  actionContainer: {
-    width: '90%',
-    gap: 14,
-    marginTop: 20,
-    paddingBottom: 10,
-  },
-  confirmButton: {
-    height: 54,
-  },
-  retryButton: {
-    height: 50,
-  },
+  safeAreaView: { flex: 1, backgroundColor: 'transparent' },
+  container: { flex: 1, justifyContent: 'space-between', alignItems: 'center', paddingVertical: 40 },
+  backButtonContainer: { position: 'absolute', top: 60, left: 16, zIndex: 10 },
+  cardName: { fontSize: 28, fontWeight: 'bold', textAlign: 'center', marginTop: 50, paddingHorizontal: 20 },
+  cardsContainer: { flex: 1, width: '100%', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' },
+  cardWrapper: { alignItems: 'center', padding: 8, maxWidth: 160 },
+  cardImageContainer: { position: 'relative', overflow: 'hidden', elevation: 10 },
+  placeholder: { justifyContent: 'center', alignItems: 'center', backgroundColor: '#f0f0f0' },
+  cardLabel: { fontSize: 16, fontWeight: '500', marginTop: 12, textAlign: 'center' },
+  actionContainer: { width: '90%', gap: 14, marginTop: 20, paddingBottom: 10 },
+  confirmButton: { height: 54 },
+  retryButton: { height: 50 },
 });

@@ -49,10 +49,7 @@ export default function StepLayout({
       </ScrollView>
 
       <View
-        style={[
-          { marginTop: theme.spacing.md, backgroundColor: theme.colors.background.primary },
-          styles.buttonRow,
-        ]}
+        style={[{ marginTop: theme.spacing.md, backgroundColor: theme.colors.background.primary }, styles.buttonRow]}
         accessible
         accessibilityRole="toolbar"
         accessibilityLabel="Step navigation buttons"
@@ -64,6 +61,7 @@ export default function StepLayout({
             onPress={onPrev}
             disabled={isPrevDisabled}
             buttonStyle={styles.button}
+            variant="secondary"
             accessible
             accessibilityRole="button"
             accessibilityLabel={prevButtonText}
@@ -76,6 +74,7 @@ export default function StepLayout({
             onPress={onNext}
             disabled={isNextDisabled}
             buttonStyle={styles.button}
+            variant="primary"
             accessible
             accessibilityRole="button"
             accessibilityLabel={nextButtonText}

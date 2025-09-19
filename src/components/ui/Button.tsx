@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { cloneElement, isValidElement } from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -10,9 +10,27 @@ import {
   TextStyle,
   View,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../../theme/useTheme';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost' | 'scan';
+export type ButtonVariant =
+  | 'primary'
+  | 'gradient'
+  | 'reverseGradient'
+  | 'secondary'
+  | 'danger'
+  | 'outline'
+  | 'ghost'
+  | 'scan';
+
+type VariantConfig = {
+  background: string;
+  foreground: string;
+  border: string;
+  glow: string;
+  style: object;
+  gradient?: [string, string, ...string[]];
+};
 
 export interface ButtonProps extends TouchableOpacityProps {
   title: string;
@@ -22,7 +40,8 @@ export interface ButtonProps extends TouchableOpacityProps {
   buttonStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   loadingColor?: string;
-  leftIcon?: React.ReactNode;
+  leftIcon?: React.ReactElement<{ size?: number; color?: string }>;
+  fullWidth?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -34,72 +53,101 @@ const Button: React.FC<ButtonProps> = ({
   textStyle,
   loadingColor,
   leftIcon,
+  fullWidth = false,
   ...rest
 }) => {
   const theme = useTheme();
 
-  // Détermine le style du bouton selon le variant
-  const getButtonStyles = () => {
-    switch (variant) {
-      case 'secondary':
-        return { backgroundColor: theme.colors.secondary };
-      case 'danger':
-        return { backgroundColor: theme.colors.danger };
-      case 'outline':
-        return {
-          backgroundColor: 'transparent',
-          borderWidth: 1,
-          borderColor: theme.colors.primary,
-          shadowColor: 'transparent',
-          elevation: 0,
-        };
-      case 'ghost':
-        return {
-          backgroundColor: 'transparent',
-          shadowColor: 'transparent',
-          elevation: 0,
-        };
-      case 'scan':
-        return { backgroundColor: theme.colors.background.tertiary };
-      case 'primary':
-      default:
-        return { backgroundColor: theme.colors.primary };
-    }
+  const variantConfig: Record<ButtonVariant, VariantConfig> = {
+    primary: {
+      background: theme.colors.primary,
+      foreground: theme.colors.primaryForeground,
+      border: theme.colors.primary,
+      glow: theme.colors.primary,
+      style: {},
+    },
+    secondary: {
+      background: theme.colors.background.secondary,
+      foreground: theme.colors.primaryForeground,
+      border: theme.colors.primary,
+      glow: `${theme.colors.primary}22`,
+      style: { elevation: 0, shadowColor: 'transparent' },
+    },
+    gradient: {
+      background: theme.colors.primary,
+      foreground: theme.colors.primaryForeground,
+      gradient: [theme.colors.variants.primaryLight, theme.colors.primary],
+      border: theme.colors.primary,
+      glow: theme.colors.primary,
+      style: {},
+    },
+    reverseGradient: {
+      background: theme.colors.primary,
+      foreground: theme.colors.primaryForeground,
+      gradient: [theme.colors.primary, theme.colors.variants.primaryLight],
+      border: theme.colors.primary,
+      glow: theme.colors.primary,
+      style: {},
+    },
+    danger: {
+      background: theme.colors.danger,
+      foreground: theme.colors.dangerForeground,
+      border: theme.colors.danger,
+      glow: theme.colors.danger,
+      style: {},
+    },
+    outline: {
+      background: 'transparent',
+      foreground: theme.colors.primaryForeground,
+      border: theme.colors.primary,
+      glow: 'transparent',
+      style: { elevation: 0, shadowColor: 'transparent' },
+    },
+    ghost: {
+      background: 'transparent',
+      foreground: theme.colors.primaryForeground,
+      border: 'transparent',
+      glow: 'transparent',
+      style: { elevation: 0, shadowColor: 'transparent' },
+    },
+    scan: {
+      background: theme.colors.background.tertiary,
+      foreground: theme.colors.text.primary,
+      gradient: [theme.colors.background.tertiary, theme.colors.background.secondary],
+      border: theme.colors.border.light,
+      glow: theme.colors.primary,
+      style: {},
+    },
   };
 
-  // Détermine la couleur du texte selon le variant
-  const getTextStyles = () => {
-    switch (variant) {
-      case 'outline':
-      case 'ghost':
-        return { color: theme.colors.primary };
-      case 'scan':
-        return { color: theme.colors.text.primary };
-      case 'primary':
-      case 'secondary':
-      case 'danger':
-      default:
-        return { color: 'white' };
-    }
-  };
+  const config = variantConfig[variant];
 
-  // Détermine la couleur du loader selon le variant
-  const getLoadingColor = () => {
-    if (loadingColor) return loadingColor;
-    switch (variant) {
-      case 'outline':
-      case 'ghost':
-        return theme.colors.primary;
-      case 'scan':
-        return theme.colors.text.primary;
-      default:
-        return 'white';
-    }
+  const renderIcon = () => {
+    if (!leftIcon || !isValidElement(leftIcon)) return null;
+    return cloneElement(leftIcon, { color: config.foreground, size: leftIcon.props?.size ?? 18 });
   };
 
   return (
     <TouchableOpacity
-      style={[styles.button, getButtonStyles(), (disabled || loading) && styles.disabledOpaque, buttonStyle]}
+      activeOpacity={0.86}
+      style={[
+        styles.button,
+        {
+          borderRadius: theme.borderRadius.medium,
+          borderWidth: config.border === 'transparent' ? 0 : 2,
+          borderColor: config.border,
+          backgroundColor:
+            variant === 'outline' || variant === 'ghost' ? 'transparent' : config.background,
+          shadowColor: config.glow,
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: variant === 'outline' || variant === 'ghost' ? 0.02 : 0.18,
+          shadowRadius: variant === 'outline' || variant === 'ghost' ? 6 : 18,
+          elevation: variant === 'outline' || variant === 'ghost' ? 1 : 6,
+          width: fullWidth ? '100%' : undefined,
+        },
+        (disabled || loading) && styles.disabledOpaque,
+        buttonStyle,
+      ]}
       disabled={disabled || loading}
       accessible
       accessibilityRole="button"
@@ -113,14 +161,42 @@ const Button: React.FC<ButtonProps> = ({
       }
       {...rest}
     >
+      {config.gradient && (
+        <LinearGradient
+          colors={config.gradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={StyleSheet.absoluteFill}
+          pointerEvents="none"
+        />
+      )}
+
       {loading ? (
-        <ActivityIndicator color={getLoadingColor()} size="small" />
+        <ActivityIndicator color={loadingColor || config.foreground} size="small" />
       ) : (
         <View style={styles.content}>
           {leftIcon && (
-            <View style={[styles.iconContainer, { marginRight: theme.spacing.md }]}>{leftIcon}</View>
+            <View style={[styles.iconContainer, { marginRight: 12 }]}>{renderIcon()}</View>
           )}
-          <Text style={[styles.text, getTextStyles(), textStyle]}>{title}</Text>
+          <Text
+            style={[
+              {
+                color: config.foreground,
+                fontSize: theme.typography.fontSizes.md,
+                fontWeight: theme.typography.fontWeights.bold,
+                textAlign: 'center',
+                textShadowColor:
+                  variant !== 'secondary' && config.glow !== 'transparent'
+                    ? `${config.glow}33`
+                    : 'transparent',
+                textShadowOffset: { width: 0, height: 1 },
+                textShadowRadius: 6,
+              },
+              textStyle,
+            ]}
+          >
+            {title}
+          </Text>
         </View>
       )}
     </TouchableOpacity>
@@ -132,13 +208,8 @@ const styles = StyleSheet.create({
     height: 54,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    paddingHorizontal: 18,
+    overflow: 'hidden',
   },
   content: {
     flexDirection: 'row',
@@ -148,10 +219,6 @@ const styles = StyleSheet.create({
   iconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  text: {
-    fontSize: 18,
-    fontWeight: '600',
   },
   disabledOpaque: {
     opacity: 0.5,
