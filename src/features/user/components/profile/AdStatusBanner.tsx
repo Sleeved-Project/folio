@@ -12,7 +12,10 @@ export default function AdStatusBanner({ status }: { status: { id: string; label
 
   const statusColors: Record<string, { backgroundColor: string; textColor: string }> = {
     // Published: { backgroundColor: theme.colors.success, textColor: theme.colors.successForeground },
-    Sold: { backgroundColor: theme.colors.danger, textColor: theme.colors.dangerForeground },
+    Sold: {
+      backgroundColor: theme.colors.variants.primaryLight,
+      textColor: theme.colors.text.primary,
+    },
     // Draft: { backgroundColor: theme.colors.warning, textColor: theme.colors.warningForeground },
     // Archived: { backgroundColor: theme.colors.info, textColor: theme.colors.infoForeground },
   };
