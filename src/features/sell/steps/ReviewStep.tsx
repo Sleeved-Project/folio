@@ -30,7 +30,7 @@ export default function ReviewStep() {
         });
         clearScanData();
         queryClient.invalidateQueries({ queryKey: ['ads'] });
-        router.replace('/');
+        router.replace('/profile');
       },
       onError: (error) => {
         showToast({

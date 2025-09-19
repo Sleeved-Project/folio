@@ -5,8 +5,8 @@ import { Card } from '../../cards/types';
 import { Button } from '../../../components/ui';
 import { useTheme } from '../../../theme/useTheme';
 import BackButton from '../../../components/ui/BackButton';
-import { downloadTempImage } from '../../../lib/utils/files';
 import { useScanContext } from '../context/ScanContext';
+import { useHasStripeAccount } from '../../marketplace/hooks/useHasStripeAccount';
 
 interface CardScanSuccessProps {
   cards: Card[];
@@ -15,22 +15,22 @@ interface CardScanSuccessProps {
 
 export default function CardScanSuccess({ cards, highlightedCardId }: CardScanSuccessProps) {
   const { setScanCardData } = useScanContext();
+  const { data: hasStripeAccount } = useHasStripeAccount();
 
   const router = useRouter();
   const theme = useTheme();
   const highlightedCard: Card = cards.find((card) => card.id === highlightedCardId) || cards[0];
 
   const handleSellCard = async () => {
-    const localImageUri = await downloadTempImage(highlightedCard.extractedTempImageUrl || '');
-
     setScanCardData({
       id: highlightedCard.id,
-      frontCardCroppedImage: localImageUri,
+      frontCardCroppedImage: highlightedCard.extractedTempImageUrl,
     });
 
-    router.push({
-      pathname: '/sell-form',
-    });
+    if (!hasStripeAccount) {
+      return router.push('/stripe-setup');
+    }
+    return router.push('/sell-form');
   };
   return (
     <>
