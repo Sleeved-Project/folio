@@ -5,11 +5,14 @@ import { Order } from '../../../marketplace/types';
 import OrderItem from '../../../marketplace/components/OrderItem';
 import { ErrorState, LoadingState } from '../../../../components/ui/StatusIndicators';
 import { useUserOrders } from '../../hooks/queries/useUserInfo';
+import { useRefetchOnFocus } from '../../../../hooks/useRefetchOnFocus';
 
 export default function UserOrderList() {
   const theme = useTheme();
-  const { data: orders, isLoading, error } = useUserOrders();
+  const { data: orders, isLoading, error, refetch: refetchOrders } = useUserOrders();
   const ordersListFlat = orders?.pages.flatMap((page) => page.data) ?? ([] as Order[]);
+
+  useRefetchOnFocus(refetchOrders);
 
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState message={error.message} />;
