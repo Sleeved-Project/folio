@@ -1,4 +1,4 @@
-import { TextStyle } from 'react-native';
+import { FlexStyle, TextStyle } from 'react-native';
 
 export const theme = {
   colors: {
@@ -100,6 +100,26 @@ export const theme = {
       shadowOpacity: 0.12,
       shadowRadius: 12,
       elevation: 4,
+    },
+  },
+
+  flex: {
+    row: 'row' as FlexStyle['flexDirection'],
+    column: 'column' as FlexStyle['flexDirection'],
+    alignment: {
+      center: 'center' as FlexStyle['alignItems'],
+      start: 'flex-start' as FlexStyle['alignItems'],
+      end: 'flex-end' as FlexStyle['alignItems'],
+      stretch: 'stretch' as FlexStyle['alignItems'],
+      baseline: 'baseline' as FlexStyle['alignItems'],
+    },
+    justifyContent: {
+      center: 'center' as FlexStyle['justifyContent'],
+      start: 'flex-start' as FlexStyle['justifyContent'],
+      end: 'flex-end' as FlexStyle['justifyContent'],
+      between: 'space-between' as FlexStyle['justifyContent'],
+      around: 'space-around' as FlexStyle['justifyContent'],
+      evenly: 'space-evenly' as FlexStyle['justifyContent'],
     },
   },
 };

@@ -10,6 +10,15 @@ export default function MarketplaceLayout() {
         options={{
           title: 'Ad Details',
           headerBackTitle: 'Back',
+          headerTintColor: theme.colors.primaryForeground,
+        }}
+      />
+      <Stack.Screen
+        name="order/[orderId]"
+        options={{
+          title: 'Order Details',
+          headerBackTitle: 'Back',
+          headerTintColor: theme.colors.primaryForeground,
         }}
       />
       <Stack.Screen

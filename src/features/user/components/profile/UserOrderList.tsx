@@ -3,9 +3,10 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import { useTheme } from '../../../../theme/useTheme';
 import { Order } from '../../../marketplace/types';
 import OrderItem from '../../../marketplace/components/OrderItem';
-import { ErrorState, LoadingState } from '../../../../components/ui/StatusIndicators';
+import { ErrorState, InfoState, LoadingState } from '../../../../components/ui/StatusIndicators';
 import { useUserOrders } from '../../hooks/queries/useUserInfo';
 import { useRefetchOnFocus } from '../../../../hooks/useRefetchOnFocus';
+import { Info } from 'lucide-react-native';
 
 export default function UserOrderList() {
   const theme = useTheme();
@@ -16,7 +17,6 @@ export default function UserOrderList() {
 
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState message={error.message} />;
-  if (ordersListFlat.length === 0) return <ErrorState message="No orders found." />;
 
   const renderItem = ({ item }: { item: Order }) => (
     <View style={styles.cardWrapper}>
@@ -33,6 +33,9 @@ export default function UserOrderList() {
       contentContainerStyle={{
         paddingBottom: theme.spacing.lg,
       }}
+      ListEmptyComponent={
+        <InfoState message="No orders found." icon={<Info color={theme.colors.info} />} />
+      }
       removeClippedSubviews
     />
   );
