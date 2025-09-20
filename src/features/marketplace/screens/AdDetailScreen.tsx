@@ -9,6 +9,8 @@ import { useAdDetail } from '../hooks/queries/useAdDetail';
 import CertificationBadge from '../components/CertificationBadge';
 import { AdStatusEnum } from '../types';
 import { useAuth } from '../../auth/context/AuthContext';
+import TitleSection from '../../../components/ui/TitleSection';
+import AdBuyerCard from '../components/AdBuyerCard';
 
 export default function AdDetailScreen({ adId }: { adId: string }) {
   const theme = useTheme();
@@ -30,6 +32,9 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
   if (isLoading) return <LoadingState />;
   if (error || !ad) return <ErrorState message="Failed to load ad details." />;
 
+  const shouldShowBuyerInfo = ad.status.label === AdStatusEnum.SOLD && user?.id === ad.seller.id;
+  const canBuy = ad.status.label === AdStatusEnum.PUBLISHED && user?.id !== ad.seller.id;
+
   return (
     <>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
@@ -38,9 +43,16 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
           imageVerso={ad.versoImageUrl}
           title={ad.card.name}
         />
+
         <AdSellerCard seller={ad.seller} onPress={handleSeller} />
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.text.black }]}>
+
+        <View
+          style={[
+            { paddingHorizontal: theme.spacing.md, marginTop: theme.spacing.md },
+            styles.section,
+          ]}
+        >
+          <Text style={[styles.sectionTitle, { color: theme.colors.primaryForeground }]}>
             {ad.card.name}
           </Text>
           <Text
@@ -56,6 +68,18 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
 
         {ad.certificate && <CertificationBadge certification={ad.certificate} />}
 
+        {shouldShowBuyerInfo && (
+          <View
+            style={[
+              { paddingHorizontal: theme.spacing.md, marginTop: theme.spacing.sm },
+              styles.section,
+            ]}
+          >
+            <TitleSection title="Buyer information" />
+            <AdBuyerCard adId={ad.id} style={{ paddingBottom: theme.spacing.xl }} />
+          </View>
+        )}
+
         {/* <View style={styles.section}>
           <CardAvailableOffers cardId={ad.id} title="Other selling" />
         </View> */}
@@ -65,7 +89,7 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
         ad={ad}
         onSeeCardDetail={handleSeeCardDetail}
         onBuy={handleBuy}
-        canBuy={Boolean(ad.status.label === AdStatusEnum.PUBLISHED && user?.id !== ad.seller.id)}
+        canBuy={canBuy}
       />
     </>
   );
@@ -76,9 +100,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   section: {
-    marginHorizontal: 16,
     gap: 4,
-    marginTop: 16,
   },
   sectionTitle: {
     fontSize: 20,
