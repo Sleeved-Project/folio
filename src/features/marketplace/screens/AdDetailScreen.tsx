@@ -11,11 +11,19 @@ import { AdStatusEnum } from '../types';
 import { useAuth } from '../../auth/context/AuthContext';
 import TitleSection from '../../../components/ui/TitleSection';
 import AdBuyerCard from '../components/AdBuyerCard';
+import { Button } from '../../../components/ui';
+import { WebView } from 'react-native-webview';
+import { useShippingLabel } from '../hooks/mutations/useShippingLabel';
 
 export default function AdDetailScreen({ adId }: { adId: string }) {
   const theme = useTheme();
   const { user } = useAuth();
   const { data: ad, isLoading, error } = useAdDetail(adId);
+  const {
+    data: shippingLabelUri,
+    mutate: downloadShipingLabel,
+    isPending,
+  } = useShippingLabel(adId);
 
   const handleSeeCardDetail = (cardId: string) => {
     router.push(`/card/${cardId}`);
@@ -77,12 +85,24 @@ export default function AdDetailScreen({ adId }: { adId: string }) {
           >
             <TitleSection title="Buyer information" />
             <AdBuyerCard adId={ad.id} style={{ paddingBottom: theme.spacing.xl }} />
+            <Button
+              title="Download shipping label"
+              onPress={() => downloadShipingLabel()}
+              loading={isPending}
+            />
           </View>
         )}
 
         {/* <View style={styles.section}>
           <CardAvailableOffers cardId={ad.id} title="Other selling" />
         </View> */}
+
+        {shippingLabelUri && (
+          <WebView
+            source={{ uri: shippingLabelUri }}
+            downloadingMessage="Shipping label downloading..."
+          />
+        )}
       </ScrollView>
 
       <AdActionBar

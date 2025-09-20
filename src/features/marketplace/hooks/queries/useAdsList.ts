@@ -8,6 +8,7 @@ export const adsKeys = {
   getAdById: (id: string) => [...adsKeys.all, 'ad', id] as const,
   searchAds: (query: string) => [...adsKeys.all, 'searchAds', { query }] as const,
   getBuyerByAdId: (id: string) => [...adsKeys.all, 'buyer', id] as const,
+  getShippingLabelByAdId: (id: string) => [...adsKeys.all, 'shipping', id] as const,
 };
 
 export const useAdsList = () => {
